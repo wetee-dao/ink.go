@@ -1,6 +1,6 @@
 package weteeorg
 
-import types "github.com/wetee-dao/go-client/gen/types"
+import types "github.com/wetee-dao/go-sdk/gen/types"
 
 // See [`Pallet::create_dao`].
 func MakeCreateDaoCall(name0 []byte, desc1 []byte, purpose2 []byte, metaData3 []byte, imApi4 []byte, bg5 []byte, logo6 []byte, img7 []byte, homeUrl8 []byte) types.RuntimeCall {

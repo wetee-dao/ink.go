@@ -3,7 +3,7 @@ package client
 import (
 	"errors"
 
-	gtypes "github.com/wetee-dao/go-client/gen/types"
+	gtypes "github.com/wetee-dao/go-sdk/gen/types"
 )
 
 func GetAccount(client *ChainClient, workID gtypes.WorkId) ([]byte, error) {

@@ -1,7 +1,7 @@
 package client
 
 import (
-	"github.com/wetee-dao/go-client/gen/weteetask"
+	"github.com/wetee-dao/go-sdk/gen/weteetask"
 
 	"github.com/centrifuge/go-substrate-rpc-client/v4/signature"
 	"github.com/pkg/errors"

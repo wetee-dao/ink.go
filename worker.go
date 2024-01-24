@@ -5,13 +5,13 @@ import (
 	"fmt"
 	"math/big"
 
-	"github.com/wetee-dao/go-client/gen/weteeworker"
+	"github.com/wetee-dao/go-sdk/gen/weteeworker"
 
 	"github.com/centrifuge/go-substrate-rpc-client/v4/signature"
 	"github.com/centrifuge/go-substrate-rpc-client/v4/types"
 	"github.com/centrifuge/go-substrate-rpc-client/v4/types/codec"
 
-	gtypes "github.com/wetee-dao/go-client/gen/types"
+	gtypes "github.com/wetee-dao/go-sdk/gen/types"
 )
 
 // Worker

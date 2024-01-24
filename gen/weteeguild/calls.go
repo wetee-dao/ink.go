@@ -1,6 +1,6 @@
 package weteeguild
 
-import types "github.com/wetee-dao/go-client/gen/types"
+import types "github.com/wetee-dao/go-sdk/gen/types"
 
 // See [`Pallet::guild_join`].
 func MakeGuildJoinCall(daoId0 uint64, guildId1 uint64, who2 [32]byte) types.RuntimeCall {

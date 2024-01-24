@@ -2,7 +2,7 @@ package timestamp
 
 import (
 	types "github.com/centrifuge/go-substrate-rpc-client/v4/types"
-	types1 "github.com/wetee-dao/go-client/gen/types"
+	types1 "github.com/wetee-dao/go-sdk/gen/types"
 )
 
 // See [`Pallet::set`].

@@ -1,6 +1,6 @@
 package weteesudo
 
-import types "github.com/wetee-dao/go-client/gen/types"
+import types "github.com/wetee-dao/go-sdk/gen/types"
 
 // See [`Pallet::sudo`].
 func MakeSudoCall(daoId0 uint64, call1 types.RuntimeCall) types.RuntimeCall {

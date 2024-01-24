@@ -2,10 +2,11 @@ package weteegov
 
 import (
 	"encoding/hex"
+
 	state "github.com/centrifuge/go-substrate-rpc-client/v4/rpc/state"
 	types "github.com/centrifuge/go-substrate-rpc-client/v4/types"
 	codec "github.com/centrifuge/go-substrate-rpc-client/v4/types/codec"
-	types1 "github.com/wetee-dao/go-client/gen/types"
+	types1 "github.com/wetee-dao/go-sdk/gen/types"
 )
 
 // Make a storage key for PrePropCount

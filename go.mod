@@ -1,4 +1,4 @@
-module github.com/wetee-dao/go-client
+module github.com/wetee-dao/go-sdk
 
 go 1.21.0
 

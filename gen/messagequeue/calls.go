@@ -1,6 +1,6 @@
 package messagequeue
 
-import types "github.com/wetee-dao/go-client/gen/types"
+import types "github.com/wetee-dao/go-sdk/gen/types"
 
 // See [`Pallet::reap_page`].
 func MakeReapPageCall(messageOrigin0 types.MessageOrigin, pageIndex1 uint32) types.RuntimeCall {

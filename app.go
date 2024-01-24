@@ -1,8 +1,8 @@
 package client
 
 import (
-	"github.com/wetee-dao/go-client/gen/types"
-	"github.com/wetee-dao/go-client/gen/weteeapp"
+	"github.com/wetee-dao/go-sdk/gen/types"
+	"github.com/wetee-dao/go-sdk/gen/weteeapp"
 
 	"github.com/centrifuge/go-substrate-rpc-client/v4/signature"
 	"github.com/pkg/errors"

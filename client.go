@@ -13,7 +13,7 @@ import (
 	"github.com/centrifuge/go-substrate-rpc-client/v4/xxhash"
 	"github.com/pkg/errors"
 
-	gtypes "github.com/wetee-dao/go-client/gen/types"
+	gtypes "github.com/wetee-dao/go-sdk/gen/types"
 )
 
 // 区块链链接

@@ -1,6 +1,6 @@
 package system
 
-import types "github.com/wetee-dao/go-client/gen/types"
+import types "github.com/wetee-dao/go-sdk/gen/types"
 
 // See [`Pallet::remark`].
 func MakeRemarkCall(remark0 []byte) types.RuntimeCall {

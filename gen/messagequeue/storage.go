@@ -2,10 +2,11 @@ package messagequeue
 
 import (
 	"encoding/hex"
+
 	state "github.com/centrifuge/go-substrate-rpc-client/v4/rpc/state"
 	types1 "github.com/centrifuge/go-substrate-rpc-client/v4/types"
 	codec "github.com/centrifuge/go-substrate-rpc-client/v4/types/codec"
-	types "github.com/wetee-dao/go-client/gen/types"
+	types "github.com/wetee-dao/go-sdk/gen/types"
 )
 
 // Make a storage key for BookStateFor

@@ -2,7 +2,7 @@ package weteeproject
 
 import (
 	types1 "github.com/centrifuge/go-substrate-rpc-client/v4/types"
-	types "github.com/wetee-dao/go-client/gen/types"
+	types "github.com/wetee-dao/go-sdk/gen/types"
 )
 
 // See [`Pallet::project_join_request`].

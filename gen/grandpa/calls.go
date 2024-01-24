@@ -1,6 +1,6 @@
 package grandpa
 
-import types "github.com/wetee-dao/go-client/gen/types"
+import types "github.com/wetee-dao/go-sdk/gen/types"
 
 // See [`Pallet::report_equivocation`].
 func MakeReportEquivocationCall(equivocationProof0 types.EquivocationProof, keyOwnerProof1 struct{}) types.RuntimeCall {
