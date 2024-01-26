@@ -1,13 +1,11 @@
 module github.com/wetee-dao/go-sdk
 
-go 1.21.0
+go 1.20
 
 require (
 	github.com/centrifuge/go-substrate-rpc-client/v4 v4.2.1
-	github.com/edgelesssys/ego v1.4.1
 	github.com/fatih/color v1.16.0
 	github.com/pkg/errors v0.9.1
-	github.com/vedhavyas/go-subkey/v2 v2.0.0
 )
 
 require (
@@ -26,8 +24,9 @@ require (
 	github.com/mimoo/StrobeGo v0.0.0-20220103164710-9a04d6ca976b // indirect
 	github.com/pierrec/xxHash v0.1.5 // indirect
 	github.com/rs/cors v1.8.2 // indirect
+	github.com/stretchr/testify v1.8.4 // indirect
+	github.com/vedhavyas/go-subkey/v2 v2.0.0 // indirect
 	golang.org/x/crypto v0.12.0 // indirect
 	golang.org/x/sys v0.14.0 // indirect
 	gopkg.in/natefinch/npipe.v2 v2.0.0-20160621034901-c1b8fa8bdcce // indirect
-	gopkg.in/square/go-jose.v2 v2.6.0 // indirect
 )

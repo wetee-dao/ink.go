@@ -151,17 +151,13 @@ func (w *Worker) ClusterProofUpload(id uint64, proof []byte) error {
 	return w.Client.SignAndSubmit(w.Signer, runtimeCall)
 }
 
-func (w *Worker) WorkProofUpload(workId gtypes.WorkId, log []string, cr []string, pubkey []byte) error {
+func (w *Worker) WorkProofUpload(workId gtypes.WorkId, logHash []byte, crHash []byte, cr gtypes.Cr, pubkey []byte) error {
 	runtimeCall := weteeworker.MakeWorkProofUploadCall(
 		workId,
 		gtypes.ProofOfWork{
-			LogHash: []byte(""),
-			CrHash:  []byte(""),
-			Cr: gtypes.Cr{
-				Cpu:  1,
-				Mem:  1,
-				Disk: 1,
-			},
+			LogHash:   logHash,
+			CrHash:    crHash,
+			Cr:        cr,
 			PublicKey: pubkey,
 		},
 	)
