@@ -71,3 +71,14 @@ func MakeStopCall(appId0 uint64) types1.RuntimeCall {
 		},
 	}
 }
+
+// See [`Pallet::restart`].
+func MakeRestartCall(appId0 uint64) types1.RuntimeCall {
+	return types1.RuntimeCall{
+		IsWeteeApp: true,
+		AsWeteeAppField0: &types1.WeteeAppPalletCall{
+			IsRestart:       true,
+			AsRestartAppId0: appId0,
+		},
+	}
+}

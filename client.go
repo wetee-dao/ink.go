@@ -123,6 +123,12 @@ func (c *ChainClient) SignAndSubmit(signer *signature.KeyringPair, runtimeCall g
 				LogWithRed("SubmitAndWatchExtrinsic", " => IsFinalized")
 				return nil
 			}
+			if status.IsFuture {
+				LogWithRed("SubmitAndWatchExtrinsic", " => IsDropped")
+				return nil
+			}
+		case err := <-sub.Err():
+			return err
 		case <-timeout:
 			fmt.Println("timeout")
 			return nil

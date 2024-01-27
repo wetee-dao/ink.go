@@ -23,3 +23,21 @@ func GetAccount(client *ChainClient, workID gtypes.WorkId) ([]byte, error) {
 	}
 	return nil, errors.New("unknow work type")
 }
+
+func GetVersion(client *ChainClient, workID gtypes.WorkId) (ret uint64, err error) {
+	if workID.Wtype.IsAPP {
+		app := &App{
+			Client: client,
+			Signer: nil,
+		}
+		return app.GetVersionLatest(workID.Id)
+	}
+	if workID.Wtype.IsTASK {
+		task := &Task{
+			Client: client,
+			Signer: nil,
+		}
+		return task.GetVersionLatest(workID.Id)
+	}
+	return 0, nil
+}

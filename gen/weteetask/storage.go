@@ -2,7 +2,6 @@ package weteetask
 
 import (
 	"encoding/hex"
-
 	state "github.com/centrifuge/go-substrate-rpc-client/v4/rpc/state"
 	types "github.com/centrifuge/go-substrate-rpc-client/v4/types"
 	codec "github.com/centrifuge/go-substrate-rpc-client/v4/types/codec"
@@ -208,6 +207,44 @@ func GetAppSettings(state state.State, bhash types.Hash, tupleOfUint64Uint160 ui
 }
 func GetAppSettingsLatest(state state.State, tupleOfUint64Uint160 uint64, tupleOfUint64Uint161 uint16) (ret types1.AppSetting, isSome bool, err error) {
 	key, err := MakeAppSettingsStorageKey(tupleOfUint64Uint160, tupleOfUint64Uint161)
+	if err != nil {
+		return
+	}
+	isSome, err = state.GetStorageLatest(key, &ret)
+	if err != nil {
+		return
+	}
+	return
+}
+
+// Make a storage key for TaskVersion
+//
+//	Task version
+//	Task 版本
+func MakeTaskVersionStorageKey(uint640 uint64) (types.StorageKey, error) {
+	byteArgs := [][]byte{}
+	encBytes := []byte{}
+	var err error
+	encBytes, err = codec.Encode(uint640)
+	if err != nil {
+		return nil, err
+	}
+	byteArgs = append(byteArgs, encBytes)
+	return types.CreateStorageKey(&types1.Meta, "WeteeTask", "TaskVersion", byteArgs...)
+}
+func GetTaskVersion(state state.State, bhash types.Hash, uint640 uint64) (ret uint64, isSome bool, err error) {
+	key, err := MakeTaskVersionStorageKey(uint640)
+	if err != nil {
+		return
+	}
+	isSome, err = state.GetStorage(key, &ret, bhash)
+	if err != nil {
+		return
+	}
+	return
+}
+func GetTaskVersionLatest(state state.State, uint640 uint64) (ret uint64, isSome bool, err error) {
+	key, err := MakeTaskVersionStorageKey(uint640)
 	if err != nil {
 		return
 	}
