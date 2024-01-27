@@ -114,17 +114,13 @@ func (c *ChainClient) SignAndSubmit(signer *signature.KeyringPair, runtimeCall g
 	for {
 		select {
 		case status := <-sub.Chan():
-			fmt.Printf("%#v\n", status)
+			// fmt.Printf("%#v\n", status)
 
 			if status.IsInBlock {
 				LogWithRed("SubmitAndWatchExtrinsic", " => IsInBlock")
 			}
 			if status.IsFinalized {
 				LogWithRed("SubmitAndWatchExtrinsic", " => IsFinalized")
-				return nil
-			}
-			if status.IsFuture {
-				LogWithRed("SubmitAndWatchExtrinsic", " => IsDropped")
 				return nil
 			}
 		case err := <-sub.Err():
