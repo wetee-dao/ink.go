@@ -54,12 +54,9 @@ func (w *Worker) ClusterMortgage(id uint64, cpu uint16, mem uint16, disk uint16,
 	return w.Client.SignAndSubmit(w.Signer, runtimeCall)
 }
 
-func (w *Worker) ClusterWithdrawal(id uint64, val int64) error {
+func (w *Worker) ClusterWithdrawal(id gtypes.WorkId, val int64) error {
 	runtimeCall := weteeworker.MakeClusterWithdrawalCall(
-		gtypes.WorkId{
-			Wtype: gtypes.WorkType{IsAPP: true, IsTASK: false},
-			Id:    id,
-		},
+		id,
 		types.NewU128(*big.NewInt(val)),
 	)
 
