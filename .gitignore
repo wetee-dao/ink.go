@@ -24,4 +24,4 @@ Dockerfile.cross
 *.swp
 *.swo
 *~
-./gen/wetee-meta.json
+gen/wetee-meta.json
