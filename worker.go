@@ -22,7 +22,7 @@ type Worker struct {
 
 // 集群注册
 // Cluster register
-func (w *Worker) ClusterRegister(name string, ip []uint8, port uint32, level uint8) error {
+func (w *Worker) ClusterRegister(name string, ip []uint8, port uint32, level uint8, untilFinalized bool) error {
 	runtimeCall := weteeworker.MakeClusterRegisterCall(
 		[]byte(name),
 		[]gtypes.Ip{
@@ -35,12 +35,12 @@ func (w *Worker) ClusterRegister(name string, ip []uint8, port uint32, level uin
 		level,
 	)
 
-	return w.Client.SignAndSubmit(w.Signer, runtimeCall)
+	return w.Client.SignAndSubmit(w.Signer, runtimeCall, untilFinalized)
 }
 
 // 集群抵押
 // Cluster mortgage
-func (w *Worker) ClusterMortgage(id uint64, cpu uint16, mem uint16, disk uint16, deposit uint64) error {
+func (w *Worker) ClusterMortgage(id uint64, cpu uint16, mem uint16, disk uint16, deposit uint64, untilFinalized bool) error {
 	d := big.NewInt(0)
 	d.SetUint64(deposit)
 	runtimeCall := weteeworker.MakeClusterMortgageCall(
@@ -51,33 +51,33 @@ func (w *Worker) ClusterMortgage(id uint64, cpu uint16, mem uint16, disk uint16,
 		types.UCompact(*d),
 	)
 
-	return w.Client.SignAndSubmit(w.Signer, runtimeCall)
+	return w.Client.SignAndSubmit(w.Signer, runtimeCall, untilFinalized)
 }
 
-func (w *Worker) ClusterWithdrawal(id gtypes.WorkId, val int64) error {
+func (w *Worker) ClusterWithdrawal(id gtypes.WorkId, val int64, untilFinalized bool) error {
 	runtimeCall := weteeworker.MakeClusterWithdrawalCall(
 		id,
 		types.NewU128(*big.NewInt(val)),
 	)
 
-	return w.Client.SignAndSubmit(w.Signer, runtimeCall)
+	return w.Client.SignAndSubmit(w.Signer, runtimeCall, untilFinalized)
 }
 
-func (w *Worker) ClusterUnmortgage(clusterID uint64, id uint64) error {
+func (w *Worker) ClusterUnmortgage(clusterID uint64, id uint64, untilFinalized bool) error {
 	runtimeCall := weteeworker.MakeClusterUnmortgageCall(
 		clusterID,
 		id,
 	)
 
-	return w.Client.SignAndSubmit(w.Signer, runtimeCall)
+	return w.Client.SignAndSubmit(w.Signer, runtimeCall, untilFinalized)
 }
 
-func (w *Worker) ClusterStop(clusterID uint64) error {
+func (w *Worker) ClusterStop(clusterID uint64, untilFinalized bool) error {
 	runtimeCall := weteeworker.MakeClusterStopCall(
 		clusterID,
 	)
 
-	return w.Client.SignAndSubmit(w.Signer, runtimeCall)
+	return w.Client.SignAndSubmit(w.Signer, runtimeCall, untilFinalized)
 }
 
 func (w *Worker) Getk8sClusterAccounts(publey []byte) (uint64, error) {
@@ -140,15 +140,15 @@ func (w *Worker) GetClusterContracts(clusterID uint64, at *types.Hash) ([]Contra
 	return list, nil
 }
 
-func (w *Worker) ClusterProofUpload(id uint64, proof []byte) error {
+func (w *Worker) ClusterProofUpload(id uint64, proof []byte, untilFinalized bool) error {
 	runtimeCall := weteeworker.MakeClusterProofUploadCall(
 		id,
 		proof,
 	)
-	return w.Client.SignAndSubmit(w.Signer, runtimeCall)
+	return w.Client.SignAndSubmit(w.Signer, runtimeCall, untilFinalized)
 }
 
-func (w *Worker) WorkProofUpload(workId gtypes.WorkId, logHash []byte, crHash []byte, cr gtypes.Cr, pubkey []byte) error {
+func (w *Worker) WorkProofUpload(workId gtypes.WorkId, logHash []byte, crHash []byte, cr gtypes.Cr, pubkey []byte, untilFinalized bool) error {
 	runtimeCall := weteeworker.MakeWorkProofUploadCall(
 		workId,
 		gtypes.ProofOfWork{
@@ -158,7 +158,7 @@ func (w *Worker) WorkProofUpload(workId gtypes.WorkId, logHash []byte, crHash []
 			PublicKey: pubkey,
 		},
 	)
-	return w.Client.SignAndSubmit(w.Signer, runtimeCall)
+	return w.Client.SignAndSubmit(w.Signer, runtimeCall, untilFinalized)
 }
 
 func (w *Worker) GetStage() (uint32, error) {
