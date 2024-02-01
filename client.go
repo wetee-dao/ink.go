@@ -75,7 +75,7 @@ func (c *ChainClient) GetAccount(address *signature.KeyringPair) (*types.Account
 
 // 签名并提交交易
 // sign and submit transaction
-func (c *ChainClient) SignAndSubmit(signer *signature.KeyringPair, runtimeCall gtypes.RuntimeCall) error {
+func (c *ChainClient) SignAndSubmit(signer *signature.KeyringPair, runtimeCall gtypes.RuntimeCall, untilFinalized bool) error {
 	accountInfo, err := c.GetAccount(signer)
 	if err != nil {
 		return err
@@ -117,6 +117,9 @@ func (c *ChainClient) SignAndSubmit(signer *signature.KeyringPair, runtimeCall g
 			// fmt.Printf("%#v\n", status)
 			if status.IsInBlock {
 				LogWithRed("SubmitAndWatchExtrinsic", " => IsInBlock")
+				if !untilFinalized {
+					return nil
+				}
 			}
 			if status.IsFinalized {
 				LogWithRed("SubmitAndWatchExtrinsic", " => IsFinalized")
