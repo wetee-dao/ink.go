@@ -40,7 +40,7 @@ func (w *Worker) ClusterRegister(name string, ip []uint8, port uint32, level uin
 
 // 集群抵押
 // Cluster mortgage
-func (w *Worker) ClusterMortgage(id uint64, cpu uint16, mem uint16, disk uint16, deposit uint64, untilFinalized bool) error {
+func (w *Worker) ClusterMortgage(id uint64, cpu uint32, mem uint32, disk uint32, deposit uint64, untilFinalized bool) error {
 	d := big.NewInt(0)
 	d.SetUint64(deposit)
 	runtimeCall := weteeworker.MakeClusterMortgageCall(

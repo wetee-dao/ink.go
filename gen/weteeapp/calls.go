@@ -6,7 +6,7 @@ import (
 )
 
 // See [`Pallet::create`].
-func MakeCreateCall(name0 []byte, image1 []byte, port2 []uint32, cpu3 uint16, memory4 uint16, disk5 uint16, level6 byte, deposit7 types.UCompact) types1.RuntimeCall {
+func MakeCreateCall(name0 []byte, image1 []byte, port2 []uint32, cpu3 uint32, memory4 uint32, disk5 uint32, level6 byte, deposit7 types.UCompact) types1.RuntimeCall {
 	return types1.RuntimeCall{
 		IsWeteeApp: true,
 		AsWeteeAppField0: &types1.WeteeAppPalletCall{
