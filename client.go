@@ -27,8 +27,11 @@ type ChainClient struct {
 
 // 初始化区块连链接
 // init chain client
-func ClientInit() (*ChainClient, error) {
-	api, err := gsrpc.NewSubstrateAPI(config.Default().RPCURL)
+func ClientInit(url string) (*ChainClient, error) {
+	if url == "" {
+		url = config.Default().RPCURL
+	}
+	api, err := gsrpc.NewSubstrateAPI(url)
 	if err != nil {
 		return nil, err
 	}
