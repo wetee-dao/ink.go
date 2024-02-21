@@ -71,14 +71,3 @@ func MakeRechargeCall(id0 uint64, deposit1 types.U128) types1.RuntimeCall {
 		},
 	}
 }
-
-// See [`Pallet::stop`].
-func MakeStopCall(appId0 uint64) types1.RuntimeCall {
-	return types1.RuntimeCall{
-		IsWeteeTask: true,
-		AsWeteeTaskField0: &types1.WeteeTaskPalletCall{
-			IsStop:       true,
-			AsStopAppId0: appId0,
-		},
-	}
-}

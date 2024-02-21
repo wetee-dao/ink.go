@@ -59,13 +59,14 @@ func MakeClusterUnmortgageCall(id0 uint64, blockNum1 uint64) types.RuntimeCall {
 }
 
 // See [`Pallet::work_proof_upload`].
-func MakeWorkProofUploadCall(workId0 types.WorkId, proof1 types.ProofOfWork) types.RuntimeCall {
+func MakeWorkProofUploadCall(workId0 types.WorkId, proof1 types.ProofOfWork, report2 []byte) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsWeteeWorker: true,
 		AsWeteeWorkerField0: &types.WeteeWorkerPalletCall{
 			IsWorkProofUpload:        true,
 			AsWorkProofUploadWorkId0: workId0,
 			AsWorkProofUploadProof1:  proof1,
+			AsWorkProofUploadReport2: report2,
 		},
 	}
 }
@@ -114,6 +115,17 @@ func MakeReportCloseCall(clusterId0 uint64, workId1 types.WorkId) types.RuntimeC
 			IsReportClose:           true,
 			AsReportCloseClusterId0: clusterId0,
 			AsReportCloseWorkId1:    workId1,
+		},
+	}
+}
+
+// See [`Pallet::work_stop`].
+func MakeWorkStopCall(workId0 types.WorkId) types.RuntimeCall {
+	return types.RuntimeCall{
+		IsWeteeWorker: true,
+		AsWeteeWorkerField0: &types.WeteeWorkerPalletCall{
+			IsWorkStop:        true,
+			AsWorkStopWorkId0: workId0,
 		},
 	}
 }

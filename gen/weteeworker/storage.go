@@ -539,6 +539,43 @@ func GetProofsOfWorkLatest(state state.State, tupleOfWorkIdUint640 types1.WorkId
 	return
 }
 
+// Make a storage key for ReportOfWork
+//
+//	work report
+func MakeReportOfWorkStorageKey(workId0 types1.WorkId) (types.StorageKey, error) {
+	byteArgs := [][]byte{}
+	encBytes := []byte{}
+	var err error
+	encBytes, err = codec.Encode(workId0)
+	if err != nil {
+		return nil, err
+	}
+	byteArgs = append(byteArgs, encBytes)
+	return types.CreateStorageKey(&types1.Meta, "WeteeWorker", "ReportOfWork", byteArgs...)
+}
+func GetReportOfWork(state state.State, bhash types.Hash, workId0 types1.WorkId) (ret []byte, isSome bool, err error) {
+	key, err := MakeReportOfWorkStorageKey(workId0)
+	if err != nil {
+		return
+	}
+	isSome, err = state.GetStorage(key, &ret, bhash)
+	if err != nil {
+		return
+	}
+	return
+}
+func GetReportOfWorkLatest(state state.State, workId0 types1.WorkId) (ret []byte, isSome bool, err error) {
+	key, err := MakeReportOfWorkStorageKey(workId0)
+	if err != nil {
+		return
+	}
+	isSome, err = state.GetStorageLatest(key, &ret)
+	if err != nil {
+		return
+	}
+	return
+}
+
 // Make a storage key for Reports
 //
 //	投诉信息

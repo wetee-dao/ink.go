@@ -152,11 +152,11 @@ func (w *Worker) WorkProofUpload(workId gtypes.WorkId, logHash []byte, crHash []
 	runtimeCall := weteeworker.MakeWorkProofUploadCall(
 		workId,
 		gtypes.ProofOfWork{
-			LogHash:   logHash,
-			CrHash:    crHash,
-			Cr:        cr,
-			PublicKey: pubkey,
+			LogHash: logHash,
+			CrHash:  crHash,
+			Cr:      cr,
 		},
+		pubkey,
 	)
 	return w.Client.SignAndSubmit(w.Signer, runtimeCall, untilFinalized)
 }
