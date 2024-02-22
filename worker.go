@@ -93,7 +93,7 @@ func (w *Worker) Getk8sClusterAccounts(publey []byte) (uint64, error) {
 		return 0, err
 	}
 	if !ok {
-		return 0, errors.New("GetK8sClusterAccountsLatest => not ok")
+		return 0, errors.New("GetK8sClusterAccountsLatest => not start")
 	}
 	return res, nil
 }

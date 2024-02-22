@@ -27,7 +27,7 @@ func (w *App) GetApp(publey []byte, id uint64) (*types.TeeApp, error) {
 		return nil, err
 	}
 	if !ok {
-		return nil, errors.New("GetK8sClusterAccountsLatest => not ok")
+		return nil, errors.New("GetK8sClusterAccountsLatest => not start")
 	}
 	return &res, nil
 }
