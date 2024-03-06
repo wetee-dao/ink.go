@@ -12,12 +12,13 @@ import (
 	"github.com/centrifuge/go-substrate-rpc-client/v4/types/codec"
 	"github.com/centrifuge/go-substrate-rpc-client/v4/xxhash"
 	"github.com/pkg/errors"
+	"golang.org/x/crypto/blake2b"
 
 	gtypes "github.com/wetee-dao/go-sdk/gen/types"
 )
 
 // 区块链链接
-// chain client
+// Chain client
 type ChainClient struct {
 	Api     *gsrpc.SubstrateAPI
 	Meta    *types.Metadata
@@ -26,7 +27,7 @@ type ChainClient struct {
 }
 
 // 初始化区块连链接
-// init chain client
+// Init chain client
 func ClientInit(url string) (*ChainClient, error) {
 	if url == "" {
 		url = config.Default().RPCURL
@@ -55,7 +56,7 @@ func ClientInit(url string) (*ChainClient, error) {
 }
 
 // 获取区块高度
-// get block number
+// Get block number
 func (c *ChainClient) GetBlockNumber() (types.BlockNumber, error) {
 	hash, err := c.Api.RPC.Chain.GetHeaderLatest()
 	if err != nil {
@@ -65,7 +66,7 @@ func (c *ChainClient) GetBlockNumber() (types.BlockNumber, error) {
 }
 
 // 获取账户信息
-// get account info
+// Get account info
 func (c *ChainClient) GetAccount(address *signature.KeyringPair) (*types.AccountInfo, error) {
 	key, err := types.CreateStorageKey(c.Meta, "System", "Account", address.PublicKey)
 	if err != nil {
@@ -77,7 +78,7 @@ func (c *ChainClient) GetAccount(address *signature.KeyringPair) (*types.Account
 }
 
 // 签名并提交交易
-// sign and submit transaction
+// Sign and submit transaction
 func (c *ChainClient) SignAndSubmit(signer *signature.KeyringPair, runtimeCall gtypes.RuntimeCall, untilFinalized bool) error {
 	accountInfo, err := c.GetAccount(signer)
 	if err != nil {
@@ -117,15 +118,27 @@ func (c *ChainClient) SignAndSubmit(signer *signature.KeyringPair, runtimeCall g
 	for {
 		select {
 		case status := <-sub.Chan():
-			// fmt.Printf("%#v\n", status)
 			if status.IsInBlock {
-				LogWithRed("SubmitAndWatchExtrinsic", " => IsInBlock")
-				if !untilFinalized {
+				LogWithRed("SubmitAndWatchExtrinsic", "IsInBlock")
+				extBytes, err := codec.Encode(ext)
+				if err != nil {
+					return err
+				}
+
+				// 计算交易的hash
+				hash := blake2b.Sum256(extBytes)
+				ok, err := c.checkExtrinsic(hash, status.AsInBlock)
+				if err != nil {
+					return err
+				}
+
+				// 如果不需要等待交易确认，直接返回
+				if ok && !untilFinalized {
 					return nil
 				}
 			}
 			if status.IsFinalized {
-				LogWithRed("SubmitAndWatchExtrinsic", " => IsFinalized")
+				LogWithRed("SubmitAndWatchExtrinsic", "IsFinalized")
 				return nil
 			}
 		case err := <-sub.Err():
@@ -136,6 +149,73 @@ func (c *ChainClient) SignAndSubmit(signer *signature.KeyringPair, runtimeCall g
 			return nil
 		}
 	}
+}
+
+func (c *ChainClient) checkExtrinsic(extHash types.Hash, blockHash types.Hash) (bool, error) {
+	block, err := c.Api.RPC.Chain.GetBlock(blockHash)
+	if err != nil {
+		return false, err
+	}
+
+	key, err := types.CreateStorageKey(c.Meta, "System", "Events", nil, nil)
+	if err != nil {
+		return false, err
+	}
+
+	raw, err := c.Api.RPC.State.GetStorageRaw(key, blockHash)
+	if err != nil {
+		return false, err
+	}
+
+	var events types.EventRecords
+	err = types.EventRecordsRaw(*raw).DecodeEventRecords(c.Meta, &events)
+	if err != nil {
+		return false, err
+	}
+
+	for _, e := range events.System_ExtrinsicSuccess {
+		extrinsicIndex := e.Phase.AsApplyExtrinsic
+		ext := block.Block.Extrinsics[extrinsicIndex]
+		extBytes, err := codec.Encode(ext)
+		if err != nil {
+			return false, err
+		}
+		if blake2b.Sum256(extBytes) == extHash {
+			return true, nil
+		}
+	}
+
+	for _, e := range events.System_ExtrinsicFailed {
+		extrinsicIndex := e.Phase.AsApplyExtrinsic
+		ext := block.Block.Extrinsics[extrinsicIndex]
+		extBytes, err := codec.Encode(ext)
+		if err != nil {
+			return false, err
+		}
+		if blake2b.Sum256(extBytes) == extHash {
+			bt, err := codec.Encode(e.DispatchError)
+			if err != nil {
+				fmt.Println(err)
+				return false, err
+			}
+
+			ge := gtypes.DispatchError{}
+			err = codec.Decode(bt, &ge)
+			if err != nil {
+				fmt.Println(err)
+				return false, err
+			}
+			b, err := ge.MarshalJSON()
+			if err != nil {
+				fmt.Println(err)
+				return false, err
+			}
+			return false, errors.New(string(b))
+		}
+
+	}
+
+	return false, nil
 }
 
 // query map data list
