@@ -149,14 +149,30 @@ func (w *Worker) ClusterProofUpload(id uint64, proof []byte, untilFinalized bool
 }
 
 func (w *Worker) WorkProofUpload(workId gtypes.WorkId, logHash []byte, crHash []byte, cr gtypes.Cr, pubkey []byte, untilFinalized bool) error {
+	hasHash := false
+	if len(logHash) > 0 && len(crHash) > 0 {
+		hasHash = true
+	}
+	hasReport := false
+	if len(pubkey) > 0 {
+		hasReport = true
+	}
 	runtimeCall := weteeworker.MakeWorkProofUploadCall(
 		workId,
-		gtypes.ProofOfWork{
-			LogHash: logHash,
-			CrHash:  crHash,
-			Cr:      cr,
+		gtypes.OptionTProofOfWork{
+			IsNone: !hasHash,
+			IsSome: hasHash,
+			AsSomeField0: gtypes.ProofOfWork{
+				LogHash: logHash,
+				CrHash:  crHash,
+				Cr:      cr,
+			},
 		},
-		pubkey,
+		gtypes.OptionTByteSlice{
+			IsNone:       !hasReport,
+			IsSome:       hasReport,
+			AsSomeField0: pubkey,
+		},
 	)
 	return w.Client.SignAndSubmit(w.Signer, runtimeCall, untilFinalized)
 }

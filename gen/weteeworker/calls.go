@@ -59,7 +59,7 @@ func MakeClusterUnmortgageCall(id0 uint64, blockNum1 uint64) types.RuntimeCall {
 }
 
 // See [`Pallet::work_proof_upload`].
-func MakeWorkProofUploadCall(workId0 types.WorkId, proof1 types.ProofOfWork, report2 []byte) types.RuntimeCall {
+func MakeWorkProofUploadCall(workId0 types.WorkId, proof1 types.OptionTProofOfWork, report2 types.OptionTByteSlice) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsWeteeWorker: true,
 		AsWeteeWorkerField0: &types.WeteeWorkerPalletCall{
