@@ -138,7 +138,7 @@ func GetPricesLatest(state state.State, byte0 byte) (ret types1.Price, isSome bo
 
 // Make a storage key for AppIdAccounts
 //
-//	App 对应账户
+//	App 拥有者账户
 //	user's K8sCluster information
 func MakeAppIdAccountsStorageKey(uint640 uint64) (types.StorageKey, error) {
 	byteArgs := [][]byte{}
