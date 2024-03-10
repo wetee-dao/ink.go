@@ -14,6 +14,7 @@ import (
 	"github.com/pkg/errors"
 	"golang.org/x/crypto/blake2b"
 
+	"github.com/wetee-dao/go-sdk/gen/system"
 	gtypes "github.com/wetee-dao/go-sdk/gen/types"
 )
 
@@ -24,11 +25,12 @@ type ChainClient struct {
 	Meta    *types.Metadata
 	Hash    types.Hash
 	Runtime *types.RuntimeVersion
+	Debug   bool
 }
 
 // 初始化区块连链接
 // Init chain client
-func ClientInit(url string) (*ChainClient, error) {
+func ClientInit(url string, debug bool) (*ChainClient, error) {
 	if url == "" {
 		url = config.Default().RPCURL
 	}
@@ -52,7 +54,7 @@ func ClientInit(url string) (*ChainClient, error) {
 		return nil, err
 	}
 
-	return &ChainClient{api, meta, genesisHash, runtime}, nil
+	return &ChainClient{api, meta, genesisHash, runtime, debug}, nil
 }
 
 // 获取区块高度
@@ -119,7 +121,7 @@ func (c *ChainClient) SignAndSubmit(signer *signature.KeyringPair, runtimeCall g
 		select {
 		case status := <-sub.Chan():
 			if status.IsInBlock {
-				LogWithRed("SubmitAndWatchExtrinsic", "IsInBlock")
+
 				extBytes, err := codec.Encode(ext)
 				if err != nil {
 					return err
@@ -127,22 +129,24 @@ func (c *ChainClient) SignAndSubmit(signer *signature.KeyringPair, runtimeCall g
 
 				// 计算交易的hash
 				hash := blake2b.Sum256(extBytes)
-				ok, err := c.checkExtrinsic(hash, status.AsInBlock)
+				events, err := c.checkExtrinsic(hash, status.AsInBlock)
 				if err != nil {
 					return err
 				}
 
 				// 如果不需要等待交易确认，直接返回
-				if ok && !untilFinalized {
+				if events != nil && !untilFinalized {
 					return nil
 				}
 			}
 			if status.IsFinalized {
-				LogWithRed("SubmitAndWatchExtrinsic", "IsFinalized")
 				return nil
 			}
 		case err := <-sub.Err():
-			LogWithRed("SubmitAndWatchExtrinsic ERROR", err.Error())
+			if c.Debug {
+				LogWithRed("SubmitAndWatchExtrinsic ERROR", err.Error())
+			}
+
 			return err
 		case <-timeout:
 			fmt.Println("timeout")
@@ -151,71 +155,58 @@ func (c *ChainClient) SignAndSubmit(signer *signature.KeyringPair, runtimeCall g
 	}
 }
 
-func (c *ChainClient) checkExtrinsic(extHash types.Hash, blockHash types.Hash) (bool, error) {
+func (c *ChainClient) checkExtrinsic(extHash types.Hash, blockHash types.Hash) ([]gtypes.EventRecord, error) {
 	block, err := c.Api.RPC.Chain.GetBlock(blockHash)
 	if err != nil {
-		return false, err
+		return nil, err
 	}
 
-	key, err := types.CreateStorageKey(c.Meta, "System", "Events", nil, nil)
+	events, err := system.GetEvents(c.Api.RPC.State, blockHash)
 	if err != nil {
-		return false, err
+		return nil, err
 	}
 
-	raw, err := c.Api.RPC.State.GetStorageRaw(key, blockHash)
-	if err != nil {
-		return false, err
-	}
-
-	var events types.EventRecords
-	err = types.EventRecordsRaw(*raw).DecodeEventRecords(c.Meta, &events)
-	if err != nil {
-		return false, err
-	}
-
-	for _, e := range events.System_ExtrinsicSuccess {
-		extrinsicIndex := e.Phase.AsApplyExtrinsic
+	cevents := make([]gtypes.EventRecord, 0, len(events))
+	for _, e := range events {
+		extrinsicIndex := e.Phase.AsApplyExtrinsicField0
 		ext := block.Block.Extrinsics[extrinsicIndex]
 		extBytes, err := codec.Encode(ext)
 		if err != nil {
-			return false, err
+			return nil, err
 		}
-		if blake2b.Sum256(extBytes) == extHash {
-			return true, nil
+
+		// 添加相关的event
+		if blake2b.Sum256(extBytes) != extHash {
+			cevents = append(cevents, e)
+		}
+
+		// 判断是否是当前交易的消息
+		if blake2b.Sum256(extBytes) != extHash || !e.Event.IsSystem {
+			continue
+		}
+		if e.Event.AsSystemField0.IsExtrinsicSuccess {
+			if c.Debug {
+				LogWithRed("Extrinsic", "ExtrinsicSuccess")
+			}
+			return cevents, nil
+		}
+		if e.Event.AsSystemField0.IsExtrinsicFailed {
+			errData := e.Event.AsSystemField0.AsExtrinsicFailedDispatchError0
+			if c.Debug {
+				LogWithRed("Extrinsic", "ExtrinsicFailed")
+			}
+
+			b, err := errData.MarshalJSON()
+			if err != nil {
+				fmt.Println(err)
+				return nil, err
+			}
+
+			return nil, errors.New(string(b))
 		}
 	}
 
-	for _, e := range events.System_ExtrinsicFailed {
-		extrinsicIndex := e.Phase.AsApplyExtrinsic
-		ext := block.Block.Extrinsics[extrinsicIndex]
-		extBytes, err := codec.Encode(ext)
-		if err != nil {
-			return false, err
-		}
-		if blake2b.Sum256(extBytes) == extHash {
-			bt, err := codec.Encode(e.DispatchError)
-			if err != nil {
-				fmt.Println(err)
-				return false, err
-			}
-
-			ge := gtypes.DispatchError{}
-			err = codec.Decode(bt, &ge)
-			if err != nil {
-				fmt.Println(err)
-				return false, err
-			}
-			b, err := ge.MarshalJSON()
-			if err != nil {
-				fmt.Println(err)
-				return false, err
-			}
-			return false, errors.New(string(b))
-		}
-
-	}
-
-	return false, nil
+	return nil, nil
 }
 
 // query map data list

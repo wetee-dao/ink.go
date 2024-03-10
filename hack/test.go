@@ -13,13 +13,13 @@ import (
 )
 
 func main() {
-	client, err := chain.ClientInit("ws://192.168.111.105:30001")
+	client, err := chain.ClientInit("ws://192.168.111.105:30001", true)
 	if err != nil {
 		panic(err)
 	}
 
 	// 1 unit of transfer
-	bal, ok := new(big.Int).SetString("5000000000000000000", 10)
+	bal, ok := new(big.Int).SetString("9000000000000", 10)
 	if !ok {
 		panic(fmt.Errorf("failed to convert balance"))
 	}
@@ -33,6 +33,6 @@ func main() {
 	c := balances.MakeTransferCall(minterWrap, types.NewUCompact(bal))
 	err = client.SignAndSubmit(&signature.TestKeyringPairAlice, c, false)
 	if err != nil {
-		panic(err)
+		fmt.Printf("%+v", err)
 	}
 }
