@@ -6,6 +6,7 @@ require (
 	github.com/centrifuge/go-substrate-rpc-client/v4 v4.2.1
 	github.com/fatih/color v1.16.0
 	github.com/pkg/errors v0.9.1
+	golang.org/x/crypto v0.12.0
 )
 
 require (
@@ -26,7 +27,6 @@ require (
 	github.com/rs/cors v1.8.2 // indirect
 	github.com/stretchr/testify v1.8.4 // indirect
 	github.com/vedhavyas/go-subkey/v2 v2.0.0 // indirect
-	golang.org/x/crypto v0.12.0 // indirect
 	golang.org/x/sys v0.14.0 // indirect
 	gopkg.in/natefinch/npipe.v2 v2.0.0-20160621034901-c1b8fa8bdcce // indirect
 )

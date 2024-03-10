@@ -573,7 +573,7 @@ func GetEventTopicsLatest(state state.State, byteArray320 [32]byte) (ret []types
 	return
 }
 
-// Make a storage key for LastRuntimeUpgrade id={{false [67]}}
+// Make a storage key for LastRuntimeUpgrade id={{false [68]}}
 //
 //	Stores the `spec_version` and `spec_name` of when the last runtime upgrade happened.
 func MakeLastRuntimeUpgradeStorageKey() (types.StorageKey, error) {
@@ -695,7 +695,7 @@ func GetUpgradedToTripleRefCountLatest(state state.State) (ret bool, err error) 
 	return
 }
 
-// Make a storage key for ExecutionPhase id={{false [63]}}
+// Make a storage key for ExecutionPhase id={{false [64]}}
 //
 //	The execution phase of the block.
 func MakeExecutionPhaseStorageKey() (types.StorageKey, error) {

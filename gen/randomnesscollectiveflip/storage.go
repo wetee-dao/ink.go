@@ -8,7 +8,7 @@ import (
 	types1 "github.com/wetee-dao/go-sdk/gen/types"
 )
 
-// Make a storage key for RandomMaterial id={{false [177]}}
+// Make a storage key for RandomMaterial id={{false [182]}}
 //
 //	Series of block headers from the last 81 blocks that acts as random seed material. This
 //	is arranged as a ring buffer with `block_number % 81` being the index into the `Vec` of
