@@ -1,6 +1,6 @@
 module github.com/wetee-dao/go-sdk
 
-go 1.23
+go 1.21
 
 require (
 	github.com/centrifuge/go-substrate-rpc-client/v4 v4.2.1
