@@ -32,7 +32,7 @@ func MakeClusterProofUploadCall(id0 uint64, proof1 []byte) types.RuntimeCall {
 }
 
 // See [`Pallet::cluster_mortgage`].
-func MakeClusterMortgageCall(id0 uint64, cpu1 uint32, mem2 uint32, disk3 uint32, deposit4 types1.UCompact) types.RuntimeCall {
+func MakeClusterMortgageCall(id0 uint64, cpu1 uint32, mem2 uint32, disk3 uint32, gpu4 uint32, deposit5 types1.UCompact) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsWeteeWorker: true,
 		AsWeteeWorkerField0: &types.WeteeWorkerPalletCall{
@@ -41,7 +41,8 @@ func MakeClusterMortgageCall(id0 uint64, cpu1 uint32, mem2 uint32, disk3 uint32,
 			AsClusterMortgageCpu1:     cpu1,
 			AsClusterMortgageMem2:     mem2,
 			AsClusterMortgageDisk3:    disk3,
-			AsClusterMortgageDeposit4: deposit4,
+			AsClusterMortgageGpu4:     gpu4,
+			AsClusterMortgageDeposit5: deposit5,
 		},
 	}
 }
