@@ -6,19 +6,20 @@ import (
 )
 
 // See [`Pallet::create`].
-func MakeCreateCall(name0 []byte, image1 []byte, port2 []uint32, cpu3 uint32, memory4 uint32, disk5 uint32, level6 byte, deposit7 types.UCompact) types1.RuntimeCall {
+func MakeCreateCall(name0 []byte, image1 []byte, meta2 []byte, port3 []uint32, cpu4 uint32, memory5 uint32, disk6 uint32, level7 byte, deposit8 types.UCompact) types1.RuntimeCall {
 	return types1.RuntimeCall{
 		IsWeteeApp: true,
 		AsWeteeAppField0: &types1.WeteeAppPalletCall{
 			IsCreate:         true,
 			AsCreateName0:    name0,
 			AsCreateImage1:   image1,
-			AsCreatePort2:    port2,
-			AsCreateCpu3:     cpu3,
-			AsCreateMemory4:  memory4,
-			AsCreateDisk5:    disk5,
-			AsCreateLevel6:   level6,
-			AsCreateDeposit7: deposit7,
+			AsCreateMeta2:    meta2,
+			AsCreatePort3:    port3,
+			AsCreateCpu4:     cpu4,
+			AsCreateMemory5:  memory5,
+			AsCreateDisk6:    disk6,
+			AsCreateLevel7:   level7,
+			AsCreateDeposit8: deposit8,
 		},
 	}
 }

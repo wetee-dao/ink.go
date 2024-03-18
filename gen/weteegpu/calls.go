@@ -6,20 +6,21 @@ import (
 )
 
 // See [`Pallet::create`].
-func MakeCreateCall(name0 []byte, image1 []byte, port2 []uint32, cpu3 uint32, memory4 uint32, disk5 uint32, gpu6 uint32, level7 byte, deposit8 types.UCompact) types1.RuntimeCall {
+func MakeCreateCall(name0 []byte, image1 []byte, meta2 []byte, port3 []uint32, cpu4 uint32, memory5 uint32, disk6 uint32, gpu7 uint32, level8 byte, deposit9 types.UCompact) types1.RuntimeCall {
 	return types1.RuntimeCall{
 		IsWeteeGpu: true,
 		AsWeteeGpuField0: &types1.WeteeGpuPalletCall{
 			IsCreate:         true,
 			AsCreateName0:    name0,
 			AsCreateImage1:   image1,
-			AsCreatePort2:    port2,
-			AsCreateCpu3:     cpu3,
-			AsCreateMemory4:  memory4,
-			AsCreateDisk5:    disk5,
-			AsCreateGpu6:     gpu6,
-			AsCreateLevel7:   level7,
-			AsCreateDeposit8: deposit8,
+			AsCreateMeta2:    meta2,
+			AsCreatePort3:    port3,
+			AsCreateCpu4:     cpu4,
+			AsCreateMemory5:  memory5,
+			AsCreateDisk6:    disk6,
+			AsCreateGpu7:     gpu7,
+			AsCreateLevel8:   level8,
+			AsCreateDeposit9: deposit9,
 		},
 	}
 }
