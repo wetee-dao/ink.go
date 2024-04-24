@@ -149,7 +149,7 @@ func (w *Worker) ClusterProofUpload(id uint64, proof []byte, untilFinalized bool
 	return w.Client.SignAndSubmit(w.Signer, runtimeCall, untilFinalized)
 }
 
-func (w *Worker) WorkProofUpload(workId gtypes.WorkId, logHash []byte, crHash []byte, cr gtypes.Cr, pubkey []byte, untilFinalized bool) error {
+func (w *Worker) WorkProofUpload(workId gtypes.WorkId, logHash []byte, crHash []byte, cr gtypes.ComCr, pubkey []byte, untilFinalized bool) error {
 	hasHash := false
 	if len(logHash) > 0 || len(crHash) > 0 {
 		hasHash = true
