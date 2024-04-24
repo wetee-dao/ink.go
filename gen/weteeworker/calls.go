@@ -5,7 +5,8 @@ import (
 	types "github.com/wetee-dao/go-sdk/gen/types"
 )
 
-// See [`Pallet::cluster_register`].
+// Worker cluster register
+// 集群注册
 func MakeClusterRegisterCall(name0 []byte, ip1 []types.Ip, port2 uint32, level3 byte) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsWeteeWorker: true,
@@ -19,7 +20,8 @@ func MakeClusterRegisterCall(name0 []byte, ip1 []types.Ip, port2 uint32, level3 
 	}
 }
 
-// See [`Pallet::cluster_proof_upload`].
+// Worker cluster upload proof of work data
+// 提交集群的工作证明
 func MakeClusterProofUploadCall(id0 uint64, proof1 []byte) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsWeteeWorker: true,
@@ -31,7 +33,8 @@ func MakeClusterProofUploadCall(id0 uint64, proof1 []byte) types.RuntimeCall {
 	}
 }
 
-// See [`Pallet::cluster_mortgage`].
+// Worker cluster mortgage
+// 质押硬件
 func MakeClusterMortgageCall(id0 uint64, cpu1 uint32, mem2 uint32, disk3 uint32, gpu4 uint32, deposit5 types1.UCompact) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsWeteeWorker: true,
@@ -47,7 +50,8 @@ func MakeClusterMortgageCall(id0 uint64, cpu1 uint32, mem2 uint32, disk3 uint32,
 	}
 }
 
-// See [`Pallet::cluster_unmortgage`].
+// Worker cluster unmortgage
+// 解抵押
 func MakeClusterUnmortgageCall(id0 uint64, blockNum1 uint64) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsWeteeWorker: true,
@@ -59,7 +63,8 @@ func MakeClusterUnmortgageCall(id0 uint64, blockNum1 uint64) types.RuntimeCall {
 	}
 }
 
-// See [`Pallet::work_proof_upload`].
+// Work proof of work data upload
+// 提交工作证明
 func MakeWorkProofUploadCall(workId0 types.WorkId, proof1 types.OptionTProofOfWork, report2 types.OptionTByteSlice) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsWeteeWorker: true,
@@ -72,7 +77,8 @@ func MakeWorkProofUploadCall(workId0 types.WorkId, proof1 types.OptionTProofOfWo
 	}
 }
 
-// See [`Pallet::cluster_withdrawal`].
+// Worker cluster withdrawal
+// 提现余额
 func MakeClusterWithdrawalCall(workId0 types.WorkId, amount1 types1.U128) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsWeteeWorker: true,
@@ -84,7 +90,8 @@ func MakeClusterWithdrawalCall(workId0 types.WorkId, amount1 types1.U128) types.
 	}
 }
 
-// See [`Pallet::cluster_stop`].
+// Worker cluster stop
+// 停止集群
 func MakeClusterStopCall(id0 uint64) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsWeteeWorker: true,
@@ -95,7 +102,8 @@ func MakeClusterStopCall(id0 uint64) types.RuntimeCall {
 	}
 }
 
-// See [`Pallet::cluster_report`].
+// Worker cluster report
+// 投诉集群
 func MakeClusterReportCall(clusterId0 uint64, workId1 types.WorkId, reason2 []byte) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsWeteeWorker: true,
@@ -108,7 +116,8 @@ func MakeClusterReportCall(clusterId0 uint64, workId1 types.WorkId, reason2 []by
 	}
 }
 
-// See [`Pallet::report_close`].
+// Worker report stop
+// 停止投诉
 func MakeReportCloseCall(clusterId0 uint64, workId1 types.WorkId) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsWeteeWorker: true,
@@ -120,7 +129,8 @@ func MakeReportCloseCall(clusterId0 uint64, workId1 types.WorkId) types.RuntimeC
 	}
 }
 
-// See [`Pallet::work_stop`].
+// Work stop
+// 停止应用
 func MakeWorkStopCall(workId0 types.WorkId) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsWeteeWorker: true,

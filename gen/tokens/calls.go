@@ -5,7 +5,19 @@ import (
 	types "github.com/wetee-dao/go-sdk/gen/types"
 )
 
-// See [`Pallet::transfer`].
+// Transfer some liquid free balance to another account.
+//
+// `transfer` will set the `FreeBalance` of the sender and receiver.
+// It will decrease the total issuance of the system by the
+// `TransferFee`. If the sender's account is below the existential
+// deposit as a result of the transfer, the account will be reaped.
+//
+// The dispatch origin for this call must be `Signed` by the
+// transactor.
+//
+// - `dest`: The recipient of the transfer.
+// - `currency_id`: currency type.
+// - `amount`: free balance amount to tranfer.
 func MakeTransferCall(dest0 types.MultiAddress, currencyId1 uint64, amount2 types1.UCompact) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsTokens: true,
@@ -18,7 +30,25 @@ func MakeTransferCall(dest0 types.MultiAddress, currencyId1 uint64, amount2 type
 	}
 }
 
-// See [`Pallet::transfer_all`].
+// Transfer all remaining balance to the given account.
+//
+// NOTE: This function only attempts to transfer _transferable_
+// balances. This means that any locked, reserved, or existential
+// deposits (when `keep_alive` is `true`), will not be transferred by
+// this function. To ensure that this function results in a killed
+// account, you might need to prepare the account by removing any
+// reference counters, storage deposits, etc...
+//
+// The dispatch origin for this call must be `Signed` by the
+// transactor.
+//
+//   - `dest`: The recipient of the transfer.
+//   - `currency_id`: currency type.
+//   - `keep_alive`: A boolean to determine if the `transfer_all`
+//     operation should send all of the funds the account has, causing
+//     the sender account to be killed (false), or transfer everything
+//     except at least the existential deposit, which will guarantee to
+//     keep the sender account alive (true).
 func MakeTransferAllCall(dest0 types.MultiAddress, currencyId1 uint64, keepAlive2 bool) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsTokens: true,
@@ -31,7 +61,17 @@ func MakeTransferAllCall(dest0 types.MultiAddress, currencyId1 uint64, keepAlive
 	}
 }
 
-// See [`Pallet::transfer_keep_alive`].
+// Same as the [`transfer`] call, but with a check that the transfer
+// will not kill the origin account.
+//
+// 99% of the time you want [`transfer`] instead.
+//
+// The dispatch origin for this call must be `Signed` by the
+// transactor.
+//
+// - `dest`: The recipient of the transfer.
+// - `currency_id`: currency type.
+// - `amount`: free balance amount to tranfer.
 func MakeTransferKeepAliveCall(dest0 types.MultiAddress, currencyId1 uint64, amount2 types1.UCompact) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsTokens: true,
@@ -44,7 +84,15 @@ func MakeTransferKeepAliveCall(dest0 types.MultiAddress, currencyId1 uint64, amo
 	}
 }
 
-// See [`Pallet::force_transfer`].
+// Exactly as `transfer`, except the origin must be root and the source
+// account may be specified.
+//
+// The dispatch origin for this call must be _Root_.
+//
+// - `source`: The sender of the transfer.
+// - `dest`: The recipient of the transfer.
+// - `currency_id`: currency type.
+// - `amount`: free balance amount to tranfer.
 func MakeForceTransferCall(source0 types.MultiAddress, dest1 types.MultiAddress, currencyId2 uint64, amount3 types1.UCompact) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsTokens: true,
@@ -58,7 +106,14 @@ func MakeForceTransferCall(source0 types.MultiAddress, dest1 types.MultiAddress,
 	}
 }
 
-// See [`Pallet::set_balance`].
+// Set the balances of a given account.
+//
+// This will alter `FreeBalance` and `ReservedBalance` in storage. it
+// will also decrease the total issuance of the system
+// (`TotalIssuance`). If the new free or reserved balance is below the
+// existential deposit, it will reap the `AccountInfo`.
+//
+// The dispatch origin for this call is `root`.
 func MakeSetBalanceCall(who0 types.MultiAddress, currencyId1 uint64, newFree2 types1.UCompact, newReserved3 types1.UCompact) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsTokens: true,

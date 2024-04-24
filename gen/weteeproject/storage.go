@@ -8,7 +8,7 @@ import (
 	types1 "github.com/wetee-dao/go-sdk/gen/types"
 )
 
-// Make a storage key for NextProjectId id={{false [4]}}
+// Make a storage key for NextProjectId id={{false [12]}}
 //
 //	The id of the next dao to be created.
 //	获取下一个组织id
@@ -110,6 +110,49 @@ func GetDaoProjectsLatest(state state.State, uint640 uint64) (ret []types1.Proje
 	return
 }
 
+// Make a storage key for ProxyProjects
+//
+//	project board
+//	项目看板
+func MakeProxyProjectsStorageKey(tupleOfByteArray32Uint6410 [32]byte, tupleOfByteArray32Uint6411 uint64) (types.StorageKey, error) {
+	byteArgs := [][]byte{}
+	encBytes := []byte{}
+	var err error
+	encBytes, err = codec.Encode(tupleOfByteArray32Uint6410)
+	if err != nil {
+		return nil, err
+	}
+	byteArgs = append(byteArgs, encBytes)
+	encBytes, err = codec.Encode(tupleOfByteArray32Uint6411)
+	if err != nil {
+		return nil, err
+	}
+	byteArgs = append(byteArgs, encBytes)
+	return types.CreateStorageKey(&types1.Meta, "WeteeProject", "ProxyProjects", byteArgs...)
+}
+func GetProxyProjects(state state.State, bhash types.Hash, tupleOfByteArray32Uint6410 [32]byte, tupleOfByteArray32Uint6411 uint64) (ret types1.ProjectInfo, isSome bool, err error) {
+	key, err := MakeProxyProjectsStorageKey(tupleOfByteArray32Uint6410, tupleOfByteArray32Uint6411)
+	if err != nil {
+		return
+	}
+	isSome, err = state.GetStorage(key, &ret, bhash)
+	if err != nil {
+		return
+	}
+	return
+}
+func GetProxyProjectsLatest(state state.State, tupleOfByteArray32Uint6410 [32]byte, tupleOfByteArray32Uint6411 uint64) (ret types1.ProjectInfo, isSome bool, err error) {
+	key, err := MakeProxyProjectsStorageKey(tupleOfByteArray32Uint6410, tupleOfByteArray32Uint6411)
+	if err != nil {
+		return
+	}
+	isSome, err = state.GetStorageLatest(key, &ret)
+	if err != nil {
+		return
+	}
+	return
+}
+
 // Make a storage key for Tasks
 //
 //	project task
@@ -165,7 +208,7 @@ func GetTasksLatest(state state.State, uint640 uint64) (ret []types1.TaskInfo, e
 	return
 }
 
-// Make a storage key for NextTaskId id={{false [4]}}
+// Make a storage key for NextTaskId id={{false [12]}}
 //
 //	The id of the next dao to be created.
 //	获取下一个组织id

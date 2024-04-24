@@ -62,7 +62,7 @@ func GetBookStateForLatest(state state.State, messageOrigin0 types.MessageOrigin
 	return
 }
 
-// Make a storage key for ServiceHead id={{false [45]}}
+// Make a storage key for ServiceHead id={{false [46]}}
 //
 //	The origin at which we should begin servicing.
 func MakeServiceHeadStorageKey() (types1.StorageKey, error) {

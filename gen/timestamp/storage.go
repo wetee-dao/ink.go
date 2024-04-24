@@ -8,9 +8,9 @@ import (
 	types1 "github.com/wetee-dao/go-sdk/gen/types"
 )
 
-// Make a storage key for Now id={{false [4]}}
+// Make a storage key for Now id={{false [12]}}
 //
-//	Current time for the current block.
+//	The current time for the current block.
 func MakeNowStorageKey() (types.StorageKey, error) {
 	return types.CreateStorageKey(&types1.Meta, "Timestamp", "Now")
 }
@@ -54,9 +54,12 @@ func GetNowLatest(state state.State) (ret uint64, err error) {
 	return
 }
 
-// Make a storage key for DidUpdate id={{false [47]}}
+// Make a storage key for DidUpdate id={{false [8]}}
 //
-//	Did the timestamp get updated in this block?
+//	Whether the timestamp has been updated in this block.
+//
+//	This value is updated to `true` upon successful submission of a timestamp by a node.
+//	It is then checked at the end of each block execution in the `on_finalize` hook.
 func MakeDidUpdateStorageKey() (types.StorageKey, error) {
 	return types.CreateStorageKey(&types1.Meta, "Timestamp", "DidUpdate")
 }

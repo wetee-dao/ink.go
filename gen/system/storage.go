@@ -23,7 +23,7 @@ func MakeAccountStorageKey(byteArray320 [32]byte) (types.StorageKey, error) {
 	return types.CreateStorageKey(&types1.Meta, "System", "Account", byteArgs...)
 }
 
-var AccountResultDefaultBytes, _ = hex.DecodeString("000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000080")
+var AccountResultDefaultBytes, _ = hex.DecodeString("0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000080")
 
 func GetAccount(state state.State, bhash types.Hash, byteArray320 [32]byte) (ret types1.AccountInfo, err error) {
 	key, err := MakeAccountStorageKey(byteArray320)
@@ -62,7 +62,7 @@ func GetAccountLatest(state state.State, byteArray320 [32]byte) (ret types1.Acco
 	return
 }
 
-// Make a storage key for ExtrinsicCount id={{false [8]}}
+// Make a storage key for ExtrinsicCount id={{false [4]}}
 //
 //	Total extrinsics count for the current block.
 func MakeExtrinsicCountStorageKey() (types.StorageKey, error) {
@@ -87,6 +87,52 @@ func GetExtrinsicCountLatest(state state.State) (ret uint32, isSome bool, err er
 	isSome, err = state.GetStorageLatest(key, &ret)
 	if err != nil {
 		return
+	}
+	return
+}
+
+// Make a storage key for InherentsApplied id={{false [8]}}
+//
+//	Whether all inherents have been applied.
+func MakeInherentsAppliedStorageKey() (types.StorageKey, error) {
+	return types.CreateStorageKey(&types1.Meta, "System", "InherentsApplied")
+}
+
+var InherentsAppliedResultDefaultBytes, _ = hex.DecodeString("00")
+
+func GetInherentsApplied(state state.State, bhash types.Hash) (ret bool, err error) {
+	key, err := MakeInherentsAppliedStorageKey()
+	if err != nil {
+		return
+	}
+	var isSome bool
+	isSome, err = state.GetStorage(key, &ret, bhash)
+	if err != nil {
+		return
+	}
+	if !isSome {
+		err = codec.Decode(InherentsAppliedResultDefaultBytes, &ret)
+		if err != nil {
+			return
+		}
+	}
+	return
+}
+func GetInherentsAppliedLatest(state state.State) (ret bool, err error) {
+	key, err := MakeInherentsAppliedStorageKey()
+	if err != nil {
+		return
+	}
+	var isSome bool
+	isSome, err = state.GetStorageLatest(key, &ret)
+	if err != nil {
+		return
+	}
+	if !isSome {
+		err = codec.Decode(InherentsAppliedResultDefaultBytes, &ret)
+		if err != nil {
+			return
+		}
 	}
 	return
 }
@@ -137,7 +183,7 @@ func GetBlockWeightLatest(state state.State) (ret types1.PerDispatchClass, err e
 	return
 }
 
-// Make a storage key for AllExtrinsicsLen id={{false [8]}}
+// Make a storage key for AllExtrinsicsLen id={{false [4]}}
 //
 //	Total length (in bytes) for all extrinsics put together, for the current block.
 func MakeAllExtrinsicsLenStorageKey() (types.StorageKey, error) {
@@ -274,7 +320,7 @@ func GetExtrinsicDataLatest(state state.State, uint320 uint32) (ret []byte, err 
 	return
 }
 
-// Make a storage key for Number id={{false [4]}}
+// Make a storage key for Number id={{false [12]}}
 //
 //	The current block number being processed. Set by `execute_block`.
 func MakeNumberStorageKey() (types.StorageKey, error) {
@@ -320,7 +366,7 @@ func GetNumberLatest(state state.State) (ret uint64, err error) {
 	return
 }
 
-// Make a storage key for ParentHash id={{false [12]}}
+// Make a storage key for ParentHash id={{false [13]}}
 //
 //	Hash of the previous block.
 func MakeParentHashStorageKey() (types.StorageKey, error) {
@@ -366,7 +412,7 @@ func GetParentHashLatest(state state.State) (ret [32]byte, err error) {
 	return
 }
 
-// Make a storage key for Digest id={{false [14]}}
+// Make a storage key for Digest id={{false [15]}}
 //
 //	Digest of the current block, also part of the block header.
 func MakeDigestStorageKey() (types.StorageKey, error) {
@@ -412,7 +458,7 @@ func GetDigestLatest(state state.State) (ret []types1.DigestItem, err error) {
 	return
 }
 
-// Make a storage key for Events id={{false [18]}}
+// Make a storage key for Events id={{false [19]}}
 //
 //	Events deposited for the current block.
 //
@@ -464,7 +510,7 @@ func GetEventsLatest(state state.State) (ret []types1.EventRecord, err error) {
 	return
 }
 
-// Make a storage key for EventCount id={{false [8]}}
+// Make a storage key for EventCount id={{false [4]}}
 //
 //	The number of events in the `Events<T>` list.
 func MakeEventCountStorageKey() (types.StorageKey, error) {
@@ -602,7 +648,7 @@ func GetLastRuntimeUpgradeLatest(state state.State) (ret types1.LastRuntimeUpgra
 	return
 }
 
-// Make a storage key for UpgradedToU32RefCount id={{false [47]}}
+// Make a storage key for UpgradedToU32RefCount id={{false [8]}}
 //
 //	True if we have upgraded so that `type RefCount` is `u32`. False (default) if not.
 func MakeUpgradedToU32RefCountStorageKey() (types.StorageKey, error) {
@@ -648,7 +694,7 @@ func GetUpgradedToU32RefCountLatest(state state.State) (ret bool, err error) {
 	return
 }
 
-// Make a storage key for UpgradedToTripleRefCount id={{false [47]}}
+// Make a storage key for UpgradedToTripleRefCount id={{false [8]}}
 //
 //	True if we have upgraded so that AccountInfo contains three types of `RefCount`. False
 //	(default) if not.
@@ -714,6 +760,35 @@ func GetExecutionPhase(state state.State, bhash types.Hash) (ret types1.Phase, i
 }
 func GetExecutionPhaseLatest(state state.State) (ret types1.Phase, isSome bool, err error) {
 	key, err := MakeExecutionPhaseStorageKey()
+	if err != nil {
+		return
+	}
+	isSome, err = state.GetStorageLatest(key, &ret)
+	if err != nil {
+		return
+	}
+	return
+}
+
+// Make a storage key for AuthorizedUpgrade id={{false [72]}}
+//
+//	`Some` if a code upgrade has been authorized.
+func MakeAuthorizedUpgradeStorageKey() (types.StorageKey, error) {
+	return types.CreateStorageKey(&types1.Meta, "System", "AuthorizedUpgrade")
+}
+func GetAuthorizedUpgrade(state state.State, bhash types.Hash) (ret types1.CodeUpgradeAuthorization, isSome bool, err error) {
+	key, err := MakeAuthorizedUpgradeStorageKey()
+	if err != nil {
+		return
+	}
+	isSome, err = state.GetStorage(key, &ret, bhash)
+	if err != nil {
+		return
+	}
+	return
+}
+func GetAuthorizedUpgradeLatest(state state.State) (ret types1.CodeUpgradeAuthorization, isSome bool, err error) {
+	key, err := MakeAuthorizedUpgradeStorageKey()
 	if err != nil {
 		return
 	}

@@ -5,7 +5,7 @@ import (
 	types "github.com/wetee-dao/go-sdk/gen/types"
 )
 
-// See [`Pallet::project_join_request`].
+// 申请加入团队
 func MakeProjectJoinRequestCall(daoId0 uint64, projectId1 uint64, who2 [32]byte) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsWeteeProject: true,
@@ -18,7 +18,7 @@ func MakeProjectJoinRequestCall(daoId0 uint64, projectId1 uint64, who2 [32]byte)
 	}
 }
 
-// See [`Pallet::create_project`].
+// 创建项目
 func MakeCreateProjectCall(daoId0 uint64, name1 []byte, description2 []byte, creator3 [32]byte) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsWeteeProject: true,
@@ -32,7 +32,7 @@ func MakeCreateProjectCall(daoId0 uint64, name1 []byte, description2 []byte, cre
 	}
 }
 
-// See [`Pallet::apply_project_funds`].
+// 为项目申请资金
 func MakeApplyProjectFundsCall(daoId0 uint64, projectId1 uint64, amount2 types1.U128) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsWeteeProject: true,
@@ -45,7 +45,7 @@ func MakeApplyProjectFundsCall(daoId0 uint64, projectId1 uint64, amount2 types1.
 	}
 }
 
-// See [`Pallet::create_task`].
+// 创建任务
 func MakeCreateTaskCall(daoId0 uint64, projectId1 uint64, name2 []byte, description3 []byte, point4 uint16, priority5 byte, maxAssignee6 types.OptionTByte, skills7 types.OptionTByteSlice, assignees8 types.OptionTByteArray32Slice, reviewers9 types.OptionTByteArray32Slice, amount10 types1.U128) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsWeteeProject: true,
@@ -66,7 +66,7 @@ func MakeCreateTaskCall(daoId0 uint64, projectId1 uint64, name2 []byte, descript
 	}
 }
 
-// See [`Pallet::join_task`].
+// 加入任务
 func MakeJoinTaskCall(daoId0 uint64, projectId1 uint64, taskId2 uint64) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsWeteeProject: true,
@@ -79,7 +79,7 @@ func MakeJoinTaskCall(daoId0 uint64, projectId1 uint64, taskId2 uint64) types.Ru
 	}
 }
 
-// See [`Pallet::leave_task`].
+// 离开项目
 func MakeLeaveTaskCall(daoId0 uint64, projectId1 uint64, taskId2 uint64) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsWeteeProject: true,
@@ -92,7 +92,7 @@ func MakeLeaveTaskCall(daoId0 uint64, projectId1 uint64, taskId2 uint64) types.R
 	}
 }
 
-// See [`Pallet::join_task_review`].
+// 加入项目审核团队
 func MakeJoinTaskReviewCall(daoId0 uint64, projectId1 uint64, taskId2 uint64) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsWeteeProject: true,
@@ -105,7 +105,7 @@ func MakeJoinTaskReviewCall(daoId0 uint64, projectId1 uint64, taskId2 uint64) ty
 	}
 }
 
-// See [`Pallet::leave_task_review`].
+// 离开任务审核
 func MakeLeaveTaskReviewCall(daoId0 uint64, projectId1 uint64, taskId2 uint64) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsWeteeProject: true,
@@ -118,7 +118,7 @@ func MakeLeaveTaskReviewCall(daoId0 uint64, projectId1 uint64, taskId2 uint64) t
 	}
 }
 
-// See [`Pallet::start_task`].
+// 开始任务
 func MakeStartTaskCall(daoId0 uint64, projectId1 uint64, taskId2 uint64) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsWeteeProject: true,
@@ -131,7 +131,7 @@ func MakeStartTaskCall(daoId0 uint64, projectId1 uint64, taskId2 uint64) types.R
 	}
 }
 
-// See [`Pallet::request_review`].
+// 申请审核
 func MakeRequestReviewCall(daoId0 uint64, projectId1 uint64, taskId2 uint64) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsWeteeProject: true,
@@ -144,7 +144,7 @@ func MakeRequestReviewCall(daoId0 uint64, projectId1 uint64, taskId2 uint64) typ
 	}
 }
 
-// See [`Pallet::task_done`].
+// 完成任务
 func MakeTaskDoneCall(daoId0 uint64, projectId1 uint64, taskId2 uint64) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsWeteeProject: true,
@@ -157,7 +157,7 @@ func MakeTaskDoneCall(daoId0 uint64, projectId1 uint64, taskId2 uint64) types.Ru
 	}
 }
 
-// See [`Pallet::make_review`].
+// 发送审核报告
 func MakeMakeReviewCall(daoId0 uint64, projectId1 uint64, taskId2 uint64, opinion3 types.ReviewOpinion, meta4 []byte) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsWeteeProject: true,
@@ -168,6 +168,28 @@ func MakeMakeReviewCall(daoId0 uint64, projectId1 uint64, taskId2 uint64, opinio
 			AsMakeReviewTaskId2:    taskId2,
 			AsMakeReviewOpinion3:   opinion3,
 			AsMakeReviewMeta4:      meta4,
+		},
+	}
+}
+
+// 创建非DAO项目
+func MakeCreateProxyProjectCall(name0 []byte, description1 []byte) types.RuntimeCall {
+	return types.RuntimeCall{
+		IsWeteeProject: true,
+		AsWeteeProjectField0: &types.WeteeProjectPalletCall{
+			IsCreateProxyProject:             true,
+			AsCreateProxyProjectName0:        name0,
+			AsCreateProxyProjectDescription1: description1,
+		},
+	}
+}
+func MakeProxyCallCall(projectId0 uint64, call1 types.RuntimeCall) types.RuntimeCall {
+	return types.RuntimeCall{
+		IsWeteeProject: true,
+		AsWeteeProjectField0: &types.WeteeProjectPalletCall{
+			IsProxyCall:           true,
+			AsProxyCallProjectId0: projectId0,
+			AsProxyCallCall1:      &call1,
 		},
 	}
 }

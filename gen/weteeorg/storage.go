@@ -46,7 +46,7 @@ func GetDaosLatest(state state.State, uint640 uint64) (ret types1.OrgInfo, isSom
 	return
 }
 
-// Make a storage key for NextDaoId id={{false [4]}}
+// Make a storage key for NextDaoId id={{false [12]}}
 //
 //	The id of the next dao to be created.
 //	获取下一个组织id
@@ -93,7 +93,7 @@ func GetNextDaoIdLatest(state state.State) (ret uint64, err error) {
 	return
 }
 
-// Make a storage key for NextAppId id={{false [4]}}
+// Make a storage key for NextAppId id={{false [12]}}
 //
 //	The id of the next dao to be created.
 //	获取下一个组织id
@@ -255,7 +255,7 @@ func GetRoadMapsLatest(state state.State, tupleOfUint64Uint320 uint64, tupleOfUi
 	return
 }
 
-// Make a storage key for NextTaskId id={{false [4]}}
+// Make a storage key for NextTaskId id={{false [12]}}
 //
 //	The id of the next dao to be created.
 //	获取下一个组织id

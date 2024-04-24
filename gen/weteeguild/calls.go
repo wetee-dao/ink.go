@@ -2,7 +2,6 @@ package weteeguild
 
 import types "github.com/wetee-dao/go-sdk/gen/types"
 
-// See [`Pallet::guild_join`].
 func MakeGuildJoinCall(daoId0 uint64, guildId1 uint64, who2 [32]byte) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsWeteeGuild: true,
@@ -15,7 +14,7 @@ func MakeGuildJoinCall(daoId0 uint64, guildId1 uint64, who2 [32]byte) types.Runt
 	}
 }
 
-// See [`Pallet::create_guild`].
+// 创建公会
 func MakeCreateGuildCall(daoId0 uint64, name1 []byte, desc2 []byte, metaData3 []byte, creator4 [32]byte) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsWeteeGuild: true,

@@ -5,7 +5,13 @@ import (
 	types "github.com/wetee-dao/go-sdk/gen/types"
 )
 
-// See [`Pallet::transfer_allow_death`].
+// Transfer some liquid free balance to another account.
+//
+// `transfer_allow_death` will set the `FreeBalance` of the sender and receiver.
+// If the sender's account is below the existential deposit as a result
+// of the transfer, the account will be reaped.
+//
+// The dispatch origin for this call must be `Signed` by the transactor.
 func MakeTransferAllowDeathCall(dest0 types.MultiAddress, value1 types1.UCompact) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsBalances: true,
@@ -17,20 +23,8 @@ func MakeTransferAllowDeathCall(dest0 types.MultiAddress, value1 types1.UCompact
 	}
 }
 
-// See [`Pallet::set_balance_deprecated`].
-func MakeSetBalanceDeprecatedCall(who0 types.MultiAddress, newFree1 types1.UCompact, oldReserved2 types1.UCompact) types.RuntimeCall {
-	return types.RuntimeCall{
-		IsBalances: true,
-		AsBalancesField0: &types.PalletBalancesPalletCall{
-			IsSetBalanceDeprecated:             true,
-			AsSetBalanceDeprecatedWho0:         who0,
-			AsSetBalanceDeprecatedNewFree1:     newFree1,
-			AsSetBalanceDeprecatedOldReserved2: oldReserved2,
-		},
-	}
-}
-
-// See [`Pallet::force_transfer`].
+// Exactly as `transfer_allow_death`, except the origin must be root and the source account
+// may be specified.
 func MakeForceTransferCall(source0 types.MultiAddress, dest1 types.MultiAddress, value2 types1.UCompact) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsBalances: true,
@@ -43,7 +37,12 @@ func MakeForceTransferCall(source0 types.MultiAddress, dest1 types.MultiAddress,
 	}
 }
 
-// See [`Pallet::transfer_keep_alive`].
+// Same as the [`transfer_allow_death`] call, but with a check that the transfer will not
+// kill the origin account.
+//
+// 99% of the time you want [`transfer_allow_death`] instead.
+//
+// [`transfer_allow_death`]: struct.Pallet.html#method.transfer
 func MakeTransferKeepAliveCall(dest0 types.MultiAddress, value1 types1.UCompact) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsBalances: true,
@@ -55,7 +54,21 @@ func MakeTransferKeepAliveCall(dest0 types.MultiAddress, value1 types1.UCompact)
 	}
 }
 
-// See [`Pallet::transfer_all`].
+// Transfer the entire transferable balance from the caller account.
+//
+// NOTE: This function only attempts to transfer _transferable_ balances. This means that
+// any locked, reserved, or existential deposits (when `keep_alive` is `true`), will not be
+// transferred by this function. To ensure that this function results in a killed account,
+// you might need to prepare the account by removing any reference counters, storage
+// deposits, etc...
+//
+// The dispatch origin of this call must be Signed.
+//
+//   - `dest`: The recipient of the transfer.
+//   - `keep_alive`: A boolean to determine if the `transfer_all` operation should send all
+//     of the funds the account has, causing the sender account to be killed (false), or
+//     transfer everything except at least the existential deposit, which will guarantee to
+//     keep the sender account alive (true).
 func MakeTransferAllCall(dest0 types.MultiAddress, keepAlive1 bool) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsBalances: true,
@@ -67,7 +80,9 @@ func MakeTransferAllCall(dest0 types.MultiAddress, keepAlive1 bool) types.Runtim
 	}
 }
 
-// See [`Pallet::force_unreserve`].
+// Unreserve some balance from a user by force.
+//
+// Can only be called by ROOT.
 func MakeForceUnreserveCall(who0 types.MultiAddress, amount1 types1.U128) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsBalances: true,
@@ -79,7 +94,14 @@ func MakeForceUnreserveCall(who0 types.MultiAddress, amount1 types1.U128) types.
 	}
 }
 
-// See [`Pallet::upgrade_accounts`].
+// Upgrade a specified account.
+//
+// - `origin`: Must be `Signed`.
+// - `who`: The account to be upgraded.
+//
+// This will waive the transaction fee if at least all but 10% of the accounts needed to
+// be upgraded. (We let some not have to be upgraded just in order to allow for the
+// possibililty of churn).
 func MakeUpgradeAccountsCall(who0 [][32]byte) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsBalances: true,
@@ -90,19 +112,9 @@ func MakeUpgradeAccountsCall(who0 [][32]byte) types.RuntimeCall {
 	}
 }
 
-// See [`Pallet::transfer`].
-func MakeTransferCall(dest0 types.MultiAddress, value1 types1.UCompact) types.RuntimeCall {
-	return types.RuntimeCall{
-		IsBalances: true,
-		AsBalancesField0: &types.PalletBalancesPalletCall{
-			IsTransfer:       true,
-			AsTransferDest0:  dest0,
-			AsTransferValue1: value1,
-		},
-	}
-}
-
-// See [`Pallet::force_set_balance`].
+// Set the regular balance of a given account.
+//
+// The dispatch origin for this call is `root`.
 func MakeForceSetBalanceCall(who0 types.MultiAddress, newFree1 types1.UCompact) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsBalances: true,
@@ -110,6 +122,22 @@ func MakeForceSetBalanceCall(who0 types.MultiAddress, newFree1 types1.UCompact) 
 			IsForceSetBalance:         true,
 			AsForceSetBalanceWho0:     who0,
 			AsForceSetBalanceNewFree1: newFree1,
+		},
+	}
+}
+
+// Adjust the total issuance in a saturating way.
+//
+// Can only be called by root and always needs a positive `delta`.
+//
+// # Example
+func MakeForceAdjustTotalIssuanceCall(direction0 types.AdjustmentDirection, delta1 types1.UCompact) types.RuntimeCall {
+	return types.RuntimeCall{
+		IsBalances: true,
+		AsBalancesField0: &types.PalletBalancesPalletCall{
+			IsForceAdjustTotalIssuance:           true,
+			AsForceAdjustTotalIssuanceDirection0: direction0,
+			AsForceAdjustTotalIssuanceDelta1:     delta1,
 		},
 	}
 }

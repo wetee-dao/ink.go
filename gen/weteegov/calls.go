@@ -5,7 +5,8 @@ import (
 	types "github.com/wetee-dao/go-sdk/gen/types"
 )
 
-// See [`Pallet::submit_proposal`].
+// create a proposal
+// 创建一个提案
 func MakeSubmitProposalCall(daoId0 uint64, memberData1 types.MemberData, proposal2 types.RuntimeCall, periodIndex3 uint32) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsWeteeGov: true,
@@ -19,7 +20,8 @@ func MakeSubmitProposalCall(daoId0 uint64, memberData1 types.MemberData, proposa
 	}
 }
 
-// See [`Pallet::deposit_proposal`].
+// Open a prop.
+// 开始全民公投
 func MakeDepositProposalCall(daoId0 uint64, proposeId1 uint32, deposit2 types1.UCompact) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsWeteeGov: true,
@@ -32,7 +34,8 @@ func MakeDepositProposalCall(daoId0 uint64, proposeId1 uint32, deposit2 types1.U
 	}
 }
 
-// See [`Pallet::vote_for_prop`].
+// Vote for the prop
+// 为全民公投投票
 func MakeVoteForPropCall(daoId0 uint64, propIndex1 uint32, pledge2 types.Pledge, opinion3 types.Opinion) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsWeteeGov: true,
@@ -46,7 +49,8 @@ func MakeVoteForPropCall(daoId0 uint64, propIndex1 uint32, pledge2 types.Pledge,
 	}
 }
 
-// See [`Pallet::cancel_vote`].
+// Cancel a vote on a prop
+// 取消一个投票
 func MakeCancelVoteCall(daoId0 uint64, index1 uint32) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsWeteeGov: true,
@@ -58,7 +62,8 @@ func MakeCancelVoteCall(daoId0 uint64, index1 uint32) types.RuntimeCall {
 	}
 }
 
-// See [`Pallet::run_proposal`].
+// Vote and execute the transaction corresponding to the proposa
+// 执行一个投票通过提案
 func MakeRunProposalCall(daoId0 uint64, index1 uint32) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsWeteeGov: true,
@@ -70,7 +75,7 @@ func MakeRunProposalCall(daoId0 uint64, index1 uint32) types.RuntimeCall {
 	}
 }
 
-// See [`Pallet::unlock`].
+// Unlock
 func MakeUnlockCall(daoId0 uint64) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsWeteeGov: true,
@@ -81,7 +86,7 @@ func MakeUnlockCall(daoId0 uint64) types.RuntimeCall {
 	}
 }
 
-// See [`Pallet::set_max_pre_props`].
+// Set the maximum number of proposals at the same time
 func MakeSetMaxPrePropsCall(daoId0 uint64, max1 uint32) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsWeteeGov: true,
@@ -92,8 +97,6 @@ func MakeSetMaxPrePropsCall(daoId0 uint64, max1 uint32) types.RuntimeCall {
 		},
 	}
 }
-
-// See [`Pallet::update_vote_model`].
 func MakeUpdateVoteModelCall(daoId0 uint64, model1 byte) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsWeteeGov: true,
@@ -104,8 +107,6 @@ func MakeUpdateVoteModelCall(daoId0 uint64, model1 byte) types.RuntimeCall {
 		},
 	}
 }
-
-// See [`Pallet::set_periods`].
 func MakeSetPeriodsCall(daoId0 uint64, periods1 []types.Period) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsWeteeGov: true,

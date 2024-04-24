@@ -8,7 +8,7 @@ import (
 	types1 "github.com/wetee-dao/go-sdk/gen/types"
 )
 
-// Make a storage key for NextTeeId id={{false [4]}}
+// Make a storage key for NextTeeId id={{false [12]}}
 //
 //	The id of the next app to be created.
 //	获取下一个app id

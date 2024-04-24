@@ -5,7 +5,8 @@ import (
 	types "github.com/wetee-dao/go-sdk/gen/types"
 )
 
-// See [`Pallet::create_asset`].
+// create dao asset.
+// 创建 WETEE 资产
 func MakeCreateAssetCall(daoId0 uint64, metadata1 types.DaoAssetMeta, amount2 types1.U128, initDaoAsset3 types1.U128) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsWeteeAsset: true,
@@ -19,7 +20,7 @@ func MakeCreateAssetCall(daoId0 uint64, metadata1 types.DaoAssetMeta, amount2 ty
 	}
 }
 
-// See [`Pallet::set_existenial_deposit`].
+// 设置加入WETEE所需要的最小抵押
 func MakeSetExistenialDepositCall(daoId0 uint64, existenialDeposit1 types1.U128) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsWeteeAsset: true,
@@ -31,7 +32,8 @@ func MakeSetExistenialDepositCall(daoId0 uint64, existenialDeposit1 types1.U128)
 	}
 }
 
-// See [`Pallet::set_metadata`].
+// You should have created the asset first.
+// 设置资产元数据
 func MakeSetMetadataCall(daoId0 uint64, metadata1 types.DaoAssetMeta) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsWeteeAsset: true,
@@ -43,7 +45,8 @@ func MakeSetMetadataCall(daoId0 uint64, metadata1 types.DaoAssetMeta) types.Runt
 	}
 }
 
-// See [`Pallet::burn`].
+// Users destroy their own assets.
+// 销毁资产
 func MakeBurnCall(daoId0 uint64, amount1 types1.U128) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsWeteeAsset: true,
@@ -55,7 +58,14 @@ func MakeBurnCall(daoId0 uint64, amount1 types1.U128) types.RuntimeCall {
 	}
 }
 
-// See [`Pallet::transfer`].
+// This function transfers the given amount from the source to the destination.
+//
+// # Arguments
+//
+// * `amount` - The amount to transfer
+// * `source` - The source account
+// * `destination` - The destination account
+// 转移资产
 func MakeTransferCall(dest0 types.MultiAddress, daoId1 uint64, amount2 types1.UCompact) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsWeteeAsset: true,
@@ -68,7 +78,7 @@ func MakeTransferCall(dest0 types.MultiAddress, daoId1 uint64, amount2 types1.UC
 	}
 }
 
-// See [`Pallet::join`].
+// 成为会员
 func MakeJoinCall(daoId0 uint64, shareExpect1 uint32, existenialDeposit2 types1.UCompact) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsWeteeAsset: true,

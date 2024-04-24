@@ -8,7 +8,7 @@ import (
 	types1 "github.com/wetee-dao/go-sdk/gen/types"
 )
 
-// Make a storage key for State id={{false [95]}}
+// Make a storage key for State id={{false [96]}}
 //
 //	State of the current authority set.
 func MakeStateStorageKey() (types.StorageKey, error) {
@@ -54,7 +54,7 @@ func GetStateLatest(state state.State) (ret types1.StoredState, err error) {
 	return
 }
 
-// Make a storage key for PendingChange id={{false [96]}}
+// Make a storage key for PendingChange id={{false [97]}}
 //
 //	Pending change: (signaled at, scheduled change).
 func MakePendingChangeStorageKey() (types.StorageKey, error) {
@@ -83,7 +83,7 @@ func GetPendingChangeLatest(state state.State) (ret types1.StoredPendingChange, 
 	return
 }
 
-// Make a storage key for NextForced id={{false [4]}}
+// Make a storage key for NextForced id={{false [12]}}
 //
 //	next block number where we can force a change.
 func MakeNextForcedStorageKey() (types.StorageKey, error) {
@@ -112,7 +112,7 @@ func GetNextForcedLatest(state state.State) (ret uint64, isSome bool, err error)
 	return
 }
 
-// Make a storage key for Stalled id={{false [99]}}
+// Make a storage key for Stalled id={{false [100]}}
 //
 //	`true` if we are currently stalled.
 func MakeStalledStorageKey() (types.StorageKey, error) {
@@ -141,7 +141,7 @@ func GetStalledLatest(state state.State) (ret types1.TupleOfUint64Uint64, isSome
 	return
 }
 
-// Make a storage key for CurrentSetId id={{false [4]}}
+// Make a storage key for CurrentSetId id={{false [12]}}
 //
 //	The number of changes (both in terms of keys and underlying economic responsibilities)
 //	in the "set" of Grandpa validators from genesis.
@@ -230,6 +230,52 @@ func GetSetIdSessionLatest(state state.State, uint640 uint64) (ret uint32, isSom
 	isSome, err = state.GetStorageLatest(key, &ret)
 	if err != nil {
 		return
+	}
+	return
+}
+
+// Make a storage key for Authorities id={{false [98]}}
+//
+//	The current list of authorities.
+func MakeAuthoritiesStorageKey() (types.StorageKey, error) {
+	return types.CreateStorageKey(&types1.Meta, "Grandpa", "Authorities")
+}
+
+var AuthoritiesResultDefaultBytes, _ = hex.DecodeString("00")
+
+func GetAuthorities(state state.State, bhash types.Hash) (ret []types1.TupleOfByteArray32Uint64, err error) {
+	key, err := MakeAuthoritiesStorageKey()
+	if err != nil {
+		return
+	}
+	var isSome bool
+	isSome, err = state.GetStorage(key, &ret, bhash)
+	if err != nil {
+		return
+	}
+	if !isSome {
+		err = codec.Decode(AuthoritiesResultDefaultBytes, &ret)
+		if err != nil {
+			return
+		}
+	}
+	return
+}
+func GetAuthoritiesLatest(state state.State) (ret []types1.TupleOfByteArray32Uint64, err error) {
+	key, err := MakeAuthoritiesStorageKey()
+	if err != nil {
+		return
+	}
+	var isSome bool
+	isSome, err = state.GetStorageLatest(key, &ret)
+	if err != nil {
+		return
+	}
+	if !isSome {
+		err = codec.Decode(AuthoritiesResultDefaultBytes, &ret)
+		if err != nil {
+			return
+		}
 	}
 	return
 }

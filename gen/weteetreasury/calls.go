@@ -5,7 +5,6 @@ import (
 	types1 "github.com/wetee-dao/go-sdk/gen/types"
 )
 
-// See [`Pallet::spend`].
 func MakeSpendCall(daoId0 uint64, beneficiary1 [32]byte, amount2 types.UCompact) types1.RuntimeCall {
 	return types1.RuntimeCall{
 		IsWeteeTreasury: true,

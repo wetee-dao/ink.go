@@ -46,7 +46,7 @@ func GetK8sClusterAccountsLatest(state state.State, byteArray320 [32]byte) (ret 
 	return
 }
 
-// Make a storage key for NextClusterId id={{false [4]}}
+// Make a storage key for NextClusterId id={{false [12]}}
 //
 //	The id of the next cluster to be created.
 //	获取下一个集群id
@@ -183,7 +183,7 @@ func MakeCrsStorageKey(uint640 uint64) (types.StorageKey, error) {
 	byteArgs = append(byteArgs, encBytes)
 	return types.CreateStorageKey(&types1.Meta, "WeteeWorker", "Crs", byteArgs...)
 }
-func GetCrs(state state.State, bhash types.Hash, uint640 uint64) (ret types1.TupleOfCrCr, isSome bool, err error) {
+func GetCrs(state state.State, bhash types.Hash, uint640 uint64) (ret types1.TupleOfComCrComCr, isSome bool, err error) {
 	key, err := MakeCrsStorageKey(uint640)
 	if err != nil {
 		return
@@ -194,7 +194,7 @@ func GetCrs(state state.State, bhash types.Hash, uint640 uint64) (ret types1.Tup
 	}
 	return
 }
-func GetCrsLatest(state state.State, uint640 uint64) (ret types1.TupleOfCrCr, isSome bool, err error) {
+func GetCrsLatest(state state.State, uint640 uint64) (ret types1.TupleOfComCrComCr, isSome bool, err error) {
 	key, err := MakeCrsStorageKey(uint640)
 	if err != nil {
 		return
@@ -449,7 +449,7 @@ func GetWorkContractStateLatest(state state.State, tupleOfWorkIdUint640 types1.W
 	return
 }
 
-// Make a storage key for Stage id={{false [8]}}
+// Make a storage key for Stage id={{false [4]}}
 //
 //	Work 结算周期
 //	Work settle period

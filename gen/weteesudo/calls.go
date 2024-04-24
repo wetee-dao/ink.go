@@ -2,7 +2,8 @@ package weteesudo
 
 import types "github.com/wetee-dao/go-sdk/gen/types"
 
-// See [`Pallet::sudo`].
+// Execute external transactions as root
+// 以 root 账户执行函数
 func MakeSudoCall(daoId0 uint64, call1 types.RuntimeCall) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsWeteeSudo: true,
@@ -14,7 +15,8 @@ func MakeSudoCall(daoId0 uint64, call1 types.RuntimeCall) types.RuntimeCall {
 	}
 }
 
-// See [`Pallet::set_sudo_account`].
+// set sudo account
+// 设置超级用户账户
 func MakeSetSudoAccountCall(daoId0 uint64, sudoAccount1 [32]byte) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsWeteeSudo: true,
@@ -26,7 +28,8 @@ func MakeSetSudoAccountCall(daoId0 uint64, sudoAccount1 [32]byte) types.RuntimeC
 	}
 }
 
-// See [`Pallet::close_sudo`].
+// close sudo
+// 关闭 sudo 功能
 func MakeCloseSudoCall(daoId0 uint64) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsWeteeSudo: true,
