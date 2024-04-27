@@ -7,20 +7,22 @@ import (
 
 // Task create
 // 注册任务
-func MakeCreateCall(name0 []byte, image1 []byte, meta2 []byte, port3 []uint32, cpu4 uint32, memory5 uint32, disk6 []types.Disk, level7 byte, deposit8 types1.UCompact) types.RuntimeCall {
+func MakeCreateCall(name0 []byte, image1 []byte, meta2 []byte, port3 []types.Service, command4 [][]byte, setting5 []types.AppSettingInput, cpu6 uint32, memory7 uint32, disk8 []types.Disk, level9 byte, deposit10 types1.UCompact) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsWeteeTask: true,
 		AsWeteeTaskField0: &types.WeteeTaskPalletCall{
-			IsCreate:         true,
-			AsCreateName0:    name0,
-			AsCreateImage1:   image1,
-			AsCreateMeta2:    meta2,
-			AsCreatePort3:    port3,
-			AsCreateCpu4:     cpu4,
-			AsCreateMemory5:  memory5,
-			AsCreateDisk6:    disk6,
-			AsCreateLevel7:   level7,
-			AsCreateDeposit8: deposit8,
+			IsCreate:          true,
+			AsCreateName0:     name0,
+			AsCreateImage1:    image1,
+			AsCreateMeta2:     meta2,
+			AsCreatePort3:     port3,
+			AsCreateCommand4:  command4,
+			AsCreateSetting5:  setting5,
+			AsCreateCpu6:      cpu6,
+			AsCreateMemory7:   memory7,
+			AsCreateDisk8:     disk8,
+			AsCreateLevel9:    level9,
+			AsCreateDeposit10: deposit10,
 		},
 	}
 }
@@ -39,16 +41,18 @@ func MakeRerunCall(id0 uint64) types.RuntimeCall {
 
 // Task update
 // 更新任务
-func MakeUpdateCall(appId0 uint64, name1 []byte, image2 []byte, port3 []uint32, withRestart4 bool) types.RuntimeCall {
+func MakeUpdateCall(appId0 uint64, newName1 types.OptionTByteSlice, newImage2 types.OptionTByteSlice, newPort3 types.OptionTServiceSlice, newCommand4 types.OptionTByteSliceSlice, newSetting5 []types.AppSettingInput, withRestart6 bool) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsWeteeTask: true,
 		AsWeteeTaskField0: &types.WeteeTaskPalletCall{
 			IsUpdate:             true,
 			AsUpdateAppId0:       appId0,
-			AsUpdateName1:        name1,
-			AsUpdateImage2:       image2,
-			AsUpdatePort3:        port3,
-			AsUpdateWithRestart4: withRestart4,
+			AsUpdateNewName1:     newName1,
+			AsUpdateNewImage2:    newImage2,
+			AsUpdateNewPort3:     newPort3,
+			AsUpdateNewCommand4:  newCommand4,
+			AsUpdateNewSetting5:  newSetting5,
+			AsUpdateWithRestart6: withRestart6,
 		},
 	}
 }

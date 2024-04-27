@@ -7,51 +7,41 @@ import (
 
 // App create
 // 注册任务
-func MakeCreateCall(name0 []byte, image1 []byte, meta2 []byte, port3 []uint32, cpu4 uint32, memory5 uint32, disk6 []types.Disk, gpu7 uint32, level8 byte, deposit9 types1.UCompact) types.RuntimeCall {
+func MakeCreateCall(name0 []byte, image1 []byte, meta2 []byte, port3 []types.Service, command4 [][]byte, setting5 []types.AppSettingInput, cpu6 uint32, memory7 uint32, disk8 []types.Disk, gpu9 uint32, level10 byte, deposit11 types1.UCompact) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsWeteeGpu: true,
 		AsWeteeGpuField0: &types.WeteeGpuPalletCall{
-			IsCreate:         true,
-			AsCreateName0:    name0,
-			AsCreateImage1:   image1,
-			AsCreateMeta2:    meta2,
-			AsCreatePort3:    port3,
-			AsCreateCpu4:     cpu4,
-			AsCreateMemory5:  memory5,
-			AsCreateDisk6:    disk6,
-			AsCreateGpu7:     gpu7,
-			AsCreateLevel8:   level8,
-			AsCreateDeposit9: deposit9,
+			IsCreate:          true,
+			AsCreateName0:     name0,
+			AsCreateImage1:    image1,
+			AsCreateMeta2:     meta2,
+			AsCreatePort3:     port3,
+			AsCreateCommand4:  command4,
+			AsCreateSetting5:  setting5,
+			AsCreateCpu6:      cpu6,
+			AsCreateMemory7:   memory7,
+			AsCreateDisk8:     disk8,
+			AsCreateGpu9:      gpu9,
+			AsCreateLevel10:   level10,
+			AsCreateDeposit11: deposit11,
 		},
 	}
 }
 
 // App update
 // 更新任务
-func MakeUpdateCall(appId0 uint64, name1 []byte, image2 []byte, port3 []uint32, withRestart4 bool) types.RuntimeCall {
+func MakeUpdateCall(appId0 uint64, newName1 types.OptionTByteSlice, newImage2 types.OptionTByteSlice, newPort3 types.OptionTServiceSlice, newCommand4 types.OptionTByteSliceSlice, newSetting5 []types.AppSettingInput, withRestart6 bool) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsWeteeGpu: true,
 		AsWeteeGpuField0: &types.WeteeGpuPalletCall{
 			IsUpdate:             true,
 			AsUpdateAppId0:       appId0,
-			AsUpdateName1:        name1,
-			AsUpdateImage2:       image2,
-			AsUpdatePort3:        port3,
-			AsUpdateWithRestart4: withRestart4,
-		},
-	}
-}
-
-// App settings
-// 任务设置
-func MakeSetSettingsCall(appId0 uint64, value1 []types.AppSettingInput, withRestart2 bool) types.RuntimeCall {
-	return types.RuntimeCall{
-		IsWeteeGpu: true,
-		AsWeteeGpuField0: &types.WeteeGpuPalletCall{
-			IsSetSettings:             true,
-			AsSetSettingsAppId0:       appId0,
-			AsSetSettingsValue1:       value1,
-			AsSetSettingsWithRestart2: withRestart2,
+			AsUpdateNewName1:     newName1,
+			AsUpdateNewImage2:    newImage2,
+			AsUpdateNewPort3:     newPort3,
+			AsUpdateNewCommand4:  newCommand4,
+			AsUpdateNewSetting5:  newSetting5,
+			AsUpdateWithRestart6: withRestart6,
 		},
 	}
 }
@@ -71,13 +61,12 @@ func MakeRechargeCall(id0 uint64, deposit1 types1.U128) types.RuntimeCall {
 
 // App restart
 // 更新任务
-func MakeRestartCall(appId0 uint64, withRestart1 bool) types.RuntimeCall {
+func MakeRestartCall(appId0 uint64) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsWeteeGpu: true,
 		AsWeteeGpuField0: &types.WeteeGpuPalletCall{
-			IsRestart:             true,
-			AsRestartAppId0:       appId0,
-			AsRestartWithRestart1: withRestart1,
+			IsRestart:       true,
+			AsRestartAppId0: appId0,
 		},
 	}
 }
