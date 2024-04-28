@@ -7,7 +7,7 @@ import (
 
 // Task create
 // 注册任务
-func MakeCreateCall(name0 []byte, image1 []byte, meta2 []byte, port3 []types.Service, command4 [][]byte, setting5 []types.AppSettingInput, cpu6 uint32, memory7 uint32, disk8 []types.Disk, level9 byte, deposit10 types1.UCompact) types.RuntimeCall {
+func MakeCreateCall(name0 []byte, image1 []byte, meta2 []byte, port3 []types.Service, command4 types.Command, env5 []types.EnvInput, cpu6 uint32, memory7 uint32, disk8 []types.Disk, level9 byte, deposit10 types1.UCompact) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsWeteeTask: true,
 		AsWeteeTaskField0: &types.WeteeTaskPalletCall{
@@ -17,7 +17,7 @@ func MakeCreateCall(name0 []byte, image1 []byte, meta2 []byte, port3 []types.Ser
 			AsCreateMeta2:     meta2,
 			AsCreatePort3:     port3,
 			AsCreateCommand4:  command4,
-			AsCreateSetting5:  setting5,
+			AsCreateEnv5:      env5,
 			AsCreateCpu6:      cpu6,
 			AsCreateMemory7:   memory7,
 			AsCreateDisk8:     disk8,
@@ -41,7 +41,7 @@ func MakeRerunCall(id0 uint64) types.RuntimeCall {
 
 // Task update
 // 更新任务
-func MakeUpdateCall(appId0 uint64, newName1 types.OptionTByteSlice, newImage2 types.OptionTByteSlice, newPort3 types.OptionTServiceSlice, newCommand4 types.OptionTByteSliceSlice, newSetting5 []types.AppSettingInput, withRestart6 bool) types.RuntimeCall {
+func MakeUpdateCall(appId0 uint64, newName1 types.OptionTByteSlice, newImage2 types.OptionTByteSlice, newPort3 types.OptionTServiceSlice, newCommand4 types.OptionTCommand, newEnv5 []types.EnvInput, withRestart6 bool) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsWeteeTask: true,
 		AsWeteeTaskField0: &types.WeteeTaskPalletCall{
@@ -51,7 +51,7 @@ func MakeUpdateCall(appId0 uint64, newName1 types.OptionTByteSlice, newImage2 ty
 			AsUpdateNewImage2:    newImage2,
 			AsUpdateNewPort3:     newPort3,
 			AsUpdateNewCommand4:  newCommand4,
-			AsUpdateNewSetting5:  newSetting5,
+			AsUpdateNewEnv5:      newEnv5,
 			AsUpdateWithRestart6: withRestart6,
 		},
 	}
@@ -59,7 +59,7 @@ func MakeUpdateCall(appId0 uint64, newName1 types.OptionTByteSlice, newImage2 ty
 
 // Task settings
 // 任务设置
-func MakeSetSettingsCall(appId0 uint64, value1 []types.AppSettingInput, withRestart2 bool) types.RuntimeCall {
+func MakeSetSettingsCall(appId0 uint64, value1 []types.EnvInput, withRestart2 bool) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsWeteeTask: true,
 		AsWeteeTaskField0: &types.WeteeTaskPalletCall{

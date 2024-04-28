@@ -174,11 +174,11 @@ func GetAppIdAccountsLatest(state state.State, uint640 uint64) (ret [32]byte, is
 	return
 }
 
-// Make a storage key for AppSettings
+// Make a storage key for Envs
 //
 //	App setting
 //	App设置
-func MakeAppSettingsStorageKey(tupleOfUint64Uint160 uint64, tupleOfUint64Uint161 uint16) (types.StorageKey, error) {
+func MakeEnvsStorageKey(tupleOfUint64Uint160 uint64, tupleOfUint64Uint161 uint16) (types.StorageKey, error) {
 	byteArgs := [][]byte{}
 	encBytes := []byte{}
 	var err error
@@ -192,10 +192,10 @@ func MakeAppSettingsStorageKey(tupleOfUint64Uint160 uint64, tupleOfUint64Uint161
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
-	return types.CreateStorageKey(&types1.Meta, "WeteeGpu", "AppSettings", byteArgs...)
+	return types.CreateStorageKey(&types1.Meta, "WeteeGpu", "Envs", byteArgs...)
 }
-func GetAppSettings(state state.State, bhash types.Hash, tupleOfUint64Uint160 uint64, tupleOfUint64Uint161 uint16) (ret types1.AppSetting, isSome bool, err error) {
-	key, err := MakeAppSettingsStorageKey(tupleOfUint64Uint160, tupleOfUint64Uint161)
+func GetEnvs(state state.State, bhash types.Hash, tupleOfUint64Uint160 uint64, tupleOfUint64Uint161 uint16) (ret types1.Env, isSome bool, err error) {
+	key, err := MakeEnvsStorageKey(tupleOfUint64Uint160, tupleOfUint64Uint161)
 	if err != nil {
 		return
 	}
@@ -205,8 +205,8 @@ func GetAppSettings(state state.State, bhash types.Hash, tupleOfUint64Uint160 ui
 	}
 	return
 }
-func GetAppSettingsLatest(state state.State, tupleOfUint64Uint160 uint64, tupleOfUint64Uint161 uint16) (ret types1.AppSetting, isSome bool, err error) {
-	key, err := MakeAppSettingsStorageKey(tupleOfUint64Uint160, tupleOfUint64Uint161)
+func GetEnvsLatest(state state.State, tupleOfUint64Uint160 uint64, tupleOfUint64Uint161 uint16) (ret types1.Env, isSome bool, err error) {
+	key, err := MakeEnvsStorageKey(tupleOfUint64Uint160, tupleOfUint64Uint161)
 	if err != nil {
 		return
 	}

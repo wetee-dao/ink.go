@@ -7,7 +7,7 @@ import (
 
 // App create
 // 注册任务
-func MakeCreateCall(name0 []byte, image1 []byte, meta2 []byte, port3 []types.Service, command4 [][]byte, setting5 []types.AppSettingInput, cpu6 uint32, memory7 uint32, disk8 []types.Disk, gpu9 uint32, level10 byte, deposit11 types1.UCompact) types.RuntimeCall {
+func MakeCreateCall(name0 []byte, image1 []byte, meta2 []byte, port3 []types.Service, command4 types.Command, env5 []types.EnvInput, cpu6 uint32, memory7 uint32, disk8 []types.Disk, gpu9 uint32, level10 byte, deposit11 types1.UCompact) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsWeteeGpu: true,
 		AsWeteeGpuField0: &types.WeteeGpuPalletCall{
@@ -17,7 +17,7 @@ func MakeCreateCall(name0 []byte, image1 []byte, meta2 []byte, port3 []types.Ser
 			AsCreateMeta2:     meta2,
 			AsCreatePort3:     port3,
 			AsCreateCommand4:  command4,
-			AsCreateSetting5:  setting5,
+			AsCreateEnv5:      env5,
 			AsCreateCpu6:      cpu6,
 			AsCreateMemory7:   memory7,
 			AsCreateDisk8:     disk8,
@@ -30,7 +30,7 @@ func MakeCreateCall(name0 []byte, image1 []byte, meta2 []byte, port3 []types.Ser
 
 // App update
 // 更新任务
-func MakeUpdateCall(appId0 uint64, newName1 types.OptionTByteSlice, newImage2 types.OptionTByteSlice, newPort3 types.OptionTServiceSlice, newCommand4 types.OptionTByteSliceSlice, newSetting5 []types.AppSettingInput, withRestart6 bool) types.RuntimeCall {
+func MakeUpdateCall(appId0 uint64, newName1 types.OptionTByteSlice, newImage2 types.OptionTByteSlice, newPort3 types.OptionTServiceSlice, newCommand4 types.OptionTCommand, newEnv5 []types.EnvInput, withRestart6 bool) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsWeteeGpu: true,
 		AsWeteeGpuField0: &types.WeteeGpuPalletCall{
@@ -40,7 +40,7 @@ func MakeUpdateCall(appId0 uint64, newName1 types.OptionTByteSlice, newImage2 ty
 			AsUpdateNewImage2:    newImage2,
 			AsUpdateNewPort3:     newPort3,
 			AsUpdateNewCommand4:  newCommand4,
-			AsUpdateNewSetting5:  newSetting5,
+			AsUpdateNewEnv5:      newEnv5,
 			AsUpdateWithRestart6: withRestart6,
 		},
 	}
