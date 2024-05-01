@@ -7,23 +7,24 @@ import (
 
 // App create
 // 注册任务
-func MakeCreateCall(name0 []byte, image1 []byte, meta2 []byte, port3 []types.Service, command4 types.Command, env5 []types.EnvInput, cpu6 uint32, memory7 uint32, disk8 []types.Disk, gpu9 uint32, level10 byte, deposit11 types1.UCompact) types.RuntimeCall {
+func MakeCreateCall(name0 []byte, image1 []byte, meta2 []byte, port3 []types.Service, command4 types.Command, env5 []types.EnvInput, cpu6 uint32, memory7 uint32, disk8 []types.Disk, gpu9 uint32, level10 byte, teeVersion11 types.TEEVersion, deposit12 types1.UCompact) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsWeteeGpu: true,
 		AsWeteeGpuField0: &types.WeteeGpuPalletCall{
-			IsCreate:          true,
-			AsCreateName0:     name0,
-			AsCreateImage1:    image1,
-			AsCreateMeta2:     meta2,
-			AsCreatePort3:     port3,
-			AsCreateCommand4:  command4,
-			AsCreateEnv5:      env5,
-			AsCreateCpu6:      cpu6,
-			AsCreateMemory7:   memory7,
-			AsCreateDisk8:     disk8,
-			AsCreateGpu9:      gpu9,
-			AsCreateLevel10:   level10,
-			AsCreateDeposit11: deposit11,
+			IsCreate:             true,
+			AsCreateName0:        name0,
+			AsCreateImage1:       image1,
+			AsCreateMeta2:        meta2,
+			AsCreatePort3:        port3,
+			AsCreateCommand4:     command4,
+			AsCreateEnv5:         env5,
+			AsCreateCpu6:         cpu6,
+			AsCreateMemory7:      memory7,
+			AsCreateDisk8:        disk8,
+			AsCreateGpu9:         gpu9,
+			AsCreateLevel10:      level10,
+			AsCreateTeeVersion11: teeVersion11,
+			AsCreateDeposit12:    deposit12,
 		},
 	}
 }
