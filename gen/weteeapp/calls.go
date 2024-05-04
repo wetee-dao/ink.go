@@ -1,13 +1,10 @@
 package weteeapp
 
-import (
-	types1 "github.com/centrifuge/go-substrate-rpc-client/v4/types"
-	types "github.com/wetee-dao/go-sdk/gen/types"
-)
+import types "github.com/wetee-dao/go-sdk/gen/types"
 
 // App create
 // 注册任务
-func MakeCreateCall(name0 []byte, image1 []byte, meta2 []byte, port3 []types.Service, command4 types.Command, env5 []types.EnvInput, cpu6 uint32, memory7 uint32, disk8 []types.Disk, level9 byte, teeVersion10 types.TEEVersion, deposit11 types1.UCompact) types.RuntimeCall {
+func MakeCreateCall(name0 []byte, image1 []byte, meta2 []byte, port3 []types.Service, command4 types.Command, env5 []types.EnvInput, cpu6 uint32, memory7 uint32, disk8 []types.Disk, level9 byte, teeVersion10 types.TEEVersion) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsWeteeApp: true,
 		AsWeteeAppField0: &types.WeteeAppPalletCall{
@@ -23,7 +20,6 @@ func MakeCreateCall(name0 []byte, image1 []byte, meta2 []byte, port3 []types.Ser
 			AsCreateDisk8:        disk8,
 			AsCreateLevel9:       level9,
 			AsCreateTeeVersion10: teeVersion10,
-			AsCreateDeposit11:    deposit11,
 		},
 	}
 }
@@ -42,19 +38,6 @@ func MakeUpdateCall(appId0 uint64, newName1 types.OptionTByteSlice, newImage2 ty
 			AsUpdateNewCommand4:  newCommand4,
 			AsUpdateNewEnv5:      newEnv5,
 			AsUpdateWithRestart6: withRestart6,
-		},
-	}
-}
-
-// App charge
-// 任务充值
-func MakeChargeCall(id0 uint64, deposit1 types1.U128) types.RuntimeCall {
-	return types.RuntimeCall{
-		IsWeteeApp: true,
-		AsWeteeAppField0: &types.WeteeAppPalletCall{
-			IsCharge:         true,
-			AsChargeId0:      id0,
-			AsChargeDeposit1: deposit1,
 		},
 	}
 }

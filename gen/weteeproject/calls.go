@@ -173,13 +173,14 @@ func MakeMakeReviewCall(daoId0 uint64, projectId1 uint64, taskId2 uint64, opinio
 }
 
 // 创建非DAO项目
-func MakeCreateProxyProjectCall(name0 []byte, description1 []byte) types.RuntimeCall {
+func MakeCreateProxyProjectCall(name0 []byte, description1 []byte, deposit2 types1.UCompact) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsWeteeProject: true,
 		AsWeteeProjectField0: &types.WeteeProjectPalletCall{
 			IsCreateProxyProject:             true,
 			AsCreateProxyProjectName0:        name0,
 			AsCreateProxyProjectDescription1: description1,
+			AsCreateProxyProjectDeposit2:     deposit2,
 		},
 	}
 }

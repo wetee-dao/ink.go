@@ -7,7 +7,7 @@ import (
 
 // Task create
 // 注册任务
-func MakeCreateCall(name0 []byte, image1 []byte, meta2 []byte, port3 []types.Service, command4 types.Command, env5 []types.EnvInput, cpu6 uint32, memory7 uint32, disk8 []types.Disk, level9 byte, teeVersion10 types.TEEVersion, deposit11 types1.UCompact) types.RuntimeCall {
+func MakeCreateCall(name0 []byte, image1 []byte, meta2 []byte, port3 []types.Service, command4 types.Command, env5 []types.EnvInput, cpu6 uint32, memory7 uint32, disk8 []types.Disk, level9 byte, teeVersion10 types.TEEVersion) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsWeteeTask: true,
 		AsWeteeTaskField0: &types.WeteeTaskPalletCall{
@@ -23,7 +23,6 @@ func MakeCreateCall(name0 []byte, image1 []byte, meta2 []byte, port3 []types.Ser
 			AsCreateDisk8:        disk8,
 			AsCreateLevel9:       level9,
 			AsCreateTeeVersion10: teeVersion10,
-			AsCreateDeposit11:    deposit11,
 		},
 	}
 }
