@@ -22,15 +22,10 @@ type Worker struct {
 
 // 集群注册
 // Cluster register
-func (w *Worker) ClusterRegister(name string, ip []uint8, port uint32, level uint8, untilFinalized bool) error {
+func (w *Worker) ClusterRegister(name string, ip []gtypes.Ip, port uint32, level uint8, untilFinalized bool) error {
 	runtimeCall := weteeworker.MakeClusterRegisterCall(
 		[]byte(name),
-		[]gtypes.Ip{
-			{
-				Ipv4: gtypes.OptionTUint32{IsNone: false, IsSome: true, AsSomeField0: 100},
-				Ipv6: gtypes.OptionTU128{IsNone: false, IsSome: true, AsSomeField0: types.NewU128(*big.NewInt(100))},
-			},
-		},
+		ip,
 		port,
 		level,
 	)
@@ -40,13 +35,15 @@ func (w *Worker) ClusterRegister(name string, ip []uint8, port uint32, level uin
 
 // 集群抵押
 // Cluster mortgage
-func (w *Worker) ClusterMortgage(id uint64, cpu uint32, mem uint32, disk uint32, gpu uint32, deposit uint64, untilFinalized bool) error {
+func (w *Worker) ClusterMortgage(id uint64, cpu uint32, mem uint32, cvm_cpu uint32, cvm_mem uint32, disk uint32, gpu uint32, deposit uint64, untilFinalized bool) error {
 	d := big.NewInt(0)
 	d.SetUint64(deposit)
 	runtimeCall := weteeworker.MakeClusterMortgageCall(
 		id,
 		cpu,
 		mem,
+		cvm_cpu,
+		cvm_mem,
 		disk,
 		gpu,
 		types.UCompact(*d),

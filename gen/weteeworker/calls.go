@@ -35,7 +35,7 @@ func MakeClusterProofUploadCall(id0 uint64, proof1 []byte) types.RuntimeCall {
 
 // Worker cluster mortgage
 // 质押硬件
-func MakeClusterMortgageCall(id0 uint64, cpu1 uint32, mem2 uint32, disk3 uint32, gpu4 uint32, deposit5 types1.UCompact) types.RuntimeCall {
+func MakeClusterMortgageCall(id0 uint64, cpu1 uint32, mem2 uint32, cvmCpu3 uint32, cvmMem4 uint32, disk5 uint32, gpu6 uint32, deposit7 types1.UCompact) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsWeteeWorker: true,
 		AsWeteeWorkerField0: &types.WeteeWorkerPalletCall{
@@ -43,9 +43,11 @@ func MakeClusterMortgageCall(id0 uint64, cpu1 uint32, mem2 uint32, disk3 uint32,
 			AsClusterMortgageId0:      id0,
 			AsClusterMortgageCpu1:     cpu1,
 			AsClusterMortgageMem2:     mem2,
-			AsClusterMortgageDisk3:    disk3,
-			AsClusterMortgageGpu4:     gpu4,
-			AsClusterMortgageDeposit5: deposit5,
+			AsClusterMortgageCvmCpu3:  cvmCpu3,
+			AsClusterMortgageCvmMem4:  cvmMem4,
+			AsClusterMortgageDisk5:    disk5,
+			AsClusterMortgageGpu6:     gpu6,
+			AsClusterMortgageDeposit7: deposit7,
 		},
 	}
 }
