@@ -4,23 +4,24 @@ import types "github.com/wetee-dao/go-sdk/gen/types"
 
 // App create
 // 注册任务
-func MakeCreateCall(name0 []byte, image1 []byte, meta2 []byte, port3 []types.Service, command4 types.Command, env5 []types.EnvInput, cpu6 uint32, memory7 uint32, disk8 []types.Disk, gpu9 uint32, level10 byte, teeVersion11 types.TEEVersion) types.RuntimeCall {
+func MakeCreateCall(name0 []byte, image1 []byte, meta2 []byte, port3 []types.Service, command4 types.Command, env5 []types.EnvInput, cpu6 uint32, memory7 uint32, disk8 []types.Disk, gpu9 uint32, sideContainer10 []types.Container, level11 byte, teeVersion12 types.TEEVersion) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsWeteeGpu: true,
 		AsWeteeGpuField0: &types.WeteeGpuPalletCall{
-			IsCreate:             true,
-			AsCreateName0:        name0,
-			AsCreateImage1:       image1,
-			AsCreateMeta2:        meta2,
-			AsCreatePort3:        port3,
-			AsCreateCommand4:     command4,
-			AsCreateEnv5:         env5,
-			AsCreateCpu6:         cpu6,
-			AsCreateMemory7:      memory7,
-			AsCreateDisk8:        disk8,
-			AsCreateGpu9:         gpu9,
-			AsCreateLevel10:      level10,
-			AsCreateTeeVersion11: teeVersion11,
+			IsCreate:                true,
+			AsCreateName0:           name0,
+			AsCreateImage1:          image1,
+			AsCreateMeta2:           meta2,
+			AsCreatePort3:           port3,
+			AsCreateCommand4:        command4,
+			AsCreateEnv5:            env5,
+			AsCreateCpu6:            cpu6,
+			AsCreateMemory7:         memory7,
+			AsCreateDisk8:           disk8,
+			AsCreateGpu9:            gpu9,
+			AsCreateSideContainer10: sideContainer10,
+			AsCreateLevel11:         level11,
+			AsCreateTeeVersion12:    teeVersion12,
 		},
 	}
 }

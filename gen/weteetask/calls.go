@@ -1,9 +1,6 @@
 package weteetask
 
-import (
-	types1 "github.com/centrifuge/go-substrate-rpc-client/v4/types"
-	types "github.com/wetee-dao/go-sdk/gen/types"
-)
+import types "github.com/wetee-dao/go-sdk/gen/types"
 
 // Task create
 // 注册任务
@@ -53,33 +50,6 @@ func MakeUpdateCall(appId0 uint64, newName1 types.OptionTByteSlice, newImage2 ty
 			AsUpdateNewCommand4:  newCommand4,
 			AsUpdateNewEnv5:      newEnv5,
 			AsUpdateWithRestart6: withRestart6,
-		},
-	}
-}
-
-// Task settings
-// 任务设置
-func MakeSetSettingsCall(appId0 uint64, value1 []types.EnvInput, withRestart2 bool) types.RuntimeCall {
-	return types.RuntimeCall{
-		IsWeteeTask: true,
-		AsWeteeTaskField0: &types.WeteeTaskPalletCall{
-			IsSetSettings:             true,
-			AsSetSettingsAppId0:       appId0,
-			AsSetSettingsValue1:       value1,
-			AsSetSettingsWithRestart2: withRestart2,
-		},
-	}
-}
-
-// Task charge
-// 任务充值
-func MakeChargeCall(id0 uint64, deposit1 types1.U128) types.RuntimeCall {
-	return types.RuntimeCall{
-		IsWeteeTask: true,
-		AsWeteeTaskField0: &types.WeteeTaskPalletCall{
-			IsCharge:         true,
-			AsChargeId0:      id0,
-			AsChargeDeposit1: deposit1,
 		},
 	}
 }
