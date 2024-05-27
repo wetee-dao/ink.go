@@ -101,7 +101,7 @@ func MakeForceUnreserveCall(who0 types.MultiAddress, amount1 types1.U128) types.
 //
 // This will waive the transaction fee if at least all but 10% of the accounts needed to
 // be upgraded. (We let some not have to be upgraded just in order to allow for the
-// possibililty of churn).
+// possibility of churn).
 func MakeUpgradeAccountsCall(who0 [][32]byte) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsBalances: true,

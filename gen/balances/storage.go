@@ -181,6 +181,8 @@ func GetAccountLatest(state state.State, byteArray320 [32]byte) (ret types1.Acco
 //
 //	Any liquidity locks on some account balances.
 //	NOTE: Should only be accessed when setting, changing and freeing a lock.
+//
+//	Use of locks is deprecated in favour of freezes. See `https://github.com/paritytech/substrate/pull/12951/`
 func MakeLocksStorageKey(byteArray320 [32]byte) (types.StorageKey, error) {
 	byteArgs := [][]byte{}
 	encBytes := []byte{}
@@ -235,6 +237,8 @@ func GetLocksLatest(state state.State, byteArray320 [32]byte) (ret []types1.Bala
 // Make a storage key for Reserves
 //
 //	Named reserves on some account balances.
+//
+//	Use of reserves is deprecated in favour of holds. See `https://github.com/paritytech/substrate/pull/12951/`
 func MakeReservesStorageKey(byteArray320 [32]byte) (types.StorageKey, error) {
 	byteArgs := [][]byte{}
 	encBytes := []byte{}
@@ -357,7 +361,7 @@ func MakeFreezesStorageKey(byteArray320 [32]byte) (types.StorageKey, error) {
 
 var FreezesResultDefaultBytes, _ = hex.DecodeString("00")
 
-func GetFreezes(state state.State, bhash types.Hash, byteArray320 [32]byte) (ret []types1.IdAmount, err error) {
+func GetFreezes(state state.State, bhash types.Hash, byteArray320 [32]byte) (ret []types1.IdAmountIdStruct, err error) {
 	key, err := MakeFreezesStorageKey(byteArray320)
 	if err != nil {
 		return
@@ -375,7 +379,7 @@ func GetFreezes(state state.State, bhash types.Hash, byteArray320 [32]byte) (ret
 	}
 	return
 }
-func GetFreezesLatest(state state.State, byteArray320 [32]byte) (ret []types1.IdAmount, err error) {
+func GetFreezesLatest(state state.State, byteArray320 [32]byte) (ret []types1.IdAmountIdStruct, err error) {
 	key, err := MakeFreezesStorageKey(byteArray320)
 	if err != nil {
 		return

@@ -8,7 +8,7 @@ import (
 	types1 "github.com/wetee-dao/go-sdk/gen/types"
 )
 
-// Make a storage key for State id={{false [96]}}
+// Make a storage key for State id={{false [97]}}
 //
 //	State of the current authority set.
 func MakeStateStorageKey() (types.StorageKey, error) {
@@ -54,7 +54,7 @@ func GetStateLatest(state state.State) (ret types1.StoredState, err error) {
 	return
 }
 
-// Make a storage key for PendingChange id={{false [97]}}
+// Make a storage key for PendingChange id={{false [98]}}
 //
 //	Pending change: (signaled at, scheduled change).
 func MakePendingChangeStorageKey() (types.StorageKey, error) {
@@ -112,7 +112,7 @@ func GetNextForcedLatest(state state.State) (ret uint64, isSome bool, err error)
 	return
 }
 
-// Make a storage key for Stalled id={{false [100]}}
+// Make a storage key for Stalled id={{false [101]}}
 //
 //	`true` if we are currently stalled.
 func MakeStalledStorageKey() (types.StorageKey, error) {
@@ -234,7 +234,7 @@ func GetSetIdSessionLatest(state state.State, uint640 uint64) (ret uint32, isSom
 	return
 }
 
-// Make a storage key for Authorities id={{false [98]}}
+// Make a storage key for Authorities id={{false [99]}}
 //
 //	The current list of authorities.
 func MakeAuthoritiesStorageKey() (types.StorageKey, error) {
