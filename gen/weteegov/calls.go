@@ -9,8 +9,8 @@ import (
 // 创建一个提案
 func MakeSubmitProposalCall(daoId0 uint64, memberData1 types.MemberData, proposal2 types.RuntimeCall, periodIndex3 uint32) types.RuntimeCall {
 	return types.RuntimeCall{
-		IsWeteeGov: true,
-		AsWeteeGovField0: &types.WeteeGovPalletCall{
+		IsWeTEEGov: true,
+		AsWeTEEGovField0: &types.WeteeGovPalletCall{
 			IsSubmitProposal:             true,
 			AsSubmitProposalDaoId0:       daoId0,
 			AsSubmitProposalMemberData1:  memberData1,
@@ -24,8 +24,8 @@ func MakeSubmitProposalCall(daoId0 uint64, memberData1 types.MemberData, proposa
 // 开始全民公投
 func MakeDepositProposalCall(daoId0 uint64, proposeId1 uint32, deposit2 types1.UCompact) types.RuntimeCall {
 	return types.RuntimeCall{
-		IsWeteeGov: true,
-		AsWeteeGovField0: &types.WeteeGovPalletCall{
+		IsWeTEEGov: true,
+		AsWeTEEGovField0: &types.WeteeGovPalletCall{
 			IsDepositProposal:           true,
 			AsDepositProposalDaoId0:     daoId0,
 			AsDepositProposalProposeId1: proposeId1,
@@ -38,8 +38,8 @@ func MakeDepositProposalCall(daoId0 uint64, proposeId1 uint32, deposit2 types1.U
 // 为全民公投投票
 func MakeVoteForPropCall(daoId0 uint64, propIndex1 uint32, pledge2 types.Pledge, opinion3 types.Opinion) types.RuntimeCall {
 	return types.RuntimeCall{
-		IsWeteeGov: true,
-		AsWeteeGovField0: &types.WeteeGovPalletCall{
+		IsWeTEEGov: true,
+		AsWeTEEGovField0: &types.WeteeGovPalletCall{
 			IsVoteForProp:           true,
 			AsVoteForPropDaoId0:     daoId0,
 			AsVoteForPropPropIndex1: propIndex1,
@@ -53,8 +53,8 @@ func MakeVoteForPropCall(daoId0 uint64, propIndex1 uint32, pledge2 types.Pledge,
 // 取消一个投票
 func MakeCancelVoteCall(daoId0 uint64, index1 uint32) types.RuntimeCall {
 	return types.RuntimeCall{
-		IsWeteeGov: true,
-		AsWeteeGovField0: &types.WeteeGovPalletCall{
+		IsWeTEEGov: true,
+		AsWeTEEGovField0: &types.WeteeGovPalletCall{
 			IsCancelVote:       true,
 			AsCancelVoteDaoId0: daoId0,
 			AsCancelVoteIndex1: index1,
@@ -66,8 +66,8 @@ func MakeCancelVoteCall(daoId0 uint64, index1 uint32) types.RuntimeCall {
 // 执行一个投票通过提案
 func MakeRunProposalCall(daoId0 uint64, index1 uint32) types.RuntimeCall {
 	return types.RuntimeCall{
-		IsWeteeGov: true,
-		AsWeteeGovField0: &types.WeteeGovPalletCall{
+		IsWeTEEGov: true,
+		AsWeTEEGovField0: &types.WeteeGovPalletCall{
 			IsRunProposal:       true,
 			AsRunProposalDaoId0: daoId0,
 			AsRunProposalIndex1: index1,
@@ -78,8 +78,8 @@ func MakeRunProposalCall(daoId0 uint64, index1 uint32) types.RuntimeCall {
 // Unlock
 func MakeUnlockCall(daoId0 uint64) types.RuntimeCall {
 	return types.RuntimeCall{
-		IsWeteeGov: true,
-		AsWeteeGovField0: &types.WeteeGovPalletCall{
+		IsWeTEEGov: true,
+		AsWeTEEGovField0: &types.WeteeGovPalletCall{
 			IsUnlock:       true,
 			AsUnlockDaoId0: daoId0,
 		},
@@ -89,8 +89,8 @@ func MakeUnlockCall(daoId0 uint64) types.RuntimeCall {
 // Set the maximum number of proposals at the same time
 func MakeSetMaxPrePropsCall(daoId0 uint64, max1 uint32) types.RuntimeCall {
 	return types.RuntimeCall{
-		IsWeteeGov: true,
-		AsWeteeGovField0: &types.WeteeGovPalletCall{
+		IsWeTEEGov: true,
+		AsWeTEEGovField0: &types.WeteeGovPalletCall{
 			IsSetMaxPreProps:       true,
 			AsSetMaxPrePropsDaoId0: daoId0,
 			AsSetMaxPrePropsMax1:   max1,
@@ -99,8 +99,8 @@ func MakeSetMaxPrePropsCall(daoId0 uint64, max1 uint32) types.RuntimeCall {
 }
 func MakeUpdateVoteModelCall(daoId0 uint64, model1 byte) types.RuntimeCall {
 	return types.RuntimeCall{
-		IsWeteeGov: true,
-		AsWeteeGovField0: &types.WeteeGovPalletCall{
+		IsWeTEEGov: true,
+		AsWeTEEGovField0: &types.WeteeGovPalletCall{
 			IsUpdateVoteModel:       true,
 			AsUpdateVoteModelDaoId0: daoId0,
 			AsUpdateVoteModelModel1: model1,
@@ -109,8 +109,8 @@ func MakeUpdateVoteModelCall(daoId0 uint64, model1 byte) types.RuntimeCall {
 }
 func MakeSetPeriodsCall(daoId0 uint64, periods1 []types.Period) types.RuntimeCall {
 	return types.RuntimeCall{
-		IsWeteeGov: true,
-		AsWeteeGovField0: &types.WeteeGovPalletCall{
+		IsWeTEEGov: true,
+		AsWeTEEGovField0: &types.WeteeGovPalletCall{
 			IsSetPeriods:         true,
 			AsSetPeriodsDaoId0:   daoId0,
 			AsSetPeriodsPeriods1: periods1,

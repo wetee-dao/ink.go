@@ -21,7 +21,7 @@ func MakeDaosStorageKey(uint640 uint64) (types.StorageKey, error) {
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
-	return types.CreateStorageKey(&types1.Meta, "WeteeOrg", "Daos", byteArgs...)
+	return types.CreateStorageKey(&types1.Meta, "WeTEEOrg", "Daos", byteArgs...)
 }
 func GetDaos(state state.State, bhash types.Hash, uint640 uint64) (ret types1.OrgInfo, isSome bool, err error) {
 	key, err := MakeDaosStorageKey(uint640)
@@ -51,7 +51,7 @@ func GetDaosLatest(state state.State, uint640 uint64) (ret types1.OrgInfo, isSom
 //	The id of the next dao to be created.
 //	获取下一个组织id
 func MakeNextDaoIdStorageKey() (types.StorageKey, error) {
-	return types.CreateStorageKey(&types1.Meta, "WeteeOrg", "NextDaoId")
+	return types.CreateStorageKey(&types1.Meta, "WeTEEOrg", "NextDaoId")
 }
 
 var NextDaoIdResultDefaultBytes, _ = hex.DecodeString("8813000000000000")
@@ -98,7 +98,7 @@ func GetNextDaoIdLatest(state state.State) (ret uint64, err error) {
 //	The id of the next dao to be created.
 //	获取下一个组织id
 func MakeNextAppIdStorageKey() (types.StorageKey, error) {
-	return types.CreateStorageKey(&types1.Meta, "WeteeOrg", "NextAppId")
+	return types.CreateStorageKey(&types1.Meta, "WeTEEOrg", "NextAppId")
 }
 
 var NextAppIdResultDefaultBytes, _ = hex.DecodeString("0000000000000000")
@@ -153,7 +153,7 @@ func MakeGuildsStorageKey(uint640 uint64) (types.StorageKey, error) {
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
-	return types.CreateStorageKey(&types1.Meta, "WeteeOrg", "Guilds", byteArgs...)
+	return types.CreateStorageKey(&types1.Meta, "WeTEEOrg", "Guilds", byteArgs...)
 }
 
 var GuildsResultDefaultBytes, _ = hex.DecodeString("00")
@@ -199,27 +199,27 @@ func GetGuildsLatest(state state.State, uint640 uint64) (ret []types1.GuildInfo,
 //
 //	the roadmap info of projects
 //	组织内Roadmap信息
-func MakeRoadMapsStorageKey(tupleOfUint64Uint320 uint64, tupleOfUint64Uint321 uint32) (types.StorageKey, error) {
+func MakeRoadMapsStorageKey(tupleOfUint64Uint3210 uint64, tupleOfUint64Uint3211 uint32) (types.StorageKey, error) {
 	byteArgs := [][]byte{}
 	encBytes := []byte{}
 	var err error
-	encBytes, err = codec.Encode(tupleOfUint64Uint320)
+	encBytes, err = codec.Encode(tupleOfUint64Uint3210)
 	if err != nil {
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
-	encBytes, err = codec.Encode(tupleOfUint64Uint321)
+	encBytes, err = codec.Encode(tupleOfUint64Uint3211)
 	if err != nil {
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
-	return types.CreateStorageKey(&types1.Meta, "WeteeOrg", "RoadMaps", byteArgs...)
+	return types.CreateStorageKey(&types1.Meta, "WeTEEOrg", "RoadMaps", byteArgs...)
 }
 
 var RoadMapsResultDefaultBytes, _ = hex.DecodeString("00")
 
-func GetRoadMaps(state state.State, bhash types.Hash, tupleOfUint64Uint320 uint64, tupleOfUint64Uint321 uint32) (ret []types1.QuarterTask, err error) {
-	key, err := MakeRoadMapsStorageKey(tupleOfUint64Uint320, tupleOfUint64Uint321)
+func GetRoadMaps(state state.State, bhash types.Hash, tupleOfUint64Uint3210 uint64, tupleOfUint64Uint3211 uint32) (ret []types1.QuarterTask, err error) {
+	key, err := MakeRoadMapsStorageKey(tupleOfUint64Uint3210, tupleOfUint64Uint3211)
 	if err != nil {
 		return
 	}
@@ -236,8 +236,8 @@ func GetRoadMaps(state state.State, bhash types.Hash, tupleOfUint64Uint320 uint6
 	}
 	return
 }
-func GetRoadMapsLatest(state state.State, tupleOfUint64Uint320 uint64, tupleOfUint64Uint321 uint32) (ret []types1.QuarterTask, err error) {
-	key, err := MakeRoadMapsStorageKey(tupleOfUint64Uint320, tupleOfUint64Uint321)
+func GetRoadMapsLatest(state state.State, tupleOfUint64Uint3210 uint64, tupleOfUint64Uint3211 uint32) (ret []types1.QuarterTask, err error) {
+	key, err := MakeRoadMapsStorageKey(tupleOfUint64Uint3210, tupleOfUint64Uint3211)
 	if err != nil {
 		return
 	}
@@ -260,7 +260,7 @@ func GetRoadMapsLatest(state state.State, tupleOfUint64Uint320 uint64, tupleOfUi
 //	The id of the next dao to be created.
 //	获取下一个组织id
 func MakeNextTaskIdStorageKey() (types.StorageKey, error) {
-	return types.CreateStorageKey(&types1.Meta, "WeteeOrg", "NextTaskId")
+	return types.CreateStorageKey(&types1.Meta, "WeTEEOrg", "NextTaskId")
 }
 
 var NextTaskIdResultDefaultBytes, _ = hex.DecodeString("0000000000000000")
@@ -315,7 +315,7 @@ func MakeMembersStorageKey(uint640 uint64) (types.StorageKey, error) {
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
-	return types.CreateStorageKey(&types1.Meta, "WeteeOrg", "Members", byteArgs...)
+	return types.CreateStorageKey(&types1.Meta, "WeTEEOrg", "Members", byteArgs...)
 }
 
 var MembersResultDefaultBytes, _ = hex.DecodeString("00")
@@ -375,7 +375,7 @@ func MakeGuildMembersStorageKey(tupleOfUint64Uint640 uint64, tupleOfUint64Uint64
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
-	return types.CreateStorageKey(&types1.Meta, "WeteeOrg", "GuildMembers", byteArgs...)
+	return types.CreateStorageKey(&types1.Meta, "WeTEEOrg", "GuildMembers", byteArgs...)
 }
 
 var GuildMembersResultDefaultBytes, _ = hex.DecodeString("00")
@@ -435,7 +435,7 @@ func MakeProjectMembersStorageKey(tupleOfUint64Uint640 uint64, tupleOfUint64Uint
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
-	return types.CreateStorageKey(&types1.Meta, "WeteeOrg", "ProjectMembers", byteArgs...)
+	return types.CreateStorageKey(&types1.Meta, "WeTEEOrg", "ProjectMembers", byteArgs...)
 }
 
 var ProjectMembersResultDefaultBytes, _ = hex.DecodeString("00")
@@ -490,7 +490,7 @@ func MakeAppHubsStorageKey(uint640 uint64) (types.StorageKey, error) {
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
-	return types.CreateStorageKey(&types1.Meta, "WeteeOrg", "AppHubs", byteArgs...)
+	return types.CreateStorageKey(&types1.Meta, "WeTEEOrg", "AppHubs", byteArgs...)
 }
 func GetAppHubs(state state.State, bhash types.Hash, uint640 uint64) (ret types1.App, isSome bool, err error) {
 	key, err := MakeAppHubsStorageKey(uint640)
@@ -528,7 +528,7 @@ func MakeOrgAppsStorageKey(uint640 uint64) (types.StorageKey, error) {
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
-	return types.CreateStorageKey(&types1.Meta, "WeteeOrg", "OrgApps", byteArgs...)
+	return types.CreateStorageKey(&types1.Meta, "WeTEEOrg", "OrgApps", byteArgs...)
 }
 
 var OrgAppsResultDefaultBytes, _ = hex.DecodeString("00")
@@ -588,7 +588,7 @@ func MakeMemberPointStorageKey(tupleOfUint64ByteArray320 uint64, tupleOfUint64By
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
-	return types.CreateStorageKey(&types1.Meta, "WeteeOrg", "MemberPoint", byteArgs...)
+	return types.CreateStorageKey(&types1.Meta, "WeTEEOrg", "MemberPoint", byteArgs...)
 }
 
 var MemberPointResultDefaultBytes, _ = hex.DecodeString("00000000")

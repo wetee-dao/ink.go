@@ -9,8 +9,8 @@ import (
 // 创建 WETEE 资产
 func MakeCreateAssetCall(daoId0 uint64, metadata1 types.DaoAssetMeta, amount2 types1.U128, initDaoAsset3 types1.U128) types.RuntimeCall {
 	return types.RuntimeCall{
-		IsWeteeAsset: true,
-		AsWeteeAssetField0: &types.WeteeAssetsPalletCall{
+		IsWeTEEAsset: true,
+		AsWeTEEAssetField0: &types.WeteeAssetsPalletCall{
 			IsCreateAsset:              true,
 			AsCreateAssetDaoId0:        daoId0,
 			AsCreateAssetMetadata1:     metadata1,
@@ -23,8 +23,8 @@ func MakeCreateAssetCall(daoId0 uint64, metadata1 types.DaoAssetMeta, amount2 ty
 // 设置加入WETEE所需要的最小抵押
 func MakeSetExistenialDepositCall(daoId0 uint64, existenialDeposit1 types1.U128) types.RuntimeCall {
 	return types.RuntimeCall{
-		IsWeteeAsset: true,
-		AsWeteeAssetField0: &types.WeteeAssetsPalletCall{
+		IsWeTEEAsset: true,
+		AsWeTEEAssetField0: &types.WeteeAssetsPalletCall{
 			IsSetExistenialDeposit:                   true,
 			AsSetExistenialDepositDaoId0:             daoId0,
 			AsSetExistenialDepositExistenialDeposit1: existenialDeposit1,
@@ -36,8 +36,8 @@ func MakeSetExistenialDepositCall(daoId0 uint64, existenialDeposit1 types1.U128)
 // 设置资产元数据
 func MakeSetMetadataCall(daoId0 uint64, metadata1 types.DaoAssetMeta) types.RuntimeCall {
 	return types.RuntimeCall{
-		IsWeteeAsset: true,
-		AsWeteeAssetField0: &types.WeteeAssetsPalletCall{
+		IsWeTEEAsset: true,
+		AsWeTEEAssetField0: &types.WeteeAssetsPalletCall{
 			IsSetMetadata:          true,
 			AsSetMetadataDaoId0:    daoId0,
 			AsSetMetadataMetadata1: metadata1,
@@ -49,8 +49,8 @@ func MakeSetMetadataCall(daoId0 uint64, metadata1 types.DaoAssetMeta) types.Runt
 // 销毁资产
 func MakeBurnCall(daoId0 uint64, amount1 types1.U128) types.RuntimeCall {
 	return types.RuntimeCall{
-		IsWeteeAsset: true,
-		AsWeteeAssetField0: &types.WeteeAssetsPalletCall{
+		IsWeTEEAsset: true,
+		AsWeTEEAssetField0: &types.WeteeAssetsPalletCall{
 			IsBurn:        true,
 			AsBurnDaoId0:  daoId0,
 			AsBurnAmount1: amount1,
@@ -68,8 +68,8 @@ func MakeBurnCall(daoId0 uint64, amount1 types1.U128) types.RuntimeCall {
 // 转移资产
 func MakeTransferCall(dest0 types.MultiAddress, daoId1 uint64, amount2 types1.UCompact) types.RuntimeCall {
 	return types.RuntimeCall{
-		IsWeteeAsset: true,
-		AsWeteeAssetField0: &types.WeteeAssetsPalletCall{
+		IsWeTEEAsset: true,
+		AsWeTEEAssetField0: &types.WeteeAssetsPalletCall{
 			IsTransfer:        true,
 			AsTransferDest0:   dest0,
 			AsTransferDaoId1:  daoId1,
@@ -81,8 +81,8 @@ func MakeTransferCall(dest0 types.MultiAddress, daoId1 uint64, amount2 types1.UC
 // 成为会员
 func MakeJoinCall(daoId0 uint64, shareExpect1 uint32, existenialDeposit2 types1.UCompact) types.RuntimeCall {
 	return types.RuntimeCall{
-		IsWeteeAsset: true,
-		AsWeteeAssetField0: &types.WeteeAssetsPalletCall{
+		IsWeTEEAsset: true,
+		AsWeTEEAssetField0: &types.WeteeAssetsPalletCall{
 			IsJoin:                   true,
 			AsJoinDaoId0:             daoId0,
 			AsJoinShareExpect1:       shareExpect1,

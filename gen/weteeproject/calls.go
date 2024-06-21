@@ -8,8 +8,8 @@ import (
 // 申请加入团队
 func MakeProjectJoinRequestCall(daoId0 uint64, projectId1 uint64, who2 [32]byte) types.RuntimeCall {
 	return types.RuntimeCall{
-		IsWeteeProject: true,
-		AsWeteeProjectField0: &types.WeteeProjectPalletCall{
+		IsWeTEEProject: true,
+		AsWeTEEProjectField0: &types.WeteeProjectPalletCall{
 			IsProjectJoinRequest:           true,
 			AsProjectJoinRequestDaoId0:     daoId0,
 			AsProjectJoinRequestProjectId1: projectId1,
@@ -21,8 +21,8 @@ func MakeProjectJoinRequestCall(daoId0 uint64, projectId1 uint64, who2 [32]byte)
 // 创建项目
 func MakeCreateProjectCall(daoId0 uint64, name1 []byte, description2 []byte, creator3 [32]byte) types.RuntimeCall {
 	return types.RuntimeCall{
-		IsWeteeProject: true,
-		AsWeteeProjectField0: &types.WeteeProjectPalletCall{
+		IsWeTEEProject: true,
+		AsWeTEEProjectField0: &types.WeteeProjectPalletCall{
 			IsCreateProject:             true,
 			AsCreateProjectDaoId0:       daoId0,
 			AsCreateProjectName1:        name1,
@@ -35,8 +35,8 @@ func MakeCreateProjectCall(daoId0 uint64, name1 []byte, description2 []byte, cre
 // 为项目申请资金
 func MakeApplyProjectFundsCall(daoId0 uint64, projectId1 uint64, amount2 types1.U128) types.RuntimeCall {
 	return types.RuntimeCall{
-		IsWeteeProject: true,
-		AsWeteeProjectField0: &types.WeteeProjectPalletCall{
+		IsWeTEEProject: true,
+		AsWeTEEProjectField0: &types.WeteeProjectPalletCall{
 			IsApplyProjectFunds:           true,
 			AsApplyProjectFundsDaoId0:     daoId0,
 			AsApplyProjectFundsProjectId1: projectId1,
@@ -48,8 +48,8 @@ func MakeApplyProjectFundsCall(daoId0 uint64, projectId1 uint64, amount2 types1.
 // 创建任务
 func MakeCreateTaskCall(daoId0 uint64, projectId1 uint64, name2 []byte, description3 []byte, point4 uint16, priority5 byte, maxAssignee6 types.OptionTByte, skills7 types.OptionTByteSlice, assignees8 types.OptionTByteArray32Slice, reviewers9 types.OptionTByteArray32Slice, amount10 types1.U128) types.RuntimeCall {
 	return types.RuntimeCall{
-		IsWeteeProject: true,
-		AsWeteeProjectField0: &types.WeteeProjectPalletCall{
+		IsWeTEEProject: true,
+		AsWeTEEProjectField0: &types.WeteeProjectPalletCall{
 			IsCreateTask:             true,
 			AsCreateTaskDaoId0:       daoId0,
 			AsCreateTaskProjectId1:   projectId1,
@@ -69,8 +69,8 @@ func MakeCreateTaskCall(daoId0 uint64, projectId1 uint64, name2 []byte, descript
 // 加入任务
 func MakeJoinTaskCall(daoId0 uint64, projectId1 uint64, taskId2 uint64) types.RuntimeCall {
 	return types.RuntimeCall{
-		IsWeteeProject: true,
-		AsWeteeProjectField0: &types.WeteeProjectPalletCall{
+		IsWeTEEProject: true,
+		AsWeTEEProjectField0: &types.WeteeProjectPalletCall{
 			IsJoinTask:           true,
 			AsJoinTaskDaoId0:     daoId0,
 			AsJoinTaskProjectId1: projectId1,
@@ -82,8 +82,8 @@ func MakeJoinTaskCall(daoId0 uint64, projectId1 uint64, taskId2 uint64) types.Ru
 // 离开项目
 func MakeLeaveTaskCall(daoId0 uint64, projectId1 uint64, taskId2 uint64) types.RuntimeCall {
 	return types.RuntimeCall{
-		IsWeteeProject: true,
-		AsWeteeProjectField0: &types.WeteeProjectPalletCall{
+		IsWeTEEProject: true,
+		AsWeTEEProjectField0: &types.WeteeProjectPalletCall{
 			IsLeaveTask:           true,
 			AsLeaveTaskDaoId0:     daoId0,
 			AsLeaveTaskProjectId1: projectId1,
@@ -95,8 +95,8 @@ func MakeLeaveTaskCall(daoId0 uint64, projectId1 uint64, taskId2 uint64) types.R
 // 加入项目审核团队
 func MakeJoinTaskReviewCall(daoId0 uint64, projectId1 uint64, taskId2 uint64) types.RuntimeCall {
 	return types.RuntimeCall{
-		IsWeteeProject: true,
-		AsWeteeProjectField0: &types.WeteeProjectPalletCall{
+		IsWeTEEProject: true,
+		AsWeTEEProjectField0: &types.WeteeProjectPalletCall{
 			IsJoinTaskReview:           true,
 			AsJoinTaskReviewDaoId0:     daoId0,
 			AsJoinTaskReviewProjectId1: projectId1,
@@ -108,8 +108,8 @@ func MakeJoinTaskReviewCall(daoId0 uint64, projectId1 uint64, taskId2 uint64) ty
 // 离开任务审核
 func MakeLeaveTaskReviewCall(daoId0 uint64, projectId1 uint64, taskId2 uint64) types.RuntimeCall {
 	return types.RuntimeCall{
-		IsWeteeProject: true,
-		AsWeteeProjectField0: &types.WeteeProjectPalletCall{
+		IsWeTEEProject: true,
+		AsWeTEEProjectField0: &types.WeteeProjectPalletCall{
 			IsLeaveTaskReview:           true,
 			AsLeaveTaskReviewDaoId0:     daoId0,
 			AsLeaveTaskReviewProjectId1: projectId1,
@@ -121,8 +121,8 @@ func MakeLeaveTaskReviewCall(daoId0 uint64, projectId1 uint64, taskId2 uint64) t
 // 开始任务
 func MakeStartTaskCall(daoId0 uint64, projectId1 uint64, taskId2 uint64) types.RuntimeCall {
 	return types.RuntimeCall{
-		IsWeteeProject: true,
-		AsWeteeProjectField0: &types.WeteeProjectPalletCall{
+		IsWeTEEProject: true,
+		AsWeTEEProjectField0: &types.WeteeProjectPalletCall{
 			IsStartTask:           true,
 			AsStartTaskDaoId0:     daoId0,
 			AsStartTaskProjectId1: projectId1,
@@ -134,8 +134,8 @@ func MakeStartTaskCall(daoId0 uint64, projectId1 uint64, taskId2 uint64) types.R
 // 申请审核
 func MakeRequestReviewCall(daoId0 uint64, projectId1 uint64, taskId2 uint64) types.RuntimeCall {
 	return types.RuntimeCall{
-		IsWeteeProject: true,
-		AsWeteeProjectField0: &types.WeteeProjectPalletCall{
+		IsWeTEEProject: true,
+		AsWeTEEProjectField0: &types.WeteeProjectPalletCall{
 			IsRequestReview:           true,
 			AsRequestReviewDaoId0:     daoId0,
 			AsRequestReviewProjectId1: projectId1,
@@ -147,8 +147,8 @@ func MakeRequestReviewCall(daoId0 uint64, projectId1 uint64, taskId2 uint64) typ
 // 完成任务
 func MakeTaskDoneCall(daoId0 uint64, projectId1 uint64, taskId2 uint64) types.RuntimeCall {
 	return types.RuntimeCall{
-		IsWeteeProject: true,
-		AsWeteeProjectField0: &types.WeteeProjectPalletCall{
+		IsWeTEEProject: true,
+		AsWeTEEProjectField0: &types.WeteeProjectPalletCall{
 			IsTaskDone:           true,
 			AsTaskDoneDaoId0:     daoId0,
 			AsTaskDoneProjectId1: projectId1,
@@ -160,8 +160,8 @@ func MakeTaskDoneCall(daoId0 uint64, projectId1 uint64, taskId2 uint64) types.Ru
 // 发送审核报告
 func MakeMakeReviewCall(daoId0 uint64, projectId1 uint64, taskId2 uint64, opinion3 types.ReviewOpinion, meta4 []byte) types.RuntimeCall {
 	return types.RuntimeCall{
-		IsWeteeProject: true,
-		AsWeteeProjectField0: &types.WeteeProjectPalletCall{
+		IsWeTEEProject: true,
+		AsWeTEEProjectField0: &types.WeteeProjectPalletCall{
 			IsMakeReview:           true,
 			AsMakeReviewDaoId0:     daoId0,
 			AsMakeReviewProjectId1: projectId1,
@@ -175,8 +175,8 @@ func MakeMakeReviewCall(daoId0 uint64, projectId1 uint64, taskId2 uint64, opinio
 // 创建非DAO项目
 func MakeCreateProxyProjectCall(name0 []byte, description1 []byte, deposit2 types1.UCompact) types.RuntimeCall {
 	return types.RuntimeCall{
-		IsWeteeProject: true,
-		AsWeteeProjectField0: &types.WeteeProjectPalletCall{
+		IsWeTEEProject: true,
+		AsWeTEEProjectField0: &types.WeteeProjectPalletCall{
 			IsCreateProxyProject:             true,
 			AsCreateProxyProjectName0:        name0,
 			AsCreateProxyProjectDescription1: description1,
@@ -186,8 +186,8 @@ func MakeCreateProxyProjectCall(name0 []byte, description1 []byte, deposit2 type
 }
 func MakeProxyCallCall(projectId0 uint64, call1 types.RuntimeCall) types.RuntimeCall {
 	return types.RuntimeCall{
-		IsWeteeProject: true,
-		AsWeteeProjectField0: &types.WeteeProjectPalletCall{
+		IsWeTEEProject: true,
+		AsWeTEEProjectField0: &types.WeteeProjectPalletCall{
 			IsProxyCall:           true,
 			AsProxyCallProjectId0: projectId0,
 			AsProxyCallCall1:      &call1,

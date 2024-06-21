@@ -1,12 +1,12 @@
-package messagequeue
+package weteemessagequeue
 
 import types "github.com/wetee-dao/go-sdk/gen/types"
 
 // Remove a page which has no more messages remaining to be processed or is stale.
-func MakeReapPageCall(messageOrigin0 types.AggregateMessageOrigin, pageIndex1 uint32) types.RuntimeCall {
+func MakeReapPageCall(messageOrigin0 types.MessageOrigin, pageIndex1 uint32) types.RuntimeCall {
 	return types.RuntimeCall{
-		IsMessageQueue: true,
-		AsMessageQueueField0: &types.PalletMessageQueuePalletCall{
+		IsWeTEEMessageQueue: true,
+		AsWeTEEMessageQueueField0: &types.WeteeMessageQueuePalletCall{
 			IsReapPage:               true,
 			AsReapPageMessageOrigin0: messageOrigin0,
 			AsReapPagePageIndex1:     pageIndex1,
@@ -27,10 +27,10 @@ func MakeReapPageCall(messageOrigin0 types.AggregateMessageOrigin, pageIndex1 ui
 //     of the message.
 //
 // Benchmark complexity considerations: O(index + weight_limit).
-func MakeExecuteOverweightCall(messageOrigin0 types.AggregateMessageOrigin, page1 uint32, index2 uint32, weightLimit3 types.Weight) types.RuntimeCall {
+func MakeExecuteOverweightCall(messageOrigin0 types.MessageOrigin, page1 uint32, index2 uint32, weightLimit3 types.Weight) types.RuntimeCall {
 	return types.RuntimeCall{
-		IsMessageQueue: true,
-		AsMessageQueueField0: &types.PalletMessageQueuePalletCall{
+		IsWeTEEMessageQueue: true,
+		AsWeTEEMessageQueueField0: &types.WeteeMessageQueuePalletCall{
 			IsExecuteOverweight:               true,
 			AsExecuteOverweightMessageOrigin0: messageOrigin0,
 			AsExecuteOverweightPage1:          page1,

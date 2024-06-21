@@ -21,7 +21,7 @@ func MakeK8sClusterAccountsStorageKey(byteArray320 [32]byte) (types.StorageKey, 
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
-	return types.CreateStorageKey(&types1.Meta, "WeteeWorker", "K8sClusterAccounts", byteArgs...)
+	return types.CreateStorageKey(&types1.Meta, "WeTEEWorker", "K8sClusterAccounts", byteArgs...)
 }
 func GetK8sClusterAccounts(state state.State, bhash types.Hash, byteArray320 [32]byte) (ret uint64, isSome bool, err error) {
 	key, err := MakeK8sClusterAccountsStorageKey(byteArray320)
@@ -51,7 +51,7 @@ func GetK8sClusterAccountsLatest(state state.State, byteArray320 [32]byte) (ret 
 //	The id of the next cluster to be created.
 //	获取下一个集群id
 func MakeNextClusterIdStorageKey() (types.StorageKey, error) {
-	return types.CreateStorageKey(&types1.Meta, "WeteeWorker", "NextClusterId")
+	return types.CreateStorageKey(&types1.Meta, "WeTEEWorker", "NextClusterId")
 }
 
 var NextClusterIdResultDefaultBytes, _ = hex.DecodeString("0100000000000000")
@@ -105,7 +105,7 @@ func MakeK8sClustersStorageKey(uint640 uint64) (types.StorageKey, error) {
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
-	return types.CreateStorageKey(&types1.Meta, "WeteeWorker", "K8sClusters", byteArgs...)
+	return types.CreateStorageKey(&types1.Meta, "WeTEEWorker", "K8sClusters", byteArgs...)
 }
 func GetK8sClusters(state state.State, bhash types.Hash, uint640 uint64) (ret types1.K8sCluster, isSome bool, err error) {
 	key, err := MakeK8sClustersStorageKey(uint640)
@@ -143,7 +143,7 @@ func MakeProofOfClustersStorageKey(uint640 uint64) (types.StorageKey, error) {
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
-	return types.CreateStorageKey(&types1.Meta, "WeteeWorker", "ProofOfClusters", byteArgs...)
+	return types.CreateStorageKey(&types1.Meta, "WeTEEWorker", "ProofOfClusters", byteArgs...)
 }
 func GetProofOfClusters(state state.State, bhash types.Hash, uint640 uint64) (ret []byte, isSome bool, err error) {
 	key, err := MakeProofOfClustersStorageKey(uint640)
@@ -181,7 +181,7 @@ func MakeCrsStorageKey(uint640 uint64) (types.StorageKey, error) {
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
-	return types.CreateStorageKey(&types1.Meta, "WeteeWorker", "Crs", byteArgs...)
+	return types.CreateStorageKey(&types1.Meta, "WeTEEWorker", "Crs", byteArgs...)
 }
 func GetCrs(state state.State, bhash types.Hash, uint640 uint64) (ret types1.TupleOfComCrComCr, isSome bool, err error) {
 	key, err := MakeCrsStorageKey(uint640)
@@ -219,7 +219,7 @@ func MakeScoresStorageKey(uint640 uint64) (types.StorageKey, error) {
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
-	return types.CreateStorageKey(&types1.Meta, "WeteeWorker", "Scores", byteArgs...)
+	return types.CreateStorageKey(&types1.Meta, "WeTEEWorker", "Scores", byteArgs...)
 }
 func GetScores(state state.State, bhash types.Hash, uint640 uint64) (ret types1.TupleOfByteByte, isSome bool, err error) {
 	key, err := MakeScoresStorageKey(uint640)
@@ -257,7 +257,7 @@ func MakeDepositPricesStorageKey(byte0 byte) (types.StorageKey, error) {
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
-	return types.CreateStorageKey(&types1.Meta, "WeteeWorker", "DepositPrices", byteArgs...)
+	return types.CreateStorageKey(&types1.Meta, "WeTEEWorker", "DepositPrices", byteArgs...)
 }
 func GetDepositPrices(state state.State, bhash types.Hash, byte0 byte) (ret types1.DepositPrice, isSome bool, err error) {
 	key, err := MakeDepositPricesStorageKey(byte0)
@@ -286,24 +286,24 @@ func GetDepositPricesLatest(state state.State, byte0 byte) (ret types1.DepositPr
 //
 //	抵押信息
 //	deposit of computing resource
-func MakeDepositsStorageKey(tupleOfUint64Uint640 uint64, tupleOfUint64Uint641 uint64) (types.StorageKey, error) {
+func MakeDepositsStorageKey(tupleOfUint64Uint3210 uint64, tupleOfUint64Uint3211 uint32) (types.StorageKey, error) {
 	byteArgs := [][]byte{}
 	encBytes := []byte{}
 	var err error
-	encBytes, err = codec.Encode(tupleOfUint64Uint640)
+	encBytes, err = codec.Encode(tupleOfUint64Uint3210)
 	if err != nil {
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
-	encBytes, err = codec.Encode(tupleOfUint64Uint641)
+	encBytes, err = codec.Encode(tupleOfUint64Uint3211)
 	if err != nil {
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
-	return types.CreateStorageKey(&types1.Meta, "WeteeWorker", "Deposits", byteArgs...)
+	return types.CreateStorageKey(&types1.Meta, "WeTEEWorker", "Deposits", byteArgs...)
 }
-func GetDeposits(state state.State, bhash types.Hash, tupleOfUint64Uint640 uint64, tupleOfUint64Uint641 uint64) (ret types1.Deposit, isSome bool, err error) {
-	key, err := MakeDepositsStorageKey(tupleOfUint64Uint640, tupleOfUint64Uint641)
+func GetDeposits(state state.State, bhash types.Hash, tupleOfUint64Uint3210 uint64, tupleOfUint64Uint3211 uint32) (ret types1.Deposit, isSome bool, err error) {
+	key, err := MakeDepositsStorageKey(tupleOfUint64Uint3210, tupleOfUint64Uint3211)
 	if err != nil {
 		return
 	}
@@ -313,8 +313,8 @@ func GetDeposits(state state.State, bhash types.Hash, tupleOfUint64Uint640 uint6
 	}
 	return
 }
-func GetDepositsLatest(state state.State, tupleOfUint64Uint640 uint64, tupleOfUint64Uint641 uint64) (ret types1.Deposit, isSome bool, err error) {
-	key, err := MakeDepositsStorageKey(tupleOfUint64Uint640, tupleOfUint64Uint641)
+func GetDepositsLatest(state state.State, tupleOfUint64Uint3210 uint64, tupleOfUint64Uint3211 uint32) (ret types1.Deposit, isSome bool, err error) {
+	key, err := MakeDepositsStorageKey(tupleOfUint64Uint3210, tupleOfUint64Uint3211)
 	if err != nil {
 		return
 	}
@@ -343,7 +343,7 @@ func MakeClusterContractsStorageKey(tupleOfUint64WorkId0 uint64, tupleOfUint64Wo
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
-	return types.CreateStorageKey(&types1.Meta, "WeteeWorker", "ClusterContracts", byteArgs...)
+	return types.CreateStorageKey(&types1.Meta, "WeTEEWorker", "ClusterContracts", byteArgs...)
 }
 func GetClusterContracts(state state.State, bhash types.Hash, tupleOfUint64WorkId0 uint64, tupleOfUint64WorkId1 types1.WorkId) (ret types1.ClusterContractState, isSome bool, err error) {
 	key, err := MakeClusterContractsStorageKey(tupleOfUint64WorkId0, tupleOfUint64WorkId1)
@@ -381,7 +381,7 @@ func MakeWorkContractsStorageKey(workId0 types1.WorkId) (types.StorageKey, error
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
-	return types.CreateStorageKey(&types1.Meta, "WeteeWorker", "WorkContracts", byteArgs...)
+	return types.CreateStorageKey(&types1.Meta, "WeTEEWorker", "WorkContracts", byteArgs...)
 }
 func GetWorkContracts(state state.State, bhash types.Hash, workId0 types1.WorkId) (ret uint64, isSome bool, err error) {
 	key, err := MakeWorkContractsStorageKey(workId0)
@@ -424,7 +424,7 @@ func MakeWorkContractStateStorageKey(tupleOfWorkIdUint640 types1.WorkId, tupleOf
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
-	return types.CreateStorageKey(&types1.Meta, "WeteeWorker", "WorkContractState", byteArgs...)
+	return types.CreateStorageKey(&types1.Meta, "WeTEEWorker", "WorkContractState", byteArgs...)
 }
 func GetWorkContractState(state state.State, bhash types.Hash, tupleOfWorkIdUint640 types1.WorkId, tupleOfWorkIdUint641 uint64) (ret types1.ContractState, isSome bool, err error) {
 	key, err := MakeWorkContractStateStorageKey(tupleOfWorkIdUint640, tupleOfWorkIdUint641)
@@ -454,7 +454,7 @@ func GetWorkContractStateLatest(state state.State, tupleOfWorkIdUint640 types1.W
 //	Work 结算周期
 //	Work settle period
 func MakeStageStorageKey() (types.StorageKey, error) {
-	return types.CreateStorageKey(&types1.Meta, "WeteeWorker", "Stage")
+	return types.CreateStorageKey(&types1.Meta, "WeTEEWorker", "Stage")
 }
 
 var StageResultDefaultBytes, _ = hex.DecodeString("58020000")
@@ -500,24 +500,24 @@ func GetStageLatest(state state.State) (ret uint32, err error) {
 //
 //	工作任务工作量证明
 //	proof of work of task
-func MakeProofsOfWorkStorageKey(tupleOfWorkIdUint640 types1.WorkId, tupleOfWorkIdUint641 uint64) (types.StorageKey, error) {
+func MakeProofsOfWorkStorageKey(tupleOfWorkIdUint320 types1.WorkId, tupleOfWorkIdUint321 uint32) (types.StorageKey, error) {
 	byteArgs := [][]byte{}
 	encBytes := []byte{}
 	var err error
-	encBytes, err = codec.Encode(tupleOfWorkIdUint640)
+	encBytes, err = codec.Encode(tupleOfWorkIdUint320)
 	if err != nil {
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
-	encBytes, err = codec.Encode(tupleOfWorkIdUint641)
+	encBytes, err = codec.Encode(tupleOfWorkIdUint321)
 	if err != nil {
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
-	return types.CreateStorageKey(&types1.Meta, "WeteeWorker", "ProofsOfWork", byteArgs...)
+	return types.CreateStorageKey(&types1.Meta, "WeTEEWorker", "ProofsOfWork", byteArgs...)
 }
-func GetProofsOfWork(state state.State, bhash types.Hash, tupleOfWorkIdUint640 types1.WorkId, tupleOfWorkIdUint641 uint64) (ret types1.ProofOfWork, isSome bool, err error) {
-	key, err := MakeProofsOfWorkStorageKey(tupleOfWorkIdUint640, tupleOfWorkIdUint641)
+func GetProofsOfWork(state state.State, bhash types.Hash, tupleOfWorkIdUint320 types1.WorkId, tupleOfWorkIdUint321 uint32) (ret types1.ProofOfWork, isSome bool, err error) {
+	key, err := MakeProofsOfWorkStorageKey(tupleOfWorkIdUint320, tupleOfWorkIdUint321)
 	if err != nil {
 		return
 	}
@@ -527,8 +527,8 @@ func GetProofsOfWork(state state.State, bhash types.Hash, tupleOfWorkIdUint640 t
 	}
 	return
 }
-func GetProofsOfWorkLatest(state state.State, tupleOfWorkIdUint640 types1.WorkId, tupleOfWorkIdUint641 uint64) (ret types1.ProofOfWork, isSome bool, err error) {
-	key, err := MakeProofsOfWorkStorageKey(tupleOfWorkIdUint640, tupleOfWorkIdUint641)
+func GetProofsOfWorkLatest(state state.State, tupleOfWorkIdUint320 types1.WorkId, tupleOfWorkIdUint321 uint32) (ret types1.ProofOfWork, isSome bool, err error) {
+	key, err := MakeProofsOfWorkStorageKey(tupleOfWorkIdUint320, tupleOfWorkIdUint321)
 	if err != nil {
 		return
 	}
@@ -551,7 +551,7 @@ func MakeReportOfWorkStorageKey(workId0 types1.WorkId) (types.StorageKey, error)
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
-	return types.CreateStorageKey(&types1.Meta, "WeteeWorker", "ReportOfWork", byteArgs...)
+	return types.CreateStorageKey(&types1.Meta, "WeTEEWorker", "ReportOfWork", byteArgs...)
 }
 func GetReportOfWork(state state.State, bhash types.Hash, workId0 types1.WorkId) (ret []byte, isSome bool, err error) {
 	key, err := MakeReportOfWorkStorageKey(workId0)
@@ -588,9 +588,9 @@ func MakeReportOfWorkTimeStorageKey(workId0 types1.WorkId) (types.StorageKey, er
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
-	return types.CreateStorageKey(&types1.Meta, "WeteeWorker", "ReportOfWorkTime", byteArgs...)
+	return types.CreateStorageKey(&types1.Meta, "WeTEEWorker", "ReportOfWorkTime", byteArgs...)
 }
-func GetReportOfWorkTime(state state.State, bhash types.Hash, workId0 types1.WorkId) (ret uint64, isSome bool, err error) {
+func GetReportOfWorkTime(state state.State, bhash types.Hash, workId0 types1.WorkId) (ret uint32, isSome bool, err error) {
 	key, err := MakeReportOfWorkTimeStorageKey(workId0)
 	if err != nil {
 		return
@@ -601,7 +601,7 @@ func GetReportOfWorkTime(state state.State, bhash types.Hash, workId0 types1.Wor
 	}
 	return
 }
-func GetReportOfWorkTimeLatest(state state.State, workId0 types1.WorkId) (ret uint64, isSome bool, err error) {
+func GetReportOfWorkTimeLatest(state state.State, workId0 types1.WorkId) (ret uint32, isSome bool, err error) {
 	key, err := MakeReportOfWorkTimeStorageKey(workId0)
 	if err != nil {
 		return
@@ -631,7 +631,7 @@ func MakeReportsStorageKey(tupleOfUint64WorkId0 uint64, tupleOfUint64WorkId1 typ
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
-	return types.CreateStorageKey(&types1.Meta, "WeteeWorker", "Reports", byteArgs...)
+	return types.CreateStorageKey(&types1.Meta, "WeTEEWorker", "Reports", byteArgs...)
 }
 func GetReports(state state.State, bhash types.Hash, tupleOfUint64WorkId0 uint64, tupleOfUint64WorkId1 types1.WorkId) (ret []byte, isSome bool, err error) {
 	key, err := MakeReportsStorageKey(tupleOfUint64WorkId0, tupleOfUint64WorkId1)

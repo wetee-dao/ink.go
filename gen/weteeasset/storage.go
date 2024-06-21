@@ -18,7 +18,7 @@ func MakeDaoAssetsInfoStorageKey(uint640 uint64) (types.StorageKey, error) {
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
-	return types.CreateStorageKey(&types1.Meta, "WeteeAsset", "DaoAssetsInfo", byteArgs...)
+	return types.CreateStorageKey(&types1.Meta, "WeTEEAsset", "DaoAssetsInfo", byteArgs...)
 }
 func GetDaoAssetsInfo(state state.State, bhash types.Hash, uint640 uint64) (ret types1.DaoAssetInfo, isSome bool, err error) {
 	key, err := MakeDaoAssetsInfoStorageKey(uint640)
@@ -53,7 +53,7 @@ func MakeUsersNumberStorageKey(uint640 uint64) (types.StorageKey, error) {
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
-	return types.CreateStorageKey(&types1.Meta, "WeteeAsset", "UsersNumber", byteArgs...)
+	return types.CreateStorageKey(&types1.Meta, "WeTEEAsset", "UsersNumber", byteArgs...)
 }
 
 var UsersNumberResultDefaultBytes, _ = hex.DecodeString("00000000")
@@ -105,7 +105,7 @@ func MakeExistentDepositsStorageKey(uint640 uint64) (types.StorageKey, error) {
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
-	return types.CreateStorageKey(&types1.Meta, "WeteeAsset", "ExistentDeposits", byteArgs...)
+	return types.CreateStorageKey(&types1.Meta, "WeTEEAsset", "ExistentDeposits", byteArgs...)
 }
 
 var ExistentDepositsResultDefaultBytes, _ = hex.DecodeString("00000000000000000000000000000000")

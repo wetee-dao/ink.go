@@ -13,7 +13,7 @@ import (
 //	The id of the next dao to be created.
 //	获取下一个组织id
 func MakeNextProjectIdStorageKey() (types.StorageKey, error) {
-	return types.CreateStorageKey(&types1.Meta, "WeteeProject", "NextProjectId")
+	return types.CreateStorageKey(&types1.Meta, "WeTEEProject", "NextProjectId")
 }
 
 var NextProjectIdResultDefaultBytes, _ = hex.DecodeString("0100000000000000")
@@ -68,7 +68,7 @@ func MakeDaoProjectsStorageKey(uint640 uint64) (types.StorageKey, error) {
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
-	return types.CreateStorageKey(&types1.Meta, "WeteeProject", "DaoProjects", byteArgs...)
+	return types.CreateStorageKey(&types1.Meta, "WeTEEProject", "DaoProjects", byteArgs...)
 }
 
 var DaoProjectsResultDefaultBytes, _ = hex.DecodeString("00")
@@ -114,24 +114,24 @@ func GetDaoProjectsLatest(state state.State, uint640 uint64) (ret []types1.Proje
 //
 //	project board
 //	项目看板
-func MakeProxyProjectsStorageKey(tupleOfByteArray32Uint6410 [32]byte, tupleOfByteArray32Uint6411 uint64) (types.StorageKey, error) {
+func MakeProxyProjectsStorageKey(tupleOfByteArray32Uint640 [32]byte, tupleOfByteArray32Uint641 uint64) (types.StorageKey, error) {
 	byteArgs := [][]byte{}
 	encBytes := []byte{}
 	var err error
-	encBytes, err = codec.Encode(tupleOfByteArray32Uint6410)
+	encBytes, err = codec.Encode(tupleOfByteArray32Uint640)
 	if err != nil {
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
-	encBytes, err = codec.Encode(tupleOfByteArray32Uint6411)
+	encBytes, err = codec.Encode(tupleOfByteArray32Uint641)
 	if err != nil {
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
-	return types.CreateStorageKey(&types1.Meta, "WeteeProject", "ProxyProjects", byteArgs...)
+	return types.CreateStorageKey(&types1.Meta, "WeTEEProject", "ProxyProjects", byteArgs...)
 }
-func GetProxyProjects(state state.State, bhash types.Hash, tupleOfByteArray32Uint6410 [32]byte, tupleOfByteArray32Uint6411 uint64) (ret types1.ProjectInfo, isSome bool, err error) {
-	key, err := MakeProxyProjectsStorageKey(tupleOfByteArray32Uint6410, tupleOfByteArray32Uint6411)
+func GetProxyProjects(state state.State, bhash types.Hash, tupleOfByteArray32Uint640 [32]byte, tupleOfByteArray32Uint641 uint64) (ret types1.ProjectInfo, isSome bool, err error) {
+	key, err := MakeProxyProjectsStorageKey(tupleOfByteArray32Uint640, tupleOfByteArray32Uint641)
 	if err != nil {
 		return
 	}
@@ -141,8 +141,8 @@ func GetProxyProjects(state state.State, bhash types.Hash, tupleOfByteArray32Uin
 	}
 	return
 }
-func GetProxyProjectsLatest(state state.State, tupleOfByteArray32Uint6410 [32]byte, tupleOfByteArray32Uint6411 uint64) (ret types1.ProjectInfo, isSome bool, err error) {
-	key, err := MakeProxyProjectsStorageKey(tupleOfByteArray32Uint6410, tupleOfByteArray32Uint6411)
+func GetProxyProjectsLatest(state state.State, tupleOfByteArray32Uint640 [32]byte, tupleOfByteArray32Uint641 uint64) (ret types1.ProjectInfo, isSome bool, err error) {
+	key, err := MakeProxyProjectsStorageKey(tupleOfByteArray32Uint640, tupleOfByteArray32Uint641)
 	if err != nil {
 		return
 	}
@@ -166,7 +166,7 @@ func MakeTasksStorageKey(uint640 uint64) (types.StorageKey, error) {
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
-	return types.CreateStorageKey(&types1.Meta, "WeteeProject", "Tasks", byteArgs...)
+	return types.CreateStorageKey(&types1.Meta, "WeTEEProject", "Tasks", byteArgs...)
 }
 
 var TasksResultDefaultBytes, _ = hex.DecodeString("00")
@@ -213,7 +213,7 @@ func GetTasksLatest(state state.State, uint640 uint64) (ret []types1.TaskInfo, e
 //	The id of the next dao to be created.
 //	获取下一个组织id
 func MakeNextTaskIdStorageKey() (types.StorageKey, error) {
-	return types.CreateStorageKey(&types1.Meta, "WeteeProject", "NextTaskId")
+	return types.CreateStorageKey(&types1.Meta, "WeTEEProject", "NextTaskId")
 }
 
 var NextTaskIdResultDefaultBytes, _ = hex.DecodeString("0100000000000000")
@@ -270,7 +270,7 @@ func MakeTaskReviewsStorageKey(uint640 uint64) (types.StorageKey, error) {
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
-	return types.CreateStorageKey(&types1.Meta, "WeteeProject", "TaskReviews", byteArgs...)
+	return types.CreateStorageKey(&types1.Meta, "WeTEEProject", "TaskReviews", byteArgs...)
 }
 func GetTaskReviews(state state.State, bhash types.Hash, uint640 uint64) (ret types1.ReviewStatus, isSome bool, err error) {
 	key, err := MakeTaskReviewsStorageKey(uint640)

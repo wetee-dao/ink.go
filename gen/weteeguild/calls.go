@@ -4,8 +4,8 @@ import types "github.com/wetee-dao/go-sdk/gen/types"
 
 func MakeGuildJoinCall(daoId0 uint64, guildId1 uint64, who2 [32]byte) types.RuntimeCall {
 	return types.RuntimeCall{
-		IsWeteeGuild: true,
-		AsWeteeGuildField0: &types.WeteeGuildPalletCall{
+		IsWeTEEGuild: true,
+		AsWeTEEGuildField0: &types.WeteeGuildPalletCall{
 			IsGuildJoin:         true,
 			AsGuildJoinDaoId0:   daoId0,
 			AsGuildJoinGuildId1: guildId1,
@@ -17,8 +17,8 @@ func MakeGuildJoinCall(daoId0 uint64, guildId1 uint64, who2 [32]byte) types.Runt
 // 创建公会
 func MakeCreateGuildCall(daoId0 uint64, name1 []byte, desc2 []byte, metaData3 []byte, creator4 [32]byte) types.RuntimeCall {
 	return types.RuntimeCall{
-		IsWeteeGuild: true,
-		AsWeteeGuildField0: &types.WeteeGuildPalletCall{
+		IsWeTEEGuild: true,
+		AsWeTEEGuildField0: &types.WeteeGuildPalletCall{
 			IsCreateGuild:          true,
 			AsCreateGuildDaoId0:    daoId0,
 			AsCreateGuildName1:     name1,

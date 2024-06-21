@@ -21,7 +21,7 @@ func MakeAccountStorageKey(uint640 uint64) (types.StorageKey, error) {
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
-	return types.CreateStorageKey(&types1.Meta, "WeteeSudo", "Account", byteArgs...)
+	return types.CreateStorageKey(&types1.Meta, "WeTEESudo", "Account", byteArgs...)
 }
 func GetAccount(state state.State, bhash types.Hash, uint640 uint64) (ret [32]byte, isSome bool, err error) {
 	key, err := MakeAccountStorageKey(uint640)
@@ -59,7 +59,7 @@ func MakeCloseDaoStorageKey(uint640 uint64) (types.StorageKey, error) {
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
-	return types.CreateStorageKey(&types1.Meta, "WeteeSudo", "CloseDao", byteArgs...)
+	return types.CreateStorageKey(&types1.Meta, "WeTEESudo", "CloseDao", byteArgs...)
 }
 func GetCloseDao(state state.State, bhash types.Hash, uint640 uint64) (ret bool, isSome bool, err error) {
 	key, err := MakeCloseDaoStorageKey(uint640)
@@ -96,7 +96,7 @@ func MakeSudoTasksStorageKey(uint640 uint64) (types.StorageKey, error) {
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
-	return types.CreateStorageKey(&types1.Meta, "WeteeSudo", "SudoTasks", byteArgs...)
+	return types.CreateStorageKey(&types1.Meta, "WeTEESudo", "SudoTasks", byteArgs...)
 }
 
 var SudoTasksResultDefaultBytes, _ = hex.DecodeString("00")

@@ -7,8 +7,8 @@ import (
 
 func MakeSpendCall(daoId0 uint64, beneficiary1 [32]byte, amount2 types.UCompact) types1.RuntimeCall {
 	return types1.RuntimeCall{
-		IsWeteeTreasury: true,
-		AsWeteeTreasuryField0: &types1.WeteeTreasuryPalletCall{
+		IsWeTEETreasury: true,
+		AsWeTEETreasuryField0: &types1.WeteeTreasuryPalletCall{
 			IsSpend:             true,
 			AsSpendDaoId0:       daoId0,
 			AsSpendBeneficiary1: beneficiary1,
