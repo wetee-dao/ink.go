@@ -33,7 +33,7 @@ func (w *Task) GetVersionLatest(id uint64) (uint64, error) {
 	if !ok {
 		return 0, errors.New("GetAppIdAccountsLatest => not ok")
 	}
-	return res, nil
+	return uint64(res), nil
 }
 
 func (w *Task) GetTask(publey []byte, id uint64) (*types.TeeTask, error) {

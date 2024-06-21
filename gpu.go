@@ -51,5 +51,5 @@ func (w *GpuApp) GetVersionLatest(id uint64) (uint64, error) {
 	if !ok {
 		return 0, errors.New("GetAppIdAccountsLatest => not ok")
 	}
-	return res, nil
+	return uint64(res), nil
 }
