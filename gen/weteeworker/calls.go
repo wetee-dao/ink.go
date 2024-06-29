@@ -54,7 +54,7 @@ func MakeClusterMortgageCall(id0 uint64, cpu1 uint32, mem2 uint32, cvmCpu3 uint3
 
 // Worker cluster unmortgage
 // 解抵押
-func MakeClusterUnmortgageCall(id0 uint64, blockNum1 uint32) types.RuntimeCall {
+func MakeClusterUnmortgageCall(id0 uint64, blockNum1 uint64) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsWeTEEWorker: true,
 		AsWeTEEWorkerField0: &types.WeteeWorkerPalletCall{

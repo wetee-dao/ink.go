@@ -199,16 +199,16 @@ func GetGuildsLatest(state state.State, uint640 uint64) (ret []types1.GuildInfo,
 //
 //	the roadmap info of projects
 //	组织内Roadmap信息
-func MakeRoadMapsStorageKey(tupleOfUint64Uint3210 uint64, tupleOfUint64Uint3211 uint32) (types.StorageKey, error) {
+func MakeRoadMapsStorageKey(tupleOfUint64Uint320 uint64, tupleOfUint64Uint321 uint32) (types.StorageKey, error) {
 	byteArgs := [][]byte{}
 	encBytes := []byte{}
 	var err error
-	encBytes, err = codec.Encode(tupleOfUint64Uint3210)
+	encBytes, err = codec.Encode(tupleOfUint64Uint320)
 	if err != nil {
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
-	encBytes, err = codec.Encode(tupleOfUint64Uint3211)
+	encBytes, err = codec.Encode(tupleOfUint64Uint321)
 	if err != nil {
 		return nil, err
 	}
@@ -218,8 +218,8 @@ func MakeRoadMapsStorageKey(tupleOfUint64Uint3210 uint64, tupleOfUint64Uint3211 
 
 var RoadMapsResultDefaultBytes, _ = hex.DecodeString("00")
 
-func GetRoadMaps(state state.State, bhash types.Hash, tupleOfUint64Uint3210 uint64, tupleOfUint64Uint3211 uint32) (ret []types1.QuarterTask, err error) {
-	key, err := MakeRoadMapsStorageKey(tupleOfUint64Uint3210, tupleOfUint64Uint3211)
+func GetRoadMaps(state state.State, bhash types.Hash, tupleOfUint64Uint320 uint64, tupleOfUint64Uint321 uint32) (ret []types1.QuarterTask, err error) {
+	key, err := MakeRoadMapsStorageKey(tupleOfUint64Uint320, tupleOfUint64Uint321)
 	if err != nil {
 		return
 	}
@@ -236,8 +236,8 @@ func GetRoadMaps(state state.State, bhash types.Hash, tupleOfUint64Uint3210 uint
 	}
 	return
 }
-func GetRoadMapsLatest(state state.State, tupleOfUint64Uint3210 uint64, tupleOfUint64Uint3211 uint32) (ret []types1.QuarterTask, err error) {
-	key, err := MakeRoadMapsStorageKey(tupleOfUint64Uint3210, tupleOfUint64Uint3211)
+func GetRoadMapsLatest(state state.State, tupleOfUint64Uint320 uint64, tupleOfUint64Uint321 uint32) (ret []types1.QuarterTask, err error) {
+	key, err := MakeRoadMapsStorageKey(tupleOfUint64Uint320, tupleOfUint64Uint321)
 	if err != nil {
 		return
 	}

@@ -286,24 +286,24 @@ func GetDepositPricesLatest(state state.State, byte0 byte) (ret types1.DepositPr
 //
 //	抵押信息
 //	deposit of computing resource
-func MakeDepositsStorageKey(tupleOfUint64Uint3210 uint64, tupleOfUint64Uint3211 uint32) (types.StorageKey, error) {
+func MakeDepositsStorageKey(tupleOfUint64Uint640 uint64, tupleOfUint64Uint641 uint64) (types.StorageKey, error) {
 	byteArgs := [][]byte{}
 	encBytes := []byte{}
 	var err error
-	encBytes, err = codec.Encode(tupleOfUint64Uint3210)
+	encBytes, err = codec.Encode(tupleOfUint64Uint640)
 	if err != nil {
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
-	encBytes, err = codec.Encode(tupleOfUint64Uint3211)
+	encBytes, err = codec.Encode(tupleOfUint64Uint641)
 	if err != nil {
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
 	return types.CreateStorageKey(&types1.Meta, "WeTEEWorker", "Deposits", byteArgs...)
 }
-func GetDeposits(state state.State, bhash types.Hash, tupleOfUint64Uint3210 uint64, tupleOfUint64Uint3211 uint32) (ret types1.Deposit, isSome bool, err error) {
-	key, err := MakeDepositsStorageKey(tupleOfUint64Uint3210, tupleOfUint64Uint3211)
+func GetDeposits(state state.State, bhash types.Hash, tupleOfUint64Uint640 uint64, tupleOfUint64Uint641 uint64) (ret types1.Deposit, isSome bool, err error) {
+	key, err := MakeDepositsStorageKey(tupleOfUint64Uint640, tupleOfUint64Uint641)
 	if err != nil {
 		return
 	}
@@ -313,8 +313,8 @@ func GetDeposits(state state.State, bhash types.Hash, tupleOfUint64Uint3210 uint
 	}
 	return
 }
-func GetDepositsLatest(state state.State, tupleOfUint64Uint3210 uint64, tupleOfUint64Uint3211 uint32) (ret types1.Deposit, isSome bool, err error) {
-	key, err := MakeDepositsStorageKey(tupleOfUint64Uint3210, tupleOfUint64Uint3211)
+func GetDepositsLatest(state state.State, tupleOfUint64Uint640 uint64, tupleOfUint64Uint641 uint64) (ret types1.Deposit, isSome bool, err error) {
+	key, err := MakeDepositsStorageKey(tupleOfUint64Uint640, tupleOfUint64Uint641)
 	if err != nil {
 		return
 	}
@@ -500,24 +500,24 @@ func GetStageLatest(state state.State) (ret uint32, err error) {
 //
 //	工作任务工作量证明
 //	proof of work of task
-func MakeProofsOfWorkStorageKey(tupleOfWorkIdUint320 types1.WorkId, tupleOfWorkIdUint321 uint32) (types.StorageKey, error) {
+func MakeProofsOfWorkStorageKey(tupleOfWorkIdUint640 types1.WorkId, tupleOfWorkIdUint641 uint64) (types.StorageKey, error) {
 	byteArgs := [][]byte{}
 	encBytes := []byte{}
 	var err error
-	encBytes, err = codec.Encode(tupleOfWorkIdUint320)
+	encBytes, err = codec.Encode(tupleOfWorkIdUint640)
 	if err != nil {
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
-	encBytes, err = codec.Encode(tupleOfWorkIdUint321)
+	encBytes, err = codec.Encode(tupleOfWorkIdUint641)
 	if err != nil {
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
 	return types.CreateStorageKey(&types1.Meta, "WeTEEWorker", "ProofsOfWork", byteArgs...)
 }
-func GetProofsOfWork(state state.State, bhash types.Hash, tupleOfWorkIdUint320 types1.WorkId, tupleOfWorkIdUint321 uint32) (ret types1.ProofOfWork, isSome bool, err error) {
-	key, err := MakeProofsOfWorkStorageKey(tupleOfWorkIdUint320, tupleOfWorkIdUint321)
+func GetProofsOfWork(state state.State, bhash types.Hash, tupleOfWorkIdUint640 types1.WorkId, tupleOfWorkIdUint641 uint64) (ret types1.ProofOfWork, isSome bool, err error) {
+	key, err := MakeProofsOfWorkStorageKey(tupleOfWorkIdUint640, tupleOfWorkIdUint641)
 	if err != nil {
 		return
 	}
@@ -527,8 +527,8 @@ func GetProofsOfWork(state state.State, bhash types.Hash, tupleOfWorkIdUint320 t
 	}
 	return
 }
-func GetProofsOfWorkLatest(state state.State, tupleOfWorkIdUint320 types1.WorkId, tupleOfWorkIdUint321 uint32) (ret types1.ProofOfWork, isSome bool, err error) {
-	key, err := MakeProofsOfWorkStorageKey(tupleOfWorkIdUint320, tupleOfWorkIdUint321)
+func GetProofsOfWorkLatest(state state.State, tupleOfWorkIdUint640 types1.WorkId, tupleOfWorkIdUint641 uint64) (ret types1.ProofOfWork, isSome bool, err error) {
+	key, err := MakeProofsOfWorkStorageKey(tupleOfWorkIdUint640, tupleOfWorkIdUint641)
 	if err != nil {
 		return
 	}
@@ -590,7 +590,7 @@ func MakeReportOfWorkTimeStorageKey(workId0 types1.WorkId) (types.StorageKey, er
 	byteArgs = append(byteArgs, encBytes)
 	return types.CreateStorageKey(&types1.Meta, "WeTEEWorker", "ReportOfWorkTime", byteArgs...)
 }
-func GetReportOfWorkTime(state state.State, bhash types.Hash, workId0 types1.WorkId) (ret uint32, isSome bool, err error) {
+func GetReportOfWorkTime(state state.State, bhash types.Hash, workId0 types1.WorkId) (ret uint64, isSome bool, err error) {
 	key, err := MakeReportOfWorkTimeStorageKey(workId0)
 	if err != nil {
 		return
@@ -601,7 +601,7 @@ func GetReportOfWorkTime(state state.State, bhash types.Hash, workId0 types1.Wor
 	}
 	return
 }
-func GetReportOfWorkTimeLatest(state state.State, workId0 types1.WorkId) (ret uint32, isSome bool, err error) {
+func GetReportOfWorkTimeLatest(state state.State, workId0 types1.WorkId) (ret uint64, isSome bool, err error) {
 	key, err := MakeReportOfWorkTimeStorageKey(workId0)
 	if err != nil {
 		return

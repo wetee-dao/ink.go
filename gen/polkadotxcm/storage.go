@@ -282,7 +282,7 @@ func MakeVersionNotifyTargetsStorageKey(tupleOfUint32VersionedLocation0 uint32, 
 	byteArgs = append(byteArgs, encBytes)
 	return types.CreateStorageKey(&types1.Meta, "PolkadotXcm", "VersionNotifyTargets", byteArgs...)
 }
-func GetVersionNotifyTargets(state state.State, bhash types.Hash, tupleOfUint32VersionedLocation0 uint32, tupleOfUint32VersionedLocation1 types1.VersionedLocation) (ret types1.Tuple370, isSome bool, err error) {
+func GetVersionNotifyTargets(state state.State, bhash types.Hash, tupleOfUint32VersionedLocation0 uint32, tupleOfUint32VersionedLocation1 types1.VersionedLocation) (ret types1.Tuple374, isSome bool, err error) {
 	key, err := MakeVersionNotifyTargetsStorageKey(tupleOfUint32VersionedLocation0, tupleOfUint32VersionedLocation1)
 	if err != nil {
 		return
@@ -293,7 +293,7 @@ func GetVersionNotifyTargets(state state.State, bhash types.Hash, tupleOfUint32V
 	}
 	return
 }
-func GetVersionNotifyTargetsLatest(state state.State, tupleOfUint32VersionedLocation0 uint32, tupleOfUint32VersionedLocation1 types1.VersionedLocation) (ret types1.Tuple370, isSome bool, err error) {
+func GetVersionNotifyTargetsLatest(state state.State, tupleOfUint32VersionedLocation0 uint32, tupleOfUint32VersionedLocation1 types1.VersionedLocation) (ret types1.Tuple374, isSome bool, err error) {
 	key, err := MakeVersionNotifyTargetsStorageKey(tupleOfUint32VersionedLocation0, tupleOfUint32VersionedLocation1)
 	if err != nil {
 		return
@@ -305,7 +305,7 @@ func GetVersionNotifyTargetsLatest(state state.State, tupleOfUint32VersionedLoca
 	return
 }
 
-// Make a storage key for VersionDiscoveryQueue id={{false [371]}}
+// Make a storage key for VersionDiscoveryQueue id={{false [375]}}
 //
 //	Destinations whose latest XCM version we would like to know. Duplicates not allowed, and
 //	the `u32` counter is the number of times that a send to the destination has been attempted,
@@ -353,7 +353,7 @@ func GetVersionDiscoveryQueueLatest(state state.State) (ret []types1.TupleOfVers
 	return
 }
 
-// Make a storage key for CurrentMigration id={{false [374]}}
+// Make a storage key for CurrentMigration id={{false [378]}}
 //
 //	The current migration's stage, if any.
 func MakeCurrentMigrationStorageKey() (types.StorageKey, error) {
@@ -385,29 +385,29 @@ func GetCurrentMigrationLatest(state state.State) (ret types1.VersionMigrationSt
 // Make a storage key for RemoteLockedFungibles
 //
 //	Fungible assets which we know are locked on a remote chain.
-func MakeRemoteLockedFungiblesStorageKey(tuple3750 uint32, tuple3751 [32]byte, tuple3752 types1.VersionedAssetId) (types.StorageKey, error) {
+func MakeRemoteLockedFungiblesStorageKey(tuple3790 uint32, tuple3791 [32]byte, tuple3792 types1.VersionedAssetId) (types.StorageKey, error) {
 	byteArgs := [][]byte{}
 	encBytes := []byte{}
 	var err error
-	encBytes, err = codec.Encode(tuple3750)
+	encBytes, err = codec.Encode(tuple3790)
 	if err != nil {
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
-	encBytes, err = codec.Encode(tuple3751)
+	encBytes, err = codec.Encode(tuple3791)
 	if err != nil {
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
-	encBytes, err = codec.Encode(tuple3752)
+	encBytes, err = codec.Encode(tuple3792)
 	if err != nil {
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
 	return types.CreateStorageKey(&types1.Meta, "PolkadotXcm", "RemoteLockedFungibles", byteArgs...)
 }
-func GetRemoteLockedFungibles(state state.State, bhash types.Hash, tuple3750 uint32, tuple3751 [32]byte, tuple3752 types1.VersionedAssetId) (ret types1.RemoteLockedFungibleRecord, isSome bool, err error) {
-	key, err := MakeRemoteLockedFungiblesStorageKey(tuple3750, tuple3751, tuple3752)
+func GetRemoteLockedFungibles(state state.State, bhash types.Hash, tuple3790 uint32, tuple3791 [32]byte, tuple3792 types1.VersionedAssetId) (ret types1.RemoteLockedFungibleRecord, isSome bool, err error) {
+	key, err := MakeRemoteLockedFungiblesStorageKey(tuple3790, tuple3791, tuple3792)
 	if err != nil {
 		return
 	}
@@ -417,8 +417,8 @@ func GetRemoteLockedFungibles(state state.State, bhash types.Hash, tuple3750 uin
 	}
 	return
 }
-func GetRemoteLockedFungiblesLatest(state state.State, tuple3750 uint32, tuple3751 [32]byte, tuple3752 types1.VersionedAssetId) (ret types1.RemoteLockedFungibleRecord, isSome bool, err error) {
-	key, err := MakeRemoteLockedFungiblesStorageKey(tuple3750, tuple3751, tuple3752)
+func GetRemoteLockedFungiblesLatest(state state.State, tuple3790 uint32, tuple3791 [32]byte, tuple3792 types1.VersionedAssetId) (ret types1.RemoteLockedFungibleRecord, isSome bool, err error) {
+	key, err := MakeRemoteLockedFungiblesStorageKey(tuple3790, tuple3791, tuple3792)
 	if err != nil {
 		return
 	}
@@ -508,6 +508,92 @@ func GetXcmExecutionSuspendedLatest(state state.State) (ret bool, err error) {
 		if err != nil {
 			return
 		}
+	}
+	return
+}
+
+// Make a storage key for ShouldRecordXcm id={{false [8]}}
+//
+//	Whether or not incoming XCMs (both executed locally and received) should be recorded.
+//	Only one XCM program will be recorded at a time.
+//	This is meant to be used in runtime APIs, and it's advised it stays false
+//	for all other use cases, so as to not degrade regular performance.
+//
+//	Only relevant if this pallet is being used as the [`xcm_executor::traits::RecordXcm`]
+//	implementation in the XCM executor configuration.
+func MakeShouldRecordXcmStorageKey() (types.StorageKey, error) {
+	return types.CreateStorageKey(&types1.Meta, "PolkadotXcm", "ShouldRecordXcm")
+}
+
+var ShouldRecordXcmResultDefaultBytes, _ = hex.DecodeString("00")
+
+func GetShouldRecordXcm(state state.State, bhash types.Hash) (ret bool, err error) {
+	key, err := MakeShouldRecordXcmStorageKey()
+	if err != nil {
+		return
+	}
+	var isSome bool
+	isSome, err = state.GetStorage(key, &ret, bhash)
+	if err != nil {
+		return
+	}
+	if !isSome {
+		err = codec.Decode(ShouldRecordXcmResultDefaultBytes, &ret)
+		if err != nil {
+			return
+		}
+	}
+	return
+}
+func GetShouldRecordXcmLatest(state state.State) (ret bool, err error) {
+	key, err := MakeShouldRecordXcmStorageKey()
+	if err != nil {
+		return
+	}
+	var isSome bool
+	isSome, err = state.GetStorageLatest(key, &ret)
+	if err != nil {
+		return
+	}
+	if !isSome {
+		err = codec.Decode(ShouldRecordXcmResultDefaultBytes, &ret)
+		if err != nil {
+			return
+		}
+	}
+	return
+}
+
+// Make a storage key for RecordedXcm id={{false [65]}}
+//
+//	If [`ShouldRecordXcm`] is set to true, then the last XCM program executed locally
+//	will be stored here.
+//	Runtime APIs can fetch the XCM that was executed by accessing this value.
+//
+//	Only relevant if this pallet is being used as the [`xcm_executor::traits::RecordXcm`]
+//	implementation in the XCM executor configuration.
+func MakeRecordedXcmStorageKey() (types.StorageKey, error) {
+	return types.CreateStorageKey(&types1.Meta, "PolkadotXcm", "RecordedXcm")
+}
+func GetRecordedXcm(state state.State, bhash types.Hash) (ret []types1.Instruction, isSome bool, err error) {
+	key, err := MakeRecordedXcmStorageKey()
+	if err != nil {
+		return
+	}
+	isSome, err = state.GetStorage(key, &ret, bhash)
+	if err != nil {
+		return
+	}
+	return
+}
+func GetRecordedXcmLatest(state state.State) (ret []types1.Instruction, isSome bool, err error) {
+	key, err := MakeRecordedXcmStorageKey()
+	if err != nil {
+		return
+	}
+	isSome, err = state.GetStorageLatest(key, &ret)
+	if err != nil {
+		return
 	}
 	return
 }

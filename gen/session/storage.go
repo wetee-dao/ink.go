@@ -147,7 +147,7 @@ func GetQueuedChangedLatest(state state.State) (ret bool, err error) {
 	return
 }
 
-// Make a storage key for QueuedKeys id={{false [345]}}
+// Make a storage key for QueuedKeys id={{false [347]}}
 //
 //	The queued keys for the next session. When the next session begins, these keys
 //	will be used to determine the validator's session keys.
@@ -194,7 +194,7 @@ func GetQueuedKeysLatest(state state.State) (ret []types1.TupleOfByteArray32Byte
 	return
 }
 
-// Make a storage key for DisabledValidators id={{false [347]}}
+// Make a storage key for DisabledValidators id={{false [349]}}
 //
 //	Indices of disabled validators.
 //

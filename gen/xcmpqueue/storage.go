@@ -8,7 +8,7 @@ import (
 	types1 "github.com/wetee-dao/go-sdk/gen/types"
 )
 
-// Make a storage key for InboundXcmpSuspended id={{false [355]}}
+// Make a storage key for InboundXcmpSuspended id={{false [357]}}
 //
 //	The suspended inbound XCMP channels. All others are not suspended.
 //
@@ -61,7 +61,7 @@ func GetInboundXcmpSuspendedLatest(state state.State) (ret []uint32, err error) 
 	return
 }
 
-// Make a storage key for OutboundXcmpStatus id={{false [358]}}
+// Make a storage key for OutboundXcmpStatus id={{false [360]}}
 //
 //	The non-empty XCMP channels in order of becoming non-empty, and the index of the first
 //	and last outbound message. If the two indices are equal, then it indicates an empty
@@ -225,7 +225,7 @@ func GetSignalMessagesLatest(state state.State, uint320 uint32) (ret []byte, err
 	return
 }
 
-// Make a storage key for QueueConfig id={{false [362]}}
+// Make a storage key for QueueConfig id={{false [366]}}
 //
 //	The configuration which controls the dynamics of the outbound queue.
 func MakeQueueConfigStorageKey() (types.StorageKey, error) {

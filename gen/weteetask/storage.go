@@ -232,7 +232,7 @@ func MakeTaskVersionStorageKey(uint640 uint64) (types.StorageKey, error) {
 	byteArgs = append(byteArgs, encBytes)
 	return types.CreateStorageKey(&types1.Meta, "WeTEETask", "TaskVersion", byteArgs...)
 }
-func GetTaskVersion(state state.State, bhash types.Hash, uint640 uint64) (ret uint32, isSome bool, err error) {
+func GetTaskVersion(state state.State, bhash types.Hash, uint640 uint64) (ret uint64, isSome bool, err error) {
 	key, err := MakeTaskVersionStorageKey(uint640)
 	if err != nil {
 		return
@@ -243,7 +243,7 @@ func GetTaskVersion(state state.State, bhash types.Hash, uint640 uint64) (ret ui
 	}
 	return
 }
-func GetTaskVersionLatest(state state.State, uint640 uint64) (ret uint32, isSome bool, err error) {
+func GetTaskVersionLatest(state state.State, uint640 uint64) (ret uint64, isSome bool, err error) {
 	key, err := MakeTaskVersionStorageKey(uint640)
 	if err != nil {
 		return

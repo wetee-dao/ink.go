@@ -8,7 +8,7 @@ import (
 	types1 "github.com/wetee-dao/go-sdk/gen/types"
 )
 
-// Make a storage key for Invulnerables id={{false [340]}}
+// Make a storage key for Invulnerables id={{false [342]}}
 //
 //	The invulnerable, permissioned collators. This list must be sorted.
 func MakeInvulnerablesStorageKey() (types.StorageKey, error) {
@@ -54,7 +54,7 @@ func GetInvulnerablesLatest(state state.State) (ret [][32]byte, err error) {
 	return
 }
 
-// Make a storage key for CandidateList id={{false [341]}}
+// Make a storage key for CandidateList id={{false [343]}}
 //
 //	The (community, limited) collation candidates. `Candidates` and `Invulnerables` should be
 //	mutually exclusive.
@@ -119,9 +119,9 @@ func MakeLastAuthoredBlockStorageKey(byteArray320 [32]byte) (types.StorageKey, e
 	return types.CreateStorageKey(&types1.Meta, "CollatorSelection", "LastAuthoredBlock", byteArgs...)
 }
 
-var LastAuthoredBlockResultDefaultBytes, _ = hex.DecodeString("00000000")
+var LastAuthoredBlockResultDefaultBytes, _ = hex.DecodeString("0000000000000000")
 
-func GetLastAuthoredBlock(state state.State, bhash types.Hash, byteArray320 [32]byte) (ret uint32, err error) {
+func GetLastAuthoredBlock(state state.State, bhash types.Hash, byteArray320 [32]byte) (ret uint64, err error) {
 	key, err := MakeLastAuthoredBlockStorageKey(byteArray320)
 	if err != nil {
 		return
@@ -139,7 +139,7 @@ func GetLastAuthoredBlock(state state.State, bhash types.Hash, byteArray320 [32]
 	}
 	return
 }
-func GetLastAuthoredBlockLatest(state state.State, byteArray320 [32]byte) (ret uint32, err error) {
+func GetLastAuthoredBlockLatest(state state.State, byteArray320 [32]byte) (ret uint64, err error) {
 	key, err := MakeLastAuthoredBlockStorageKey(byteArray320)
 	if err != nil {
 		return

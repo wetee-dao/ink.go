@@ -170,7 +170,7 @@ func GetPeriodsLatest(state state.State, uint640 uint64) (ret []types1.Period, e
 	return
 }
 
-// Make a storage key for DefaultPeriods id={{false [449]}}
+// Make a storage key for DefaultPeriods id={{false [451]}}
 //
 //	投票轨道
 func MakeDefaultPeriodsStorageKey() (types.StorageKey, error) {
@@ -277,24 +277,24 @@ func GetPrePropsLatest(state state.State, uint640 uint64) (ret []types1.PreProp,
 //	提案
 //	Those who have locked a deposit.
 //	TWOX-NOTE: Safe, as increasing integer keys are safe.
-func MakeDepositOfStorageKey(tupleOfUint64Uint3210 uint64, tupleOfUint64Uint3211 uint32) (types.StorageKey, error) {
+func MakeDepositOfStorageKey(tupleOfUint64Uint320 uint64, tupleOfUint64Uint321 uint32) (types.StorageKey, error) {
 	byteArgs := [][]byte{}
 	encBytes := []byte{}
 	var err error
-	encBytes, err = codec.Encode(tupleOfUint64Uint3210)
+	encBytes, err = codec.Encode(tupleOfUint64Uint320)
 	if err != nil {
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
-	encBytes, err = codec.Encode(tupleOfUint64Uint3211)
+	encBytes, err = codec.Encode(tupleOfUint64Uint321)
 	if err != nil {
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
 	return types.CreateStorageKey(&types1.Meta, "WeTEEGov", "DepositOf", byteArgs...)
 }
-func GetDepositOf(state state.State, bhash types.Hash, tupleOfUint64Uint3210 uint64, tupleOfUint64Uint3211 uint32) (ret types1.TupleOfByteArray32SliceU128, isSome bool, err error) {
-	key, err := MakeDepositOfStorageKey(tupleOfUint64Uint3210, tupleOfUint64Uint3211)
+func GetDepositOf(state state.State, bhash types.Hash, tupleOfUint64Uint320 uint64, tupleOfUint64Uint321 uint32) (ret types1.TupleOfByteArray32SliceU128, isSome bool, err error) {
+	key, err := MakeDepositOfStorageKey(tupleOfUint64Uint320, tupleOfUint64Uint321)
 	if err != nil {
 		return
 	}
@@ -304,8 +304,8 @@ func GetDepositOf(state state.State, bhash types.Hash, tupleOfUint64Uint3210 uin
 	}
 	return
 }
-func GetDepositOfLatest(state state.State, tupleOfUint64Uint3210 uint64, tupleOfUint64Uint3211 uint32) (ret types1.TupleOfByteArray32SliceU128, isSome bool, err error) {
-	key, err := MakeDepositOfStorageKey(tupleOfUint64Uint3210, tupleOfUint64Uint3211)
+func GetDepositOfLatest(state state.State, tupleOfUint64Uint320 uint64, tupleOfUint64Uint321 uint32) (ret types1.TupleOfByteArray32SliceU128, isSome bool, err error) {
+	key, err := MakeDepositOfStorageKey(tupleOfUint64Uint320, tupleOfUint64Uint321)
 	if err != nil {
 		return
 	}
@@ -320,24 +320,24 @@ func GetDepositOfLatest(state state.State, tupleOfUint64Uint3210 uint64, tupleOf
 //
 //	全民投票
 //	Prop specific information.
-func MakePropsStorageKey(tupleOfUint64Uint3210 uint64, tupleOfUint64Uint3211 uint32) (types.StorageKey, error) {
+func MakePropsStorageKey(tupleOfUint64Uint320 uint64, tupleOfUint64Uint321 uint32) (types.StorageKey, error) {
 	byteArgs := [][]byte{}
 	encBytes := []byte{}
 	var err error
-	encBytes, err = codec.Encode(tupleOfUint64Uint3210)
+	encBytes, err = codec.Encode(tupleOfUint64Uint320)
 	if err != nil {
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
-	encBytes, err = codec.Encode(tupleOfUint64Uint3211)
+	encBytes, err = codec.Encode(tupleOfUint64Uint321)
 	if err != nil {
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
 	return types.CreateStorageKey(&types1.Meta, "WeTEEGov", "Props", byteArgs...)
 }
-func GetProps(state state.State, bhash types.Hash, tupleOfUint64Uint3210 uint64, tupleOfUint64Uint3211 uint32) (ret types1.Prop, isSome bool, err error) {
-	key, err := MakePropsStorageKey(tupleOfUint64Uint3210, tupleOfUint64Uint3211)
+func GetProps(state state.State, bhash types.Hash, tupleOfUint64Uint320 uint64, tupleOfUint64Uint321 uint32) (ret types1.Prop, isSome bool, err error) {
+	key, err := MakePropsStorageKey(tupleOfUint64Uint320, tupleOfUint64Uint321)
 	if err != nil {
 		return
 	}
@@ -347,8 +347,8 @@ func GetProps(state state.State, bhash types.Hash, tupleOfUint64Uint3210 uint64,
 	}
 	return
 }
-func GetPropsLatest(state state.State, tupleOfUint64Uint3210 uint64, tupleOfUint64Uint3211 uint32) (ret types1.Prop, isSome bool, err error) {
-	key, err := MakePropsStorageKey(tupleOfUint64Uint3210, tupleOfUint64Uint3211)
+func GetPropsLatest(state state.State, tupleOfUint64Uint320 uint64, tupleOfUint64Uint321 uint32) (ret types1.Prop, isSome bool, err error) {
+	key, err := MakePropsStorageKey(tupleOfUint64Uint320, tupleOfUint64Uint321)
 	if err != nil {
 		return
 	}
@@ -376,7 +376,7 @@ func MakeReserveOfStorageKey(byteArray320 [32]byte) (types.StorageKey, error) {
 
 var ReserveOfResultDefaultBytes, _ = hex.DecodeString("00")
 
-func GetReserveOf(state state.State, bhash types.Hash, byteArray320 [32]byte) (ret []types1.TupleOfU128Uint32, err error) {
+func GetReserveOf(state state.State, bhash types.Hash, byteArray320 [32]byte) (ret []types1.TupleOfU128Uint64, err error) {
 	key, err := MakeReserveOfStorageKey(byteArray320)
 	if err != nil {
 		return
@@ -394,7 +394,7 @@ func GetReserveOf(state state.State, bhash types.Hash, byteArray320 [32]byte) (r
 	}
 	return
 }
-func GetReserveOfLatest(state state.State, byteArray320 [32]byte) (ret []types1.TupleOfU128Uint32, err error) {
+func GetReserveOfLatest(state state.State, byteArray320 [32]byte) (ret []types1.TupleOfU128Uint64, err error) {
 	key, err := MakeReserveOfStorageKey(byteArray320)
 	if err != nil {
 		return

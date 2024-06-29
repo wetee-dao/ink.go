@@ -232,7 +232,7 @@ func MakeAppVersionStorageKey(uint640 uint64) (types.StorageKey, error) {
 	byteArgs = append(byteArgs, encBytes)
 	return types.CreateStorageKey(&types1.Meta, "WeTEEGpu", "AppVersion", byteArgs...)
 }
-func GetAppVersion(state state.State, bhash types.Hash, uint640 uint64) (ret uint32, isSome bool, err error) {
+func GetAppVersion(state state.State, bhash types.Hash, uint640 uint64) (ret uint64, isSome bool, err error) {
 	key, err := MakeAppVersionStorageKey(uint640)
 	if err != nil {
 		return
@@ -243,7 +243,7 @@ func GetAppVersion(state state.State, bhash types.Hash, uint640 uint64) (ret uin
 	}
 	return
 }
-func GetAppVersionLatest(state state.State, uint640 uint64) (ret uint32, isSome bool, err error) {
+func GetAppVersionLatest(state state.State, uint640 uint64) (ret uint64, isSome bool, err error) {
 	key, err := MakeAppVersionStorageKey(uint640)
 	if err != nil {
 		return

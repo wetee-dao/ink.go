@@ -141,3 +141,21 @@ func MakeForceAdjustTotalIssuanceCall(direction0 types.AdjustmentDirection, delt
 		},
 	}
 }
+
+// Burn the specified liquid free balance from the origin account.
+//
+// If the origin's account ends up below the existential deposit as a result
+// of the burn and `keep_alive` is false, the account will be reaped.
+//
+// Unlike sending funds to a _burn_ address, which merely makes the funds inaccessible,
+// this `burn` operation will reduce total issuance by the amount _burned_.
+func MakeBurnCall(value0 types1.UCompact, keepAlive1 bool) types.RuntimeCall {
+	return types.RuntimeCall{
+		IsBalances: true,
+		AsBalancesField0: &types.PalletBalancesPalletCall{
+			IsBurn:           true,
+			AsBurnValue0:     value0,
+			AsBurnKeepAlive1: keepAlive1,
+		},
+	}
+}
