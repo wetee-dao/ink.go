@@ -59,24 +59,24 @@ func GetNextTeeIdLatest(state state.State) (ret uint64, err error) {
 //
 //	App
 //	应用
-func MakeGPUAppsStorageKey(tupleOfByteArray32Uint640 [32]byte, tupleOfByteArray32Uint641 uint64) (types.StorageKey, error) {
+func MakeGPUAppsStorageKey(tupleOfByteArray32Uint6410 [32]byte, tupleOfByteArray32Uint6411 uint64) (types.StorageKey, error) {
 	byteArgs := [][]byte{}
 	encBytes := []byte{}
 	var err error
-	encBytes, err = codec.Encode(tupleOfByteArray32Uint640)
+	encBytes, err = codec.Encode(tupleOfByteArray32Uint6410)
 	if err != nil {
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
-	encBytes, err = codec.Encode(tupleOfByteArray32Uint641)
+	encBytes, err = codec.Encode(tupleOfByteArray32Uint6411)
 	if err != nil {
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
 	return types.CreateStorageKey(&types1.Meta, "WeTEEGpu", "GPUApps", byteArgs...)
 }
-func GetGPUApps(state state.State, bhash types.Hash, tupleOfByteArray32Uint640 [32]byte, tupleOfByteArray32Uint641 uint64) (ret types1.GpuApp, isSome bool, err error) {
-	key, err := MakeGPUAppsStorageKey(tupleOfByteArray32Uint640, tupleOfByteArray32Uint641)
+func GetGPUApps(state state.State, bhash types.Hash, tupleOfByteArray32Uint6410 [32]byte, tupleOfByteArray32Uint6411 uint64) (ret types1.GpuApp, isSome bool, err error) {
+	key, err := MakeGPUAppsStorageKey(tupleOfByteArray32Uint6410, tupleOfByteArray32Uint6411)
 	if err != nil {
 		return
 	}
@@ -86,8 +86,8 @@ func GetGPUApps(state state.State, bhash types.Hash, tupleOfByteArray32Uint640 [
 	}
 	return
 }
-func GetGPUAppsLatest(state state.State, tupleOfByteArray32Uint640 [32]byte, tupleOfByteArray32Uint641 uint64) (ret types1.GpuApp, isSome bool, err error) {
-	key, err := MakeGPUAppsStorageKey(tupleOfByteArray32Uint640, tupleOfByteArray32Uint641)
+func GetGPUAppsLatest(state state.State, tupleOfByteArray32Uint6410 [32]byte, tupleOfByteArray32Uint6411 uint64) (ret types1.GpuApp, isSome bool, err error) {
+	key, err := MakeGPUAppsStorageKey(tupleOfByteArray32Uint6410, tupleOfByteArray32Uint6411)
 	if err != nil {
 		return
 	}

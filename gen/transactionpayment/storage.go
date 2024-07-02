@@ -8,7 +8,7 @@ import (
 	types1 "github.com/wetee-dao/go-sdk/gen/types"
 )
 
-// Make a storage key for NextFeeMultiplier id={{false [202]}}
+// Make a storage key for NextFeeMultiplier id={{false [138]}}
 func MakeNextFeeMultiplierStorageKey() (types.StorageKey, error) {
 	return types.CreateStorageKey(&types1.Meta, "TransactionPayment", "NextFeeMultiplier")
 }
@@ -52,7 +52,7 @@ func GetNextFeeMultiplierLatest(state state.State) (ret types.U128, err error) {
 	return
 }
 
-// Make a storage key for StorageVersion id={{false [235]}}
+// Make a storage key for StorageVersion id={{false [139]}}
 func MakeStorageVersionStorageKey() (types.StorageKey, error) {
 	return types.CreateStorageKey(&types1.Meta, "TransactionPayment", "StorageVersion")
 }
