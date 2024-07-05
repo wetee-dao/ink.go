@@ -55,3 +55,16 @@ func MakeRestartCall(appId0 uint64) types.RuntimeCall {
 		},
 	}
 }
+
+// update price
+// 更新价格
+func MakeUpdatePriceCall(level0 byte, price1 types.Price2) types.RuntimeCall {
+	return types.RuntimeCall{
+		IsWeTEEGpu: true,
+		AsWeTEEGpuField0: &types.WeteeGpuPalletCall{
+			IsUpdatePrice:       true,
+			AsUpdatePriceLevel0: level0,
+			AsUpdatePricePrice1: price1,
+		},
+	}
+}

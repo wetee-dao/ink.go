@@ -53,3 +53,16 @@ func MakeUpdateCall(appId0 uint64, newName1 types.OptionTByteSlice, newImage2 ty
 		},
 	}
 }
+
+// update price
+// 更新价格
+func MakeUpdatePriceCall(level0 byte, price1 types.Price1) types.RuntimeCall {
+	return types.RuntimeCall{
+		IsWeTEETask: true,
+		AsWeTEETaskField0: &types.WeteeTaskPalletCall{
+			IsUpdatePrice:       true,
+			AsUpdatePriceLevel0: level0,
+			AsUpdatePricePrice1: price1,
+		},
+	}
+}
