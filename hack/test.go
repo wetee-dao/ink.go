@@ -2,66 +2,44 @@ package main
 
 import (
 	"fmt"
+	"math/big"
 	"runtime"
-	"strconv"
-	"strings"
 
 	"github.com/centrifuge/go-substrate-rpc-client/v4/signature"
-
+	"github.com/centrifuge/go-substrate-rpc-client/v4/signature/ed25519"
+	"github.com/centrifuge/go-substrate-rpc-client/v4/types"
 	chain "github.com/wetee-dao/go-sdk"
+	"github.com/wetee-dao/go-sdk/gen/balances"
 	gtypes "github.com/wetee-dao/go-sdk/gen/types"
 )
 
 func main() {
-	client, err := chain.ClientInit("ws://xiaobai.asyou.me:30002", true)
+	client, err := chain.ClientInit("wss://xiaobai.asyou.me:30001", true)
 	if err != nil {
 		panic(err)
 	}
 
 	var testSecretSeed = "0x167d9a020688544ea246b056799d6a771e97c9da057e4d0b87024537f99177bc"
-	p, err := signature.KeyringPairFromSecret(testSecretSeed, 42)
+	p, err := ed25519.KeyringPairFromSecret(testSecretSeed, 42)
+	// p, err := signature.KeyringPairFromSecret(testSecretSeed, 42)
 	if err != nil {
 		panic(err)
 	}
 
-	worker := &chain.Worker{
-		Client: client,
-		Signer: &p,
-	}
+	fmt.Println("p.Address:", p.Address)
 
-	name := "XXXXX"
-	domain := "wetee.test"
-	ipstrs := strings.Split("127.0.0.1", ".")
-	if len(ipstrs) != 4 {
+	minter, _ := types.NewMultiAddressFromAccountID(signature.TestKeyringPairAlice.PublicKey)
+	minterWrap := gtypes.MultiAddress{
+		IsId:       true,
+		AsIdField0: minter.AsID,
+	}
+	bal, _ := new(big.Int).SetString("500000000000", 10)
+	call := balances.MakeTransferAllowDeathCall(minterWrap, types.NewUCompact(bal))
+	err = client.SignAndSubmit(&p, call, true)
+	if err != nil {
 		printErrorStack(err)
 		return
 	}
-	iparr := []uint8{}
-	for _, ipstr := range ipstrs {
-		i, err := strconv.Atoi(ipstr)
-		if err != nil {
-			printErrorStack(err)
-			return
-		}
-		iparr = append(iparr, uint8(i))
-	}
-
-	// iparr
-	err = worker.ClusterRegister(name, []gtypes.Ip{
-		{
-			Ipv4: gtypes.OptionTUint32{
-				IsNone: true,
-			},
-
-			Ipv6: gtypes.OptionTU128{
-				IsNone: true,
-			},
-			Domain: gtypes.OptionTByteSlice{
-				IsSome:       true,
-				AsSomeField0: []byte(domain),
-			},
-		},
-	}, uint32(30000), uint8(1), true)
 
 	printErrorStack(err)
 }
