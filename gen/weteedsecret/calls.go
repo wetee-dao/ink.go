@@ -4,7 +4,7 @@ import types "github.com/wetee-dao/go-sdk/gen/types"
 
 // 注册 dkg 节点
 // register dkg node
-func MakeRegisterNodeCall(pubkey0 []byte) types.RuntimeCall {
+func MakeRegisterNodeCall(pubkey0 [32]byte) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsWeTEEDsecret: true,
 		AsWeTEEDsecretField0: &types.WeteeDsecretPalletCall{

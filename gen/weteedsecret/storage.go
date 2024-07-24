@@ -8,7 +8,7 @@ import (
 	types1 "github.com/wetee-dao/go-sdk/gen/types"
 )
 
-// Make a storage key for CodeMrenclave id={{false [202]}}
+// Make a storage key for CodeMrenclave id={{false [201]}}
 //
 //	代码版本
 func MakeCodeMrenclaveStorageKey() (types.StorageKey, error) {
@@ -54,7 +54,7 @@ func GetCodeMrenclaveLatest(state state.State) (ret []byte, err error) {
 	return
 }
 
-// Make a storage key for CodeMrsigner id={{false [202]}}
+// Make a storage key for CodeMrsigner id={{false [201]}}
 //
 //	代码打包签名人
 func MakeCodeMrsignerStorageKey() (types.StorageKey, error) {
