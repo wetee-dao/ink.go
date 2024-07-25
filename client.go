@@ -7,13 +7,13 @@ import (
 
 	gsrpc "github.com/centrifuge/go-substrate-rpc-client/v4"
 	"github.com/centrifuge/go-substrate-rpc-client/v4/config"
-	"github.com/centrifuge/go-substrate-rpc-client/v4/signature"
 	"github.com/centrifuge/go-substrate-rpc-client/v4/types"
 	"github.com/centrifuge/go-substrate-rpc-client/v4/types/codec"
 	"github.com/centrifuge/go-substrate-rpc-client/v4/xxhash"
 	"github.com/pkg/errors"
 	"golang.org/x/crypto/blake2b"
 
+	"github.com/wetee-dao/go-sdk/core"
 	"github.com/wetee-dao/go-sdk/gen/system"
 	gtypes "github.com/wetee-dao/go-sdk/gen/types"
 )
@@ -69,7 +69,7 @@ func (c *ChainClient) GetBlockNumber() (types.BlockNumber, error) {
 
 // 获取账户信息
 // Get account info
-func (c *ChainClient) GetAccount(address *signature.KeyringPair) (*types.AccountInfo, error) {
+func (c *ChainClient) GetAccount(address *core.Signer) (*types.AccountInfo, error) {
 	key, err := types.CreateStorageKey(c.Meta, "System", "Account", address.PublicKey)
 	if err != nil {
 		panic(err)
@@ -81,7 +81,7 @@ func (c *ChainClient) GetAccount(address *signature.KeyringPair) (*types.Account
 
 // 签名并提交交易
 // Sign and submit transaction
-func (c *ChainClient) SignAndSubmit(signer *signature.KeyringPair, runtimeCall gtypes.RuntimeCall, untilFinalized bool) error {
+func (c *ChainClient) SignAndSubmit(signer *core.Signer, runtimeCall gtypes.RuntimeCall, untilFinalized bool) error {
 	accountInfo, err := c.GetAccount(signer)
 	if err != nil {
 		return err
@@ -91,7 +91,7 @@ func (c *ChainClient) SignAndSubmit(signer *signature.KeyringPair, runtimeCall g
 		return err
 	}
 
-	ext := types.NewExtrinsic(call)
+	ext := core.NewExtrinsic(call)
 	era := types.ExtrinsicEra{IsMortalEra: false}
 	nonce := uint32(accountInfo.Nonce)
 
@@ -105,12 +105,12 @@ func (c *ChainClient) SignAndSubmit(signer *signature.KeyringPair, runtimeCall g
 		TransactionVersion: c.Runtime.TransactionVersion,
 	}
 
-	err = ext.Sign(*signer, o)
+	err = ext.Sign(signer, o)
 	if err != nil {
 		return err
 	}
 
-	sub, err := c.Api.RPC.Author.SubmitAndWatchExtrinsic(ext)
+	sub, err := c.Api.RPC.Author.SubmitAndWatchExtrinsic(ext.Extrinsic)
 	if err != nil {
 		return err
 	}

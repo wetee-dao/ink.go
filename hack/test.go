@@ -6,9 +6,9 @@ import (
 	"runtime"
 
 	"github.com/centrifuge/go-substrate-rpc-client/v4/signature"
-	"github.com/centrifuge/go-substrate-rpc-client/v4/signature/ed25519"
 	"github.com/centrifuge/go-substrate-rpc-client/v4/types"
 	chain "github.com/wetee-dao/go-sdk"
+	"github.com/wetee-dao/go-sdk/core"
 	"github.com/wetee-dao/go-sdk/gen/balances"
 	gtypes "github.com/wetee-dao/go-sdk/gen/types"
 )
@@ -20,8 +20,7 @@ func main() {
 	}
 
 	var testSecretSeed = "0x167d9a020688544ea246b056799d6a771e97c9da057e4d0b87024537f99177bc"
-	p, err := ed25519.KeyringPairFromSecret(testSecretSeed, 42)
-	// p, err := signature.KeyringPairFromSecret(testSecretSeed, 42)
+	p, err := core.Ed25519PairFromSecret(testSecretSeed, 42)
 	if err != nil {
 		panic(err)
 	}

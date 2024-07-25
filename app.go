@@ -1,17 +1,17 @@
 package client
 
 import (
+	"github.com/wetee-dao/go-sdk/core"
 	"github.com/wetee-dao/go-sdk/gen/types"
 	"github.com/wetee-dao/go-sdk/gen/weteeapp"
 
-	"github.com/centrifuge/go-substrate-rpc-client/v4/signature"
 	"github.com/pkg/errors"
 )
 
 // Worker
 type App struct {
 	Client *ChainClient
-	Signer *signature.KeyringPair
+	Signer *core.Signer
 }
 
 func (w *App) GetApp(publey []byte, id uint64) (*types.TeeApp, error) {

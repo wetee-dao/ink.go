@@ -7,7 +7,7 @@ require (
 	github.com/fatih/color v1.16.0
 	github.com/pkg/errors v0.9.1
 	github.com/stretchr/testify v1.8.4 // indirect
-	github.com/vedhavyas/go-subkey/v2 v2.0.0 // indirect
+	github.com/vedhavyas/go-subkey/v2 v2.0.0
 	golang.org/x/crypto v0.12.0
 )
 
@@ -31,4 +31,4 @@ require (
 	gopkg.in/natefinch/npipe.v2 v2.0.0-20160621034901-c1b8fa8bdcce // indirect
 )
 
-replace github.com/centrifuge/go-substrate-rpc-client/v4 v4.2.1 => ../go-substrate-rpc-client
+// replace github.com/centrifuge/go-substrate-rpc-client/v4 v4.2.1 => ../go-substrate-rpc-client
