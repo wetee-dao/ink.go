@@ -9,8 +9,8 @@ import (
 	"github.com/centrifuge/go-substrate-rpc-client/v4/types"
 	chain "github.com/wetee-dao/go-sdk"
 	"github.com/wetee-dao/go-sdk/core"
-	"github.com/wetee-dao/go-sdk/gen/balances"
-	gtypes "github.com/wetee-dao/go-sdk/gen/types"
+	"github.com/wetee-dao/go-sdk/pallet/balances"
+	gtypes "github.com/wetee-dao/go-sdk/pallet/types"
 )
 
 func main() {

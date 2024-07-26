@@ -14,8 +14,8 @@ import (
 	"golang.org/x/crypto/blake2b"
 
 	"github.com/wetee-dao/go-sdk/core"
-	"github.com/wetee-dao/go-sdk/gen/system"
-	gtypes "github.com/wetee-dao/go-sdk/gen/types"
+	"github.com/wetee-dao/go-sdk/pallet/system"
+	gtypes "github.com/wetee-dao/go-sdk/pallet/types"
 )
 
 // 区块链链接

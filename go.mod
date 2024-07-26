@@ -30,5 +30,3 @@ require (
 	golang.org/x/sys v0.14.0 // indirect
 	gopkg.in/natefinch/npipe.v2 v2.0.0-20160621034901-c1b8fa8bdcce // indirect
 )
-
-// replace github.com/centrifuge/go-substrate-rpc-client/v4 v4.2.1 => ../go-substrate-rpc-client
