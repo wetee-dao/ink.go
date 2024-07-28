@@ -142,3 +142,12 @@ func MakeWorkStopCall(workId0 types.WorkId) types.RuntimeCall {
 		},
 	}
 }
+func MakeSetBootPeersCall(boots0 []types.P2PAddr) types.RuntimeCall {
+	return types.RuntimeCall{
+		IsWeTEEWorker: true,
+		AsWeTEEWorkerField0: &types.WeteeWorkerPalletCall{
+			IsSetBootPeers:       true,
+			AsSetBootPeersBoots0: boots0,
+		},
+	}
+}

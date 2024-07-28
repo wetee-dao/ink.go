@@ -23,8 +23,8 @@ import (
 type ChainClient struct {
 	Api     *gsrpc.SubstrateAPI
 	Meta    *types.Metadata
-	Hash    types.Hash
 	Runtime *types.RuntimeVersion
+	Hash    types.Hash
 	Debug   bool
 }
 
@@ -54,7 +54,7 @@ func ClientInit(url string, debug bool) (*ChainClient, error) {
 		return nil, err
 	}
 
-	return &ChainClient{api, meta, genesisHash, runtime, debug}, nil
+	return &ChainClient{api, meta, runtime, genesisHash, debug}, nil
 }
 
 // 获取区块高度
@@ -155,6 +155,8 @@ func (c *ChainClient) SignAndSubmit(signer *core.Signer, runtimeCall gtypes.Runt
 	}
 }
 
+// 检查交易是否成功
+// Check whether the transaction is successful
 func (c *ChainClient) checkExtrinsic(extHash types.Hash, blockHash types.Hash) ([]gtypes.EventRecord, error) {
 	block, err := c.Api.RPC.Chain.GetBlock(blockHash)
 	if err != nil {
@@ -209,7 +211,8 @@ func (c *ChainClient) checkExtrinsic(extHash types.Hash, blockHash types.Hash) (
 	return nil, nil
 }
 
-// query map data list
+// 查询 map 所有数据
+// query map data list of map
 func (c *ChainClient) QueryMapAll(pallet string, method string) ([]types.StorageChangeSet, error) {
 	key := createPrefixedKey(pallet, method)
 
@@ -226,7 +229,8 @@ func (c *ChainClient) QueryMapAll(pallet string, method string) ([]types.Storage
 	return set, nil
 }
 
-// query double map data list
+// 查询 double map 第一个 key 的所有数据
+// query double map data list of double map
 func (c *ChainClient) QueryDoubleMapAll(pallet string, method string, keyarg interface{}, at *types.Hash) ([]types.StorageChangeSet, error) {
 	key, err := c.GetDoubleMapPrefixKey(pallet, method, keyarg)
 	if err != nil {
@@ -259,6 +263,8 @@ func (c *ChainClient) QueryDoubleMapAll(pallet string, method string, keyarg int
 	return set, nil
 }
 
+// 查询 double map 第一个 key 前缀
+// get double map prefix key of double map {{pallet}}.{{method}}.{{frist key}}
 func (c *ChainClient) GetDoubleMapPrefixKey(pallet string, method string, keyarg interface{}) ([]byte, error) {
 	arg, err := codec.Encode(keyarg)
 	if err != nil {
@@ -283,6 +289,7 @@ func (c *ChainClient) GetDoubleMapPrefixKey(pallet string, method string, keyarg
 	return key, nil
 }
 
+// get hashers of map {{pallet}}.{{method}}
 func (c *ChainClient) GetHashers(pallet, method string) ([]hash.Hash, error) {
 	// get entry metadata
 	// 获取储存元数据
@@ -306,6 +313,7 @@ func (c *ChainClient) GetHashers(pallet, method string) ([]hash.Hash, error) {
 	return hashers, nil
 }
 
+// create prefixed key of {{pallet}}.{{method}}
 func createPrefixedKey(pallet, method string) []byte {
 	return append(xxhash.New128([]byte(pallet)).Sum(nil), xxhash.New128([]byte(method)).Sum(nil)...)
 }

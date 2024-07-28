@@ -93,7 +93,7 @@ func GetNextClusterIdLatest(state state.State) (ret uint64, err error) {
 	return
 }
 
-// Make a storage key for CodeMrenclave id={{false [201]}}
+// Make a storage key for CodeMrenclave id={{false [205]}}
 //
 //	代码版本
 func MakeCodeMrenclaveStorageKey() (types.StorageKey, error) {
@@ -139,7 +139,7 @@ func GetCodeMrenclaveLatest(state state.State) (ret []byte, err error) {
 	return
 }
 
-// Make a storage key for CodeMrsigner id={{false [201]}}
+// Make a storage key for CodeMrsigner id={{false [205]}}
 //
 //	代码打包签名人
 func MakeCodeMrsignerStorageKey() (types.StorageKey, error) {
@@ -178,6 +178,52 @@ func GetCodeMrsignerLatest(state state.State) (ret []byte, err error) {
 	}
 	if !isSome {
 		err = codec.Decode(CodeMrsignerResultDefaultBytes, &ret)
+		if err != nil {
+			return
+		}
+	}
+	return
+}
+
+// Make a storage key for BootPeers id={{false [284]}}
+//
+//	侧链boot peers
+func MakeBootPeersStorageKey() (types.StorageKey, error) {
+	return types.CreateStorageKey(&types1.Meta, "WeTEEWorker", "BootPeers")
+}
+
+var BootPeersResultDefaultBytes, _ = hex.DecodeString("00")
+
+func GetBootPeers(state state.State, bhash types.Hash) (ret []types1.P2PAddr, err error) {
+	key, err := MakeBootPeersStorageKey()
+	if err != nil {
+		return
+	}
+	var isSome bool
+	isSome, err = state.GetStorage(key, &ret, bhash)
+	if err != nil {
+		return
+	}
+	if !isSome {
+		err = codec.Decode(BootPeersResultDefaultBytes, &ret)
+		if err != nil {
+			return
+		}
+	}
+	return
+}
+func GetBootPeersLatest(state state.State) (ret []types1.P2PAddr, err error) {
+	key, err := MakeBootPeersStorageKey()
+	if err != nil {
+		return
+	}
+	var isSome bool
+	isSome, err = state.GetStorageLatest(key, &ret)
+	if err != nil {
+		return
+	}
+	if !isSome {
+		err = codec.Decode(BootPeersResultDefaultBytes, &ret)
 		if err != nil {
 			return
 		}
