@@ -19,6 +19,7 @@ type Signer struct {
 	KeyType uint8
 }
 
+// Sr25519PairFromSecret generates a sr25519 key pair from a seed or phrase
 func Sr25519PairFromSecret(seedOrPhrase string, network uint16) (Signer, error) {
 	scheme := sr25519.Scheme{}
 	kyr, err := subkey.DeriveKeyPair(scheme, seedOrPhrase)
@@ -27,16 +28,14 @@ func Sr25519PairFromSecret(seedOrPhrase string, network uint16) (Signer, error) 
 	}
 
 	ss58Address := kyr.SS58Address(network)
-
-	var pk = kyr.Public()
-
 	return Signer{
 		KeyPair:   kyr,
 		Address:   ss58Address,
-		PublicKey: pk,
+		PublicKey: kyr.Public(),
 	}, nil
 }
 
+// Ed25519PairFromSecret generates a ed25519 key pair from a seed or phrase
 func Ed25519PairFromSecret(seedOrPhrase string, network uint16) (Signer, error) {
 	scheme := ed25519.Scheme{}
 	kyr, err := subkey.DeriveKeyPair(scheme, seedOrPhrase)
@@ -45,16 +44,15 @@ func Ed25519PairFromSecret(seedOrPhrase string, network uint16) (Signer, error) 
 	}
 
 	ss58Address := kyr.SS58Address(network)
-	var pk = kyr.Public()
-
 	return Signer{
 		KeyType:   1,
 		KeyPair:   kyr,
 		Address:   ss58Address,
-		PublicKey: pk,
+		PublicKey: kyr.Public(),
 	}, nil
 }
 
+// Ed25519PairFromPk generates a ed25519 key pair from golang ed25519.PrivateKey
 func Ed25519PairFromPk(pk goEd25519.PrivateKey, network uint16) (Signer, error) {
 	pub := pk.Public().(goEd25519.PublicKey)
 	kyr := Ed25519Signer{
@@ -63,12 +61,11 @@ func Ed25519PairFromPk(pk goEd25519.PrivateKey, network uint16) (Signer, error) 
 	}
 
 	ss58Address := kyr.SS58Address(network)
-
 	return Signer{
 		KeyType:   1,
 		KeyPair:   &kyr,
 		Address:   ss58Address,
-		PublicKey: pk,
+		PublicKey: pub,
 	}, nil
 }
 
@@ -82,6 +79,7 @@ func (e *Ed25519Signer) Public() []byte {
 	return *e.pub
 }
 
+// Seed returns the seed for this key
 func (kr *Ed25519Signer) Seed() []byte {
 	return kr.secret.Seed()
 }
