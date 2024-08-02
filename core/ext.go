@@ -50,7 +50,6 @@ func (e *Extrinsic) Sign(signer *Signer, o types.SignatureOptions) error {
 	}
 
 	signerPubKey, err := types.NewMultiAddressFromAccountID(signer.Public())
-
 	if err != nil {
 		return err
 	}
