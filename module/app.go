@@ -6,7 +6,7 @@ import (
 	"github.com/wetee-dao/go-sdk/pallet/types"
 	"github.com/wetee-dao/go-sdk/pallet/weteeapp"
 
-	"github.com/pkg/errors"
+	"errors"
 )
 
 // Worker

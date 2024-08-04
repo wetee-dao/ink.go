@@ -1,6 +1,7 @@
 package client
 
 import (
+	"errors"
 	"fmt"
 	"hash"
 	"time"
@@ -10,7 +11,6 @@ import (
 	"github.com/centrifuge/go-substrate-rpc-client/v4/types"
 	"github.com/centrifuge/go-substrate-rpc-client/v4/types/codec"
 	"github.com/centrifuge/go-substrate-rpc-client/v4/xxhash"
-	"github.com/pkg/errors"
 	"golang.org/x/crypto/blake2b"
 
 	"github.com/wetee-dao/go-sdk/core"
@@ -218,12 +218,12 @@ func (c *ChainClient) QueryMapAll(pallet string, method string) ([]types.Storage
 
 	keys, err := c.Api.RPC.State.GetKeysLatest(key)
 	if err != nil {
-		return []types.StorageChangeSet{}, errors.Wrap(err, "[GetKeysLatest]")
+		return []types.StorageChangeSet{}, err
 	}
 
 	set, err := c.Api.RPC.State.QueryStorageAtLatest(keys)
 	if err != nil {
-		return []types.StorageChangeSet{}, errors.Wrap(err, "[QueryStorageAtLatest]")
+		return []types.StorageChangeSet{}, err
 	}
 
 	return set, nil
@@ -234,7 +234,7 @@ func (c *ChainClient) QueryMapAll(pallet string, method string) ([]types.Storage
 func (c *ChainClient) QueryDoubleMapAll(pallet string, method string, keyarg interface{}, at *types.Hash) ([]types.StorageChangeSet, error) {
 	key, err := c.GetDoubleMapPrefixKey(pallet, method, keyarg)
 	if err != nil {
-		return nil, errors.Wrap(err, "[GetDoubleMapPrefixKey]")
+		return nil, err
 	}
 
 	// query key
@@ -246,7 +246,7 @@ func (c *ChainClient) QueryDoubleMapAll(pallet string, method string, keyarg int
 	}
 
 	if err != nil {
-		return nil, errors.Wrap(err, "[GetKeysLatest]")
+		return nil, err
 	}
 
 	// get all data
@@ -257,7 +257,7 @@ func (c *ChainClient) QueryDoubleMapAll(pallet string, method string, keyarg int
 		set, err = c.Api.RPC.State.QueryStorageAt(keys, *at)
 	}
 	if err != nil {
-		return nil, errors.Wrap(err, "[QueryStorageAtLatest]")
+		return nil, err
 	}
 
 	return set, nil
@@ -308,7 +308,7 @@ func (c *ChainClient) GetHashers(pallet, method string) ([]hash.Hash, error) {
 	// 获取储存的 hasher 函数
 	hashers, err := entryMeta.Hashers()
 	if err != nil {
-		return nil, errors.Wrap(err, "[Hashers]")
+		return nil, err
 	}
 	return hashers, nil
 }

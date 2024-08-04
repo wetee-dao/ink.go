@@ -5,8 +5,9 @@ import (
 	"github.com/wetee-dao/go-sdk/pallet/types"
 	"github.com/wetee-dao/go-sdk/pallet/weteetask"
 
+	"errors"
+
 	"github.com/centrifuge/go-substrate-rpc-client/v4/signature"
-	"github.com/pkg/errors"
 )
 
 // Worker
