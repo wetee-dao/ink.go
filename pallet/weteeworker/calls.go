@@ -142,6 +142,9 @@ func MakeWorkStopCall(workId0 types.WorkId) types.RuntimeCall {
 		},
 	}
 }
+
+// Set boot peers
+// 设置引导节点
 func MakeSetBootPeersCall(boots0 []types.P2PAddr) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsWeTEEWorker: true,

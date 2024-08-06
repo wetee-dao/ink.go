@@ -53,19 +53,24 @@ func GetNextIdLatest(state state.State) (ret types.U128, err error) {
 }
 
 // Make a storage key for TEECalls
-func MakeTEECallsStorageKey(u1280 types.U128) (types.StorageKey, error) {
+func MakeTEECallsStorageKey(tupleOfUint64U1280 uint64, tupleOfUint64U1281 types.U128) (types.StorageKey, error) {
 	byteArgs := [][]byte{}
 	encBytes := []byte{}
 	var err error
-	encBytes, err = codec.Encode(u1280)
+	encBytes, err = codec.Encode(tupleOfUint64U1280)
+	if err != nil {
+		return nil, err
+	}
+	byteArgs = append(byteArgs, encBytes)
+	encBytes, err = codec.Encode(tupleOfUint64U1281)
 	if err != nil {
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
 	return types.CreateStorageKey(&types1.Meta, "WeTEEBridge", "TEECalls", byteArgs...)
 }
-func GetTEECalls(state state.State, bhash types.Hash, u1280 types.U128) (ret types1.TEECall, isSome bool, err error) {
-	key, err := MakeTEECallsStorageKey(u1280)
+func GetTEECalls(state state.State, bhash types.Hash, tupleOfUint64U1280 uint64, tupleOfUint64U1281 types.U128) (ret types1.TEECall, isSome bool, err error) {
+	key, err := MakeTEECallsStorageKey(tupleOfUint64U1280, tupleOfUint64U1281)
 	if err != nil {
 		return
 	}
@@ -75,8 +80,46 @@ func GetTEECalls(state state.State, bhash types.Hash, u1280 types.U128) (ret typ
 	}
 	return
 }
-func GetTEECallsLatest(state state.State, u1280 types.U128) (ret types1.TEECall, isSome bool, err error) {
-	key, err := MakeTEECallsStorageKey(u1280)
+func GetTEECallsLatest(state state.State, tupleOfUint64U1280 uint64, tupleOfUint64U1281 types.U128) (ret types1.TEECall, isSome bool, err error) {
+	key, err := MakeTEECallsStorageKey(tupleOfUint64U1280, tupleOfUint64U1281)
+	if err != nil {
+		return
+	}
+	isSome, err = state.GetStorageLatest(key, &ret)
+	if err != nil {
+		return
+	}
+	return
+}
+
+// Make a storage key for ApiMetas
+//
+//	App
+//	应用
+func MakeApiMetasStorageKey(workId0 types1.WorkId) (types.StorageKey, error) {
+	byteArgs := [][]byte{}
+	encBytes := []byte{}
+	var err error
+	encBytes, err = codec.Encode(workId0)
+	if err != nil {
+		return nil, err
+	}
+	byteArgs = append(byteArgs, encBytes)
+	return types.CreateStorageKey(&types1.Meta, "WeTEEBridge", "ApiMetas", byteArgs...)
+}
+func GetApiMetas(state state.State, bhash types.Hash, workId0 types1.WorkId) (ret types1.ApiMeta, isSome bool, err error) {
+	key, err := MakeApiMetasStorageKey(workId0)
+	if err != nil {
+		return
+	}
+	isSome, err = state.GetStorage(key, &ret, bhash)
+	if err != nil {
+		return
+	}
+	return
+}
+func GetApiMetasLatest(state state.State, workId0 types1.WorkId) (ret types1.ApiMeta, isSome bool, err error) {
+	key, err := MakeApiMetasStorageKey(workId0)
 	if err != nil {
 		return
 	}

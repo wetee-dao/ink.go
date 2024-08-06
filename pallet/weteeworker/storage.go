@@ -185,7 +185,7 @@ func GetCodeMrsignerLatest(state state.State) (ret []byte, err error) {
 	return
 }
 
-// Make a storage key for BootPeers id={{false [284]}}
+// Make a storage key for BootPeers id={{false [287]}}
 //
 //	侧链boot peers
 func MakeBootPeersStorageKey() (types.StorageKey, error) {
