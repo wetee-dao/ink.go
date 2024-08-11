@@ -65,6 +65,20 @@ func MakeClusterUnmortgageCall(id0 uint64, blockNum1 uint64) types.RuntimeCall {
 	}
 }
 
+// 启动或重启服务
+// 启动或重启服务
+func MakeWorkStartCall(workId0 types.WorkId, report1 types.OptionTByteSlice, deployKey2 [32]byte) types.RuntimeCall {
+	return types.RuntimeCall{
+		IsWeTEEWorker: true,
+		AsWeTEEWorkerField0: &types.WeteeWorkerPalletCall{
+			IsWorkStart:           true,
+			AsWorkStartWorkId0:    workId0,
+			AsWorkStartReport1:    report1,
+			AsWorkStartDeployKey2: deployKey2,
+		},
+	}
+}
+
 // Work proof of work data upload
 // 提交工作证明
 func MakeWorkProofUploadCall(workId0 types.WorkId, proof1 types.OptionTProofOfWork, report2 types.OptionTByteSlice) types.RuntimeCall {
@@ -151,6 +165,15 @@ func MakeSetBootPeersCall(boots0 []types.P2PAddr) types.RuntimeCall {
 		AsWeTEEWorkerField0: &types.WeteeWorkerPalletCall{
 			IsSetBootPeers:       true,
 			AsSetBootPeersBoots0: boots0,
+		},
+	}
+}
+func MakeSetStageCall(stage0 uint32) types.RuntimeCall {
+	return types.RuntimeCall{
+		IsWeTEEWorker: true,
+		AsWeTEEWorkerField0: &types.WeteeWorkerPalletCall{
+			IsSetStage:       true,
+			AsSetStageStage0: stage0,
 		},
 	}
 }

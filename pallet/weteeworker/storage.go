@@ -587,6 +587,44 @@ func GetWorkContractStateLatest(state state.State, tupleOfWorkIdUint640 types1.W
 	return
 }
 
+// Make a storage key for DeployKeys
+//
+//	程序使用部署密钥，每次部署都会生成新的部署密钥
+//	smart deplopy key
+func MakeDeployKeysStorageKey(workId0 types1.WorkId) (types.StorageKey, error) {
+	byteArgs := [][]byte{}
+	encBytes := []byte{}
+	var err error
+	encBytes, err = codec.Encode(workId0)
+	if err != nil {
+		return nil, err
+	}
+	byteArgs = append(byteArgs, encBytes)
+	return types.CreateStorageKey(&types1.Meta, "WeTEEWorker", "DeployKeys", byteArgs...)
+}
+func GetDeployKeys(state state.State, bhash types.Hash, workId0 types1.WorkId) (ret [32]byte, isSome bool, err error) {
+	key, err := MakeDeployKeysStorageKey(workId0)
+	if err != nil {
+		return
+	}
+	isSome, err = state.GetStorage(key, &ret, bhash)
+	if err != nil {
+		return
+	}
+	return
+}
+func GetDeployKeysLatest(state state.State, workId0 types1.WorkId) (ret [32]byte, isSome bool, err error) {
+	key, err := MakeDeployKeysStorageKey(workId0)
+	if err != nil {
+		return
+	}
+	isSome, err = state.GetStorageLatest(key, &ret)
+	if err != nil {
+		return
+	}
+	return
+}
+
 // Make a storage key for Stage id={{false [4]}}
 //
 //	Work 结算周期
@@ -704,43 +742,6 @@ func GetReportOfWork(state state.State, bhash types.Hash, workId0 types1.WorkId)
 }
 func GetReportOfWorkLatest(state state.State, workId0 types1.WorkId) (ret []byte, isSome bool, err error) {
 	key, err := MakeReportOfWorkStorageKey(workId0)
-	if err != nil {
-		return
-	}
-	isSome, err = state.GetStorageLatest(key, &ret)
-	if err != nil {
-		return
-	}
-	return
-}
-
-// Make a storage key for ReportOfWorkTime
-//
-//	work report
-func MakeReportOfWorkTimeStorageKey(workId0 types1.WorkId) (types.StorageKey, error) {
-	byteArgs := [][]byte{}
-	encBytes := []byte{}
-	var err error
-	encBytes, err = codec.Encode(workId0)
-	if err != nil {
-		return nil, err
-	}
-	byteArgs = append(byteArgs, encBytes)
-	return types.CreateStorageKey(&types1.Meta, "WeTEEWorker", "ReportOfWorkTime", byteArgs...)
-}
-func GetReportOfWorkTime(state state.State, bhash types.Hash, workId0 types1.WorkId) (ret uint64, isSome bool, err error) {
-	key, err := MakeReportOfWorkTimeStorageKey(workId0)
-	if err != nil {
-		return
-	}
-	isSome, err = state.GetStorage(key, &ret, bhash)
-	if err != nil {
-		return
-	}
-	return
-}
-func GetReportOfWorkTimeLatest(state state.State, workId0 types1.WorkId) (ret uint64, isSome bool, err error) {
-	key, err := MakeReportOfWorkTimeStorageKey(workId0)
 	if err != nil {
 		return
 	}

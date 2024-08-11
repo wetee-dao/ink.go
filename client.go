@@ -43,6 +43,7 @@ func ClientInit(url string, debug bool) (*ChainClient, error) {
 	if err != nil {
 		return nil, err
 	}
+	gtypes.Meta = *meta
 
 	genesisHash, err := api.RPC.Chain.GetBlockHash(0)
 	if err != nil {
@@ -55,6 +56,29 @@ func ClientInit(url string, debug bool) (*ChainClient, error) {
 	}
 
 	return &ChainClient{api, meta, runtime, genesisHash, debug}, nil
+}
+
+// 检查 metadata 是否匹配
+// 不匹配就更新
+func (c *ChainClient) CheckMetadata() error {
+	runtime, err := c.Api.RPC.State.GetRuntimeVersionLatest()
+	if err != nil {
+		return err
+	}
+
+	if c.Runtime.SpecVersion == runtime.SpecVersion {
+		return nil
+	}
+
+	meta, err := c.Api.RPC.State.GetMetadataLatest()
+	if err != nil {
+		return err
+	}
+
+	c.Runtime = runtime
+	c.Meta = meta
+	gtypes.Meta = *meta
+	return nil
 }
 
 // 获取区块高度
@@ -116,12 +140,11 @@ func (c *ChainClient) SignAndSubmit(signer *core.Signer, runtimeCall gtypes.Runt
 	}
 
 	defer sub.Unsubscribe()
-	timeout := time.After(20 * time.Second)
+	timeout := time.After(30 * time.Second)
 	for {
 		select {
 		case status := <-sub.Chan():
 			if status.IsInBlock {
-
 				extBytes, err := codec.Encode(ext)
 				if err != nil {
 					return err
@@ -149,7 +172,7 @@ func (c *ChainClient) SignAndSubmit(signer *core.Signer, runtimeCall gtypes.Runt
 
 			return err
 		case <-timeout:
-			fmt.Println("timeout")
+			fmt.Println("Extrinsic: timeout")
 			return nil
 		}
 	}
@@ -214,11 +237,42 @@ func (c *ChainClient) checkExtrinsic(extHash types.Hash, blockHash types.Hash) (
 // 查询 map 所有数据
 // query map data list of map
 func (c *ChainClient) QueryMapAll(pallet string, method string) ([]types.StorageChangeSet, error) {
-	key := createPrefixedKey(pallet, method)
+	key := CreatePrefixedKey(pallet, method)
 
 	keys, err := c.Api.RPC.State.GetKeysLatest(key)
 	if err != nil {
 		return []types.StorageChangeSet{}, err
+	}
+
+	set, err := c.Api.RPC.State.QueryStorageAtLatest(keys)
+	if err != nil {
+		return []types.StorageChangeSet{}, err
+	}
+
+	return set, nil
+}
+
+// 查询 map 所有数据
+// query map data list of map4
+func (c *ChainClient) QueryMapKeys(pallet string, method string, fkeys []interface{}) ([]types.StorageChangeSet, error) {
+	key := CreatePrefixedKey(pallet, method)
+
+	hashers, err := c.GetHashers(pallet, method)
+	if err != nil {
+		return nil, err
+	}
+
+	keys := make([]types.StorageKey, 0, len(fkeys))
+	for i, sk := range fkeys {
+		arg2, err := codec.Encode(sk)
+		if err != nil {
+			return nil, err
+		}
+		_, err = hashers[0].Write(arg2)
+		if err != nil {
+			return nil, fmt.Errorf("unable to hash args[%d]: %s Error: %v", 1, arg2, err)
+		}
+		keys[i] = types.StorageKey(append(key, hashers[1].Sum(nil)...))
 	}
 
 	set, err := c.Api.RPC.State.QueryStorageAtLatest(keys)
@@ -272,7 +326,7 @@ func (c *ChainClient) GetDoubleMapPrefixKey(pallet string, method string, keyarg
 	}
 
 	// create key prefix
-	key := createPrefixedKey(pallet, method)
+	key := CreatePrefixedKey(pallet, method)
 	hashers, err := c.GetHashers(pallet, method)
 	if err != nil {
 		return nil, err
@@ -283,10 +337,72 @@ func (c *ChainClient) GetDoubleMapPrefixKey(pallet string, method string, keyarg
 	if err != nil {
 		return nil, fmt.Errorf("unable to hash args[%d]: %s Error: %v", 0, arg, err)
 	}
+
 	// append hash to key
 	key = append(key, hashers[0].Sum(nil)...)
 
 	return key, nil
+}
+
+// 查询 double map 第一个 key 的所有数据
+// query double map data list of double map
+func (c *ChainClient) QueryDoubleMapKeys(pallet string, method string, keyarg interface{}, skeys []interface{}, at *types.Hash) ([]types.StorageChangeSet, error) {
+	keys, err := c.GetDoubleMapPrefixKeys(pallet, method, keyarg, skeys)
+	if err != nil {
+		return nil, err
+	}
+
+	// get all data
+	var set []types.StorageChangeSet
+	if at == nil {
+		set, err = c.Api.RPC.State.QueryStorageAtLatest(keys)
+	} else {
+		set, err = c.Api.RPC.State.QueryStorageAt(keys, *at)
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	return set, nil
+}
+
+// 查询 double map 第一个 key 前缀 和 多个 第二个 key
+// get double map prefix key of double map {{pallet}}.{{method}}.{{frist key}}
+func (c *ChainClient) GetDoubleMapPrefixKeys(pallet string, method string, keyarg interface{}, skeys []interface{}) ([]types.StorageKey, error) {
+	arg, err := codec.Encode(keyarg)
+	if err != nil {
+		return nil, err
+	}
+
+	// create key prefix
+	key := CreatePrefixedKey(pallet, method)
+	hashers, err := c.GetHashers(pallet, method)
+	if err != nil {
+		return nil, err
+	}
+
+	// write key
+	_, err = hashers[0].Write(arg)
+	if err != nil {
+		return nil, fmt.Errorf("unable to hash args[%d]: %s Error: %v", 0, arg, err)
+	}
+
+	// append hash to key
+	key = append(key, hashers[0].Sum(nil)...)
+	keys := make([]types.StorageKey, 0, len(skeys))
+	for _, sk := range skeys {
+		arg2, err := codec.Encode(sk)
+		if err != nil {
+			return nil, err
+		}
+		_, err = hashers[1].Write(arg2)
+		if err != nil {
+			return nil, fmt.Errorf("unable to hash args[%d]: %s Error: %v", 1, arg2, err)
+		}
+		keys = append(keys, types.StorageKey(append(key, hashers[1].Sum(nil)...)))
+	}
+
+	return keys, nil
 }
 
 // get hashers of map {{pallet}}.{{method}}
@@ -314,6 +430,6 @@ func (c *ChainClient) GetHashers(pallet, method string) ([]hash.Hash, error) {
 }
 
 // create prefixed key of {{pallet}}.{{method}}
-func createPrefixedKey(pallet, method string) []byte {
+func CreatePrefixedKey(pallet, method string) []byte {
 	return append(xxhash.New128([]byte(pallet)).Sum(nil), xxhash.New128([]byte(method)).Sum(nil)...)
 }

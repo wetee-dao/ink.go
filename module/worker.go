@@ -196,3 +196,14 @@ type ContractStateWrap struct {
 	BlockHash     string
 	ContractState *gtypes.ClusterContractState
 }
+
+func (w *Worker) GetCluster(clusterID uint64) (*gtypes.K8sCluster, error) {
+	c, ok, err := weteeworker.GetK8sClustersLatest(w.Client.Api.RPC.State, clusterID)
+	if err != nil {
+		return nil, err
+	}
+	if !ok {
+		return nil, errors.New("GetK8sClustersLatest => not ok")
+	}
+	return &c, nil
+}
