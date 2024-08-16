@@ -108,22 +108,19 @@ func (c *ChainClient) GetAccount(address *core.Signer) (*types.AccountInfo, erro
 func (c *ChainClient) SignAndSubmit(signer *core.Signer, runtimeCall gtypes.RuntimeCall, untilFinalized bool) error {
 	accountInfo, err := c.GetAccount(signer)
 	if err != nil {
-		return err
+		return errors.New("GetAccountInfo error: " + err.Error())
 	}
 	call, err := (runtimeCall).AsCall()
 	if err != nil {
-		return err
+		return errors.New("(runtimeCall).AsCall() error: " + err.Error())
 	}
 
 	ext := core.NewExtrinsic(call)
-	era := types.ExtrinsicEra{IsMortalEra: false}
-	nonce := uint32(accountInfo.Nonce)
-
 	o := types.SignatureOptions{
 		BlockHash:          c.Hash,
-		Era:                era,
+		Era:                types.ExtrinsicEra{IsMortalEra: false},
 		GenesisHash:        c.Hash,
-		Nonce:              types.NewUCompactFromUInt(uint64(nonce)),
+		Nonce:              types.NewUCompactFromUInt(uint64(accountInfo.Nonce)),
 		SpecVersion:        c.Runtime.SpecVersion,
 		Tip:                types.NewUCompactFromUInt(0),
 		TransactionVersion: c.Runtime.TransactionVersion,
@@ -136,7 +133,7 @@ func (c *ChainClient) SignAndSubmit(signer *core.Signer, runtimeCall gtypes.Runt
 
 	sub, err := c.Api.RPC.Author.SubmitAndWatchExtrinsic(ext.Extrinsic)
 	if err != nil {
-		return err
+		return errors.New("SubmitAndWatchExtrinsic error: " + err.Error())
 	}
 
 	defer sub.Unsubscribe()

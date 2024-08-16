@@ -4,7 +4,7 @@ import types "github.com/wetee-dao/go-sdk/pallet/types"
 
 // Task create
 // 注册任务
-func MakeCreateCall(name0 []byte, image1 []byte, meta2 []byte, port3 []types.Service, command4 types.Command, env5 []types.EnvInput, cpu6 uint32, memory7 uint32, disk8 []types.Disk, level9 byte, teeVersion10 types.TEEVersion) types.RuntimeCall {
+func MakeCreateCall(name0 []byte, image1 []byte, meta2 []byte, port3 []types.Service, command4 types.Command, env5 []types.EnvInput, secretEnv6 types.OptionTByteSlice, cpu7 uint32, memory8 uint32, disk9 []types.Disk, level10 byte, teeVersion11 types.TEEVersion) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsWeTEETask: true,
 		AsWeTEETaskField0: &types.WeteeTaskPalletCall{
@@ -15,11 +15,12 @@ func MakeCreateCall(name0 []byte, image1 []byte, meta2 []byte, port3 []types.Ser
 			AsCreatePort3:        port3,
 			AsCreateCommand4:     command4,
 			AsCreateEnv5:         env5,
-			AsCreateCpu6:         cpu6,
-			AsCreateMemory7:      memory7,
-			AsCreateDisk8:        disk8,
-			AsCreateLevel9:       level9,
-			AsCreateTeeVersion10: teeVersion10,
+			AsCreateSecretEnv6:   secretEnv6,
+			AsCreateCpu7:         cpu7,
+			AsCreateMemory8:      memory8,
+			AsCreateDisk9:        disk9,
+			AsCreateLevel10:      level10,
+			AsCreateTeeVersion11: teeVersion11,
 		},
 	}
 }
@@ -38,7 +39,7 @@ func MakeRerunCall(id0 uint64) types.RuntimeCall {
 
 // Task update
 // 更新任务
-func MakeUpdateCall(appId0 uint64, newName1 types.OptionTByteSlice, newImage2 types.OptionTByteSlice, newPort3 types.OptionTServiceSlice, newCommand4 types.OptionTCommand, newEnv5 []types.EnvInput, withRestart6 bool) types.RuntimeCall {
+func MakeUpdateCall(appId0 uint64, newName1 types.OptionTByteSlice, newImage2 types.OptionTByteSlice, newPort3 types.OptionTServiceSlice, newCommand4 types.OptionTCommand, newEnv5 []types.EnvInput, secretEnv6 types.OptionTByteSlice, withRestart7 bool) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsWeTEETask: true,
 		AsWeTEETaskField0: &types.WeteeTaskPalletCall{
@@ -49,7 +50,8 @@ func MakeUpdateCall(appId0 uint64, newName1 types.OptionTByteSlice, newImage2 ty
 			AsUpdateNewPort3:     newPort3,
 			AsUpdateNewCommand4:  newCommand4,
 			AsUpdateNewEnv5:      newEnv5,
-			AsUpdateWithRestart6: withRestart6,
+			AsUpdateSecretEnv6:   secretEnv6,
+			AsUpdateWithRestart7: withRestart7,
 		},
 	}
 }

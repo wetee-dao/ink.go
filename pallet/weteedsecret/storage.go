@@ -8,7 +8,7 @@ import (
 	types1 "github.com/wetee-dao/go-sdk/pallet/types"
 )
 
-// Make a storage key for CodeMrenclave id={{false [205]}}
+// Make a storage key for CodeMrenclave id={{false [203]}}
 //
 //	代码版本
 func MakeCodeMrenclaveStorageKey() (types.StorageKey, error) {
@@ -54,7 +54,7 @@ func GetCodeMrenclaveLatest(state state.State) (ret []byte, err error) {
 	return
 }
 
-// Make a storage key for CodeMrsigner id={{false [205]}}
+// Make a storage key for CodeMrsigner id={{false [203]}}
 //
 //	代码打包签名人
 func MakeCodeMrsignerStorageKey() (types.StorageKey, error) {
@@ -161,7 +161,7 @@ func MakeNodesStorageKey(uint640 uint64) (types.StorageKey, error) {
 	byteArgs = append(byteArgs, encBytes)
 	return types.CreateStorageKey(&types1.Meta, "WeTEEDsecret", "Nodes", byteArgs...)
 }
-func GetNodes(state state.State, bhash types.Hash, uint640 uint64) (ret types1.Node, isSome bool, err error) {
+func GetNodes(state state.State, bhash types.Hash, uint640 uint64) (ret [32]byte, isSome bool, err error) {
 	key, err := MakeNodesStorageKey(uint640)
 	if err != nil {
 		return
@@ -172,7 +172,7 @@ func GetNodes(state state.State, bhash types.Hash, uint640 uint64) (ret types1.N
 	}
 	return
 }
-func GetNodesLatest(state state.State, uint640 uint64) (ret types1.Node, isSome bool, err error) {
+func GetNodesLatest(state state.State, uint640 uint64) (ret [32]byte, isSome bool, err error) {
 	key, err := MakeNodesStorageKey(uint640)
 	if err != nil {
 		return

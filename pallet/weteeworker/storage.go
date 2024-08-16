@@ -93,7 +93,7 @@ func GetNextClusterIdLatest(state state.State) (ret uint64, err error) {
 	return
 }
 
-// Make a storage key for CodeMrenclave id={{false [205]}}
+// Make a storage key for CodeMrenclave id={{false [203]}}
 //
 //	代码版本
 func MakeCodeMrenclaveStorageKey() (types.StorageKey, error) {
@@ -139,7 +139,7 @@ func GetCodeMrenclaveLatest(state state.State) (ret []byte, err error) {
 	return
 }
 
-// Make a storage key for CodeMrsigner id={{false [205]}}
+// Make a storage key for CodeMrsigner id={{false [203]}}
 //
 //	代码打包签名人
 func MakeCodeMrsignerStorageKey() (types.StorageKey, error) {
@@ -185,7 +185,7 @@ func GetCodeMrsignerLatest(state state.State) (ret []byte, err error) {
 	return
 }
 
-// Make a storage key for BootPeers id={{false [287]}}
+// Make a storage key for BootPeers id={{false [289]}}
 //
 //	侧链boot peers
 func MakeBootPeersStorageKey() (types.StorageKey, error) {
@@ -296,6 +296,44 @@ func GetProofOfClusters(state state.State, bhash types.Hash, uint640 uint64) (re
 }
 func GetProofOfClustersLatest(state state.State, uint640 uint64) (ret []byte, isSome bool, err error) {
 	key, err := MakeProofOfClustersStorageKey(uint640)
+	if err != nil {
+		return
+	}
+	isSome, err = state.GetStorageLatest(key, &ret)
+	if err != nil {
+		return
+	}
+	return
+}
+
+// Make a storage key for ProofOfClusterTimes
+//
+//	集群工作证明时间
+//	K8sCluster proof of work time
+func MakeProofOfClusterTimesStorageKey(uint640 uint64) (types.StorageKey, error) {
+	byteArgs := [][]byte{}
+	encBytes := []byte{}
+	var err error
+	encBytes, err = codec.Encode(uint640)
+	if err != nil {
+		return nil, err
+	}
+	byteArgs = append(byteArgs, encBytes)
+	return types.CreateStorageKey(&types1.Meta, "WeTEEWorker", "ProofOfClusterTimes", byteArgs...)
+}
+func GetProofOfClusterTimes(state state.State, bhash types.Hash, uint640 uint64) (ret uint64, isSome bool, err error) {
+	key, err := MakeProofOfClusterTimesStorageKey(uint640)
+	if err != nil {
+		return
+	}
+	isSome, err = state.GetStorage(key, &ret, bhash)
+	if err != nil {
+		return
+	}
+	return
+}
+func GetProofOfClusterTimesLatest(state state.State, uint640 uint64) (ret uint64, isSome bool, err error) {
+	key, err := MakeProofOfClusterTimesStorageKey(uint640)
 	if err != nil {
 		return
 	}

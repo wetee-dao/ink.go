@@ -217,6 +217,44 @@ func GetEnvsLatest(state state.State, tupleOfUint64Uint160 uint64, tupleOfUint64
 	return
 }
 
+// Make a storage key for SecretEnvs
+//
+//	Secret app setting
+//	加密设置
+func MakeSecretEnvsStorageKey(uint640 uint64) (types.StorageKey, error) {
+	byteArgs := [][]byte{}
+	encBytes := []byte{}
+	var err error
+	encBytes, err = codec.Encode(uint640)
+	if err != nil {
+		return nil, err
+	}
+	byteArgs = append(byteArgs, encBytes)
+	return types.CreateStorageKey(&types1.Meta, "WeTEEGpu", "SecretEnvs", byteArgs...)
+}
+func GetSecretEnvs(state state.State, bhash types.Hash, uint640 uint64) (ret []byte, isSome bool, err error) {
+	key, err := MakeSecretEnvsStorageKey(uint640)
+	if err != nil {
+		return
+	}
+	isSome, err = state.GetStorage(key, &ret, bhash)
+	if err != nil {
+		return
+	}
+	return
+}
+func GetSecretEnvsLatest(state state.State, uint640 uint64) (ret []byte, isSome bool, err error) {
+	key, err := MakeSecretEnvsStorageKey(uint640)
+	if err != nil {
+		return
+	}
+	isSome, err = state.GetStorageLatest(key, &ret)
+	if err != nil {
+		return
+	}
+	return
+}
+
 // Make a storage key for AppVersion
 //
 //	App version

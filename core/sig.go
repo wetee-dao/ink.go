@@ -7,6 +7,7 @@ import (
 	"github.com/vedhavyas/go-subkey/v2"
 	"github.com/vedhavyas/go-subkey/v2/ed25519"
 	"github.com/vedhavyas/go-subkey/v2/sr25519"
+	"golang.org/x/crypto/blake2b"
 )
 
 type Signer struct {
@@ -95,9 +96,19 @@ func (e *Ed25519Signer) SS58Address(network uint16) string {
 }
 
 func (e *Ed25519Signer) Sign(msg []byte) ([]byte, error) {
+	if len(msg) > 256 {
+		h := blake2b.Sum256(msg)
+		msg = h[:]
+	}
+
 	return e.secret.Sign(nil, msg, crypto.Hash(0))
 }
 
 func (e *Ed25519Signer) Verify(msg []byte, signature []byte) bool {
+	if len(msg) > 256 {
+		h := blake2b.Sum256(msg)
+		msg = h[:]
+	}
+
 	return goEd25519.Verify(*e.pub, msg, signature)
 }
