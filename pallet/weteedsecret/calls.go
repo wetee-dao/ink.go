@@ -41,3 +41,16 @@ func MakeUploadClusterProofCall(cid0 uint64, report1 []byte, pubs2 [][32]byte, s
 		},
 	}
 }
+
+// 上传 devloper，report hash 启动应用
+func MakeWorkLaunchCall(work0 types.WorkId, report1 types.OptionTByteSlice, deployKey2 [32]byte) types.RuntimeCall {
+	return types.RuntimeCall{
+		IsWeTEEDsecret: true,
+		AsWeTEEDsecretField0: &types.WeteeDsecretPalletCall{
+			IsWorkLaunch:           true,
+			AsWorkLaunchWork0:      work0,
+			AsWorkLaunchReport1:    report1,
+			AsWorkLaunchDeployKey2: deployKey2,
+		},
+	}
+}

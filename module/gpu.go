@@ -55,3 +55,14 @@ func (w *GpuApp) GetVersionLatest(id uint64) (uint64, error) {
 	}
 	return uint64(res), nil
 }
+
+func (w *GpuApp) GetSecretEnv(id uint64) ([]byte, error) {
+	res, ok, err := weteegpu.GetSecretEnvsLatest(w.Client.Api.RPC.State, id)
+	if err != nil {
+		return nil, err
+	}
+	if !ok {
+		return nil, errors.New("GetAppIdAccountsLatest => not ok")
+	}
+	return res, nil
+}

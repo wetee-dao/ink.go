@@ -55,3 +55,14 @@ func (w *Task) GetTask(publey []byte, id uint64) (*types.TeeTask, error) {
 	}
 	return &res, nil
 }
+
+func (w *Task) GetSecretEnv(id uint64) ([]byte, error) {
+	res, ok, err := weteetask.GetSecretEnvsLatest(w.Client.Api.RPC.State, id)
+	if err != nil {
+		return nil, err
+	}
+	if !ok {
+		return nil, errors.New("GetAppIdAccountsLatest => not ok")
+	}
+	return res, nil
+}

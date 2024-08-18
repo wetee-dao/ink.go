@@ -20,6 +20,24 @@ type Signer struct {
 	KeyType uint8
 }
 
+func (e *Signer) Sign(msg []byte) ([]byte, error) {
+	if len(msg) > 256 {
+		h := blake2b.Sum256(msg)
+		msg = h[:]
+	}
+
+	return e.KeyPair.Sign(msg)
+}
+
+func (e *Signer) Verify(msg []byte, signature []byte) bool {
+	if len(msg) > 256 {
+		h := blake2b.Sum256(msg)
+		msg = h[:]
+	}
+
+	return e.KeyPair.Verify(msg, signature)
+}
+
 // Sr25519PairFromSecret generates a sr25519 key pair from a seed or phrase
 func Sr25519PairFromSecret(seedOrPhrase string, network uint16) (Signer, error) {
 	scheme := sr25519.Scheme{}
@@ -96,19 +114,9 @@ func (e *Ed25519Signer) SS58Address(network uint16) string {
 }
 
 func (e *Ed25519Signer) Sign(msg []byte) ([]byte, error) {
-	if len(msg) > 256 {
-		h := blake2b.Sum256(msg)
-		msg = h[:]
-	}
-
 	return e.secret.Sign(nil, msg, crypto.Hash(0))
 }
 
 func (e *Ed25519Signer) Verify(msg []byte, signature []byte) bool {
-	if len(msg) > 256 {
-		h := blake2b.Sum256(msg)
-		msg = h[:]
-	}
-
 	return goEd25519.Verify(*e.pub, msg, signature)
 }
