@@ -54,7 +54,7 @@ func GetVersion(client *chain.ChainClient, workID gtypes.WorkId) (ret uint64, er
 	return 0, errors.New("unknow work type")
 }
 
-func GetSecretEnv(client *chain.ChainClient, workID gtypes.WorkId) (ret []byte, err error) {
+func GetSecretEnv(client *chain.ChainClient, workID gtypes.WorkId) (ret []byte, isSome bool, err error) {
 	if workID.Wtype.IsAPP {
 		app := &App{
 			Client: client,
@@ -75,5 +75,5 @@ func GetSecretEnv(client *chain.ChainClient, workID gtypes.WorkId) (ret []byte, 
 		return gpuapp.GetSecretEnv(workID.Id)
 	}
 
-	return nil, errors.New("unknow work type")
+	return nil, false, errors.New("unknow work type")
 }
