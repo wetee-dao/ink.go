@@ -16,13 +16,13 @@ func MakeRegisterNodeCall(sender0 [32]byte) types.RuntimeCall {
 
 // 上传共识节点代码
 // update consensus node code
-func MakeUploadCodeCall(mrenclave0 []byte, mrsigner1 []byte) types.RuntimeCall {
+func MakeUploadCodeCall(signature0 []byte, signer1 []byte) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsWeTEEDsecret: true,
 		AsWeTEEDsecretField0: &types.WeteeDsecretPalletCall{
 			IsUploadCode:           true,
-			AsUploadCodeMrenclave0: mrenclave0,
-			AsUploadCodeMrsigner1:  mrsigner1,
+			AsUploadCodeSignature0: signature0,
+			AsUploadCodeSigner1:    signer1,
 		},
 	}
 }

@@ -13,7 +13,7 @@ func MakeNextIdStorageKey() (types.StorageKey, error) {
 	return types.CreateStorageKey(&types1.Meta, "WeTEEBridge", "NextId")
 }
 
-var NextIdResultDefaultBytes, _ = hex.DecodeString("00000000000000000000000000000000")
+var NextIdResultDefaultBytes, _ = hex.DecodeString("01000000000000000000000000000000")
 
 func GetNextId(state state.State, bhash types.Hash) (ret types.U128, err error) {
 	key, err := MakeNextIdStorageKey()

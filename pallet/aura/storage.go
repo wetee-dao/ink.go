@@ -8,7 +8,7 @@ import (
 	types1 "github.com/wetee-dao/go-sdk/pallet/types"
 )
 
-// Make a storage key for Authorities id={{false [100]}}
+// Make a storage key for Authorities id={{false [99]}}
 //
 //	The current authority set.
 func MakeAuthoritiesStorageKey() (types.StorageKey, error) {
@@ -54,7 +54,7 @@ func GetAuthoritiesLatest(state state.State) (ret [][32]byte, err error) {
 	return
 }
 
-// Make a storage key for CurrentSlot id={{false [103]}}
+// Make a storage key for CurrentSlot id={{false [102]}}
 //
 //	The current slot of this block.
 //

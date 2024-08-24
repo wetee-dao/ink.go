@@ -20,8 +20,6 @@ func MakeClusterRegisterCall(name0 []byte, ip1 []types.Ip, port2 uint32, level3 
 	}
 }
 
-// Worker cluster upload proof of work data
-// 提交集群的工作证明
 // Worker cluster mortgage
 // 质押硬件
 func MakeClusterMortgageCall(id0 uint64, cpu1 uint32, mem2 uint32, cvmCpu3 uint32, cvmMem4 uint32, disk5 uint32, gpu6 uint32, deposit7 types1.UCompact) types.RuntimeCall {
@@ -155,13 +153,13 @@ func MakeSetStageCall(stage0 uint32) types.RuntimeCall {
 
 // 上传共识节点代码
 // update consensus node code
-func MakeUploadCodeCall(mrenclave0 []byte, mrsigner1 []byte) types.RuntimeCall {
+func MakeUploadCodeCall(signature0 []byte, signer1 []byte) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsWeTEEWorker: true,
 		AsWeTEEWorkerField0: &types.WeteeWorkerPalletCall{
 			IsUploadCode:           true,
-			AsUploadCodeMrenclave0: mrenclave0,
-			AsUploadCodeMrsigner1:  mrsigner1,
+			AsUploadCodeSignature0: signature0,
+			AsUploadCodeSigner1:    signer1,
 		},
 	}
 }

@@ -36,7 +36,7 @@ func MakeDepositProposalCall(daoId0 uint64, proposeId1 uint32, deposit2 types1.U
 
 // Vote for the prop
 // 为全民公投投票
-func MakeVoteForPropCall(daoId0 uint64, propIndex1 uint32, pledge2 types.Pledge, opinion3 types.Opinion) types.RuntimeCall {
+func MakeVoteForPropCall(daoId0 uint64, propIndex1 uint32, pledge2 types1.UCompact, opinion3 types.Opinion) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsWeTEEGov: true,
 		AsWeTEEGovField0: &types.WeteeGovPalletCall{

@@ -77,16 +77,3 @@ func MakeTransferCall(dest0 types.MultiAddress, daoId1 uint64, amount2 types1.UC
 		},
 	}
 }
-
-// 成为会员
-func MakeJoinCall(daoId0 uint64, shareExpect1 uint32, existenialDeposit2 types1.UCompact) types.RuntimeCall {
-	return types.RuntimeCall{
-		IsWeTEEAsset: true,
-		AsWeTEEAssetField0: &types.WeteeAssetsPalletCall{
-			IsJoin:                   true,
-			AsJoinDaoId0:             daoId0,
-			AsJoinShareExpect1:       shareExpect1,
-			AsJoinExistenialDeposit2: existenialDeposit2,
-		},
-	}
-}

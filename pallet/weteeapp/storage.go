@@ -174,6 +174,114 @@ func GetAppIdAccountsLatest(state state.State, uint640 uint64) (ret [32]byte, is
 	return
 }
 
+// Make a storage key for CodeSignature
+//
+//	代码版本
+func MakeCodeSignatureStorageKey(uint640 uint64) (types.StorageKey, error) {
+	byteArgs := [][]byte{}
+	encBytes := []byte{}
+	var err error
+	encBytes, err = codec.Encode(uint640)
+	if err != nil {
+		return nil, err
+	}
+	byteArgs = append(byteArgs, encBytes)
+	return types.CreateStorageKey(&types1.Meta, "WeTEEApp", "CodeSignature", byteArgs...)
+}
+
+var CodeSignatureResultDefaultBytes, _ = hex.DecodeString("00")
+
+func GetCodeSignature(state state.State, bhash types.Hash, uint640 uint64) (ret []byte, err error) {
+	key, err := MakeCodeSignatureStorageKey(uint640)
+	if err != nil {
+		return
+	}
+	var isSome bool
+	isSome, err = state.GetStorage(key, &ret, bhash)
+	if err != nil {
+		return
+	}
+	if !isSome {
+		err = codec.Decode(CodeSignatureResultDefaultBytes, &ret)
+		if err != nil {
+			return
+		}
+	}
+	return
+}
+func GetCodeSignatureLatest(state state.State, uint640 uint64) (ret []byte, err error) {
+	key, err := MakeCodeSignatureStorageKey(uint640)
+	if err != nil {
+		return
+	}
+	var isSome bool
+	isSome, err = state.GetStorageLatest(key, &ret)
+	if err != nil {
+		return
+	}
+	if !isSome {
+		err = codec.Decode(CodeSignatureResultDefaultBytes, &ret)
+		if err != nil {
+			return
+		}
+	}
+	return
+}
+
+// Make a storage key for CodeSigner
+//
+//	代码打包签名人
+func MakeCodeSignerStorageKey(uint640 uint64) (types.StorageKey, error) {
+	byteArgs := [][]byte{}
+	encBytes := []byte{}
+	var err error
+	encBytes, err = codec.Encode(uint640)
+	if err != nil {
+		return nil, err
+	}
+	byteArgs = append(byteArgs, encBytes)
+	return types.CreateStorageKey(&types1.Meta, "WeTEEApp", "CodeSigner", byteArgs...)
+}
+
+var CodeSignerResultDefaultBytes, _ = hex.DecodeString("00")
+
+func GetCodeSigner(state state.State, bhash types.Hash, uint640 uint64) (ret []byte, err error) {
+	key, err := MakeCodeSignerStorageKey(uint640)
+	if err != nil {
+		return
+	}
+	var isSome bool
+	isSome, err = state.GetStorage(key, &ret, bhash)
+	if err != nil {
+		return
+	}
+	if !isSome {
+		err = codec.Decode(CodeSignerResultDefaultBytes, &ret)
+		if err != nil {
+			return
+		}
+	}
+	return
+}
+func GetCodeSignerLatest(state state.State, uint640 uint64) (ret []byte, err error) {
+	key, err := MakeCodeSignerStorageKey(uint640)
+	if err != nil {
+		return
+	}
+	var isSome bool
+	isSome, err = state.GetStorageLatest(key, &ret)
+	if err != nil {
+		return
+	}
+	if !isSome {
+		err = codec.Decode(CodeSignerResultDefaultBytes, &ret)
+		if err != nil {
+			return
+		}
+	}
+	return
+}
+
 // Make a storage key for Envs
 //
 //	App setting

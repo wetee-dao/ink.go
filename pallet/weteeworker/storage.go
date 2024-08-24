@@ -93,17 +93,18 @@ func GetNextClusterIdLatest(state state.State) (ret uint64, err error) {
 	return
 }
 
-// Make a storage key for CodeMrenclave id={{false [203]}}
+// Make a storage key for CodeSignature id={{false [14]}}
 //
+//	code sig
 //	代码版本
-func MakeCodeMrenclaveStorageKey() (types.StorageKey, error) {
-	return types.CreateStorageKey(&types1.Meta, "WeTEEWorker", "CodeMrenclave")
+func MakeCodeSignatureStorageKey() (types.StorageKey, error) {
+	return types.CreateStorageKey(&types1.Meta, "WeTEEWorker", "CodeSignature")
 }
 
-var CodeMrenclaveResultDefaultBytes, _ = hex.DecodeString("00")
+var CodeSignatureResultDefaultBytes, _ = hex.DecodeString("00")
 
-func GetCodeMrenclave(state state.State, bhash types.Hash) (ret []byte, err error) {
-	key, err := MakeCodeMrenclaveStorageKey()
+func GetCodeSignature(state state.State, bhash types.Hash) (ret []byte, err error) {
+	key, err := MakeCodeSignatureStorageKey()
 	if err != nil {
 		return
 	}
@@ -113,15 +114,15 @@ func GetCodeMrenclave(state state.State, bhash types.Hash) (ret []byte, err erro
 		return
 	}
 	if !isSome {
-		err = codec.Decode(CodeMrenclaveResultDefaultBytes, &ret)
+		err = codec.Decode(CodeSignatureResultDefaultBytes, &ret)
 		if err != nil {
 			return
 		}
 	}
 	return
 }
-func GetCodeMrenclaveLatest(state state.State) (ret []byte, err error) {
-	key, err := MakeCodeMrenclaveStorageKey()
+func GetCodeSignatureLatest(state state.State) (ret []byte, err error) {
+	key, err := MakeCodeSignatureStorageKey()
 	if err != nil {
 		return
 	}
@@ -131,7 +132,7 @@ func GetCodeMrenclaveLatest(state state.State) (ret []byte, err error) {
 		return
 	}
 	if !isSome {
-		err = codec.Decode(CodeMrenclaveResultDefaultBytes, &ret)
+		err = codec.Decode(CodeSignatureResultDefaultBytes, &ret)
 		if err != nil {
 			return
 		}
@@ -139,17 +140,18 @@ func GetCodeMrenclaveLatest(state state.State) (ret []byte, err error) {
 	return
 }
 
-// Make a storage key for CodeMrsigner id={{false [203]}}
+// Make a storage key for CodeSigner id={{false [14]}}
 //
+//	code signer
 //	代码打包签名人
-func MakeCodeMrsignerStorageKey() (types.StorageKey, error) {
-	return types.CreateStorageKey(&types1.Meta, "WeTEEWorker", "CodeMrsigner")
+func MakeCodeSignerStorageKey() (types.StorageKey, error) {
+	return types.CreateStorageKey(&types1.Meta, "WeTEEWorker", "CodeSigner")
 }
 
-var CodeMrsignerResultDefaultBytes, _ = hex.DecodeString("00")
+var CodeSignerResultDefaultBytes, _ = hex.DecodeString("00")
 
-func GetCodeMrsigner(state state.State, bhash types.Hash) (ret []byte, err error) {
-	key, err := MakeCodeMrsignerStorageKey()
+func GetCodeSigner(state state.State, bhash types.Hash) (ret []byte, err error) {
+	key, err := MakeCodeSignerStorageKey()
 	if err != nil {
 		return
 	}
@@ -159,15 +161,15 @@ func GetCodeMrsigner(state state.State, bhash types.Hash) (ret []byte, err error
 		return
 	}
 	if !isSome {
-		err = codec.Decode(CodeMrsignerResultDefaultBytes, &ret)
+		err = codec.Decode(CodeSignerResultDefaultBytes, &ret)
 		if err != nil {
 			return
 		}
 	}
 	return
 }
-func GetCodeMrsignerLatest(state state.State) (ret []byte, err error) {
-	key, err := MakeCodeMrsignerStorageKey()
+func GetCodeSignerLatest(state state.State) (ret []byte, err error) {
+	key, err := MakeCodeSignerStorageKey()
 	if err != nil {
 		return
 	}
@@ -177,7 +179,7 @@ func GetCodeMrsignerLatest(state state.State) (ret []byte, err error) {
 		return
 	}
 	if !isSome {
-		err = codec.Decode(CodeMrsignerResultDefaultBytes, &ret)
+		err = codec.Decode(CodeSignerResultDefaultBytes, &ret)
 		if err != nil {
 			return
 		}
@@ -185,7 +187,7 @@ func GetCodeMrsignerLatest(state state.State) (ret []byte, err error) {
 	return
 }
 
-// Make a storage key for BootPeers id={{false [289]}}
+// Make a storage key for BootPeers id={{false [292]}}
 //
 //	侧链boot peers
 func MakeBootPeersStorageKey() (types.StorageKey, error) {

@@ -5,7 +5,7 @@ import (
 	types1 "github.com/wetee-dao/go-sdk/pallet/types"
 )
 
-func MakeInkCallbackCall(clusterId0 uint64, callId1 types.U128, args2 []byte, value3 types.U128, error4 types1.OptionTByteSlice) types1.RuntimeCall {
+func MakeInkCallbackCall(clusterId0 uint64, callId1 types.U128, args2 []types1.InkArg, value3 types.U128, error4 types1.OptionTByteSlice) types1.RuntimeCall {
 	return types1.RuntimeCall{
 		IsWeTEEBridge: true,
 		AsWeTEEBridgeField0: &types1.WeteeTeeBridgePalletCall{
