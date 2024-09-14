@@ -28,3 +28,13 @@ func MakeSetTeeApiCall(workId0 types1.WorkId, meta1 types1.ApiMeta) types1.Runti
 		},
 	}
 }
+func MakeDeleteCallCall(clusterId0 uint64, callId1 types.U128) types1.RuntimeCall {
+	return types1.RuntimeCall{
+		IsWeTEEBridge: true,
+		AsWeTEEBridgeField0: &types1.WeteeTeeBridgePalletCall{
+			IsDeleteCall:           true,
+			AsDeleteCallClusterId0: clusterId0,
+			AsDeleteCallCallId1:    callId1,
+		},
+	}
+}
