@@ -3,8 +3,8 @@ package module
 import (
 	chain "github.com/wetee-dao/go-sdk"
 	"github.com/wetee-dao/go-sdk/core"
+	"github.com/wetee-dao/go-sdk/pallet/app"
 	"github.com/wetee-dao/go-sdk/pallet/types"
-	"github.com/wetee-dao/go-sdk/pallet/weteeapp"
 
 	"errors"
 )
@@ -23,7 +23,7 @@ func (w *App) GetApp(publey []byte, id uint64) (*types.TeeApp, error) {
 	var mss [32]byte
 	copy(mss[:], publey)
 
-	res, ok, err := weteeapp.GetTEEAppsLatest(w.Client.Api.RPC.State, mss, id)
+	res, ok, err := app.GetTEEAppsLatest(w.Client.Api.RPC.State, mss, id)
 	if err != nil {
 		return nil, err
 	}
@@ -34,7 +34,7 @@ func (w *App) GetApp(publey []byte, id uint64) (*types.TeeApp, error) {
 }
 
 func (w *App) GetAccount(id uint64) ([]byte, error) {
-	res, ok, err := weteeapp.GetAppIdAccountsLatest(w.Client.Api.RPC.State, id)
+	res, ok, err := app.GetAppIdAccountsLatest(w.Client.Api.RPC.State, id)
 	if err != nil {
 		return nil, err
 	}
@@ -45,7 +45,7 @@ func (w *App) GetAccount(id uint64) ([]byte, error) {
 }
 
 func (w *App) GetVersionLatest(id uint64) (uint64, error) {
-	res, ok, err := weteeapp.GetAppVersionLatest(w.Client.Api.RPC.State, id)
+	res, ok, err := app.GetAppVersionLatest(w.Client.Api.RPC.State, id)
 	if err != nil {
 		return 0, err
 	}
@@ -56,5 +56,5 @@ func (w *App) GetVersionLatest(id uint64) (uint64, error) {
 }
 
 func (w *App) GetSecretEnv(id uint64) ([]byte, bool, error) {
-	return weteeapp.GetSecretEnvsLatest(w.Client.Api.RPC.State, id)
+	return app.GetSecretEnvsLatest(w.Client.Api.RPC.State, id)
 }

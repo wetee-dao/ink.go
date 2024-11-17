@@ -2,8 +2,8 @@ package module
 
 import (
 	chain "github.com/wetee-dao/go-sdk"
+	"github.com/wetee-dao/go-sdk/pallet/gpu"
 	"github.com/wetee-dao/go-sdk/pallet/types"
-	"github.com/wetee-dao/go-sdk/pallet/weteegpu"
 
 	"errors"
 
@@ -24,7 +24,7 @@ func (w *GpuApp) GetApp(publey []byte, id uint64) (*types.GpuApp, error) {
 	var mss [32]byte
 	copy(mss[:], publey)
 
-	res, ok, err := weteegpu.GetGPUAppsLatest(w.Client.Api.RPC.State, mss, id)
+	res, ok, err := gpu.GetGPUAppsLatest(w.Client.Api.RPC.State, mss, id)
 	if err != nil {
 		return nil, err
 	}
@@ -35,7 +35,7 @@ func (w *GpuApp) GetApp(publey []byte, id uint64) (*types.GpuApp, error) {
 }
 
 func (w *GpuApp) GetAccount(id uint64) ([]byte, error) {
-	res, ok, err := weteegpu.GetAppIdAccountsLatest(w.Client.Api.RPC.State, id)
+	res, ok, err := gpu.GetAppIdAccountsLatest(w.Client.Api.RPC.State, id)
 	if err != nil {
 		return nil, err
 	}
@@ -46,7 +46,7 @@ func (w *GpuApp) GetAccount(id uint64) ([]byte, error) {
 }
 
 func (w *GpuApp) GetVersionLatest(id uint64) (uint64, error) {
-	res, ok, err := weteegpu.GetAppVersionLatest(w.Client.Api.RPC.State, id)
+	res, ok, err := gpu.GetAppVersionLatest(w.Client.Api.RPC.State, id)
 	if err != nil {
 		return 0, err
 	}
@@ -57,5 +57,5 @@ func (w *GpuApp) GetVersionLatest(id uint64) (uint64, error) {
 }
 
 func (w *GpuApp) GetSecretEnv(id uint64) ([]byte, bool, error) {
-	return weteegpu.GetSecretEnvsLatest(w.Client.Api.RPC.State, id)
+	return gpu.GetSecretEnvsLatest(w.Client.Api.RPC.State, id)
 }

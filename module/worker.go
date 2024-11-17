@@ -7,12 +7,12 @@ import (
 
 	chain "github.com/wetee-dao/go-sdk"
 	"github.com/wetee-dao/go-sdk/core"
-	"github.com/wetee-dao/go-sdk/pallet/weteeworker"
 
 	"github.com/centrifuge/go-substrate-rpc-client/v4/types"
 	"github.com/centrifuge/go-substrate-rpc-client/v4/types/codec"
 
 	gtypes "github.com/wetee-dao/go-sdk/pallet/types"
+	"github.com/wetee-dao/go-sdk/pallet/worker"
 )
 
 // Worker
@@ -24,7 +24,7 @@ type Worker struct {
 // 集群注册
 // Cluster register
 func (w *Worker) ClusterRegister(name string, ip []gtypes.Ip, port uint32, level uint8, untilFinalized bool) error {
-	runtimeCall := weteeworker.MakeClusterRegisterCall(
+	runtimeCall := worker.MakeClusterRegisterCall(
 		[]byte(name),
 		ip,
 		port,
@@ -39,7 +39,7 @@ func (w *Worker) ClusterRegister(name string, ip []gtypes.Ip, port uint32, level
 func (w *Worker) ClusterMortgage(id uint64, cpu uint32, mem uint32, cvm_cpu uint32, cvm_mem uint32, disk uint32, gpu uint32, deposit uint64, untilFinalized bool) error {
 	d := big.NewInt(0)
 	d.SetUint64(deposit)
-	runtimeCall := weteeworker.MakeClusterMortgageCall(
+	runtimeCall := worker.MakeClusterMortgageCall(
 		id,
 		cpu,
 		mem,
@@ -54,7 +54,7 @@ func (w *Worker) ClusterMortgage(id uint64, cpu uint32, mem uint32, cvm_cpu uint
 }
 
 func (w *Worker) ClusterWithdrawal(id gtypes.WorkId, val int64, untilFinalized bool) error {
-	runtimeCall := weteeworker.MakeClusterWithdrawalCall(
+	runtimeCall := worker.MakeClusterWithdrawalCall(
 		id,
 		types.NewU128(*big.NewInt(val)),
 	)
@@ -63,7 +63,7 @@ func (w *Worker) ClusterWithdrawal(id gtypes.WorkId, val int64, untilFinalized b
 }
 
 func (w *Worker) ClusterUnmortgage(clusterID uint64, id uint64, untilFinalized bool) error {
-	runtimeCall := weteeworker.MakeClusterUnmortgageCall(
+	runtimeCall := worker.MakeClusterUnmortgageCall(
 		clusterID,
 		id,
 	)
@@ -72,7 +72,7 @@ func (w *Worker) ClusterUnmortgage(clusterID uint64, id uint64, untilFinalized b
 }
 
 func (w *Worker) ClusterStop(clusterID uint64, untilFinalized bool) error {
-	runtimeCall := weteeworker.MakeClusterStopCall(
+	runtimeCall := worker.MakeClusterStopCall(
 		clusterID,
 	)
 
@@ -87,7 +87,7 @@ func (w *Worker) Getk8sClusterAccounts(publey []byte) (uint64, error) {
 	var mss [32]byte
 	copy(mss[:], publey)
 
-	res, ok, err := weteeworker.GetK8sClusterAccountsLatest(w.Client.Api.RPC.State, mss)
+	res, ok, err := worker.GetK8sClusterAccountsLatest(w.Client.Api.RPC.State, mss)
 	if err != nil {
 		return 0, err
 	}
@@ -148,7 +148,7 @@ func (w *Worker) WorkProofUpload(workId gtypes.WorkId, logHash []byte, crHash []
 	if len(pubkey) > 0 {
 		hasReport = true
 	}
-	runtimeCall := weteeworker.MakeWorkProofUploadCall(
+	runtimeCall := worker.MakeWorkProofUploadCall(
 		workId,
 		gtypes.OptionTProofOfWork{
 			IsNone: !hasHash,
@@ -169,11 +169,11 @@ func (w *Worker) WorkProofUpload(workId gtypes.WorkId, logHash []byte, crHash []
 }
 
 func (w *Worker) GetStage() (uint32, error) {
-	return weteeworker.GetStageLatest(w.Client.Api.RPC.State)
+	return worker.GetStageLatest(w.Client.Api.RPC.State)
 }
 
 func (w *Worker) GetWorkContract(workId gtypes.WorkId, id uint64) (*gtypes.ContractState, error) {
-	res, ok, err := weteeworker.GetWorkContractStateLatest(w.Client.Api.RPC.State, workId, id)
+	res, ok, err := worker.GetWorkContractStateLatest(w.Client.Api.RPC.State, workId, id)
 	if err != nil {
 		return nil, err
 	}
@@ -190,7 +190,7 @@ type ContractStateWrap struct {
 }
 
 func (w *Worker) GetCluster(clusterID uint64) (*gtypes.K8sCluster, error) {
-	c, ok, err := weteeworker.GetK8sClustersLatest(w.Client.Api.RPC.State, clusterID)
+	c, ok, err := worker.GetK8sClustersLatest(w.Client.Api.RPC.State, clusterID)
 	if err != nil {
 		return nil, err
 	}

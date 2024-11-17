@@ -2,8 +2,8 @@ package module
 
 import (
 	chain "github.com/wetee-dao/go-sdk"
+	"github.com/wetee-dao/go-sdk/pallet/task"
 	"github.com/wetee-dao/go-sdk/pallet/types"
-	"github.com/wetee-dao/go-sdk/pallet/weteetask"
 
 	"errors"
 
@@ -17,7 +17,7 @@ type Task struct {
 }
 
 func (w *Task) GetAccount(id uint64) ([]byte, error) {
-	res, ok, err := weteetask.GetTaskIdAccountsLatest(w.Client.Api.RPC.State, id)
+	res, ok, err := task.GetTaskIdAccountsLatest(w.Client.Api.RPC.State, id)
 	if err != nil {
 		return nil, err
 	}
@@ -28,7 +28,7 @@ func (w *Task) GetAccount(id uint64) ([]byte, error) {
 }
 
 func (w *Task) GetVersionLatest(id uint64) (uint64, error) {
-	res, ok, err := weteetask.GetTaskVersionLatest(w.Client.Api.RPC.State, id)
+	res, ok, err := task.GetTaskVersionLatest(w.Client.Api.RPC.State, id)
 	if err != nil {
 		return 0, err
 	}
@@ -46,7 +46,7 @@ func (w *Task) GetTask(publey []byte, id uint64) (*types.TeeTask, error) {
 	var mss [32]byte
 	copy(mss[:], publey)
 
-	res, ok, err := weteetask.GetTEETasksLatest(w.Client.Api.RPC.State, mss, id)
+	res, ok, err := task.GetTEETasksLatest(w.Client.Api.RPC.State, mss, id)
 	if err != nil {
 		return nil, err
 	}
@@ -57,5 +57,5 @@ func (w *Task) GetTask(publey []byte, id uint64) (*types.TeeTask, error) {
 }
 
 func (w *Task) GetSecretEnv(id uint64) ([]byte, bool, error) {
-	return weteetask.GetSecretEnvsLatest(w.Client.Api.RPC.State, id)
+	return task.GetSecretEnvsLatest(w.Client.Api.RPC.State, id)
 }

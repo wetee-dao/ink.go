@@ -5,12 +5,12 @@ import (
 	"fmt"
 
 	chain "github.com/wetee-dao/go-sdk"
+	"github.com/wetee-dao/go-sdk/pallet/app"
+	"github.com/wetee-dao/go-sdk/pallet/dsecret"
+	"github.com/wetee-dao/go-sdk/pallet/gpu"
+	"github.com/wetee-dao/go-sdk/pallet/task"
 	gtypes "github.com/wetee-dao/go-sdk/pallet/types"
-	"github.com/wetee-dao/go-sdk/pallet/weteeapp"
-	"github.com/wetee-dao/go-sdk/pallet/weteedsecret"
-	"github.com/wetee-dao/go-sdk/pallet/weteegpu"
-	"github.com/wetee-dao/go-sdk/pallet/weteetask"
-	"github.com/wetee-dao/go-sdk/pallet/weteeworker"
+	"github.com/wetee-dao/go-sdk/pallet/worker"
 )
 
 func GetAccount(client *chain.ChainClient, workID gtypes.WorkId) ([]byte, error) {
@@ -89,13 +89,13 @@ func GetWorkCodeSignature(client *chain.ChainClient, workID gtypes.WorkId) (ret 
 	// 判断工作类型是否为 APP
 	if workID.Wtype.IsAPP {
 		// 调用 weteeapp 获取代码签名的最新数据
-		return weteeapp.GetCodeSignatureLatest(client.Api.RPC.State, workID.Id)
+		return app.GetCodeSignatureLatest(client.Api.RPC.State, workID.Id)
 	} else if workID.Wtype.IsTASK {
 		// 调用 weteetask 获取代码签名的最新数据
-		return weteetask.GetCodeSignatureLatest(client.Api.RPC.State, workID.Id)
+		return task.GetCodeSignatureLatest(client.Api.RPC.State, workID.Id)
 	} else if workID.Wtype.IsGPU {
 		// 调用 weteegpu 获取代码签名的最新数据
-		return weteegpu.GetCodeSignatureLatest(client.Api.RPC.State, workID.Id)
+		return gpu.GetCodeSignatureLatest(client.Api.RPC.State, workID.Id)
 	}
 
 	// 如果工作类型未知，返回错误信息
@@ -106,12 +106,12 @@ func GetWorkCodeSignature(client *chain.ChainClient, workID gtypes.WorkId) (ret 
 // Get CodeSignature/SIgner
 func GetDsecretCode(client *chain.ChainClient) ([]byte, []byte, error) {
 	// 检查节点代码是否和 wetee 上要求的版本一致
-	codeSignature, err := weteedsecret.GetCodeSignatureLatest(client.Api.RPC.State)
+	codeSignature, err := dsecret.GetCodeSignatureLatest(client.Api.RPC.State)
 	if err != nil {
 		fmt.Println("Get code signature error:", err)
 		return nil, nil, err
 	}
-	codeSigner, err := weteedsecret.GetCodeSignerLatest(client.Api.RPC.State)
+	codeSigner, err := dsecret.GetCodeSignerLatest(client.Api.RPC.State)
 	if err != nil {
 		fmt.Println("Get code signer error:", err)
 		return nil, nil, err
@@ -123,7 +123,7 @@ func GetDsecretCode(client *chain.ChainClient) ([]byte, []byte, error) {
 // GetWorkerCode 函数用于获取 weteeworker 的代码签名和签名者
 func GetWorkerCode(client *chain.ChainClient) ([]byte, []byte, error) {
 	// 获取 weteeworker 的最新代码签名
-	codeSignature, err := weteeworker.GetCodeSignatureLatest(client.Api.RPC.State)
+	codeSignature, err := worker.GetCodeSignatureLatest(client.Api.RPC.State)
 	// 处理获取代码签名过程中的错误
 	if err != nil {
 		fmt.Println("Get code signature error:", err)
@@ -131,7 +131,7 @@ func GetWorkerCode(client *chain.ChainClient) ([]byte, []byte, error) {
 	}
 
 	// 获取 weteeworker 的最新代码签名者
-	codeSigner, err := weteeworker.GetCodeSignerLatest(client.Api.RPC.State)
+	codeSigner, err := worker.GetCodeSignerLatest(client.Api.RPC.State)
 	// 处理获取代码签名者过程中的错误
 	if err != nil {
 		fmt.Println("Get code signer error:", err)
@@ -165,13 +165,13 @@ func GetWorkSignature(client *chain.ChainClient, workID gtypes.WorkId) ([]byte, 
 	// 判断工作类型是否为 APP
 	if workID.Wtype.IsAPP {
 		// 调用 weteeapp 获取代码签名的最新数据
-		return weteeapp.GetCodeSignatureLatest(client.Api.RPC.State, workID.Id)
+		return app.GetCodeSignatureLatest(client.Api.RPC.State, workID.Id)
 	} else if workID.Wtype.IsTASK {
 		// 调用 weteetask 获取代码签名的最新数据
-		return weteetask.GetCodeSignatureLatest(client.Api.RPC.State, workID.Id)
+		return task.GetCodeSignatureLatest(client.Api.RPC.State, workID.Id)
 	} else if workID.Wtype.IsGPU {
 		// 调用 weteegpu 获取代码签名的最新数据
-		return weteegpu.GetCodeSignatureLatest(client.Api.RPC.State, workID.Id)
+		return gpu.GetCodeSignatureLatest(client.Api.RPC.State, workID.Id)
 	}
 
 	// 如果工作类型未知，返回错误信息
@@ -183,13 +183,13 @@ func GetWorkCodeSigner(client *chain.ChainClient, workID gtypes.WorkId) ([]byte,
 	// 判断工作类型是否为 APP
 	if workID.Wtype.IsAPP {
 		// 调用 weteeapp 获取代码签名者的最新数据
-		return weteeapp.GetCodeSignerLatest(client.Api.RPC.State, workID.Id)
+		return app.GetCodeSignerLatest(client.Api.RPC.State, workID.Id)
 	} else if workID.Wtype.IsTASK {
 		// 调用 weteetask 获取代码签名者的最新数据
-		return weteetask.GetCodeSignerLatest(client.Api.RPC.State, workID.Id)
+		return task.GetCodeSignerLatest(client.Api.RPC.State, workID.Id)
 	} else if workID.Wtype.IsGPU {
 		// 调用 weteegpu 获取代码签名者的最新数据
-		return weteegpu.GetCodeSignerLatest(client.Api.RPC.State, workID.Id)
+		return gpu.GetCodeSignerLatest(client.Api.RPC.State, workID.Id)
 	}
 
 	// 如果工作类型未知，返回错误信息
