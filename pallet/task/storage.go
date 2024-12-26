@@ -59,24 +59,24 @@ func GetNextTeeIdLatest(state state.State) (ret uint64, err error) {
 //
 //	Task
 //	应用
-func MakeTEETasksStorageKey(tupleOfByteArray32Uint6410 [32]byte, tupleOfByteArray32Uint6411 uint64) (types.StorageKey, error) {
+func MakeTEETasksStorageKey(tupleOfByteArray32Uint640 [32]byte, tupleOfByteArray32Uint641 uint64) (types.StorageKey, error) {
 	byteArgs := [][]byte{}
 	encBytes := []byte{}
 	var err error
-	encBytes, err = codec.Encode(tupleOfByteArray32Uint6410)
+	encBytes, err = codec.Encode(tupleOfByteArray32Uint640)
 	if err != nil {
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
-	encBytes, err = codec.Encode(tupleOfByteArray32Uint6411)
+	encBytes, err = codec.Encode(tupleOfByteArray32Uint641)
 	if err != nil {
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
 	return types.CreateStorageKey(&types1.Meta, "Task", "TEETasks", byteArgs...)
 }
-func GetTEETasks(state state.State, bhash types.Hash, tupleOfByteArray32Uint6410 [32]byte, tupleOfByteArray32Uint6411 uint64) (ret types1.TeeTask, isSome bool, err error) {
-	key, err := MakeTEETasksStorageKey(tupleOfByteArray32Uint6410, tupleOfByteArray32Uint6411)
+func GetTEETasks(state state.State, bhash types.Hash, tupleOfByteArray32Uint640 [32]byte, tupleOfByteArray32Uint641 uint64) (ret types1.TeeTask, isSome bool, err error) {
+	key, err := MakeTEETasksStorageKey(tupleOfByteArray32Uint640, tupleOfByteArray32Uint641)
 	if err != nil {
 		return
 	}
@@ -86,8 +86,8 @@ func GetTEETasks(state state.State, bhash types.Hash, tupleOfByteArray32Uint6410
 	}
 	return
 }
-func GetTEETasksLatest(state state.State, tupleOfByteArray32Uint6410 [32]byte, tupleOfByteArray32Uint6411 uint64) (ret types1.TeeTask, isSome bool, err error) {
-	key, err := MakeTEETasksStorageKey(tupleOfByteArray32Uint6410, tupleOfByteArray32Uint6411)
+func GetTEETasksLatest(state state.State, tupleOfByteArray32Uint640 [32]byte, tupleOfByteArray32Uint641 uint64) (ret types1.TeeTask, isSome bool, err error) {
+	key, err := MakeTEETasksStorageKey(tupleOfByteArray32Uint640, tupleOfByteArray32Uint641)
 	if err != nil {
 		return
 	}

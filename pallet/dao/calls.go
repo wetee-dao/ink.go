@@ -1,10 +1,13 @@
 package dao
 
-import types "github.com/wetee-dao/go-sdk/pallet/types"
+import (
+	types1 "github.com/centrifuge/go-substrate-rpc-client/v4/types"
+	types "github.com/wetee-dao/go-sdk/pallet/types"
+)
 
 // Create a DAO
 // 从一个通证池,创建一个组织
-func MakeCreateDaoCall(name0 []byte, desc1 []byte, purpose2 []byte, metaData3 []byte, imApi4 []byte, bg5 []byte, logo6 []byte, img7 []byte, homeUrl8 []byte) types.RuntimeCall {
+func MakeCreateDaoCall(name0 []byte, desc1 []byte, purpose2 []byte, metaData3 []byte) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsDao: true,
 		AsDaoField0: &types.WeteeDaoPalletCall{
@@ -13,18 +16,28 @@ func MakeCreateDaoCall(name0 []byte, desc1 []byte, purpose2 []byte, metaData3 []
 			AsCreateDaoDesc1:     desc1,
 			AsCreateDaoPurpose2:  purpose2,
 			AsCreateDaoMetaData3: metaData3,
-			AsCreateDaoImApi4:    imApi4,
-			AsCreateDaoBg5:       bg5,
-			AsCreateDaoLogo6:     logo6,
-			AsCreateDaoImg7:      img7,
-			AsCreateDaoHomeUrl8:  homeUrl8,
+		},
+	}
+}
+
+// init asset for dao
+// 初始化 DAO 通证
+func MakeInitAssetCall(daoId0 uint64, symbol1 []byte, decimals2 byte, initToken3 types1.U128) types.RuntimeCall {
+	return types.RuntimeCall{
+		IsDao: true,
+		AsDaoField0: &types.WeteeDaoPalletCall{
+			IsInitAsset:           true,
+			AsInitAssetDaoId0:     daoId0,
+			AsInitAssetSymbol1:    symbol1,
+			AsInitAssetDecimals2:  decimals2,
+			AsInitAssetInitToken3: initToken3,
 		},
 	}
 }
 
 // update dao info
 // 更新组织信息
-func MakeUpdateDaoCall(daoId0 uint64, name1 types.OptionTByteSlice, desc2 types.OptionTByteSlice, purpose3 types.OptionTByteSlice, metaData4 types.OptionTByteSlice, imApi5 types.OptionTByteSlice, bg6 types.OptionTByteSlice, logo7 types.OptionTByteSlice, img8 types.OptionTByteSlice, homeUrl9 types.OptionTByteSlice, status10 types.OptionTStatus) types.RuntimeCall {
+func MakeUpdateDaoCall(daoId0 uint64, name1 types.OptionTByteSlice, desc2 types.OptionTByteSlice, purpose3 types.OptionTByteSlice, metaData4 types.OptionTByteSlice, status5 types.OptionTStatus) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsDao: true,
 		AsDaoField0: &types.WeteeDaoPalletCall{
@@ -34,12 +47,7 @@ func MakeUpdateDaoCall(daoId0 uint64, name1 types.OptionTByteSlice, desc2 types.
 			AsUpdateDaoDesc2:     desc2,
 			AsUpdateDaoPurpose3:  purpose3,
 			AsUpdateDaoMetaData4: metaData4,
-			AsUpdateDaoImApi5:    imApi5,
-			AsUpdateDaoBg6:       bg6,
-			AsUpdateDaoLogo7:     logo7,
-			AsUpdateDaoImg8:      img8,
-			AsUpdateDaoHomeUrl9:  homeUrl9,
-			AsUpdateDaoStatus10:  status10,
+			AsUpdateDaoStatus5:   status5,
 		},
 	}
 }

@@ -12,7 +12,7 @@ import (
 //
 //	DKG 代码版本
 func MakeCodeSignatureStorageKey() (types.StorageKey, error) {
-	return types.CreateStorageKey(&types1.Meta, "Dsecret", "CodeSignature")
+	return types.CreateStorageKey(&types1.Meta, "DSecret", "CodeSignature")
 }
 
 var CodeSignatureResultDefaultBytes, _ = hex.DecodeString("00")
@@ -58,7 +58,7 @@ func GetCodeSignatureLatest(state state.State) (ret []byte, err error) {
 //
 //	DKG 代码打包签名人
 func MakeCodeSignerStorageKey() (types.StorageKey, error) {
-	return types.CreateStorageKey(&types1.Meta, "Dsecret", "CodeSigner")
+	return types.CreateStorageKey(&types1.Meta, "DSecret", "CodeSigner")
 }
 
 var CodeSignerResultDefaultBytes, _ = hex.DecodeString("00")
@@ -105,7 +105,7 @@ func GetCodeSignerLatest(state state.State) (ret []byte, err error) {
 //	The id of the next node to be created.
 //	获取下一个 node id
 func MakeNextNodeIdStorageKey() (types.StorageKey, error) {
-	return types.CreateStorageKey(&types1.Meta, "Dsecret", "NextNodeId")
+	return types.CreateStorageKey(&types1.Meta, "DSecret", "NextNodeId")
 }
 
 var NextNodeIdResultDefaultBytes, _ = hex.DecodeString("0000000000000000")
@@ -159,7 +159,7 @@ func MakeNodesStorageKey(uint640 uint64) (types.StorageKey, error) {
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
-	return types.CreateStorageKey(&types1.Meta, "Dsecret", "Nodes", byteArgs...)
+	return types.CreateStorageKey(&types1.Meta, "DSecret", "Nodes", byteArgs...)
 }
 func GetNodes(state state.State, bhash types.Hash, uint640 uint64) (ret [32]byte, isSome bool, err error) {
 	key, err := MakeNodesStorageKey(uint640)
@@ -197,7 +197,7 @@ func MakeNodePubServersStorageKey(uint640 uint64) (types.StorageKey, error) {
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
-	return types.CreateStorageKey(&types1.Meta, "Dsecret", "NodePubServers", byteArgs...)
+	return types.CreateStorageKey(&types1.Meta, "DSecret", "NodePubServers", byteArgs...)
 }
 func GetNodePubServers(state state.State, bhash types.Hash, uint640 uint64) (ret types1.P2PAddr, isSome bool, err error) {
 	key, err := MakeNodePubServersStorageKey(uint640)

@@ -228,7 +228,7 @@ func GetDeletionQueueLatest(state state.State, uint320 uint32) (ret []byte, isSo
 	return
 }
 
-// Make a storage key for DeletionQueueCounter id={{false [317]}}
+// Make a storage key for DeletionQueueCounter id={{false [527]}}
 //
 //	A pair of monotonic counters used to track the latest contract marked for deletion
 //	and the latest deleted contract in queue.
@@ -275,7 +275,7 @@ func GetDeletionQueueCounterLatest(state state.State) (ret types1.DeletionQueueM
 	return
 }
 
-// Make a storage key for MigrationInProgress id={{false [318]}}
+// Make a storage key for MigrationInProgress id={{false [528]}}
 //
 //	A migration can span across multiple blocks. This storage defines a cursor to track the
 //	progress of the migration, enabling us to resume from the last completed position.

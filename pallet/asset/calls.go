@@ -18,19 +18,6 @@ func MakeCreateAssetCall(metadata0 types.AssetMeta, initAmount1 types1.U128) typ
 	}
 }
 
-// You should have created the asset first.
-// 设置资产元数据
-func MakeSetMetadataCall(assetId0 uint64, metadata1 types.AssetMeta) types.RuntimeCall {
-	return types.RuntimeCall{
-		IsAsset: true,
-		AsAssetField0: &types.WeteeAssetsPalletCall{
-			IsSetMetadata:          true,
-			AsSetMetadataAssetId0:  assetId0,
-			AsSetMetadataMetadata1: metadata1,
-		},
-	}
-}
-
 // Users destroy their own assets.
 // 销毁资产
 func MakeBurnCall(assetId0 uint64, amount1 types1.U128) types.RuntimeCall {
@@ -60,6 +47,25 @@ func MakeTransferCall(dest0 types.MultiAddress, assetId1 uint64, amount2 types1.
 			AsTransferDest0:    dest0,
 			AsTransferAssetId1: assetId1,
 			AsTransferAmount2:  amount2,
+		},
+	}
+}
+func MakeSetParachainAssetCall(paraId0 uint32, metadata1 types.AssetMeta) types.RuntimeCall {
+	return types.RuntimeCall{
+		IsAsset: true,
+		AsAssetField0: &types.WeteeAssetsPalletCall{
+			IsSetParachainAsset:          true,
+			AsSetParachainAssetParaId0:   paraId0,
+			AsSetParachainAssetMetadata1: metadata1,
+		},
+	}
+}
+func MakeSetChainIdCall(paraId0 uint32) types.RuntimeCall {
+	return types.RuntimeCall{
+		IsAsset: true,
+		AsAssetField0: &types.WeteeAssetsPalletCall{
+			IsSetChainId:        true,
+			AsSetChainIdParaId0: paraId0,
 		},
 	}
 }

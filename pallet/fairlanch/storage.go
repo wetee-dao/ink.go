@@ -8,16 +8,16 @@ import (
 	types1 "github.com/wetee-dao/go-sdk/pallet/types"
 )
 
-// Make a storage key for BlockReward id={{false [338]}}
+// Make a storage key for BlockReward id={{false [548]}}
 //
 //	current block reward
 func MakeBlockRewardStorageKey() (types.StorageKey, error) {
 	return types.CreateStorageKey(&types1.Meta, "Fairlanch", "BlockReward")
 }
 
-var BlockRewardResultDefaultBytes, _ = hex.DecodeString("0000000000000000000000000000000000000000000000000000000000000000")
+var BlockRewardResultDefaultBytes, _ = hex.DecodeString("000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000")
 
-func GetBlockReward(state state.State, bhash types.Hash) (ret types1.TupleOfU128U128, err error) {
+func GetBlockReward(state state.State, bhash types.Hash) (ret types1.Tuple548, err error) {
 	key, err := MakeBlockRewardStorageKey()
 	if err != nil {
 		return
@@ -35,7 +35,7 @@ func GetBlockReward(state state.State, bhash types.Hash) (ret types1.TupleOfU128
 	}
 	return
 }
-func GetBlockRewardLatest(state state.State) (ret types1.TupleOfU128U128, err error) {
+func GetBlockRewardLatest(state state.State) (ret types1.Tuple548, err error) {
 	key, err := MakeBlockRewardStorageKey()
 	if err != nil {
 		return
@@ -57,24 +57,24 @@ func GetBlockRewardLatest(state state.State) (ret types1.TupleOfU128U128, err er
 // Make a storage key for Stakings
 //
 //	Staking
-func MakeStakingsStorageKey(tupleOfByteArray32Uint6410 [32]byte, tupleOfByteArray32Uint6411 uint64) (types.StorageKey, error) {
+func MakeStakingsStorageKey(tupleOfByteArray32Uint640 [32]byte, tupleOfByteArray32Uint641 uint64) (types.StorageKey, error) {
 	byteArgs := [][]byte{}
 	encBytes := []byte{}
 	var err error
-	encBytes, err = codec.Encode(tupleOfByteArray32Uint6410)
+	encBytes, err = codec.Encode(tupleOfByteArray32Uint640)
 	if err != nil {
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
-	encBytes, err = codec.Encode(tupleOfByteArray32Uint6411)
+	encBytes, err = codec.Encode(tupleOfByteArray32Uint641)
 	if err != nil {
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
 	return types.CreateStorageKey(&types1.Meta, "Fairlanch", "Stakings", byteArgs...)
 }
-func GetStakings(state state.State, bhash types.Hash, tupleOfByteArray32Uint6410 [32]byte, tupleOfByteArray32Uint6411 uint64) (ret types1.Wstaking, isSome bool, err error) {
-	key, err := MakeStakingsStorageKey(tupleOfByteArray32Uint6410, tupleOfByteArray32Uint6411)
+func GetStakings(state state.State, bhash types.Hash, tupleOfByteArray32Uint640 [32]byte, tupleOfByteArray32Uint641 uint64) (ret types.U128, isSome bool, err error) {
+	key, err := MakeStakingsStorageKey(tupleOfByteArray32Uint640, tupleOfByteArray32Uint641)
 	if err != nil {
 		return
 	}
@@ -84,14 +84,165 @@ func GetStakings(state state.State, bhash types.Hash, tupleOfByteArray32Uint6410
 	}
 	return
 }
-func GetStakingsLatest(state state.State, tupleOfByteArray32Uint6410 [32]byte, tupleOfByteArray32Uint6411 uint64) (ret types1.Wstaking, isSome bool, err error) {
-	key, err := MakeStakingsStorageKey(tupleOfByteArray32Uint6410, tupleOfByteArray32Uint6411)
+func GetStakingsLatest(state state.State, tupleOfByteArray32Uint640 [32]byte, tupleOfByteArray32Uint641 uint64) (ret types.U128, isSome bool, err error) {
+	key, err := MakeStakingsStorageKey(tupleOfByteArray32Uint640, tupleOfByteArray32Uint641)
 	if err != nil {
 		return
 	}
 	isSome, err = state.GetStorageLatest(key, &ret)
 	if err != nil {
 		return
+	}
+	return
+}
+
+// Make a storage key for ToStakings
+//
+//	Asset next to staking
+func MakeToStakingsStorageKey(tupleOfByteArray32Uint640 [32]byte, tupleOfByteArray32Uint641 uint64) (types.StorageKey, error) {
+	byteArgs := [][]byte{}
+	encBytes := []byte{}
+	var err error
+	encBytes, err = codec.Encode(tupleOfByteArray32Uint640)
+	if err != nil {
+		return nil, err
+	}
+	byteArgs = append(byteArgs, encBytes)
+	encBytes, err = codec.Encode(tupleOfByteArray32Uint641)
+	if err != nil {
+		return nil, err
+	}
+	byteArgs = append(byteArgs, encBytes)
+	return types.CreateStorageKey(&types1.Meta, "Fairlanch", "ToStakings", byteArgs...)
+}
+func GetToStakings(state state.State, bhash types.Hash, tupleOfByteArray32Uint640 [32]byte, tupleOfByteArray32Uint641 uint64) (ret types.U128, isSome bool, err error) {
+	key, err := MakeToStakingsStorageKey(tupleOfByteArray32Uint640, tupleOfByteArray32Uint641)
+	if err != nil {
+		return
+	}
+	isSome, err = state.GetStorage(key, &ret, bhash)
+	if err != nil {
+		return
+	}
+	return
+}
+func GetToStakingsLatest(state state.State, tupleOfByteArray32Uint640 [32]byte, tupleOfByteArray32Uint641 uint64) (ret types.U128, isSome bool, err error) {
+	key, err := MakeToStakingsStorageKey(tupleOfByteArray32Uint640, tupleOfByteArray32Uint641)
+	if err != nil {
+		return
+	}
+	isSome, err = state.GetStorageLatest(key, &ret)
+	if err != nil {
+		return
+	}
+	return
+}
+
+// Make a storage key for StakingTotal
+func MakeStakingTotalStorageKey(uint640 uint64) (types.StorageKey, error) {
+	byteArgs := [][]byte{}
+	encBytes := []byte{}
+	var err error
+	encBytes, err = codec.Encode(uint640)
+	if err != nil {
+		return nil, err
+	}
+	byteArgs = append(byteArgs, encBytes)
+	return types.CreateStorageKey(&types1.Meta, "Fairlanch", "StakingTotal", byteArgs...)
+}
+
+var StakingTotalResultDefaultBytes, _ = hex.DecodeString("00000000000000000000000000000000")
+
+func GetStakingTotal(state state.State, bhash types.Hash, uint640 uint64) (ret types.U128, err error) {
+	key, err := MakeStakingTotalStorageKey(uint640)
+	if err != nil {
+		return
+	}
+	var isSome bool
+	isSome, err = state.GetStorage(key, &ret, bhash)
+	if err != nil {
+		return
+	}
+	if !isSome {
+		err = codec.Decode(StakingTotalResultDefaultBytes, &ret)
+		if err != nil {
+			return
+		}
+	}
+	return
+}
+func GetStakingTotalLatest(state state.State, uint640 uint64) (ret types.U128, err error) {
+	key, err := MakeStakingTotalStorageKey(uint640)
+	if err != nil {
+		return
+	}
+	var isSome bool
+	isSome, err = state.GetStorageLatest(key, &ret)
+	if err != nil {
+		return
+	}
+	if !isSome {
+		err = codec.Decode(StakingTotalResultDefaultBytes, &ret)
+		if err != nil {
+			return
+		}
+	}
+	return
+}
+
+// Make a storage key for StakingTotalCache
+func MakeStakingTotalCacheStorageKey(tupleOfU128Uint640 types.U128, tupleOfU128Uint641 uint64) (types.StorageKey, error) {
+	byteArgs := [][]byte{}
+	encBytes := []byte{}
+	var err error
+	encBytes, err = codec.Encode(tupleOfU128Uint640)
+	if err != nil {
+		return nil, err
+	}
+	byteArgs = append(byteArgs, encBytes)
+	encBytes, err = codec.Encode(tupleOfU128Uint641)
+	if err != nil {
+		return nil, err
+	}
+	byteArgs = append(byteArgs, encBytes)
+	return types.CreateStorageKey(&types1.Meta, "Fairlanch", "StakingTotalCache", byteArgs...)
+}
+
+var StakingTotalCacheResultDefaultBytes, _ = hex.DecodeString("00000000000000000000000000000000")
+
+func GetStakingTotalCache(state state.State, bhash types.Hash, tupleOfU128Uint640 types.U128, tupleOfU128Uint641 uint64) (ret types.U128, err error) {
+	key, err := MakeStakingTotalCacheStorageKey(tupleOfU128Uint640, tupleOfU128Uint641)
+	if err != nil {
+		return
+	}
+	var isSome bool
+	isSome, err = state.GetStorage(key, &ret, bhash)
+	if err != nil {
+		return
+	}
+	if !isSome {
+		err = codec.Decode(StakingTotalCacheResultDefaultBytes, &ret)
+		if err != nil {
+			return
+		}
+	}
+	return
+}
+func GetStakingTotalCacheLatest(state state.State, tupleOfU128Uint640 types.U128, tupleOfU128Uint641 uint64) (ret types.U128, err error) {
+	key, err := MakeStakingTotalCacheStorageKey(tupleOfU128Uint640, tupleOfU128Uint641)
+	if err != nil {
+		return
+	}
+	var isSome bool
+	isSome, err = state.GetStorageLatest(key, &ret)
+	if err != nil {
+		return
+	}
+	if !isSome {
+		err = codec.Decode(StakingTotalCacheResultDefaultBytes, &ret)
+		if err != nil {
+			return
+		}
 	}
 	return
 }
@@ -117,7 +268,7 @@ func MakeNextStakingRewardsStorageKey(tupleOfUint64ByteArray320 uint64, tupleOfU
 	byteArgs = append(byteArgs, encBytes)
 	return types.CreateStorageKey(&types1.Meta, "Fairlanch", "NextStakingRewards", byteArgs...)
 }
-func GetNextStakingRewards(state state.State, bhash types.Hash, tupleOfUint64ByteArray320 uint64, tupleOfUint64ByteArray321 [32]byte) (ret []types1.TupleOfUint64U128, isSome bool, err error) {
+func GetNextStakingRewards(state state.State, bhash types.Hash, tupleOfUint64ByteArray320 uint64, tupleOfUint64ByteArray321 [32]byte) (ret bool, isSome bool, err error) {
 	key, err := MakeNextStakingRewardsStorageKey(tupleOfUint64ByteArray320, tupleOfUint64ByteArray321)
 	if err != nil {
 		return
@@ -128,7 +279,7 @@ func GetNextStakingRewards(state state.State, bhash types.Hash, tupleOfUint64Byt
 	}
 	return
 }
-func GetNextStakingRewardsLatest(state state.State, tupleOfUint64ByteArray320 uint64, tupleOfUint64ByteArray321 [32]byte) (ret []types1.TupleOfUint64U128, isSome bool, err error) {
+func GetNextStakingRewardsLatest(state state.State, tupleOfUint64ByteArray320 uint64, tupleOfUint64ByteArray321 [32]byte) (ret bool, isSome bool, err error) {
 	key, err := MakeNextStakingRewardsStorageKey(tupleOfUint64ByteArray320, tupleOfUint64ByteArray321)
 	if err != nil {
 		return
@@ -140,8 +291,8 @@ func GetNextStakingRewardsLatest(state state.State, tupleOfUint64ByteArray320 ui
 	return
 }
 
-// Make a storage key for UserReward
-func MakeUserRewardStorageKey(byteArray320 [32]byte) (types.StorageKey, error) {
+// Make a storage key for UserNextReward
+func MakeUserNextRewardStorageKey(byteArray320 [32]byte) (types.StorageKey, error) {
 	byteArgs := [][]byte{}
 	encBytes := []byte{}
 	var err error
@@ -150,13 +301,13 @@ func MakeUserRewardStorageKey(byteArray320 [32]byte) (types.StorageKey, error) {
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
-	return types.CreateStorageKey(&types1.Meta, "Fairlanch", "UserReward", byteArgs...)
+	return types.CreateStorageKey(&types1.Meta, "Fairlanch", "UserNextReward", byteArgs...)
 }
 
-var UserRewardResultDefaultBytes, _ = hex.DecodeString("000000000000000000000000000000000000000000000000")
+var UserNextRewardResultDefaultBytes, _ = hex.DecodeString("0000000000000000")
 
-func GetUserReward(state state.State, bhash types.Hash, byteArray320 [32]byte) (ret types1.TupleOfUint64U128, err error) {
-	key, err := MakeUserRewardStorageKey(byteArray320)
+func GetUserNextReward(state state.State, bhash types.Hash, byteArray320 [32]byte) (ret uint64, err error) {
+	key, err := MakeUserNextRewardStorageKey(byteArray320)
 	if err != nil {
 		return
 	}
@@ -166,15 +317,15 @@ func GetUserReward(state state.State, bhash types.Hash, byteArray320 [32]byte) (
 		return
 	}
 	if !isSome {
-		err = codec.Decode(UserRewardResultDefaultBytes, &ret)
+		err = codec.Decode(UserNextRewardResultDefaultBytes, &ret)
 		if err != nil {
 			return
 		}
 	}
 	return
 }
-func GetUserRewardLatest(state state.State, byteArray320 [32]byte) (ret types1.TupleOfUint64U128, err error) {
-	key, err := MakeUserRewardStorageKey(byteArray320)
+func GetUserNextRewardLatest(state state.State, byteArray320 [32]byte) (ret uint64, err error) {
+	key, err := MakeUserNextRewardStorageKey(byteArray320)
 	if err != nil {
 		return
 	}
@@ -184,62 +335,7 @@ func GetUserRewardLatest(state state.State, byteArray320 [32]byte) (ret types1.T
 		return
 	}
 	if !isSome {
-		err = codec.Decode(UserRewardResultDefaultBytes, &ret)
-		if err != nil {
-			return
-		}
-	}
-	return
-}
-
-// Make a storage key for EpochRewardTotal
-//
-//	epoch_reward_total
-//	奖励奖励池
-func MakeEpochRewardTotalStorageKey(uint640 uint64) (types.StorageKey, error) {
-	byteArgs := [][]byte{}
-	encBytes := []byte{}
-	var err error
-	encBytes, err = codec.Encode(uint640)
-	if err != nil {
-		return nil, err
-	}
-	byteArgs = append(byteArgs, encBytes)
-	return types.CreateStorageKey(&types1.Meta, "Fairlanch", "EpochRewardTotal", byteArgs...)
-}
-
-var EpochRewardTotalResultDefaultBytes, _ = hex.DecodeString("00000000000000000000000000000000")
-
-func GetEpochRewardTotal(state state.State, bhash types.Hash, uint640 uint64) (ret types.U128, err error) {
-	key, err := MakeEpochRewardTotalStorageKey(uint640)
-	if err != nil {
-		return
-	}
-	var isSome bool
-	isSome, err = state.GetStorage(key, &ret, bhash)
-	if err != nil {
-		return
-	}
-	if !isSome {
-		err = codec.Decode(EpochRewardTotalResultDefaultBytes, &ret)
-		if err != nil {
-			return
-		}
-	}
-	return
-}
-func GetEpochRewardTotalLatest(state state.State, uint640 uint64) (ret types.U128, err error) {
-	key, err := MakeEpochRewardTotalStorageKey(uint640)
-	if err != nil {
-		return
-	}
-	var isSome bool
-	isSome, err = state.GetStorageLatest(key, &ret)
-	if err != nil {
-		return
-	}
-	if !isSome {
-		err = codec.Decode(EpochRewardTotalResultDefaultBytes, &ret)
+		err = codec.Decode(UserNextRewardResultDefaultBytes, &ret)
 		if err != nil {
 			return
 		}

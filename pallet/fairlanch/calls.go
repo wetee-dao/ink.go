@@ -5,23 +5,81 @@ import (
 	types1 "github.com/wetee-dao/go-sdk/pallet/types"
 )
 
-func MakeVStakingCall(vassertId0 uint64, vamount1 types.U128) types1.RuntimeCall {
+// 质押 vtoken
+func MakeVStakingCall(vassetId0 uint64, vamount1 types.U128) types1.RuntimeCall {
 	return types1.RuntimeCall{
 		IsFairlanch: true,
 		AsFairlanchField0: &types1.WeteeFairlanchPalletCall{
-			IsVStaking:           true,
-			AsVStakingVassertId0: vassertId0,
-			AsVStakingVamount1:   vamount1,
+			IsVStaking:          true,
+			AsVStakingVassetId0: vassetId0,
+			AsVStakingVamount1:  vamount1,
 		},
 	}
 }
-func MakeVUnstakingCall(vassertId0 uint64, amount1 types.U128) types1.RuntimeCall {
+
+// 取消 vtoken 质押
+func MakeVUnstakingCall(vassetId0 uint64, amount1 types.U128) types1.RuntimeCall {
 	return types1.RuntimeCall{
 		IsFairlanch: true,
 		AsFairlanchField0: &types1.WeteeFairlanchPalletCall{
-			IsVUnstaking:           true,
-			AsVUnstakingVassertId0: vassertId0,
-			AsVUnstakingAmount1:    amount1,
+			IsVUnstaking:          true,
+			AsVUnstakingVassetId0: vassetId0,
+			AsVUnstakingAmount1:   amount1,
+		},
+	}
+}
+
+// 设置 economic 质押比例
+func MakeSetEconomicsCall(assetId0 uint64, rewardRate1 byte) types1.RuntimeCall {
+	return types1.RuntimeCall{
+		IsFairlanch: true,
+		AsFairlanchField0: &types1.WeteeFairlanchPalletCall{
+			IsSetEconomics:            true,
+			AsSetEconomicsAssetId0:    assetId0,
+			AsSetEconomicsRewardRate1: rewardRate1,
+		},
+	}
+}
+func MakeRegisterVtokenCall(vassetId0 uint64, assetId1 uint64, vassetPool2 types.U128, assetPool3 types.U128) types1.RuntimeCall {
+	return types1.RuntimeCall{
+		IsFairlanch: true,
+		AsFairlanchField0: &types1.WeteeFairlanchPalletCall{
+			IsRegisterVtoken:            true,
+			AsRegisterVtokenVassetId0:   vassetId0,
+			AsRegisterVtokenAssetId1:    assetId1,
+			AsRegisterVtokenVassetPool2: vassetPool2,
+			AsRegisterVtokenAssetPool3:  assetPool3,
+		},
+	}
+}
+func MakeSetVtokenRateCall(vassetId0 uint64, assetId1 uint64, vassetPool2 types.U128, assetPool3 types.U128) types1.RuntimeCall {
+	return types1.RuntimeCall{
+		IsFairlanch: true,
+		AsFairlanchField0: &types1.WeteeFairlanchPalletCall{
+			IsSetVtokenRate:            true,
+			AsSetVtokenRateVassetId0:   vassetId0,
+			AsSetVtokenRateAssetId1:    assetId1,
+			AsSetVtokenRateVassetPool2: vassetPool2,
+			AsSetVtokenRateAssetPool3:  assetPool3,
+		},
+	}
+}
+func MakeDeleteEconomicsCall(assetId0 uint64) types1.RuntimeCall {
+	return types1.RuntimeCall{
+		IsFairlanch: true,
+		AsFairlanchField0: &types1.WeteeFairlanchPalletCall{
+			IsDeleteEconomics:         true,
+			AsDeleteEconomicsAssetId0: assetId0,
+		},
+	}
+}
+func MakeVStakingCancelCall(vassetId0 uint64, vamount1 types.U128) types1.RuntimeCall {
+	return types1.RuntimeCall{
+		IsFairlanch: true,
+		AsFairlanchField0: &types1.WeteeFairlanchPalletCall{
+			IsVStakingCancel:          true,
+			AsVStakingCancelVassetId0: vassetId0,
+			AsVStakingCancelVamount1:  vamount1,
 		},
 	}
 }
