@@ -13,7 +13,6 @@ import (
 	"github.com/centrifuge/go-substrate-rpc-client/v4/xxhash"
 	"golang.org/x/crypto/blake2b"
 
-	"github.com/wetee-dao/go-sdk/core"
 	"github.com/wetee-dao/go-sdk/pallet/system"
 	gtypes "github.com/wetee-dao/go-sdk/pallet/types"
 )
@@ -93,7 +92,7 @@ func (c *ChainClient) GetBlockNumber() (types.BlockNumber, error) {
 
 // 获取账户信息
 // Get account info
-func (c *ChainClient) GetAccount(address *core.Signer) (*types.AccountInfo, error) {
+func (c *ChainClient) GetAccount(address *Signer) (*types.AccountInfo, error) {
 	key, err := types.CreateStorageKey(c.Meta, "System", "Account", address.PublicKey)
 	if err != nil {
 		panic(err)
@@ -105,7 +104,7 @@ func (c *ChainClient) GetAccount(address *core.Signer) (*types.AccountInfo, erro
 
 // 签名并提交交易
 // Sign and submit transaction
-func (c *ChainClient) SignAndSubmit(signer *core.Signer, runtimeCall gtypes.RuntimeCall, untilFinalized bool) error {
+func (c *ChainClient) SignAndSubmit(signer *Signer, runtimeCall gtypes.RuntimeCall, untilFinalized bool) error {
 	accountInfo, err := c.GetAccount(signer)
 	if err != nil {
 		return errors.New("GetAccountInfo error: " + err.Error())
@@ -115,7 +114,7 @@ func (c *ChainClient) SignAndSubmit(signer *core.Signer, runtimeCall gtypes.Runt
 		return errors.New("(runtimeCall).AsCall() error: " + err.Error())
 	}
 
-	ext := core.NewExtrinsic(call)
+	ext := NewExtrinsic(call)
 	o := types.SignatureOptions{
 		BlockHash:          c.Hash,
 		Era:                types.ExtrinsicEra{IsMortalEra: false},

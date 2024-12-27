@@ -2,7 +2,6 @@ package module
 
 import (
 	chain "github.com/wetee-dao/go-sdk"
-	"github.com/wetee-dao/go-sdk/core"
 	"github.com/wetee-dao/go-sdk/pallet/app"
 	"github.com/wetee-dao/go-sdk/pallet/types"
 
@@ -12,7 +11,7 @@ import (
 // Worker
 type App struct {
 	Client *chain.ChainClient
-	Signer *core.Signer
+	Signer *chain.Signer
 }
 
 func (w *App) GetApp(publey []byte, id uint64) (*types.TeeApp, error) {

@@ -6,7 +6,6 @@ import (
 	"math/big"
 
 	chain "github.com/wetee-dao/go-sdk"
-	"github.com/wetee-dao/go-sdk/core"
 
 	"github.com/centrifuge/go-substrate-rpc-client/v4/types"
 	"github.com/centrifuge/go-substrate-rpc-client/v4/types/codec"
@@ -18,7 +17,7 @@ import (
 // Worker
 type Worker struct {
 	Client *chain.ChainClient
-	Signer *core.Signer
+	Signer *chain.Signer
 }
 
 // 集群注册
