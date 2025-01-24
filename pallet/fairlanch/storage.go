@@ -8,8 +8,9 @@ import (
 	types1 "github.com/wetee-dao/go-sdk/pallet/types"
 )
 
-// Make a storage key for BlockReward id={{false [548]}}
+// Make a storage key for BlockReward id={{false [546]}}
 //
+//	当前周期的区块奖励
 //	current block reward
 func MakeBlockRewardStorageKey() (types.StorageKey, error) {
 	return types.CreateStorageKey(&types1.Meta, "Fairlanch", "BlockReward")
@@ -17,7 +18,7 @@ func MakeBlockRewardStorageKey() (types.StorageKey, error) {
 
 var BlockRewardResultDefaultBytes, _ = hex.DecodeString("000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000")
 
-func GetBlockReward(state state.State, bhash types.Hash) (ret types1.Tuple548, err error) {
+func GetBlockReward(state state.State, bhash types.Hash) (ret types1.Tuple546, err error) {
 	key, err := MakeBlockRewardStorageKey()
 	if err != nil {
 		return
@@ -35,7 +36,7 @@ func GetBlockReward(state state.State, bhash types.Hash) (ret types1.Tuple548, e
 	}
 	return
 }
-func GetBlockRewardLatest(state state.State) (ret types1.Tuple548, err error) {
+func GetBlockRewardLatest(state state.State) (ret types1.Tuple546, err error) {
 	key, err := MakeBlockRewardStorageKey()
 	if err != nil {
 		return
@@ -56,6 +57,7 @@ func GetBlockRewardLatest(state state.State) (ret types1.Tuple548, err error) {
 
 // Make a storage key for Stakings
 //
+//	用户质押金额
 //	Staking
 func MakeStakingsStorageKey(tupleOfByteArray32Uint640 [32]byte, tupleOfByteArray32Uint641 uint64) (types.StorageKey, error) {
 	byteArgs := [][]byte{}
@@ -98,6 +100,7 @@ func GetStakingsLatest(state state.State, tupleOfByteArray32Uint640 [32]byte, tu
 
 // Make a storage key for ToStakings
 //
+//	下个周期进入质押的金额
 //	Asset next to staking
 func MakeToStakingsStorageKey(tupleOfByteArray32Uint640 [32]byte, tupleOfByteArray32Uint641 uint64) (types.StorageKey, error) {
 	byteArgs := [][]byte{}
@@ -138,7 +141,57 @@ func GetToStakingsLatest(state state.State, tupleOfByteArray32Uint640 [32]byte, 
 	return
 }
 
+// Make a storage key for ToStakingTotal id={{false [4]}}
+//
+//	下个周期进入质押的用户数
+//	Asset next to staking total user
+func MakeToStakingTotalStorageKey() (types.StorageKey, error) {
+	return types.CreateStorageKey(&types1.Meta, "Fairlanch", "ToStakingTotal")
+}
+
+var ToStakingTotalResultDefaultBytes, _ = hex.DecodeString("00000000")
+
+func GetToStakingTotal(state state.State, bhash types.Hash) (ret uint32, err error) {
+	key, err := MakeToStakingTotalStorageKey()
+	if err != nil {
+		return
+	}
+	var isSome bool
+	isSome, err = state.GetStorage(key, &ret, bhash)
+	if err != nil {
+		return
+	}
+	if !isSome {
+		err = codec.Decode(ToStakingTotalResultDefaultBytes, &ret)
+		if err != nil {
+			return
+		}
+	}
+	return
+}
+func GetToStakingTotalLatest(state state.State) (ret uint32, err error) {
+	key, err := MakeToStakingTotalStorageKey()
+	if err != nil {
+		return
+	}
+	var isSome bool
+	isSome, err = state.GetStorageLatest(key, &ret)
+	if err != nil {
+		return
+	}
+	if !isSome {
+		err = codec.Decode(ToStakingTotalResultDefaultBytes, &ret)
+		if err != nil {
+			return
+		}
+	}
+	return
+}
+
 // Make a storage key for StakingTotal
+//
+//	质押总金额
+//	total staking token amount
 func MakeStakingTotalStorageKey(uint640 uint64) (types.StorageKey, error) {
 	byteArgs := [][]byte{}
 	encBytes := []byte{}
@@ -190,7 +243,65 @@ func GetStakingTotalLatest(state state.State, uint640 uint64) (ret types.U128, e
 	return
 }
 
+// Make a storage key for StakingQuota
+//
+//	质押限额
+//	quota of asset staking
+func MakeStakingQuotaStorageKey(uint640 uint64) (types.StorageKey, error) {
+	byteArgs := [][]byte{}
+	encBytes := []byte{}
+	var err error
+	encBytes, err = codec.Encode(uint640)
+	if err != nil {
+		return nil, err
+	}
+	byteArgs = append(byteArgs, encBytes)
+	return types.CreateStorageKey(&types1.Meta, "Fairlanch", "StakingQuota", byteArgs...)
+}
+
+var StakingQuotaResultDefaultBytes, _ = hex.DecodeString("00000000000000000000000000000000")
+
+func GetStakingQuota(state state.State, bhash types.Hash, uint640 uint64) (ret types.U128, err error) {
+	key, err := MakeStakingQuotaStorageKey(uint640)
+	if err != nil {
+		return
+	}
+	var isSome bool
+	isSome, err = state.GetStorage(key, &ret, bhash)
+	if err != nil {
+		return
+	}
+	if !isSome {
+		err = codec.Decode(StakingQuotaResultDefaultBytes, &ret)
+		if err != nil {
+			return
+		}
+	}
+	return
+}
+func GetStakingQuotaLatest(state state.State, uint640 uint64) (ret types.U128, err error) {
+	key, err := MakeStakingQuotaStorageKey(uint640)
+	if err != nil {
+		return
+	}
+	var isSome bool
+	isSome, err = state.GetStorageLatest(key, &ret)
+	if err != nil {
+		return
+	}
+	if !isSome {
+		err = codec.Decode(StakingQuotaResultDefaultBytes, &ret)
+		if err != nil {
+			return
+		}
+	}
+	return
+}
+
 // Make a storage key for StakingTotalCache
+//
+//	质押总金额缓存
+//	cache of staking total
 func MakeStakingTotalCacheStorageKey(tupleOfU128Uint640 types.U128, tupleOfU128Uint641 uint64) (types.StorageKey, error) {
 	byteArgs := [][]byte{}
 	encBytes := []byte{}

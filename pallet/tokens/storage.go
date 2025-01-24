@@ -3,30 +3,30 @@ package tokens
 import (
 	"encoding/hex"
 	state "github.com/centrifuge/go-substrate-rpc-client/v4/rpc/state"
-	types1 "github.com/centrifuge/go-substrate-rpc-client/v4/types"
+	types "github.com/centrifuge/go-substrate-rpc-client/v4/types"
 	codec "github.com/centrifuge/go-substrate-rpc-client/v4/types/codec"
-	types "github.com/wetee-dao/go-sdk/pallet/types"
+	types1 "github.com/wetee-dao/go-sdk/pallet/types"
 )
 
 // Make a storage key for TotalIssuance
 //
 //	The total issuance of a token type.
-func MakeTotalIssuanceStorageKey(currencyId0 types.CurrencyId) (types1.StorageKey, error) {
+func MakeTotalIssuanceStorageKey(uint640 uint64) (types.StorageKey, error) {
 	byteArgs := [][]byte{}
 	encBytes := []byte{}
 	var err error
-	encBytes, err = codec.Encode(currencyId0)
+	encBytes, err = codec.Encode(uint640)
 	if err != nil {
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
-	return types1.CreateStorageKey(&types.Meta, "Tokens", "TotalIssuance", byteArgs...)
+	return types.CreateStorageKey(&types1.Meta, "Tokens", "TotalIssuance", byteArgs...)
 }
 
 var TotalIssuanceResultDefaultBytes, _ = hex.DecodeString("00000000000000000000000000000000")
 
-func GetTotalIssuance(state state.State, bhash types1.Hash, currencyId0 types.CurrencyId) (ret types1.U128, err error) {
-	key, err := MakeTotalIssuanceStorageKey(currencyId0)
+func GetTotalIssuance(state state.State, bhash types.Hash, uint640 uint64) (ret types.U128, err error) {
+	key, err := MakeTotalIssuanceStorageKey(uint640)
 	if err != nil {
 		return
 	}
@@ -43,8 +43,8 @@ func GetTotalIssuance(state state.State, bhash types1.Hash, currencyId0 types.Cu
 	}
 	return
 }
-func GetTotalIssuanceLatest(state state.State, currencyId0 types.CurrencyId) (ret types1.U128, err error) {
-	key, err := MakeTotalIssuanceStorageKey(currencyId0)
+func GetTotalIssuanceLatest(state state.State, uint640 uint64) (ret types.U128, err error) {
+	key, err := MakeTotalIssuanceStorageKey(uint640)
 	if err != nil {
 		return
 	}
@@ -66,27 +66,27 @@ func GetTotalIssuanceLatest(state state.State, currencyId0 types.CurrencyId) (re
 //
 //	Any liquidity locks of a token type under an account.
 //	NOTE: Should only be accessed when setting, changing and freeing a lock.
-func MakeLocksStorageKey(tupleOfByteArray32CurrencyId0 [32]byte, tupleOfByteArray32CurrencyId1 types.CurrencyId) (types1.StorageKey, error) {
+func MakeLocksStorageKey(tupleOfByteArray32Uint640 [32]byte, tupleOfByteArray32Uint641 uint64) (types.StorageKey, error) {
 	byteArgs := [][]byte{}
 	encBytes := []byte{}
 	var err error
-	encBytes, err = codec.Encode(tupleOfByteArray32CurrencyId0)
+	encBytes, err = codec.Encode(tupleOfByteArray32Uint640)
 	if err != nil {
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
-	encBytes, err = codec.Encode(tupleOfByteArray32CurrencyId1)
+	encBytes, err = codec.Encode(tupleOfByteArray32Uint641)
 	if err != nil {
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
-	return types1.CreateStorageKey(&types.Meta, "Tokens", "Locks", byteArgs...)
+	return types.CreateStorageKey(&types1.Meta, "Tokens", "Locks", byteArgs...)
 }
 
 var LocksResultDefaultBytes, _ = hex.DecodeString("00")
 
-func GetLocks(state state.State, bhash types1.Hash, tupleOfByteArray32CurrencyId0 [32]byte, tupleOfByteArray32CurrencyId1 types.CurrencyId) (ret []types.BalanceLock1, err error) {
-	key, err := MakeLocksStorageKey(tupleOfByteArray32CurrencyId0, tupleOfByteArray32CurrencyId1)
+func GetLocks(state state.State, bhash types.Hash, tupleOfByteArray32Uint640 [32]byte, tupleOfByteArray32Uint641 uint64) (ret []types1.BalanceLock1, err error) {
+	key, err := MakeLocksStorageKey(tupleOfByteArray32Uint640, tupleOfByteArray32Uint641)
 	if err != nil {
 		return
 	}
@@ -103,8 +103,8 @@ func GetLocks(state state.State, bhash types1.Hash, tupleOfByteArray32CurrencyId
 	}
 	return
 }
-func GetLocksLatest(state state.State, tupleOfByteArray32CurrencyId0 [32]byte, tupleOfByteArray32CurrencyId1 types.CurrencyId) (ret []types.BalanceLock1, err error) {
-	key, err := MakeLocksStorageKey(tupleOfByteArray32CurrencyId0, tupleOfByteArray32CurrencyId1)
+func GetLocksLatest(state state.State, tupleOfByteArray32Uint640 [32]byte, tupleOfByteArray32Uint641 uint64) (ret []types1.BalanceLock1, err error) {
+	key, err := MakeLocksStorageKey(tupleOfByteArray32Uint640, tupleOfByteArray32Uint641)
 	if err != nil {
 		return
 	}
@@ -130,27 +130,27 @@ func GetLocksLatest(state state.State, tupleOfByteArray32CurrencyId0 [32]byte, t
 //
 //	NOTE: This is only used in the case that this module is used to store
 //	balances.
-func MakeAccountsStorageKey(tupleOfByteArray32CurrencyId0 [32]byte, tupleOfByteArray32CurrencyId1 types.CurrencyId) (types1.StorageKey, error) {
+func MakeAccountsStorageKey(tupleOfByteArray32Uint640 [32]byte, tupleOfByteArray32Uint641 uint64) (types.StorageKey, error) {
 	byteArgs := [][]byte{}
 	encBytes := []byte{}
 	var err error
-	encBytes, err = codec.Encode(tupleOfByteArray32CurrencyId0)
+	encBytes, err = codec.Encode(tupleOfByteArray32Uint640)
 	if err != nil {
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
-	encBytes, err = codec.Encode(tupleOfByteArray32CurrencyId1)
+	encBytes, err = codec.Encode(tupleOfByteArray32Uint641)
 	if err != nil {
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
-	return types1.CreateStorageKey(&types.Meta, "Tokens", "Accounts", byteArgs...)
+	return types.CreateStorageKey(&types1.Meta, "Tokens", "Accounts", byteArgs...)
 }
 
 var AccountsResultDefaultBytes, _ = hex.DecodeString("000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000")
 
-func GetAccounts(state state.State, bhash types1.Hash, tupleOfByteArray32CurrencyId0 [32]byte, tupleOfByteArray32CurrencyId1 types.CurrencyId) (ret types.AccountData1, err error) {
-	key, err := MakeAccountsStorageKey(tupleOfByteArray32CurrencyId0, tupleOfByteArray32CurrencyId1)
+func GetAccounts(state state.State, bhash types.Hash, tupleOfByteArray32Uint640 [32]byte, tupleOfByteArray32Uint641 uint64) (ret types1.AccountData1, err error) {
+	key, err := MakeAccountsStorageKey(tupleOfByteArray32Uint640, tupleOfByteArray32Uint641)
 	if err != nil {
 		return
 	}
@@ -167,8 +167,8 @@ func GetAccounts(state state.State, bhash types1.Hash, tupleOfByteArray32Currenc
 	}
 	return
 }
-func GetAccountsLatest(state state.State, tupleOfByteArray32CurrencyId0 [32]byte, tupleOfByteArray32CurrencyId1 types.CurrencyId) (ret types.AccountData1, err error) {
-	key, err := MakeAccountsStorageKey(tupleOfByteArray32CurrencyId0, tupleOfByteArray32CurrencyId1)
+func GetAccountsLatest(state state.State, tupleOfByteArray32Uint640 [32]byte, tupleOfByteArray32Uint641 uint64) (ret types1.AccountData1, err error) {
+	key, err := MakeAccountsStorageKey(tupleOfByteArray32Uint640, tupleOfByteArray32Uint641)
 	if err != nil {
 		return
 	}
@@ -189,27 +189,27 @@ func GetAccountsLatest(state state.State, tupleOfByteArray32CurrencyId0 [32]byte
 // Make a storage key for Reserves
 //
 //	Named reserves on some account balances.
-func MakeReservesStorageKey(tupleOfByteArray32CurrencyId0 [32]byte, tupleOfByteArray32CurrencyId1 types.CurrencyId) (types1.StorageKey, error) {
+func MakeReservesStorageKey(tupleOfByteArray32Uint640 [32]byte, tupleOfByteArray32Uint641 uint64) (types.StorageKey, error) {
 	byteArgs := [][]byte{}
 	encBytes := []byte{}
 	var err error
-	encBytes, err = codec.Encode(tupleOfByteArray32CurrencyId0)
+	encBytes, err = codec.Encode(tupleOfByteArray32Uint640)
 	if err != nil {
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
-	encBytes, err = codec.Encode(tupleOfByteArray32CurrencyId1)
+	encBytes, err = codec.Encode(tupleOfByteArray32Uint641)
 	if err != nil {
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
-	return types1.CreateStorageKey(&types.Meta, "Tokens", "Reserves", byteArgs...)
+	return types.CreateStorageKey(&types1.Meta, "Tokens", "Reserves", byteArgs...)
 }
 
 var ReservesResultDefaultBytes, _ = hex.DecodeString("00")
 
-func GetReserves(state state.State, bhash types1.Hash, tupleOfByteArray32CurrencyId0 [32]byte, tupleOfByteArray32CurrencyId1 types.CurrencyId) (ret []types.ReserveDataReserveIdentifierByteArray8, err error) {
-	key, err := MakeReservesStorageKey(tupleOfByteArray32CurrencyId0, tupleOfByteArray32CurrencyId1)
+func GetReserves(state state.State, bhash types.Hash, tupleOfByteArray32Uint640 [32]byte, tupleOfByteArray32Uint641 uint64) (ret []types1.ReserveDataReserveIdentifierByteArray8, err error) {
+	key, err := MakeReservesStorageKey(tupleOfByteArray32Uint640, tupleOfByteArray32Uint641)
 	if err != nil {
 		return
 	}
@@ -226,8 +226,8 @@ func GetReserves(state state.State, bhash types1.Hash, tupleOfByteArray32Currenc
 	}
 	return
 }
-func GetReservesLatest(state state.State, tupleOfByteArray32CurrencyId0 [32]byte, tupleOfByteArray32CurrencyId1 types.CurrencyId) (ret []types.ReserveDataReserveIdentifierByteArray8, err error) {
-	key, err := MakeReservesStorageKey(tupleOfByteArray32CurrencyId0, tupleOfByteArray32CurrencyId1)
+func GetReservesLatest(state state.State, tupleOfByteArray32Uint640 [32]byte, tupleOfByteArray32Uint641 uint64) (ret []types1.ReserveDataReserveIdentifierByteArray8, err error) {
+	key, err := MakeReservesStorageKey(tupleOfByteArray32Uint640, tupleOfByteArray32Uint641)
 	if err != nil {
 		return
 	}

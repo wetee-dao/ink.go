@@ -282,7 +282,7 @@ func MakeVersionNotifyTargetsStorageKey(tupleOfUint32VersionedLocation0 uint32, 
 	byteArgs = append(byteArgs, encBytes)
 	return types.CreateStorageKey(&types1.Meta, "PolkadotXcm", "VersionNotifyTargets", byteArgs...)
 }
-func GetVersionNotifyTargets(state state.State, bhash types.Hash, tupleOfUint32VersionedLocation0 uint32, tupleOfUint32VersionedLocation1 types1.VersionedLocation) (ret types1.Tuple408, isSome bool, err error) {
+func GetVersionNotifyTargets(state state.State, bhash types.Hash, tupleOfUint32VersionedLocation0 uint32, tupleOfUint32VersionedLocation1 types1.VersionedLocation) (ret types1.Tuple409, isSome bool, err error) {
 	key, err := MakeVersionNotifyTargetsStorageKey(tupleOfUint32VersionedLocation0, tupleOfUint32VersionedLocation1)
 	if err != nil {
 		return
@@ -293,7 +293,7 @@ func GetVersionNotifyTargets(state state.State, bhash types.Hash, tupleOfUint32V
 	}
 	return
 }
-func GetVersionNotifyTargetsLatest(state state.State, tupleOfUint32VersionedLocation0 uint32, tupleOfUint32VersionedLocation1 types1.VersionedLocation) (ret types1.Tuple408, isSome bool, err error) {
+func GetVersionNotifyTargetsLatest(state state.State, tupleOfUint32VersionedLocation0 uint32, tupleOfUint32VersionedLocation1 types1.VersionedLocation) (ret types1.Tuple409, isSome bool, err error) {
 	key, err := MakeVersionNotifyTargetsStorageKey(tupleOfUint32VersionedLocation0, tupleOfUint32VersionedLocation1)
 	if err != nil {
 		return
@@ -305,7 +305,7 @@ func GetVersionNotifyTargetsLatest(state state.State, tupleOfUint32VersionedLoca
 	return
 }
 
-// Make a storage key for VersionDiscoveryQueue id={{false [409]}}
+// Make a storage key for VersionDiscoveryQueue id={{false [410]}}
 //
 //	Destinations whose latest XCM version we would like to know. Duplicates not allowed, and
 //	the `u32` counter is the number of times that a send to the destination has been attempted,
@@ -353,7 +353,7 @@ func GetVersionDiscoveryQueueLatest(state state.State) (ret []types1.TupleOfVers
 	return
 }
 
-// Make a storage key for CurrentMigration id={{false [412]}}
+// Make a storage key for CurrentMigration id={{false [413]}}
 //
 //	The current migration's stage, if any.
 func MakeCurrentMigrationStorageKey() (types.StorageKey, error) {
@@ -385,29 +385,29 @@ func GetCurrentMigrationLatest(state state.State) (ret types1.VersionMigrationSt
 // Make a storage key for RemoteLockedFungibles
 //
 //	Fungible assets which we know are locked on a remote chain.
-func MakeRemoteLockedFungiblesStorageKey(tuple4130 uint32, tuple4131 [32]byte, tuple4132 types1.VersionedAssetId) (types.StorageKey, error) {
+func MakeRemoteLockedFungiblesStorageKey(tuple4140 uint32, tuple4141 [32]byte, tuple4142 types1.VersionedAssetId) (types.StorageKey, error) {
 	byteArgs := [][]byte{}
 	encBytes := []byte{}
 	var err error
-	encBytes, err = codec.Encode(tuple4130)
+	encBytes, err = codec.Encode(tuple4140)
 	if err != nil {
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
-	encBytes, err = codec.Encode(tuple4131)
+	encBytes, err = codec.Encode(tuple4141)
 	if err != nil {
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
-	encBytes, err = codec.Encode(tuple4132)
+	encBytes, err = codec.Encode(tuple4142)
 	if err != nil {
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
 	return types.CreateStorageKey(&types1.Meta, "PolkadotXcm", "RemoteLockedFungibles", byteArgs...)
 }
-func GetRemoteLockedFungibles(state state.State, bhash types.Hash, tuple4130 uint32, tuple4131 [32]byte, tuple4132 types1.VersionedAssetId) (ret types1.RemoteLockedFungibleRecord, isSome bool, err error) {
-	key, err := MakeRemoteLockedFungiblesStorageKey(tuple4130, tuple4131, tuple4132)
+func GetRemoteLockedFungibles(state state.State, bhash types.Hash, tuple4140 uint32, tuple4141 [32]byte, tuple4142 types1.VersionedAssetId) (ret types1.RemoteLockedFungibleRecord, isSome bool, err error) {
+	key, err := MakeRemoteLockedFungiblesStorageKey(tuple4140, tuple4141, tuple4142)
 	if err != nil {
 		return
 	}
@@ -417,8 +417,8 @@ func GetRemoteLockedFungibles(state state.State, bhash types.Hash, tuple4130 uin
 	}
 	return
 }
-func GetRemoteLockedFungiblesLatest(state state.State, tuple4130 uint32, tuple4131 [32]byte, tuple4132 types1.VersionedAssetId) (ret types1.RemoteLockedFungibleRecord, isSome bool, err error) {
-	key, err := MakeRemoteLockedFungiblesStorageKey(tuple4130, tuple4131, tuple4132)
+func GetRemoteLockedFungiblesLatest(state state.State, tuple4140 uint32, tuple4141 [32]byte, tuple4142 types1.VersionedAssetId) (ret types1.RemoteLockedFungibleRecord, isSome bool, err error) {
+	key, err := MakeRemoteLockedFungiblesStorageKey(tuple4140, tuple4141, tuple4142)
 	if err != nil {
 		return
 	}

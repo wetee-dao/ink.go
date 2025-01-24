@@ -1,8 +1,8 @@
 package xtokens
 
 import (
-	types1 "github.com/centrifuge/go-substrate-rpc-client/v4/types"
-	types "github.com/wetee-dao/go-sdk/pallet/types"
+	types "github.com/centrifuge/go-substrate-rpc-client/v4/types"
+	types1 "github.com/wetee-dao/go-sdk/pallet/types"
 )
 
 // Transfer native currencies.
@@ -17,10 +17,10 @@ import (
 // received. Receiving depends on if the XCM message could be delivered
 // by the network, and if the receiving chain would handle
 // messages correctly.
-func MakeTransferCall(currencyId0 types.CurrencyId, amount1 types1.U128, dest2 types.VersionedLocation, destWeightLimit3 types.WeightLimit) types.RuntimeCall {
-	return types.RuntimeCall{
+func MakeTransferCall(currencyId0 uint64, amount1 types.U128, dest2 types1.VersionedLocation, destWeightLimit3 types1.WeightLimit) types1.RuntimeCall {
+	return types1.RuntimeCall{
 		IsXTokens: true,
-		AsXTokensField0: &types.OrmlXtokensModuleCall{
+		AsXTokensField0: &types1.OrmlXtokensModuleCall{
 			IsTransfer:                 true,
 			AsTransferCurrencyId0:      currencyId0,
 			AsTransferAmount1:          amount1,
@@ -42,10 +42,10 @@ func MakeTransferCall(currencyId0 types.CurrencyId, amount1 types1.U128, dest2 t
 // received. Receiving depends on if the XCM message could be delivered
 // by the network, and if the receiving chain would handle
 // messages correctly.
-func MakeTransferMultiassetCall(asset0 types.VersionedAsset, dest1 types.VersionedLocation, destWeightLimit2 types.WeightLimit) types.RuntimeCall {
-	return types.RuntimeCall{
+func MakeTransferMultiassetCall(asset0 types1.VersionedAsset, dest1 types1.VersionedLocation, destWeightLimit2 types1.WeightLimit) types1.RuntimeCall {
+	return types1.RuntimeCall{
 		IsXTokens: true,
-		AsXTokensField0: &types.OrmlXtokensModuleCall{
+		AsXTokensField0: &types1.OrmlXtokensModuleCall{
 			IsTransferMultiasset:                 true,
 			AsTransferMultiassetAsset0:           &asset0,
 			AsTransferMultiassetDest1:            &dest1,
@@ -75,10 +75,10 @@ func MakeTransferMultiassetCall(asset0 types.VersionedAsset, dest1 types.Version
 // received. Receiving depends on if the XCM message could be delivered
 // by the network, and if the receiving chain would handle
 // messages correctly.
-func MakeTransferWithFeeCall(currencyId0 types.CurrencyId, amount1 types1.U128, fee2 types1.U128, dest3 types.VersionedLocation, destWeightLimit4 types.WeightLimit) types.RuntimeCall {
-	return types.RuntimeCall{
+func MakeTransferWithFeeCall(currencyId0 uint64, amount1 types.U128, fee2 types.U128, dest3 types1.VersionedLocation, destWeightLimit4 types1.WeightLimit) types1.RuntimeCall {
+	return types1.RuntimeCall{
 		IsXTokens: true,
-		AsXTokensField0: &types.OrmlXtokensModuleCall{
+		AsXTokensField0: &types1.OrmlXtokensModuleCall{
 			IsTransferWithFee:                 true,
 			AsTransferWithFeeCurrencyId0:      currencyId0,
 			AsTransferWithFeeAmount1:          amount1,
@@ -110,10 +110,10 @@ func MakeTransferWithFeeCall(currencyId0 types.CurrencyId, amount1 types1.U128, 
 // received. Receiving depends on if the XCM message could be delivered
 // by the network, and if the receiving chain would handle
 // messages correctly.
-func MakeTransferMultiassetWithFeeCall(asset0 types.VersionedAsset, fee1 types.VersionedAsset, dest2 types.VersionedLocation, destWeightLimit3 types.WeightLimit) types.RuntimeCall {
-	return types.RuntimeCall{
+func MakeTransferMultiassetWithFeeCall(asset0 types1.VersionedAsset, fee1 types1.VersionedAsset, dest2 types1.VersionedLocation, destWeightLimit3 types1.WeightLimit) types1.RuntimeCall {
+	return types1.RuntimeCall{
 		IsXTokens: true,
-		AsXTokensField0: &types.OrmlXtokensModuleCall{
+		AsXTokensField0: &types1.OrmlXtokensModuleCall{
 			IsTransferMultiassetWithFee:                 true,
 			AsTransferMultiassetWithFeeAsset0:           &asset0,
 			AsTransferMultiassetWithFeeFee1:             &fee1,
@@ -138,10 +138,10 @@ func MakeTransferMultiassetWithFeeCall(asset0 types.VersionedAsset, fee1 types.V
 // received. Receiving depends on if the XCM message could be delivered
 // by the network, and if the receiving chain would handle
 // messages correctly.
-func MakeTransferMulticurrenciesCall(currencies0 []types.TupleOfCurrencyIdU128, feeItem1 uint32, dest2 types.VersionedLocation, destWeightLimit3 types.WeightLimit) types.RuntimeCall {
-	return types.RuntimeCall{
+func MakeTransferMulticurrenciesCall(currencies0 []types1.TupleOfUint64U128, feeItem1 uint32, dest2 types1.VersionedLocation, destWeightLimit3 types1.WeightLimit) types1.RuntimeCall {
+	return types1.RuntimeCall{
 		IsXTokens: true,
-		AsXTokensField0: &types.OrmlXtokensModuleCall{
+		AsXTokensField0: &types1.OrmlXtokensModuleCall{
 			IsTransferMulticurrencies:                 true,
 			AsTransferMulticurrenciesCurrencies0:      currencies0,
 			AsTransferMulticurrenciesFeeItem1:         feeItem1,
@@ -166,10 +166,10 @@ func MakeTransferMulticurrenciesCall(currencies0 []types.TupleOfCurrencyIdU128, 
 // received. Receiving depends on if the XCM message could be delivered
 // by the network, and if the receiving chain would handle
 // messages correctly.
-func MakeTransferMultiassetsCall(assets0 types.VersionedAssets, feeItem1 uint32, dest2 types.VersionedLocation, destWeightLimit3 types.WeightLimit) types.RuntimeCall {
-	return types.RuntimeCall{
+func MakeTransferMultiassetsCall(assets0 types1.VersionedAssets, feeItem1 uint32, dest2 types1.VersionedLocation, destWeightLimit3 types1.WeightLimit) types1.RuntimeCall {
+	return types1.RuntimeCall{
 		IsXTokens: true,
-		AsXTokensField0: &types.OrmlXtokensModuleCall{
+		AsXTokensField0: &types1.OrmlXtokensModuleCall{
 			IsTransferMultiassets:                 true,
 			AsTransferMultiassetsAssets0:          &assets0,
 			AsTransferMultiassetsFeeItem1:         feeItem1,

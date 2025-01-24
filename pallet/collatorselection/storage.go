@@ -8,7 +8,7 @@ import (
 	types1 "github.com/wetee-dao/go-sdk/pallet/types"
 )
 
-// Make a storage key for Invulnerables id={{false [376]}}
+// Make a storage key for Invulnerables id={{false [377]}}
 //
 //	The invulnerable, permissioned collators. This list must be sorted.
 func MakeInvulnerablesStorageKey() (types.StorageKey, error) {
@@ -54,7 +54,7 @@ func GetInvulnerablesLatest(state state.State) (ret [][32]byte, err error) {
 	return
 }
 
-// Make a storage key for CandidateList id={{false [377]}}
+// Make a storage key for CandidateList id={{false [378]}}
 //
 //	The (community, limited) collation candidates. `Candidates` and `Invulnerables` should be
 //	mutually exclusive.

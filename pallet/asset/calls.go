@@ -17,6 +17,15 @@ func MakeCreateAssetCall(metadata0 types.AssetMeta, initAmount1 types1.U128) typ
 		},
 	}
 }
+func MakeDeleteAssetCall(assetId0 uint64) types.RuntimeCall {
+	return types.RuntimeCall{
+		IsAsset: true,
+		AsAssetField0: &types.WeteeAssetsPalletCall{
+			IsDeleteAsset:         true,
+			AsDeleteAssetAssetId0: assetId0,
+		},
+	}
+}
 
 // Users destroy their own assets.
 // 销毁资产
@@ -50,13 +59,14 @@ func MakeTransferCall(dest0 types.MultiAddress, assetId1 uint64, amount2 types1.
 		},
 	}
 }
-func MakeSetParachainAssetCall(paraId0 uint32, metadata1 types.AssetMeta) types.RuntimeCall {
+func MakeParachainAssetRegisterCall(paraId0 uint32, generalKey1 []byte, metadata2 types.AssetMeta) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsAsset: true,
 		AsAssetField0: &types.WeteeAssetsPalletCall{
-			IsSetParachainAsset:          true,
-			AsSetParachainAssetParaId0:   paraId0,
-			AsSetParachainAssetMetadata1: metadata1,
+			IsParachainAssetRegister:            true,
+			AsParachainAssetRegisterParaId0:     paraId0,
+			AsParachainAssetRegisterGeneralKey1: generalKey1,
+			AsParachainAssetRegisterMetadata2:   metadata2,
 		},
 	}
 }
@@ -66,6 +76,27 @@ func MakeSetChainIdCall(paraId0 uint32) types.RuntimeCall {
 		AsAssetField0: &types.WeteeAssetsPalletCall{
 			IsSetChainId:        true,
 			AsSetChainIdParaId0: paraId0,
+		},
+	}
+}
+func MakeDeleteParachainForAssetCall(assetId0 uint64, paraId1 uint32) types.RuntimeCall {
+	return types.RuntimeCall{
+		IsAsset: true,
+		AsAssetField0: &types.WeteeAssetsPalletCall{
+			IsDeleteParachainForAsset:         true,
+			AsDeleteParachainForAssetAssetId0: assetId0,
+			AsDeleteParachainForAssetParaId1:  paraId1,
+		},
+	}
+}
+func MakeSetParachainForAssetCall(assetId0 uint64, paraId1 uint32, generalKey2 []byte) types.RuntimeCall {
+	return types.RuntimeCall{
+		IsAsset: true,
+		AsAssetField0: &types.WeteeAssetsPalletCall{
+			IsSetParachainForAsset:            true,
+			AsSetParachainForAssetAssetId0:    assetId0,
+			AsSetParachainForAssetParaId1:     paraId1,
+			AsSetParachainForAssetGeneralKey2: generalKey2,
 		},
 	}
 }

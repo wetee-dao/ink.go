@@ -52,20 +52,20 @@ func GetChainIDLatest(state state.State) (ret uint32, err error) {
 	return
 }
 
-// Make a storage key for AssetsInfo
-func MakeAssetsInfoStorageKey(currencyId0 types1.CurrencyId) (types.StorageKey, error) {
+// Make a storage key for AssetInfos
+func MakeAssetInfosStorageKey(uint640 uint64) (types.StorageKey, error) {
 	byteArgs := [][]byte{}
 	encBytes := []byte{}
 	var err error
-	encBytes, err = codec.Encode(currencyId0)
+	encBytes, err = codec.Encode(uint640)
 	if err != nil {
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
-	return types.CreateStorageKey(&types1.Meta, "Asset", "AssetsInfo", byteArgs...)
+	return types.CreateStorageKey(&types1.Meta, "Asset", "AssetInfos", byteArgs...)
 }
-func GetAssetsInfo(state state.State, bhash types.Hash, currencyId0 types1.CurrencyId) (ret types1.AssetInfo, isSome bool, err error) {
-	key, err := MakeAssetsInfoStorageKey(currencyId0)
+func GetAssetInfos(state state.State, bhash types.Hash, uint640 uint64) (ret types1.AssetInfo, isSome bool, err error) {
+	key, err := MakeAssetInfosStorageKey(uint640)
 	if err != nil {
 		return
 	}
@@ -75,8 +75,8 @@ func GetAssetsInfo(state state.State, bhash types.Hash, currencyId0 types1.Curre
 	}
 	return
 }
-func GetAssetsInfoLatest(state state.State, currencyId0 types1.CurrencyId) (ret types1.AssetInfo, isSome bool, err error) {
-	key, err := MakeAssetsInfoStorageKey(currencyId0)
+func GetAssetInfosLatest(state state.State, uint640 uint64) (ret types1.AssetInfo, isSome bool, err error) {
+	key, err := MakeAssetInfosStorageKey(uint640)
 	if err != nil {
 		return
 	}
@@ -87,8 +87,8 @@ func GetAssetsInfoLatest(state state.State, currencyId0 types1.CurrencyId) (ret 
 	return
 }
 
-// Make a storage key for Symbols
-func MakeSymbolsStorageKey(byteSlice0 []byte) (types.StorageKey, error) {
+// Make a storage key for AssetSymbols
+func MakeAssetSymbolsStorageKey(byteSlice0 []byte) (types.StorageKey, error) {
 	byteArgs := [][]byte{}
 	encBytes := []byte{}
 	var err error
@@ -97,10 +97,10 @@ func MakeSymbolsStorageKey(byteSlice0 []byte) (types.StorageKey, error) {
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
-	return types.CreateStorageKey(&types1.Meta, "Asset", "Symbols", byteArgs...)
+	return types.CreateStorageKey(&types1.Meta, "Asset", "AssetSymbols", byteArgs...)
 }
-func GetSymbols(state state.State, bhash types.Hash, byteSlice0 []byte) (ret types1.CurrencyId, isSome bool, err error) {
-	key, err := MakeSymbolsStorageKey(byteSlice0)
+func GetAssetSymbols(state state.State, bhash types.Hash, byteSlice0 []byte) (ret uint64, isSome bool, err error) {
+	key, err := MakeAssetSymbolsStorageKey(byteSlice0)
 	if err != nil {
 		return
 	}
@@ -110,8 +110,8 @@ func GetSymbols(state state.State, bhash types.Hash, byteSlice0 []byte) (ret typ
 	}
 	return
 }
-func GetSymbolsLatest(state state.State, byteSlice0 []byte) (ret types1.CurrencyId, isSome bool, err error) {
-	key, err := MakeSymbolsStorageKey(byteSlice0)
+func GetAssetSymbolsLatest(state state.State, byteSlice0 []byte) (ret uint64, isSome bool, err error) {
+	key, err := MakeAssetSymbolsStorageKey(byteSlice0)
 	if err != nil {
 		return
 	}
@@ -122,8 +122,8 @@ func GetSymbolsLatest(state state.State, byteSlice0 []byte) (ret types1.Currency
 	return
 }
 
-// Make a storage key for ParaMaps
-func MakeParaMapsStorageKey(tupleOfUint32ByteSlice0 uint32, tupleOfUint32ByteSlice1 []byte) (types.StorageKey, error) {
+// Make a storage key for ParaAssetMaps
+func MakeParaAssetMapsStorageKey(tupleOfUint32ByteSlice0 uint32, tupleOfUint32ByteSlice1 []byte) (types.StorageKey, error) {
 	byteArgs := [][]byte{}
 	encBytes := []byte{}
 	var err error
@@ -137,10 +137,10 @@ func MakeParaMapsStorageKey(tupleOfUint32ByteSlice0 uint32, tupleOfUint32ByteSli
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
-	return types.CreateStorageKey(&types1.Meta, "Asset", "ParaMaps", byteArgs...)
+	return types.CreateStorageKey(&types1.Meta, "Asset", "ParaAssetMaps", byteArgs...)
 }
-func GetParaMaps(state state.State, bhash types.Hash, tupleOfUint32ByteSlice0 uint32, tupleOfUint32ByteSlice1 []byte) (ret types1.CurrencyId, isSome bool, err error) {
-	key, err := MakeParaMapsStorageKey(tupleOfUint32ByteSlice0, tupleOfUint32ByteSlice1)
+func GetParaAssetMaps(state state.State, bhash types.Hash, tupleOfUint32ByteSlice0 uint32, tupleOfUint32ByteSlice1 []byte) (ret uint64, isSome bool, err error) {
+	key, err := MakeParaAssetMapsStorageKey(tupleOfUint32ByteSlice0, tupleOfUint32ByteSlice1)
 	if err != nil {
 		return
 	}
@@ -150,8 +150,113 @@ func GetParaMaps(state state.State, bhash types.Hash, tupleOfUint32ByteSlice0 ui
 	}
 	return
 }
-func GetParaMapsLatest(state state.State, tupleOfUint32ByteSlice0 uint32, tupleOfUint32ByteSlice1 []byte) (ret types1.CurrencyId, isSome bool, err error) {
-	key, err := MakeParaMapsStorageKey(tupleOfUint32ByteSlice0, tupleOfUint32ByteSlice1)
+func GetParaAssetMapsLatest(state state.State, tupleOfUint32ByteSlice0 uint32, tupleOfUint32ByteSlice1 []byte) (ret uint64, isSome bool, err error) {
+	key, err := MakeParaAssetMapsStorageKey(tupleOfUint32ByteSlice0, tupleOfUint32ByteSlice1)
+	if err != nil {
+		return
+	}
+	isSome, err = state.GetStorageLatest(key, &ret)
+	if err != nil {
+		return
+	}
+	return
+}
+
+// Make a storage key for AssetParaIds
+func MakeAssetParaIdsStorageKey(uint640 uint64) (types.StorageKey, error) {
+	byteArgs := [][]byte{}
+	encBytes := []byte{}
+	var err error
+	encBytes, err = codec.Encode(uint640)
+	if err != nil {
+		return nil, err
+	}
+	byteArgs = append(byteArgs, encBytes)
+	return types.CreateStorageKey(&types1.Meta, "Asset", "AssetParaIds", byteArgs...)
+}
+func GetAssetParaIds(state state.State, bhash types.Hash, uint640 uint64) (ret uint32, isSome bool, err error) {
+	key, err := MakeAssetParaIdsStorageKey(uint640)
+	if err != nil {
+		return
+	}
+	isSome, err = state.GetStorage(key, &ret, bhash)
+	if err != nil {
+		return
+	}
+	return
+}
+func GetAssetParaIdsLatest(state state.State, uint640 uint64) (ret uint32, isSome bool, err error) {
+	key, err := MakeAssetParaIdsStorageKey(uint640)
+	if err != nil {
+		return
+	}
+	isSome, err = state.GetStorageLatest(key, &ret)
+	if err != nil {
+		return
+	}
+	return
+}
+
+// Make a storage key for LocationToSymbols
+func MakeLocationToSymbolsStorageKey(byteSlice0 []byte) (types.StorageKey, error) {
+	byteArgs := [][]byte{}
+	encBytes := []byte{}
+	var err error
+	encBytes, err = codec.Encode(byteSlice0)
+	if err != nil {
+		return nil, err
+	}
+	byteArgs = append(byteArgs, encBytes)
+	return types.CreateStorageKey(&types1.Meta, "Asset", "LocationToSymbols", byteArgs...)
+}
+func GetLocationToSymbols(state state.State, bhash types.Hash, byteSlice0 []byte) (ret []byte, isSome bool, err error) {
+	key, err := MakeLocationToSymbolsStorageKey(byteSlice0)
+	if err != nil {
+		return
+	}
+	isSome, err = state.GetStorage(key, &ret, bhash)
+	if err != nil {
+		return
+	}
+	return
+}
+func GetLocationToSymbolsLatest(state state.State, byteSlice0 []byte) (ret []byte, isSome bool, err error) {
+	key, err := MakeLocationToSymbolsStorageKey(byteSlice0)
+	if err != nil {
+		return
+	}
+	isSome, err = state.GetStorageLatest(key, &ret)
+	if err != nil {
+		return
+	}
+	return
+}
+
+// Make a storage key for SymbolToLocations
+func MakeSymbolToLocationsStorageKey(byteSlice0 []byte) (types.StorageKey, error) {
+	byteArgs := [][]byte{}
+	encBytes := []byte{}
+	var err error
+	encBytes, err = codec.Encode(byteSlice0)
+	if err != nil {
+		return nil, err
+	}
+	byteArgs = append(byteArgs, encBytes)
+	return types.CreateStorageKey(&types1.Meta, "Asset", "SymbolToLocations", byteArgs...)
+}
+func GetSymbolToLocations(state state.State, bhash types.Hash, byteSlice0 []byte) (ret []byte, isSome bool, err error) {
+	key, err := MakeSymbolToLocationsStorageKey(byteSlice0)
+	if err != nil {
+		return
+	}
+	isSome, err = state.GetStorage(key, &ret, bhash)
+	if err != nil {
+		return
+	}
+	return
+}
+func GetSymbolToLocationsLatest(state state.State, byteSlice0 []byte) (ret []byte, isSome bool, err error) {
+	key, err := MakeSymbolToLocationsStorageKey(byteSlice0)
 	if err != nil {
 		return
 	}

@@ -6,6 +6,7 @@ import (
 )
 
 // 质押 vtoken
+// vtoken stake
 func MakeVStakingCall(vassetId0 uint64, vamount1 types.U128) types1.RuntimeCall {
 	return types1.RuntimeCall{
 		IsFairlanch: true,
@@ -30,13 +31,14 @@ func MakeVUnstakingCall(vassetId0 uint64, amount1 types.U128) types1.RuntimeCall
 }
 
 // 设置 economic 质押比例
-func MakeSetEconomicsCall(assetId0 uint64, rewardRate1 byte) types1.RuntimeCall {
+func MakeSetEconomicsCall(assetId0 uint64, rewardRate1 byte, quota2 types.U128) types1.RuntimeCall {
 	return types1.RuntimeCall{
 		IsFairlanch: true,
 		AsFairlanchField0: &types1.WeteeFairlanchPalletCall{
 			IsSetEconomics:            true,
 			AsSetEconomicsAssetId0:    assetId0,
 			AsSetEconomicsRewardRate1: rewardRate1,
+			AsSetEconomicsQuota2:      quota2,
 		},
 	}
 }
@@ -80,6 +82,14 @@ func MakeVStakingCancelCall(vassetId0 uint64, vamount1 types.U128) types1.Runtim
 			IsVStakingCancel:          true,
 			AsVStakingCancelVassetId0: vassetId0,
 			AsVStakingCancelVamount1:  vamount1,
+		},
+	}
+}
+func MakeSetEpochCall() types1.RuntimeCall {
+	return types1.RuntimeCall{
+		IsFairlanch: true,
+		AsFairlanchField0: &types1.WeteeFairlanchPalletCall{
+			IsSetEpoch: true,
 		},
 	}
 }

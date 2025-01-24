@@ -18,7 +18,7 @@ import (
 // - `dest`: The recipient of the transfer.
 // - `currency_id`: currency type.
 // - `amount`: free balance amount to tranfer.
-func MakeTransferCall(dest0 types.MultiAddress, currencyId1 types.CurrencyId, amount2 types1.UCompact) types.RuntimeCall {
+func MakeTransferCall(dest0 types.MultiAddress, currencyId1 uint64, amount2 types1.UCompact) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsTokens: true,
 		AsTokensField0: &types.OrmlTokensModuleCall{
@@ -49,7 +49,7 @@ func MakeTransferCall(dest0 types.MultiAddress, currencyId1 types.CurrencyId, am
 //     the sender account to be killed (false), or transfer everything
 //     except at least the existential deposit, which will guarantee to
 //     keep the sender account alive (true).
-func MakeTransferAllCall(dest0 types.MultiAddress, currencyId1 types.CurrencyId, keepAlive2 bool) types.RuntimeCall {
+func MakeTransferAllCall(dest0 types.MultiAddress, currencyId1 uint64, keepAlive2 bool) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsTokens: true,
 		AsTokensField0: &types.OrmlTokensModuleCall{
@@ -72,7 +72,7 @@ func MakeTransferAllCall(dest0 types.MultiAddress, currencyId1 types.CurrencyId,
 // - `dest`: The recipient of the transfer.
 // - `currency_id`: currency type.
 // - `amount`: free balance amount to tranfer.
-func MakeTransferKeepAliveCall(dest0 types.MultiAddress, currencyId1 types.CurrencyId, amount2 types1.UCompact) types.RuntimeCall {
+func MakeTransferKeepAliveCall(dest0 types.MultiAddress, currencyId1 uint64, amount2 types1.UCompact) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsTokens: true,
 		AsTokensField0: &types.OrmlTokensModuleCall{
@@ -93,7 +93,7 @@ func MakeTransferKeepAliveCall(dest0 types.MultiAddress, currencyId1 types.Curre
 // - `dest`: The recipient of the transfer.
 // - `currency_id`: currency type.
 // - `amount`: free balance amount to tranfer.
-func MakeForceTransferCall(source0 types.MultiAddress, dest1 types.MultiAddress, currencyId2 types.CurrencyId, amount3 types1.UCompact) types.RuntimeCall {
+func MakeForceTransferCall(source0 types.MultiAddress, dest1 types.MultiAddress, currencyId2 uint64, amount3 types1.UCompact) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsTokens: true,
 		AsTokensField0: &types.OrmlTokensModuleCall{
@@ -114,7 +114,7 @@ func MakeForceTransferCall(source0 types.MultiAddress, dest1 types.MultiAddress,
 // existential deposit, it will reap the `AccountInfo`.
 //
 // The dispatch origin for this call is `root`.
-func MakeSetBalanceCall(who0 types.MultiAddress, currencyId1 types.CurrencyId, newFree2 types1.UCompact, newReserved3 types1.UCompact) types.RuntimeCall {
+func MakeSetBalanceCall(who0 types.MultiAddress, currencyId1 uint64, newFree2 types1.UCompact, newReserved3 types1.UCompact) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsTokens: true,
 		AsTokensField0: &types.OrmlTokensModuleCall{
