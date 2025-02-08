@@ -25,7 +25,7 @@ func MakeBookStateForStorageKey(messageOrigin0 types.MessageOrigin) (types1.Stor
 
 var BookStateForResultDefaultBytes, _ = hex.DecodeString("0000000000000000000000000000000000000000000000000000000000")
 
-func GetBookStateFor(state state.State, bhash types1.Hash, messageOrigin0 types.MessageOrigin) (ret types.BookState1, err error) {
+func GetBookStateFor(state state.State, bhash types1.Hash, messageOrigin0 types.MessageOrigin) (ret types.BookState, err error) {
 	key, err := MakeBookStateForStorageKey(messageOrigin0)
 	if err != nil {
 		return
@@ -43,7 +43,7 @@ func GetBookStateFor(state state.State, bhash types1.Hash, messageOrigin0 types.
 	}
 	return
 }
-func GetBookStateForLatest(state state.State, messageOrigin0 types.MessageOrigin) (ret types.BookState1, err error) {
+func GetBookStateForLatest(state state.State, messageOrigin0 types.MessageOrigin) (ret types.BookState, err error) {
 	key, err := MakeBookStateForStorageKey(messageOrigin0)
 	if err != nil {
 		return
@@ -62,7 +62,7 @@ func GetBookStateForLatest(state state.State, messageOrigin0 types.MessageOrigin
 	return
 }
 
-// Make a storage key for ServiceHead id={{false [126]}}
+// Make a storage key for ServiceHead id={{false [45]}}
 //
 //	The origin at which we should begin servicing.
 func MakeServiceHeadStorageKey() (types1.StorageKey, error) {
@@ -110,7 +110,7 @@ func MakePagesStorageKey(tupleOfMessageOriginUint320 types.MessageOrigin, tupleO
 	byteArgs = append(byteArgs, encBytes)
 	return types1.CreateStorageKey(&types.Meta, "WeMessageQueue", "Pages", byteArgs...)
 }
-func GetPages(state state.State, bhash types1.Hash, tupleOfMessageOriginUint320 types.MessageOrigin, tupleOfMessageOriginUint321 uint32) (ret types.PageSizeUint32, isSome bool, err error) {
+func GetPages(state state.State, bhash types1.Hash, tupleOfMessageOriginUint320 types.MessageOrigin, tupleOfMessageOriginUint321 uint32) (ret types.Page, isSome bool, err error) {
 	key, err := MakePagesStorageKey(tupleOfMessageOriginUint320, tupleOfMessageOriginUint321)
 	if err != nil {
 		return
@@ -121,7 +121,7 @@ func GetPages(state state.State, bhash types1.Hash, tupleOfMessageOriginUint320 
 	}
 	return
 }
-func GetPagesLatest(state state.State, tupleOfMessageOriginUint320 types.MessageOrigin, tupleOfMessageOriginUint321 uint32) (ret types.PageSizeUint32, isSome bool, err error) {
+func GetPagesLatest(state state.State, tupleOfMessageOriginUint320 types.MessageOrigin, tupleOfMessageOriginUint321 uint32) (ret types.Page, isSome bool, err error) {
 	key, err := MakePagesStorageKey(tupleOfMessageOriginUint320, tupleOfMessageOriginUint321)
 	if err != nil {
 		return

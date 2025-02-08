@@ -8,7 +8,7 @@ import (
 	types1 "github.com/wetee-dao/go-sdk/pallet/types"
 )
 
-// Make a storage key for BlockReward id={{false [546]}}
+// Make a storage key for BlockReward id={{false [340]}}
 //
 //	当前周期的区块奖励
 //	current block reward
@@ -18,7 +18,7 @@ func MakeBlockRewardStorageKey() (types.StorageKey, error) {
 
 var BlockRewardResultDefaultBytes, _ = hex.DecodeString("000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000")
 
-func GetBlockReward(state state.State, bhash types.Hash) (ret types1.Tuple546, err error) {
+func GetBlockReward(state state.State, bhash types.Hash) (ret types1.Tuple340, err error) {
 	key, err := MakeBlockRewardStorageKey()
 	if err != nil {
 		return
@@ -36,7 +36,7 @@ func GetBlockReward(state state.State, bhash types.Hash) (ret types1.Tuple546, e
 	}
 	return
 }
-func GetBlockRewardLatest(state state.State) (ret types1.Tuple546, err error) {
+func GetBlockRewardLatest(state state.State) (ret types1.Tuple340, err error) {
 	key, err := MakeBlockRewardStorageKey()
 	if err != nil {
 		return
@@ -59,24 +59,24 @@ func GetBlockRewardLatest(state state.State) (ret types1.Tuple546, err error) {
 //
 //	用户质押金额
 //	Staking
-func MakeStakingsStorageKey(tupleOfByteArray32Uint640 [32]byte, tupleOfByteArray32Uint641 uint64) (types.StorageKey, error) {
+func MakeStakingsStorageKey(tupleOfByteArray32Uint6410 [32]byte, tupleOfByteArray32Uint6411 uint64) (types.StorageKey, error) {
 	byteArgs := [][]byte{}
 	encBytes := []byte{}
 	var err error
-	encBytes, err = codec.Encode(tupleOfByteArray32Uint640)
+	encBytes, err = codec.Encode(tupleOfByteArray32Uint6410)
 	if err != nil {
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
-	encBytes, err = codec.Encode(tupleOfByteArray32Uint641)
+	encBytes, err = codec.Encode(tupleOfByteArray32Uint6411)
 	if err != nil {
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
 	return types.CreateStorageKey(&types1.Meta, "Fairlanch", "Stakings", byteArgs...)
 }
-func GetStakings(state state.State, bhash types.Hash, tupleOfByteArray32Uint640 [32]byte, tupleOfByteArray32Uint641 uint64) (ret types.U128, isSome bool, err error) {
-	key, err := MakeStakingsStorageKey(tupleOfByteArray32Uint640, tupleOfByteArray32Uint641)
+func GetStakings(state state.State, bhash types.Hash, tupleOfByteArray32Uint6410 [32]byte, tupleOfByteArray32Uint6411 uint64) (ret types.U128, isSome bool, err error) {
+	key, err := MakeStakingsStorageKey(tupleOfByteArray32Uint6410, tupleOfByteArray32Uint6411)
 	if err != nil {
 		return
 	}
@@ -86,8 +86,8 @@ func GetStakings(state state.State, bhash types.Hash, tupleOfByteArray32Uint640 
 	}
 	return
 }
-func GetStakingsLatest(state state.State, tupleOfByteArray32Uint640 [32]byte, tupleOfByteArray32Uint641 uint64) (ret types.U128, isSome bool, err error) {
-	key, err := MakeStakingsStorageKey(tupleOfByteArray32Uint640, tupleOfByteArray32Uint641)
+func GetStakingsLatest(state state.State, tupleOfByteArray32Uint6410 [32]byte, tupleOfByteArray32Uint6411 uint64) (ret types.U128, isSome bool, err error) {
+	key, err := MakeStakingsStorageKey(tupleOfByteArray32Uint6410, tupleOfByteArray32Uint6411)
 	if err != nil {
 		return
 	}
@@ -102,24 +102,24 @@ func GetStakingsLatest(state state.State, tupleOfByteArray32Uint640 [32]byte, tu
 //
 //	下个周期进入质押的金额
 //	Asset next to staking
-func MakeToStakingsStorageKey(tupleOfByteArray32Uint640 [32]byte, tupleOfByteArray32Uint641 uint64) (types.StorageKey, error) {
+func MakeToStakingsStorageKey(tupleOfByteArray32Uint6410 [32]byte, tupleOfByteArray32Uint6411 uint64) (types.StorageKey, error) {
 	byteArgs := [][]byte{}
 	encBytes := []byte{}
 	var err error
-	encBytes, err = codec.Encode(tupleOfByteArray32Uint640)
+	encBytes, err = codec.Encode(tupleOfByteArray32Uint6410)
 	if err != nil {
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
-	encBytes, err = codec.Encode(tupleOfByteArray32Uint641)
+	encBytes, err = codec.Encode(tupleOfByteArray32Uint6411)
 	if err != nil {
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
 	return types.CreateStorageKey(&types1.Meta, "Fairlanch", "ToStakings", byteArgs...)
 }
-func GetToStakings(state state.State, bhash types.Hash, tupleOfByteArray32Uint640 [32]byte, tupleOfByteArray32Uint641 uint64) (ret types.U128, isSome bool, err error) {
-	key, err := MakeToStakingsStorageKey(tupleOfByteArray32Uint640, tupleOfByteArray32Uint641)
+func GetToStakings(state state.State, bhash types.Hash, tupleOfByteArray32Uint6410 [32]byte, tupleOfByteArray32Uint6411 uint64) (ret types.U128, isSome bool, err error) {
+	key, err := MakeToStakingsStorageKey(tupleOfByteArray32Uint6410, tupleOfByteArray32Uint6411)
 	if err != nil {
 		return
 	}
@@ -129,8 +129,8 @@ func GetToStakings(state state.State, bhash types.Hash, tupleOfByteArray32Uint64
 	}
 	return
 }
-func GetToStakingsLatest(state state.State, tupleOfByteArray32Uint640 [32]byte, tupleOfByteArray32Uint641 uint64) (ret types.U128, isSome bool, err error) {
-	key, err := MakeToStakingsStorageKey(tupleOfByteArray32Uint640, tupleOfByteArray32Uint641)
+func GetToStakingsLatest(state state.State, tupleOfByteArray32Uint6410 [32]byte, tupleOfByteArray32Uint6411 uint64) (ret types.U128, isSome bool, err error) {
+	key, err := MakeToStakingsStorageKey(tupleOfByteArray32Uint6410, tupleOfByteArray32Uint6411)
 	if err != nil {
 		return
 	}
