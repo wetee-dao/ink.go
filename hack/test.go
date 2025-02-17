@@ -16,7 +16,7 @@ func main() {
 
 	fmt.Println(signature.TestKeyringPairAlice.Address)
 
-	client, err := chain.ClientInit("wss://xiaobai.asyou.me:30001", true)
+	client, err := chain.ClientInit("wss://xiaobai.asyou.me:30011/ws", true)
 	if err != nil {
 		panic(err)
 	}
