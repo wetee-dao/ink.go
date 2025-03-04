@@ -8,44 +8,6 @@ import (
 	types1 "github.com/wetee-dao/go-sdk/pallet/types"
 )
 
-// Make a storage key for K8sClusterAccounts
-//
-//	用户对应集群的信息
-//	user's K8sCluster information
-func MakeK8sClusterAccountsStorageKey(byteArray320 [32]byte) (types.StorageKey, error) {
-	byteArgs := [][]byte{}
-	encBytes := []byte{}
-	var err error
-	encBytes, err = codec.Encode(byteArray320)
-	if err != nil {
-		return nil, err
-	}
-	byteArgs = append(byteArgs, encBytes)
-	return types.CreateStorageKey(&types1.Meta, "Worker", "K8sClusterAccounts", byteArgs...)
-}
-func GetK8sClusterAccounts(state state.State, bhash types.Hash, byteArray320 [32]byte) (ret uint64, isSome bool, err error) {
-	key, err := MakeK8sClusterAccountsStorageKey(byteArray320)
-	if err != nil {
-		return
-	}
-	isSome, err = state.GetStorage(key, &ret, bhash)
-	if err != nil {
-		return
-	}
-	return
-}
-func GetK8sClusterAccountsLatest(state state.State, byteArray320 [32]byte) (ret uint64, isSome bool, err error) {
-	key, err := MakeK8sClusterAccountsStorageKey(byteArray320)
-	if err != nil {
-		return
-	}
-	isSome, err = state.GetStorageLatest(key, &ret)
-	if err != nil {
-		return
-	}
-	return
-}
-
 // Make a storage key for NextClusterId id={{false [12]}}
 //
 //	The id of the next cluster to be created.
@@ -187,48 +149,40 @@ func GetCodeSignerLatest(state state.State) (ret []byte, err error) {
 	return
 }
 
-// Make a storage key for BootPeers id={{false [300]}}
+// Make a storage key for K8sClusterAccounts
 //
-//	侧链boot peers
-func MakeBootPeersStorageKey() (types.StorageKey, error) {
-	return types.CreateStorageKey(&types1.Meta, "Worker", "BootPeers")
+//	用户对应集群的信息
+//	user's K8sCluster information
+func MakeK8sClusterAccountsStorageKey(byteArray320 [32]byte) (types.StorageKey, error) {
+	byteArgs := [][]byte{}
+	encBytes := []byte{}
+	var err error
+	encBytes, err = codec.Encode(byteArray320)
+	if err != nil {
+		return nil, err
+	}
+	byteArgs = append(byteArgs, encBytes)
+	return types.CreateStorageKey(&types1.Meta, "Worker", "K8sClusterAccounts", byteArgs...)
 }
-
-var BootPeersResultDefaultBytes, _ = hex.DecodeString("00")
-
-func GetBootPeers(state state.State, bhash types.Hash) (ret []types1.P2PAddr, err error) {
-	key, err := MakeBootPeersStorageKey()
+func GetK8sClusterAccounts(state state.State, bhash types.Hash, byteArray320 [32]byte) (ret uint64, isSome bool, err error) {
+	key, err := MakeK8sClusterAccountsStorageKey(byteArray320)
 	if err != nil {
 		return
 	}
-	var isSome bool
 	isSome, err = state.GetStorage(key, &ret, bhash)
 	if err != nil {
 		return
 	}
-	if !isSome {
-		err = codec.Decode(BootPeersResultDefaultBytes, &ret)
-		if err != nil {
-			return
-		}
-	}
 	return
 }
-func GetBootPeersLatest(state state.State) (ret []types1.P2PAddr, err error) {
-	key, err := MakeBootPeersStorageKey()
+func GetK8sClusterAccountsLatest(state state.State, byteArray320 [32]byte) (ret uint64, isSome bool, err error) {
+	key, err := MakeK8sClusterAccountsStorageKey(byteArray320)
 	if err != nil {
 		return
 	}
-	var isSome bool
 	isSome, err = state.GetStorageLatest(key, &ret)
 	if err != nil {
 		return
-	}
-	if !isSome {
-		err = codec.Decode(BootPeersResultDefaultBytes, &ret)
-		if err != nil {
-			return
-		}
 	}
 	return
 }
@@ -460,11 +414,49 @@ func GetDepositPricesLatest(state state.State, byte0 byte) (ret types1.DepositPr
 	return
 }
 
-// Make a storage key for Deposits
+// Make a storage key for DepositRatios
 //
-//	抵押信息
+//	抵押 asset id
+//	抵押资产和USDT的价格换算比率 n/1_000_000
+func MakeDepositRatiosStorageKey(uint640 uint64) (types.StorageKey, error) {
+	byteArgs := [][]byte{}
+	encBytes := []byte{}
+	var err error
+	encBytes, err = codec.Encode(uint640)
+	if err != nil {
+		return nil, err
+	}
+	byteArgs = append(byteArgs, encBytes)
+	return types.CreateStorageKey(&types1.Meta, "Worker", "DepositRatios", byteArgs...)
+}
+func GetDepositRatios(state state.State, bhash types.Hash, uint640 uint64) (ret uint32, isSome bool, err error) {
+	key, err := MakeDepositRatiosStorageKey(uint640)
+	if err != nil {
+		return
+	}
+	isSome, err = state.GetStorage(key, &ret, bhash)
+	if err != nil {
+		return
+	}
+	return
+}
+func GetDepositRatiosLatest(state state.State, uint640 uint64) (ret uint32, isSome bool, err error) {
+	key, err := MakeDepositRatiosStorageKey(uint640)
+	if err != nil {
+		return
+	}
+	isSome, err = state.GetStorageLatest(key, &ret)
+	if err != nil {
+		return
+	}
+	return
+}
+
+// Make a storage key for DepositedAssets
+//
+//	抵押Token
 //	deposit of computing resource
-func MakeDepositsStorageKey(tupleOfUint64Uint640 uint64, tupleOfUint64Uint641 uint64) (types.StorageKey, error) {
+func MakeDepositedAssetsStorageKey(tupleOfUint64Uint640 uint64, tupleOfUint64Uint641 uint64) (types.StorageKey, error) {
 	byteArgs := [][]byte{}
 	encBytes := []byte{}
 	var err error
@@ -478,10 +470,10 @@ func MakeDepositsStorageKey(tupleOfUint64Uint640 uint64, tupleOfUint64Uint641 ui
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
-	return types.CreateStorageKey(&types1.Meta, "Worker", "Deposits", byteArgs...)
+	return types.CreateStorageKey(&types1.Meta, "Worker", "DepositedAssets", byteArgs...)
 }
-func GetDeposits(state state.State, bhash types.Hash, tupleOfUint64Uint640 uint64, tupleOfUint64Uint641 uint64) (ret types1.Deposit, isSome bool, err error) {
-	key, err := MakeDepositsStorageKey(tupleOfUint64Uint640, tupleOfUint64Uint641)
+func GetDepositedAssets(state state.State, bhash types.Hash, tupleOfUint64Uint640 uint64, tupleOfUint64Uint641 uint64) (ret types1.AssetDeposit, isSome bool, err error) {
+	key, err := MakeDepositedAssetsStorageKey(tupleOfUint64Uint640, tupleOfUint64Uint641)
 	if err != nil {
 		return
 	}
@@ -491,8 +483,8 @@ func GetDeposits(state state.State, bhash types.Hash, tupleOfUint64Uint640 uint6
 	}
 	return
 }
-func GetDepositsLatest(state state.State, tupleOfUint64Uint640 uint64, tupleOfUint64Uint641 uint64) (ret types1.Deposit, isSome bool, err error) {
-	key, err := MakeDepositsStorageKey(tupleOfUint64Uint640, tupleOfUint64Uint641)
+func GetDepositedAssetsLatest(state state.State, tupleOfUint64Uint640 uint64, tupleOfUint64Uint641 uint64) (ret types1.AssetDeposit, isSome bool, err error) {
+	key, err := MakeDepositedAssetsStorageKey(tupleOfUint64Uint640, tupleOfUint64Uint641)
 	if err != nil {
 		return
 	}

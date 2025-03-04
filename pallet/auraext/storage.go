@@ -1,4 +1,4 @@
-package aura
+package auraext
 
 import (
 	"encoding/hex"
@@ -10,9 +10,13 @@ import (
 
 // Make a storage key for Authorities id={{false [395]}}
 //
-//	The current authority set.
+//	Serves as cache for the authorities.
+//
+//	The authorities in AuRa are overwritten in `on_initialize` when we switch to a new session,
+//	but we require the old authorities to verify the seal when validating a PoV. This will
+//	always be updated to the latest AuRa authorities in `on_finalize`.
 func MakeAuthoritiesStorageKey() (types.StorageKey, error) {
-	return types.CreateStorageKey(&types1.Meta, "Aura", "Authorities")
+	return types.CreateStorageKey(&types1.Meta, "AuraExt", "Authorities")
 }
 
 var AuthoritiesResultDefaultBytes, _ = hex.DecodeString("00")
@@ -54,50 +58,33 @@ func GetAuthoritiesLatest(state state.State) (ret [][32]byte, err error) {
 	return
 }
 
-// Make a storage key for CurrentSlot id={{false [397]}}
+// Make a storage key for SlotInfo id={{false [398]}}
 //
-//	The current slot of this block.
+//	Current slot paired with a number of authored blocks.
 //
-//	This will be set in `on_initialize`.
-func MakeCurrentSlotStorageKey() (types.StorageKey, error) {
-	return types.CreateStorageKey(&types1.Meta, "Aura", "CurrentSlot")
+//	Updated on each block initialization.
+func MakeSlotInfoStorageKey() (types.StorageKey, error) {
+	return types.CreateStorageKey(&types1.Meta, "AuraExt", "SlotInfo")
 }
-
-var CurrentSlotResultDefaultBytes, _ = hex.DecodeString("0000000000000000")
-
-func GetCurrentSlot(state state.State, bhash types.Hash) (ret uint64, err error) {
-	key, err := MakeCurrentSlotStorageKey()
+func GetSlotInfo(state state.State, bhash types.Hash) (ret types1.TupleOfUint64Uint321, isSome bool, err error) {
+	key, err := MakeSlotInfoStorageKey()
 	if err != nil {
 		return
 	}
-	var isSome bool
 	isSome, err = state.GetStorage(key, &ret, bhash)
 	if err != nil {
 		return
 	}
-	if !isSome {
-		err = codec.Decode(CurrentSlotResultDefaultBytes, &ret)
-		if err != nil {
-			return
-		}
-	}
 	return
 }
-func GetCurrentSlotLatest(state state.State) (ret uint64, err error) {
-	key, err := MakeCurrentSlotStorageKey()
+func GetSlotInfoLatest(state state.State) (ret types1.TupleOfUint64Uint321, isSome bool, err error) {
+	key, err := MakeSlotInfoStorageKey()
 	if err != nil {
 		return
 	}
-	var isSome bool
 	isSome, err = state.GetStorageLatest(key, &ret)
 	if err != nil {
 		return
-	}
-	if !isSome {
-		err = codec.Decode(CurrentSlotResultDefaultBytes, &ret)
-		if err != nil {
-			return
-		}
 	}
 	return
 }

@@ -35,7 +35,7 @@ func (w *Worker) ClusterRegister(name string, ip []gtypes.Ip, port uint32, level
 
 // 集群抵押
 // Cluster mortgage
-func (w *Worker) ClusterMortgage(id uint64, cpu uint32, mem uint32, cvm_cpu uint32, cvm_mem uint32, disk uint32, gpu uint32, deposit uint64, untilFinalized bool) error {
+func (w *Worker) ClusterMortgage(id uint64, cpu uint32, mem uint32, cvm_cpu uint32, cvm_mem uint32, disk uint32, gpu uint32, assetId uint64, deposit uint64, untilFinalized bool) error {
 	d := big.NewInt(0)
 	d.SetUint64(deposit)
 	runtimeCall := worker.MakeClusterMortgageCall(
@@ -46,6 +46,7 @@ func (w *Worker) ClusterMortgage(id uint64, cpu uint32, mem uint32, cvm_cpu uint
 		cvm_mem,
 		disk,
 		gpu,
+		assetId,
 		types.UCompact(*d),
 	)
 

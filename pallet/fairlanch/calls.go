@@ -29,6 +29,16 @@ func MakeVUnstakingCall(vassetId0 uint64, amount1 types.U128) types1.RuntimeCall
 		},
 	}
 }
+func MakeVStakingCancelCall(vassetId0 uint64, vamount1 types.U128) types1.RuntimeCall {
+	return types1.RuntimeCall{
+		IsFairlanch: true,
+		AsFairlanchField0: &types1.WeteeFairlanchPalletCall{
+			IsVStakingCancel:          true,
+			AsVStakingCancelVassetId0: vassetId0,
+			AsVStakingCancelVamount1:  vamount1,
+		},
+	}
+}
 
 // 设置 economic 质押比例
 func MakeSetEconomicsCall(assetId0 uint64, rewardRate1 byte, quota2 types.U128) types1.RuntimeCall {
@@ -72,16 +82,6 @@ func MakeDeleteEconomicsCall(assetId0 uint64) types1.RuntimeCall {
 		AsFairlanchField0: &types1.WeteeFairlanchPalletCall{
 			IsDeleteEconomics:         true,
 			AsDeleteEconomicsAssetId0: assetId0,
-		},
-	}
-}
-func MakeVStakingCancelCall(vassetId0 uint64, vamount1 types.U128) types1.RuntimeCall {
-	return types1.RuntimeCall{
-		IsFairlanch: true,
-		AsFairlanchField0: &types1.WeteeFairlanchPalletCall{
-			IsVStakingCancel:          true,
-			AsVStakingCancelVassetId0: vassetId0,
-			AsVStakingCancelVamount1:  vamount1,
 		},
 	}
 }

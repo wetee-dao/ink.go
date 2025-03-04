@@ -170,7 +170,7 @@ func GetPeriodsLatest(state state.State, uint640 uint64) (ret []types1.Period, e
 	return
 }
 
-// Make a storage key for DefaultPeriods id={{false [279]}}
+// Make a storage key for DefaultPeriods id={{false [492]}}
 //
 //	投票轨道
 func MakeDefaultPeriodsStorageKey() (types.StorageKey, error) {
