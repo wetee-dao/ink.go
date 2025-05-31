@@ -32,7 +32,7 @@ func FuncToSelector(f string) [4]byte {
 }
 
 // Convert a h160 hex string to a byte array
-func H160HexToBt(hexString string) ([20]byte, error) {
+func HexToH160(hexString string) (H160, error) {
 	// Remove the "0x" prefix if it exists
 	if hexString[:2] == "0x" {
 		hexString = hexString[2:]

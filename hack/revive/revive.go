@@ -24,15 +24,18 @@ func main() {
 		return
 	}
 
+	contract := "0xFF9C30963C48949325E93e1D1BF02429f35382bA"
+
 	revice, err := module.NewRevive(
-		client, data,
+		client,
+		data,
 	)
 	if err != nil {
 		util.LogWithRed("NewRevive", err)
 		return
 	}
 
-	b, err := revice.BalanceOfH160("0x2B9c0Cc310CAaFcf5E7c9A09cf0dC582053DAbAF")
+	b, err := revice.BalanceOfH160(contract)
 	if err != nil {
 		util.LogWithRed("getBy32", err)
 		return
@@ -40,13 +43,13 @@ func main() {
 	fmt.Println(b)
 	fmt.Println("")
 
-	mlist := [][20]byte{}
+	mlist := make([]util.H160, 0, 10)
 	err = revice.QueryInk(
 		util.NewAccountID(signature.TestKeyringPairAlice.PublicKey),
 		types.NewU128(*big.NewInt(0)),
 		util.NewNone[types.Weight](),
 		util.NewNone[types.U128](),
-		"0x2B9c0Cc310CAaFcf5E7c9A09cf0dC582053DAbAF",
+		contract,
 		util.InkContractInput{
 			Selector: util.FuncToSelector("Member::list"),
 			Args:     []any{},
@@ -54,23 +57,49 @@ func main() {
 		&mlist,
 	)
 	if err == nil {
-		fmt.Println(mlist)
+		for _, m := range mlist {
+			fmt.Println(m.String())
+		}
 		fmt.Println("")
+	} else {
+		fmt.Println("-----------------")
+		fmt.Println(err)
 	}
 
-	v, err := revice.DryRunInk(
+	track := util.NewSome(types.NewU16(10))
+	err = revice.QueryInk(
 		util.NewAccountID(signature.TestKeyringPairAlice.PublicKey),
 		types.NewU128(*big.NewInt(0)),
 		util.NewNone[types.Weight](),
 		util.NewNone[types.U128](),
-		"0x2B9c0Cc310CAaFcf5E7c9A09cf0dC582053DAbAF",
+		contract,
 		util.InkContractInput{
-			Selector: util.FuncToSelector("Member::levae"),
+			Selector: util.FuncToSelector("Gov::defalut_track"),
 			Args:     []any{},
 		},
+		&track,
 	)
-	fmt.Println(err)
 	if err == nil {
-		fmt.Println(v)
+		fmt.Println(track)
+		fmt.Println("")
+	} else {
+		fmt.Println("-----------------")
+		fmt.Println(err)
 	}
+
+	// v, err := revice.DryRunInk(
+	// 	util.NewAccountID(signature.TestKeyringPairAlice.PublicKey),
+	// 	types.NewU128(*big.NewInt(0)),
+	// 	util.NewNone[types.Weight](),
+	// 	util.NewNone[types.U128](),
+	// 	contract,
+	// 	util.InkContractInput{
+	// 		Selector: util.FuncToSelector("Member::levae"),
+	// 		Args:     []any{},
+	// 	},
+	// )
+	// fmt.Println(err)
+	// if err == nil {
+	// 	fmt.Println(v)
+	// }
 }

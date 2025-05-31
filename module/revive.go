@@ -37,7 +37,7 @@ func NewRevive(client *chain.ChainClient, abiRaw []byte) (*Revive, error) {
 // Get balance of h160
 func (r *Revive) BalanceOfH160(address string) (types.U128, error) {
 	balance := types.NewU128(*big.NewInt(0))
-	bt, err := util.H160HexToBt(address)
+	bt, err := util.HexToH160(address)
 	if err != nil {
 		return types.U128{}, err
 	}
@@ -72,7 +72,13 @@ func (r *Revive) QueryInk(
 	}
 
 	// util.PrintJson(result)
-	return scale.NewDecoder(bytes.NewReader(result.Data)).Decode(returnValue)
+	// fmt.Println(result.Data[1:])
+
+	if result.Data == nil {
+		return errors.New("result data is nil")
+	}
+
+	return scale.NewDecoder(bytes.NewReader(result.Data[1:])).Decode(returnValue)
 }
 
 // try call ink contract
@@ -93,7 +99,7 @@ func (r *Revive) DryRunInk(
 		return nil, errors.New("Call args length not match, ABI expect: " + strconv.Itoa(len(f.Args)) + " actual: " + strconv.Itoa(len(contractInput.Args)))
 	}
 
-	contractAddress, err := util.H160HexToBt(contract)
+	contractAddress, err := util.HexToH160(contract)
 	if err != nil {
 		return nil, errors.New("H160HexToBt: " + err.Error())
 	}
@@ -103,9 +109,9 @@ func (r *Revive) DryRunInk(
 		return nil, errors.New("contractInput.Encode: " + err.Error())
 	}
 
-	// util.LogWithRed("[ TryCall contract ]", contract)
-	// util.LogWithRed("[ TryCall   origin ]", origin.ToHexString())
-	// util.LogWithRed("[ TryCall     args ]", "0x"+hex.EncodeToString(inputBt))
+	util.LogWithRed("[ TryCall contract ]", contract)
+	util.LogWithRed("[ TryCall   origin ]", origin.ToHexString())
+	util.LogWithRed("[ TryCall     args ]", "0x"+hex.EncodeToString(inputBt))
 
 	result := util.ContractResult{}
 	err = r.Client.CallRuntimeApi(
@@ -136,7 +142,6 @@ func (r *Revive) DryRunInk(
 		}
 	} else {
 		returnValue = &result.Result.V
-		// util.PrintJson(returnValue)
 		if returnValue.Flags == 1 {
 			info := ""
 			if len(returnValue.Data) > 2 && returnValue.Data[1] == 1 {
@@ -161,7 +166,7 @@ func (r *Revive) CallInk(
 	contract string,
 	contractInput util.InkContractInput,
 ) error {
-	contractAddress, err := util.H160HexToBt(contract)
+	contractAddress, err := util.HexToH160(contract)
 	if err != nil {
 		return errors.New("H160HexToBt: " + err.Error())
 	}
@@ -171,7 +176,6 @@ func (r *Revive) CallInk(
 		return errors.New("contractInput.Encode: " + err.Error())
 	}
 
-	// r.Client.Api.
 	call := revive.MakeCallCall(
 		contractAddress,
 		types.NewUCompact(amount.Int),
