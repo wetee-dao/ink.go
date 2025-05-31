@@ -18,7 +18,7 @@ func MakeInkCallbackCall(clusterId0 uint64, callId1 types.U128, args2 []types1.I
 		},
 	}
 }
-func MakeCallInkCall(workId0 types1.WorkId, contract1 [32]byte, method2 [4]byte, args3 []types1.InkArg, value4 types.U128) types1.RuntimeCall {
+func MakeCallInkCall(workId0 types1.WorkId, contract1 [20]byte, method2 [4]byte, args3 []types1.InkArg, value4 types.U128) types1.RuntimeCall {
 	return types1.RuntimeCall{
 		IsBridge: true,
 		AsBridgeField0: &types1.WeteeTeeBridgePalletCall{

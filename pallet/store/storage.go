@@ -94,16 +94,16 @@ func GetAccountOfAppLatest(state state.State, u1280 types.U128) (ret [32]byte, i
 // Make a storage key for AccountApps
 //
 //	获取用户应用列表
-func MakeAccountAppsStorageKey(tupleOfByteArray32U12810 [32]byte, tupleOfByteArray32U12811 types.U128) (types.StorageKey, error) {
+func MakeAccountAppsStorageKey(tupleOfByteArray32U1280 [32]byte, tupleOfByteArray32U1281 types.U128) (types.StorageKey, error) {
 	byteArgs := [][]byte{}
 	encBytes := []byte{}
 	var err error
-	encBytes, err = codec.Encode(tupleOfByteArray32U12810)
+	encBytes, err = codec.Encode(tupleOfByteArray32U1280)
 	if err != nil {
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
-	encBytes, err = codec.Encode(tupleOfByteArray32U12811)
+	encBytes, err = codec.Encode(tupleOfByteArray32U1281)
 	if err != nil {
 		return nil, err
 	}
@@ -113,8 +113,8 @@ func MakeAccountAppsStorageKey(tupleOfByteArray32U12810 [32]byte, tupleOfByteArr
 
 var AccountAppsResultDefaultBytes, _ = hex.DecodeString("")
 
-func GetAccountApps(state state.State, bhash types.Hash, tupleOfByteArray32U12810 [32]byte, tupleOfByteArray32U12811 types.U128) (ret struct{}, err error) {
-	key, err := MakeAccountAppsStorageKey(tupleOfByteArray32U12810, tupleOfByteArray32U12811)
+func GetAccountApps(state state.State, bhash types.Hash, tupleOfByteArray32U1280 [32]byte, tupleOfByteArray32U1281 types.U128) (ret struct{}, err error) {
+	key, err := MakeAccountAppsStorageKey(tupleOfByteArray32U1280, tupleOfByteArray32U1281)
 	if err != nil {
 		return
 	}
@@ -131,8 +131,8 @@ func GetAccountApps(state state.State, bhash types.Hash, tupleOfByteArray32U1281
 	}
 	return
 }
-func GetAccountAppsLatest(state state.State, tupleOfByteArray32U12810 [32]byte, tupleOfByteArray32U12811 types.U128) (ret struct{}, err error) {
-	key, err := MakeAccountAppsStorageKey(tupleOfByteArray32U12810, tupleOfByteArray32U12811)
+func GetAccountAppsLatest(state state.State, tupleOfByteArray32U1280 [32]byte, tupleOfByteArray32U1281 types.U128) (ret struct{}, err error) {
+	key, err := MakeAccountAppsStorageKey(tupleOfByteArray32U1280, tupleOfByteArray32U1281)
 	if err != nil {
 		return
 	}
@@ -206,7 +206,7 @@ func MakeVersionListsStorageKey(tupleOfU128Uint160 types.U128, tupleOfU128Uint16
 	byteArgs = append(byteArgs, encBytes)
 	return types.CreateStorageKey(&types1.Meta, "Store", "VersionLists", byteArgs...)
 }
-func GetVersionLists(state state.State, bhash types.Hash, tupleOfU128Uint160 types.U128, tupleOfU128Uint161 uint16) (ret types1.TupleOfImageSliceUint64, isSome bool, err error) {
+func GetVersionLists(state state.State, bhash types.Hash, tupleOfU128Uint160 types.U128, tupleOfU128Uint161 uint16) (ret types1.TupleOfImageSliceUint32, isSome bool, err error) {
 	key, err := MakeVersionListsStorageKey(tupleOfU128Uint160, tupleOfU128Uint161)
 	if err != nil {
 		return
@@ -217,7 +217,7 @@ func GetVersionLists(state state.State, bhash types.Hash, tupleOfU128Uint160 typ
 	}
 	return
 }
-func GetVersionListsLatest(state state.State, tupleOfU128Uint160 types.U128, tupleOfU128Uint161 uint16) (ret types1.TupleOfImageSliceUint64, isSome bool, err error) {
+func GetVersionListsLatest(state state.State, tupleOfU128Uint160 types.U128, tupleOfU128Uint161 uint16) (ret types1.TupleOfImageSliceUint32, isSome bool, err error) {
 	key, err := MakeVersionListsStorageKey(tupleOfU128Uint160, tupleOfU128Uint161)
 	if err != nil {
 		return

@@ -17,7 +17,7 @@ import (
 //
 // - `dest`: The recipient of the transfer.
 // - `currency_id`: currency type.
-// - `amount`: free balance amount to tranfer.
+// - `amount`: free balance amount to transfer.
 func MakeTransferCall(dest0 types.MultiAddress, currencyId1 uint64, amount2 types1.UCompact) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsTokens: true,
@@ -71,7 +71,7 @@ func MakeTransferAllCall(dest0 types.MultiAddress, currencyId1 uint64, keepAlive
 //
 // - `dest`: The recipient of the transfer.
 // - `currency_id`: currency type.
-// - `amount`: free balance amount to tranfer.
+// - `amount`: free balance amount to transfer.
 func MakeTransferKeepAliveCall(dest0 types.MultiAddress, currencyId1 uint64, amount2 types1.UCompact) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsTokens: true,
@@ -92,7 +92,7 @@ func MakeTransferKeepAliveCall(dest0 types.MultiAddress, currencyId1 uint64, amo
 // - `source`: The sender of the transfer.
 // - `dest`: The recipient of the transfer.
 // - `currency_id`: currency type.
-// - `amount`: free balance amount to tranfer.
+// - `amount`: free balance amount to transfer.
 func MakeForceTransferCall(source0 types.MultiAddress, dest1 types.MultiAddress, currencyId2 uint64, amount3 types1.UCompact) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsTokens: true,

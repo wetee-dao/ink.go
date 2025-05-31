@@ -222,7 +222,7 @@ func GetNodePubServersLatest(state state.State, uint640 uint64) (ret types1.P2PA
 	return
 }
 
-// Make a storage key for BootPeers id={{false [546]}}
+// Make a storage key for BootPeers id={{false [327]}}
 //
 //	侧链boot peers
 func MakeBootPeersStorageKey() (types.StorageKey, error) {

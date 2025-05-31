@@ -114,24 +114,24 @@ func GetDaoProjectsLatest(state state.State, uint640 uint64) (ret []types1.Proje
 //
 //	project board
 //	项目看板
-func MakeProxyProjectsStorageKey(tupleOfByteArray32Uint640 [32]byte, tupleOfByteArray32Uint641 uint64) (types.StorageKey, error) {
+func MakeProxyProjectsStorageKey(tupleOfByteArray32Uint6410 [32]byte, tupleOfByteArray32Uint6411 uint64) (types.StorageKey, error) {
 	byteArgs := [][]byte{}
 	encBytes := []byte{}
 	var err error
-	encBytes, err = codec.Encode(tupleOfByteArray32Uint640)
+	encBytes, err = codec.Encode(tupleOfByteArray32Uint6410)
 	if err != nil {
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
-	encBytes, err = codec.Encode(tupleOfByteArray32Uint641)
+	encBytes, err = codec.Encode(tupleOfByteArray32Uint6411)
 	if err != nil {
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
 	return types.CreateStorageKey(&types1.Meta, "Project", "ProxyProjects", byteArgs...)
 }
-func GetProxyProjects(state state.State, bhash types.Hash, tupleOfByteArray32Uint640 [32]byte, tupleOfByteArray32Uint641 uint64) (ret types1.ProjectInfo, isSome bool, err error) {
-	key, err := MakeProxyProjectsStorageKey(tupleOfByteArray32Uint640, tupleOfByteArray32Uint641)
+func GetProxyProjects(state state.State, bhash types.Hash, tupleOfByteArray32Uint6410 [32]byte, tupleOfByteArray32Uint6411 uint64) (ret types1.ProjectInfo, isSome bool, err error) {
+	key, err := MakeProxyProjectsStorageKey(tupleOfByteArray32Uint6410, tupleOfByteArray32Uint6411)
 	if err != nil {
 		return
 	}
@@ -141,8 +141,8 @@ func GetProxyProjects(state state.State, bhash types.Hash, tupleOfByteArray32Uin
 	}
 	return
 }
-func GetProxyProjectsLatest(state state.State, tupleOfByteArray32Uint640 [32]byte, tupleOfByteArray32Uint641 uint64) (ret types1.ProjectInfo, isSome bool, err error) {
-	key, err := MakeProxyProjectsStorageKey(tupleOfByteArray32Uint640, tupleOfByteArray32Uint641)
+func GetProxyProjectsLatest(state state.State, tupleOfByteArray32Uint6410 [32]byte, tupleOfByteArray32Uint6411 uint64) (ret types1.ProjectInfo, isSome bool, err error) {
+	key, err := MakeProxyProjectsStorageKey(tupleOfByteArray32Uint6410, tupleOfByteArray32Uint6411)
 	if err != nil {
 		return
 	}

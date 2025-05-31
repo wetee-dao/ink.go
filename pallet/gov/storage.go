@@ -170,7 +170,7 @@ func GetPeriodsLatest(state state.State, uint640 uint64) (ret []types1.Period, e
 	return
 }
 
-// Make a storage key for DefaultPeriods id={{false [492]}}
+// Make a storage key for DefaultPeriods id={{false [295]}}
 //
 //	投票轨道
 func MakeDefaultPeriodsStorageKey() (types.StorageKey, error) {
@@ -376,7 +376,7 @@ func MakeReserveOfStorageKey(byteArray320 [32]byte) (types.StorageKey, error) {
 
 var ReserveOfResultDefaultBytes, _ = hex.DecodeString("00")
 
-func GetReserveOf(state state.State, bhash types.Hash, byteArray320 [32]byte) (ret []types1.TupleOfU128Uint64, err error) {
+func GetReserveOf(state state.State, bhash types.Hash, byteArray320 [32]byte) (ret []types1.TupleOfU128Uint32, err error) {
 	key, err := MakeReserveOfStorageKey(byteArray320)
 	if err != nil {
 		return
@@ -394,7 +394,7 @@ func GetReserveOf(state state.State, bhash types.Hash, byteArray320 [32]byte) (r
 	}
 	return
 }
-func GetReserveOfLatest(state state.State, byteArray320 [32]byte) (ret []types1.TupleOfU128Uint64, err error) {
+func GetReserveOfLatest(state state.State, byteArray320 [32]byte) (ret []types1.TupleOfU128Uint32, err error) {
 	key, err := MakeReserveOfStorageKey(byteArray320)
 	if err != nil {
 		return

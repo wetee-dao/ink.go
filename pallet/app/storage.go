@@ -59,24 +59,24 @@ func GetNextTeeIdLatest(state state.State) (ret uint64, err error) {
 //
 //	App
 //	应用
-func MakeTEEAppsStorageKey(tupleOfByteArray32Uint640 [32]byte, tupleOfByteArray32Uint641 uint64) (types.StorageKey, error) {
+func MakeTEEAppsStorageKey(tupleOfByteArray32Uint6410 [32]byte, tupleOfByteArray32Uint6411 uint64) (types.StorageKey, error) {
 	byteArgs := [][]byte{}
 	encBytes := []byte{}
 	var err error
-	encBytes, err = codec.Encode(tupleOfByteArray32Uint640)
+	encBytes, err = codec.Encode(tupleOfByteArray32Uint6410)
 	if err != nil {
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
-	encBytes, err = codec.Encode(tupleOfByteArray32Uint641)
+	encBytes, err = codec.Encode(tupleOfByteArray32Uint6411)
 	if err != nil {
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
 	return types.CreateStorageKey(&types1.Meta, "App", "TEEApps", byteArgs...)
 }
-func GetTEEApps(state state.State, bhash types.Hash, tupleOfByteArray32Uint640 [32]byte, tupleOfByteArray32Uint641 uint64) (ret types1.TeeApp, isSome bool, err error) {
-	key, err := MakeTEEAppsStorageKey(tupleOfByteArray32Uint640, tupleOfByteArray32Uint641)
+func GetTEEApps(state state.State, bhash types.Hash, tupleOfByteArray32Uint6410 [32]byte, tupleOfByteArray32Uint6411 uint64) (ret types1.TeeApp, isSome bool, err error) {
+	key, err := MakeTEEAppsStorageKey(tupleOfByteArray32Uint6410, tupleOfByteArray32Uint6411)
 	if err != nil {
 		return
 	}
@@ -86,8 +86,8 @@ func GetTEEApps(state state.State, bhash types.Hash, tupleOfByteArray32Uint640 [
 	}
 	return
 }
-func GetTEEAppsLatest(state state.State, tupleOfByteArray32Uint640 [32]byte, tupleOfByteArray32Uint641 uint64) (ret types1.TeeApp, isSome bool, err error) {
-	key, err := MakeTEEAppsStorageKey(tupleOfByteArray32Uint640, tupleOfByteArray32Uint641)
+func GetTEEAppsLatest(state state.State, tupleOfByteArray32Uint6410 [32]byte, tupleOfByteArray32Uint6411 uint64) (ret types1.TeeApp, isSome bool, err error) {
+	key, err := MakeTEEAppsStorageKey(tupleOfByteArray32Uint6410, tupleOfByteArray32Uint6411)
 	if err != nil {
 		return
 	}
@@ -378,7 +378,7 @@ func MakeAppVersionStorageKey(uint640 uint64) (types.StorageKey, error) {
 	byteArgs = append(byteArgs, encBytes)
 	return types.CreateStorageKey(&types1.Meta, "App", "AppVersion", byteArgs...)
 }
-func GetAppVersion(state state.State, bhash types.Hash, uint640 uint64) (ret uint64, isSome bool, err error) {
+func GetAppVersion(state state.State, bhash types.Hash, uint640 uint64) (ret uint32, isSome bool, err error) {
 	key, err := MakeAppVersionStorageKey(uint640)
 	if err != nil {
 		return
@@ -389,7 +389,7 @@ func GetAppVersion(state state.State, bhash types.Hash, uint640 uint64) (ret uin
 	}
 	return
 }
-func GetAppVersionLatest(state state.State, uint640 uint64) (ret uint64, isSome bool, err error) {
+func GetAppVersionLatest(state state.State, uint640 uint64) (ret uint32, isSome bool, err error) {
 	key, err := MakeAppVersionStorageKey(uint640)
 	if err != nil {
 		return

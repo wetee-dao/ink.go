@@ -1,13 +1,18 @@
 package client
 
 import (
+	"bytes"
+	"encoding/hex"
 	"errors"
 	"fmt"
 	"hash"
+	"log"
 	"time"
 
 	gsrpc "github.com/centrifuge/go-substrate-rpc-client/v4"
 	"github.com/centrifuge/go-substrate-rpc-client/v4/config"
+	"github.com/centrifuge/go-substrate-rpc-client/v4/registry"
+	"github.com/centrifuge/go-substrate-rpc-client/v4/scale"
 	"github.com/centrifuge/go-substrate-rpc-client/v4/types"
 	"github.com/centrifuge/go-substrate-rpc-client/v4/types/codec"
 	"github.com/centrifuge/go-substrate-rpc-client/v4/xxhash"
@@ -15,16 +20,18 @@ import (
 
 	"github.com/wetee-dao/go-sdk/pallet/system"
 	gtypes "github.com/wetee-dao/go-sdk/pallet/types"
+	"github.com/wetee-dao/go-sdk/util"
 )
 
 // 区块链链接
 // Chain client
 type ChainClient struct {
-	Api     *gsrpc.SubstrateAPI
-	Meta    *types.Metadata
-	Runtime *types.RuntimeVersion
-	Hash    types.Hash
-	Debug   bool
+	Api      *gsrpc.SubstrateAPI
+	Meta     *types.Metadata
+	Runtime  *types.RuntimeVersion
+	ErrorMap registry.ErrorRegistry
+	Hash     types.Hash
+	Debug    bool
 }
 
 // 初始化区块连链接
@@ -44,6 +51,11 @@ func ClientInit(url string, debug bool) (*ChainClient, error) {
 	}
 	gtypes.Meta = *meta
 
+	errMap, err := InitErrors(meta)
+	if err != nil {
+		return nil, err
+	}
+
 	genesisHash, err := api.RPC.Chain.GetBlockHash(0)
 	if err != nil {
 		return nil, err
@@ -54,7 +66,7 @@ func ClientInit(url string, debug bool) (*ChainClient, error) {
 		return nil, err
 	}
 
-	return &ChainClient{api, meta, runtime, genesisHash, debug}, nil
+	return &ChainClient{api, meta, runtime, errMap, genesisHash, debug}, nil
 }
 
 // 检查 metadata 是否匹配
@@ -163,7 +175,7 @@ func (c *ChainClient) SignAndSubmit(signer *Signer, runtimeCall gtypes.RuntimeCa
 			}
 		case err := <-sub.Err():
 			if c.Debug {
-				LogWithRed("SubmitAndWatchExtrinsic ERROR", err.Error())
+				util.LogWithRed("SubmitAndWatchExtrinsic ERROR", err.Error())
 			}
 
 			return err
@@ -207,23 +219,35 @@ func (c *ChainClient) checkExtrinsic(extHash types.Hash, blockHash types.Hash) (
 		}
 		if e.Event.AsSystemField0.IsExtrinsicSuccess {
 			if c.Debug {
-				LogWithRed("Extrinsic", "ExtrinsicSuccess")
+				util.LogWithRed("Extrinsic", "ExtrinsicSuccess")
 			}
 			return cevents, nil
 		}
 		if e.Event.AsSystemField0.IsExtrinsicFailed {
 			errData := e.Event.AsSystemField0.AsExtrinsicFailedDispatchError0
 			if c.Debug {
-				LogWithRed("Extrinsic", "ExtrinsicFailed")
+				util.LogWithRed("Extrinsic", "ExtrinsicFailed")
 			}
 
-			b, err := errData.MarshalJSON()
-			if err != nil {
-				fmt.Println(err)
-				return nil, err
+			var errInfo error
+			if errData.IsModule {
+				merr := errData.AsModuleField0
+				info, ierr := c.GetErrorInfo(merr.Index, merr.Error)
+				if ierr == nil {
+					errInfo = errors.New("tx: module error " + info.Name)
+				} else {
+					errInfo = errors.New("tx: unknown module error ")
+				}
+			} else {
+				b, err := errData.MarshalJSON()
+				if err != nil {
+					fmt.Println(err)
+					return nil, err
+				}
+				errInfo = errors.New(string(b))
 			}
 
-			return nil, errors.New(string(b))
+			return nil, errInfo
 		}
 	}
 
@@ -423,6 +447,40 @@ func (c *ChainClient) GetHashers(pallet, method string) ([]hash.Hash, error) {
 		return nil, err
 	}
 	return hashers, nil
+}
+
+func (c *ChainClient) CallRuntimeApi(pallet, method string, args []any, result any) error {
+	var buffer bytes.Buffer
+	var err error
+	encoder := scale.NewEncoder(&buffer)
+
+	// Encode the arguments
+	for _, arg := range args {
+		err = encoder.Encode(arg)
+		if err != nil {
+			log.Fatal(err)
+			return err
+		}
+	}
+
+	// Call runtime api
+	var rawResult string
+	err = c.Api.Client.Call(&rawResult, "state_call", pallet+"_"+method, "0x"+hex.EncodeToString(buffer.Bytes()))
+	if err != nil {
+		return err
+	}
+
+	// Decode the raw result from hex to bytes
+	rawResult = rawResult[2:]
+	resultBytes, err := hex.DecodeString(rawResult)
+	if err != nil {
+		log.Fatalf("Failed to decode result: %v", err)
+	}
+
+	// fmt.Println("Call RuntimeApi Result:", resultBytes)
+
+	// Decode the result using scale.Decoder
+	return scale.NewDecoder(bytes.NewReader(resultBytes)).Decode(result)
 }
 
 // create prefixed key of {{pallet}}.{{method}}

@@ -215,11 +215,11 @@ func GetAllExtrinsicsLenLatest(state state.State) (ret uint32, isSome bool, err 
 // Make a storage key for BlockHash
 //
 //	Map of block numbers to block hashes.
-func MakeBlockHashStorageKey(uint640 uint64) (types.StorageKey, error) {
+func MakeBlockHashStorageKey(uint320 uint32) (types.StorageKey, error) {
 	byteArgs := [][]byte{}
 	encBytes := []byte{}
 	var err error
-	encBytes, err = codec.Encode(uint640)
+	encBytes, err = codec.Encode(uint320)
 	if err != nil {
 		return nil, err
 	}
@@ -229,8 +229,8 @@ func MakeBlockHashStorageKey(uint640 uint64) (types.StorageKey, error) {
 
 var BlockHashResultDefaultBytes, _ = hex.DecodeString("0000000000000000000000000000000000000000000000000000000000000000")
 
-func GetBlockHash(state state.State, bhash types.Hash, uint640 uint64) (ret [32]byte, err error) {
-	key, err := MakeBlockHashStorageKey(uint640)
+func GetBlockHash(state state.State, bhash types.Hash, uint320 uint32) (ret [32]byte, err error) {
+	key, err := MakeBlockHashStorageKey(uint320)
 	if err != nil {
 		return
 	}
@@ -247,8 +247,8 @@ func GetBlockHash(state state.State, bhash types.Hash, uint640 uint64) (ret [32]
 	}
 	return
 }
-func GetBlockHashLatest(state state.State, uint640 uint64) (ret [32]byte, err error) {
-	key, err := MakeBlockHashStorageKey(uint640)
+func GetBlockHashLatest(state state.State, uint320 uint32) (ret [32]byte, err error) {
+	key, err := MakeBlockHashStorageKey(uint320)
 	if err != nil {
 		return
 	}
@@ -320,16 +320,16 @@ func GetExtrinsicDataLatest(state state.State, uint320 uint32) (ret []byte, err 
 	return
 }
 
-// Make a storage key for Number id={{false [12]}}
+// Make a storage key for Number id={{false [4]}}
 //
 //	The current block number being processed. Set by `execute_block`.
 func MakeNumberStorageKey() (types.StorageKey, error) {
 	return types.CreateStorageKey(&types1.Meta, "System", "Number")
 }
 
-var NumberResultDefaultBytes, _ = hex.DecodeString("0000000000000000")
+var NumberResultDefaultBytes, _ = hex.DecodeString("00000000")
 
-func GetNumber(state state.State, bhash types.Hash) (ret uint64, err error) {
+func GetNumber(state state.State, bhash types.Hash) (ret uint32, err error) {
 	key, err := MakeNumberStorageKey()
 	if err != nil {
 		return
@@ -347,7 +347,7 @@ func GetNumber(state state.State, bhash types.Hash) (ret uint64, err error) {
 	}
 	return
 }
-func GetNumberLatest(state state.State) (ret uint64, err error) {
+func GetNumberLatest(state state.State) (ret uint32, err error) {
 	key, err := MakeNumberStorageKey()
 	if err != nil {
 		return
@@ -582,7 +582,7 @@ func MakeEventTopicsStorageKey(byteArray320 [32]byte) (types.StorageKey, error) 
 
 var EventTopicsResultDefaultBytes, _ = hex.DecodeString("00")
 
-func GetEventTopics(state state.State, bhash types.Hash, byteArray320 [32]byte) (ret []types1.TupleOfUint64Uint32, err error) {
+func GetEventTopics(state state.State, bhash types.Hash, byteArray320 [32]byte) (ret []types1.TupleOfUint32Uint32, err error) {
 	key, err := MakeEventTopicsStorageKey(byteArray320)
 	if err != nil {
 		return
@@ -600,7 +600,7 @@ func GetEventTopics(state state.State, bhash types.Hash, byteArray320 [32]byte) 
 	}
 	return
 }
-func GetEventTopicsLatest(state state.State, byteArray320 [32]byte) (ret []types1.TupleOfUint64Uint32, err error) {
+func GetEventTopicsLatest(state state.State, byteArray320 [32]byte) (ret []types1.TupleOfUint32Uint32, err error) {
 	key, err := MakeEventTopicsStorageKey(byteArray320)
 	if err != nil {
 		return
@@ -619,7 +619,7 @@ func GetEventTopicsLatest(state state.State, byteArray320 [32]byte) (ret []types
 	return
 }
 
-// Make a storage key for LastRuntimeUpgrade id={{false [169]}}
+// Make a storage key for LastRuntimeUpgrade id={{false [88]}}
 //
 //	Stores the `spec_version` and `spec_name` of when the last runtime upgrade happened.
 func MakeLastRuntimeUpgradeStorageKey() (types.StorageKey, error) {
@@ -741,7 +741,7 @@ func GetUpgradedToTripleRefCountLatest(state state.State) (ret bool, err error) 
 	return
 }
 
-// Make a storage key for ExecutionPhase id={{false [165]}}
+// Make a storage key for ExecutionPhase id={{false [85]}}
 //
 //	The execution phase of the block.
 func MakeExecutionPhaseStorageKey() (types.StorageKey, error) {
@@ -770,7 +770,7 @@ func GetExecutionPhaseLatest(state state.State) (ret types1.Phase, isSome bool, 
 	return
 }
 
-// Make a storage key for AuthorizedUpgrade id={{false [171]}}
+// Make a storage key for AuthorizedUpgrade id={{false [92]}}
 //
 //	`Some` if a code upgrade has been authorized.
 func MakeAuthorizedUpgradeStorageKey() (types.StorageKey, error) {
@@ -795,6 +795,58 @@ func GetAuthorizedUpgradeLatest(state state.State) (ret types1.CodeUpgradeAuthor
 	isSome, err = state.GetStorageLatest(key, &ret)
 	if err != nil {
 		return
+	}
+	return
+}
+
+// Make a storage key for ExtrinsicWeightReclaimed id={{false [10]}}
+//
+//	The weight reclaimed for the extrinsic.
+//
+//	This information is available until the end of the extrinsic execution.
+//	More precisely this information is removed in `note_applied_extrinsic`.
+//
+//	Logic doing some post dispatch weight reduction must update this storage to avoid duplicate
+//	reduction.
+func MakeExtrinsicWeightReclaimedStorageKey() (types.StorageKey, error) {
+	return types.CreateStorageKey(&types1.Meta, "System", "ExtrinsicWeightReclaimed")
+}
+
+var ExtrinsicWeightReclaimedResultDefaultBytes, _ = hex.DecodeString("0000")
+
+func GetExtrinsicWeightReclaimed(state state.State, bhash types.Hash) (ret types1.Weight, err error) {
+	key, err := MakeExtrinsicWeightReclaimedStorageKey()
+	if err != nil {
+		return
+	}
+	var isSome bool
+	isSome, err = state.GetStorage(key, &ret, bhash)
+	if err != nil {
+		return
+	}
+	if !isSome {
+		err = codec.Decode(ExtrinsicWeightReclaimedResultDefaultBytes, &ret)
+		if err != nil {
+			return
+		}
+	}
+	return
+}
+func GetExtrinsicWeightReclaimedLatest(state state.State) (ret types1.Weight, err error) {
+	key, err := MakeExtrinsicWeightReclaimedStorageKey()
+	if err != nil {
+		return
+	}
+	var isSome bool
+	isSome, err = state.GetStorageLatest(key, &ret)
+	if err != nil {
+		return
+	}
+	if !isSome {
+		err = codec.Decode(ExtrinsicWeightReclaimedResultDefaultBytes, &ret)
+		if err != nil {
+			return
+		}
 	}
 	return
 }

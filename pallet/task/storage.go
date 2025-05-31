@@ -59,24 +59,24 @@ func GetNextTeeIdLatest(state state.State) (ret uint64, err error) {
 //
 //	Task
 //	应用
-func MakeTEETasksStorageKey(tupleOfByteArray32Uint640 [32]byte, tupleOfByteArray32Uint641 uint64) (types.StorageKey, error) {
+func MakeTEETasksStorageKey(tupleOfByteArray32Uint6410 [32]byte, tupleOfByteArray32Uint6411 uint64) (types.StorageKey, error) {
 	byteArgs := [][]byte{}
 	encBytes := []byte{}
 	var err error
-	encBytes, err = codec.Encode(tupleOfByteArray32Uint640)
+	encBytes, err = codec.Encode(tupleOfByteArray32Uint6410)
 	if err != nil {
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
-	encBytes, err = codec.Encode(tupleOfByteArray32Uint641)
+	encBytes, err = codec.Encode(tupleOfByteArray32Uint6411)
 	if err != nil {
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
 	return types.CreateStorageKey(&types1.Meta, "Task", "TEETasks", byteArgs...)
 }
-func GetTEETasks(state state.State, bhash types.Hash, tupleOfByteArray32Uint640 [32]byte, tupleOfByteArray32Uint641 uint64) (ret types1.TeeTask, isSome bool, err error) {
-	key, err := MakeTEETasksStorageKey(tupleOfByteArray32Uint640, tupleOfByteArray32Uint641)
+func GetTEETasks(state state.State, bhash types.Hash, tupleOfByteArray32Uint6410 [32]byte, tupleOfByteArray32Uint6411 uint64) (ret types1.TeeTask, isSome bool, err error) {
+	key, err := MakeTEETasksStorageKey(tupleOfByteArray32Uint6410, tupleOfByteArray32Uint6411)
 	if err != nil {
 		return
 	}
@@ -86,8 +86,8 @@ func GetTEETasks(state state.State, bhash types.Hash, tupleOfByteArray32Uint640 
 	}
 	return
 }
-func GetTEETasksLatest(state state.State, tupleOfByteArray32Uint640 [32]byte, tupleOfByteArray32Uint641 uint64) (ret types1.TeeTask, isSome bool, err error) {
-	key, err := MakeTEETasksStorageKey(tupleOfByteArray32Uint640, tupleOfByteArray32Uint641)
+func GetTEETasksLatest(state state.State, tupleOfByteArray32Uint6410 [32]byte, tupleOfByteArray32Uint6411 uint64) (ret types1.TeeTask, isSome bool, err error) {
+	key, err := MakeTEETasksStorageKey(tupleOfByteArray32Uint6410, tupleOfByteArray32Uint6411)
 	if err != nil {
 		return
 	}
@@ -378,7 +378,7 @@ func MakeTaskVersionStorageKey(uint640 uint64) (types.StorageKey, error) {
 	byteArgs = append(byteArgs, encBytes)
 	return types.CreateStorageKey(&types1.Meta, "Task", "TaskVersion", byteArgs...)
 }
-func GetTaskVersion(state state.State, bhash types.Hash, uint640 uint64) (ret uint64, isSome bool, err error) {
+func GetTaskVersion(state state.State, bhash types.Hash, uint640 uint64) (ret uint32, isSome bool, err error) {
 	key, err := MakeTaskVersionStorageKey(uint640)
 	if err != nil {
 		return
@@ -389,7 +389,7 @@ func GetTaskVersion(state state.State, bhash types.Hash, uint640 uint64) (ret ui
 	}
 	return
 }
-func GetTaskVersionLatest(state state.State, uint640 uint64) (ret uint64, isSome bool, err error) {
+func GetTaskVersionLatest(state state.State, uint640 uint64) (ret uint32, isSome bool, err error) {
 	key, err := MakeTaskVersionStorageKey(uint640)
 	if err != nil {
 		return

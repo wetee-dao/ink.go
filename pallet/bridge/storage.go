@@ -129,3 +129,38 @@ func GetApiMetasLatest(state state.State, workId0 types1.WorkId) (ret types1.Api
 	}
 	return
 }
+
+// Make a storage key for Results
+func MakeResultsStorageKey(u1280 types.U128) (types.StorageKey, error) {
+	byteArgs := [][]byte{}
+	encBytes := []byte{}
+	var err error
+	encBytes, err = codec.Encode(u1280)
+	if err != nil {
+		return nil, err
+	}
+	byteArgs = append(byteArgs, encBytes)
+	return types.CreateStorageKey(&types1.Meta, "Bridge", "Results", byteArgs...)
+}
+func GetResults(state state.State, bhash types.Hash, u1280 types.U128) (ret types1.ContractResult, isSome bool, err error) {
+	key, err := MakeResultsStorageKey(u1280)
+	if err != nil {
+		return
+	}
+	isSome, err = state.GetStorage(key, &ret, bhash)
+	if err != nil {
+		return
+	}
+	return
+}
+func GetResultsLatest(state state.State, u1280 types.U128) (ret types1.ContractResult, isSome bool, err error) {
+	key, err := MakeResultsStorageKey(u1280)
+	if err != nil {
+		return
+	}
+	isSome, err = state.GetStorageLatest(key, &ret)
+	if err != nil {
+		return
+	}
+	return
+}

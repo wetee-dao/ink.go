@@ -65,7 +65,7 @@ func (w *Worker) ClusterWithdrawal(id gtypes.WorkId, val int64, untilFinalized b
 func (w *Worker) ClusterUnmortgage(clusterID uint64, id uint64, untilFinalized bool) error {
 	runtimeCall := worker.MakeClusterUnmortgageCall(
 		clusterID,
-		id,
+		uint32(id),
 	)
 
 	return w.Client.SignAndSubmit(w.Signer, runtimeCall, untilFinalized)

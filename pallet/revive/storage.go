@@ -1,4 +1,4 @@
-package contracts
+package revive
 
 import (
 	"encoding/hex"
@@ -20,7 +20,7 @@ func MakePristineCodeStorageKey(byteArray320 [32]byte) (types.StorageKey, error)
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
-	return types.CreateStorageKey(&types1.Meta, "Contracts", "PristineCode", byteArgs...)
+	return types.CreateStorageKey(&types1.Meta, "Revive", "PristineCode", byteArgs...)
 }
 func GetPristineCode(state state.State, bhash types.Hash, byteArray320 [32]byte) (ret []byte, isSome bool, err error) {
 	key, err := MakePristineCodeStorageKey(byteArray320)
@@ -57,7 +57,7 @@ func MakeCodeInfoOfStorageKey(byteArray320 [32]byte) (types.StorageKey, error) {
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
-	return types.CreateStorageKey(&types1.Meta, "Contracts", "CodeInfoOf", byteArgs...)
+	return types.CreateStorageKey(&types1.Meta, "Revive", "CodeInfoOf", byteArgs...)
 }
 func GetCodeInfoOf(state state.State, bhash types.Hash, byteArray320 [32]byte) (ret types1.CodeInfo, isSome bool, err error) {
 	key, err := MakeCodeInfoOfStorageKey(byteArray320)
@@ -82,91 +82,22 @@ func GetCodeInfoOfLatest(state state.State, byteArray320 [32]byte) (ret types1.C
 	return
 }
 
-// Make a storage key for Nonce id={{false [12]}}
-//
-//	This is a **monotonic** counter incremented on contract instantiation.
-//
-//	This is used in order to generate unique trie ids for contracts.
-//	The trie id of a new contract is calculated from hash(account_id, nonce).
-//	The nonce is required because otherwise the following sequence would lead to
-//	a possible collision of storage:
-//
-//	1. Create a new contract.
-//	2. Terminate the contract.
-//	3. Immediately recreate the contract with the same account_id.
-//
-//	This is bad because the contents of a trie are deleted lazily and there might be
-//	storage of the old instantiation still in it when the new contract is created. Please
-//	note that we can't replace the counter by the block number because the sequence above
-//	can happen in the same block. We also can't keep the account counter in memory only
-//	because storage is the only way to communicate across different extrinsics in the
-//	same block.
-//
-//	# Note
-//
-//	Do not use it to determine the number of contracts. It won't be decremented if
-//	a contract is destroyed.
-func MakeNonceStorageKey() (types.StorageKey, error) {
-	return types.CreateStorageKey(&types1.Meta, "Contracts", "Nonce")
-}
-
-var NonceResultDefaultBytes, _ = hex.DecodeString("0000000000000000")
-
-func GetNonce(state state.State, bhash types.Hash) (ret uint64, err error) {
-	key, err := MakeNonceStorageKey()
-	if err != nil {
-		return
-	}
-	var isSome bool
-	isSome, err = state.GetStorage(key, &ret, bhash)
-	if err != nil {
-		return
-	}
-	if !isSome {
-		err = codec.Decode(NonceResultDefaultBytes, &ret)
-		if err != nil {
-			return
-		}
-	}
-	return
-}
-func GetNonceLatest(state state.State) (ret uint64, err error) {
-	key, err := MakeNonceStorageKey()
-	if err != nil {
-		return
-	}
-	var isSome bool
-	isSome, err = state.GetStorageLatest(key, &ret)
-	if err != nil {
-		return
-	}
-	if !isSome {
-		err = codec.Decode(NonceResultDefaultBytes, &ret)
-		if err != nil {
-			return
-		}
-	}
-	return
-}
-
 // Make a storage key for ContractInfoOf
 //
 //	The code associated with a given account.
-//
-//	TWOX-NOTE: SAFE since `AccountId` is a secure hash.
-func MakeContractInfoOfStorageKey(byteArray320 [32]byte) (types.StorageKey, error) {
+func MakeContractInfoOfStorageKey(byteArray200 [20]byte) (types.StorageKey, error) {
 	byteArgs := [][]byte{}
 	encBytes := []byte{}
 	var err error
-	encBytes, err = codec.Encode(byteArray320)
+	encBytes, err = codec.Encode(byteArray200)
 	if err != nil {
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
-	return types.CreateStorageKey(&types1.Meta, "Contracts", "ContractInfoOf", byteArgs...)
+	return types.CreateStorageKey(&types1.Meta, "Revive", "ContractInfoOf", byteArgs...)
 }
-func GetContractInfoOf(state state.State, bhash types.Hash, byteArray320 [32]byte) (ret types1.ContractInfo, isSome bool, err error) {
-	key, err := MakeContractInfoOfStorageKey(byteArray320)
+func GetContractInfoOf(state state.State, bhash types.Hash, byteArray200 [20]byte) (ret types1.ContractInfo, isSome bool, err error) {
+	key, err := MakeContractInfoOfStorageKey(byteArray200)
 	if err != nil {
 		return
 	}
@@ -176,8 +107,45 @@ func GetContractInfoOf(state state.State, bhash types.Hash, byteArray320 [32]byt
 	}
 	return
 }
-func GetContractInfoOfLatest(state state.State, byteArray320 [32]byte) (ret types1.ContractInfo, isSome bool, err error) {
-	key, err := MakeContractInfoOfStorageKey(byteArray320)
+func GetContractInfoOfLatest(state state.State, byteArray200 [20]byte) (ret types1.ContractInfo, isSome bool, err error) {
+	key, err := MakeContractInfoOfStorageKey(byteArray200)
+	if err != nil {
+		return
+	}
+	isSome, err = state.GetStorageLatest(key, &ret)
+	if err != nil {
+		return
+	}
+	return
+}
+
+// Make a storage key for ImmutableDataOf
+//
+//	The immutable data associated with a given account.
+func MakeImmutableDataOfStorageKey(byteArray200 [20]byte) (types.StorageKey, error) {
+	byteArgs := [][]byte{}
+	encBytes := []byte{}
+	var err error
+	encBytes, err = codec.Encode(byteArray200)
+	if err != nil {
+		return nil, err
+	}
+	byteArgs = append(byteArgs, encBytes)
+	return types.CreateStorageKey(&types1.Meta, "Revive", "ImmutableDataOf", byteArgs...)
+}
+func GetImmutableDataOf(state state.State, bhash types.Hash, byteArray200 [20]byte) (ret []byte, isSome bool, err error) {
+	key, err := MakeImmutableDataOfStorageKey(byteArray200)
+	if err != nil {
+		return
+	}
+	isSome, err = state.GetStorage(key, &ret, bhash)
+	if err != nil {
+		return
+	}
+	return
+}
+func GetImmutableDataOfLatest(state state.State, byteArray200 [20]byte) (ret []byte, isSome bool, err error) {
+	key, err := MakeImmutableDataOfStorageKey(byteArray200)
 	if err != nil {
 		return
 	}
@@ -203,7 +171,7 @@ func MakeDeletionQueueStorageKey(uint320 uint32) (types.StorageKey, error) {
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
-	return types.CreateStorageKey(&types1.Meta, "Contracts", "DeletionQueue", byteArgs...)
+	return types.CreateStorageKey(&types1.Meta, "Revive", "DeletionQueue", byteArgs...)
 }
 func GetDeletionQueue(state state.State, bhash types.Hash, uint320 uint32) (ret []byte, isSome bool, err error) {
 	key, err := MakeDeletionQueueStorageKey(uint320)
@@ -228,12 +196,12 @@ func GetDeletionQueueLatest(state state.State, uint320 uint32) (ret []byte, isSo
 	return
 }
 
-// Make a storage key for DeletionQueueCounter id={{false [531]}}
+// Make a storage key for DeletionQueueCounter id={{false [234]}}
 //
 //	A pair of monotonic counters used to track the latest contract marked for deletion
 //	and the latest deleted contract in queue.
 func MakeDeletionQueueCounterStorageKey() (types.StorageKey, error) {
-	return types.CreateStorageKey(&types1.Meta, "Contracts", "DeletionQueueCounter")
+	return types.CreateStorageKey(&types1.Meta, "Revive", "DeletionQueueCounter")
 }
 
 var DeletionQueueCounterResultDefaultBytes, _ = hex.DecodeString("0000000000000000")
@@ -275,15 +243,27 @@ func GetDeletionQueueCounterLatest(state state.State) (ret types1.DeletionQueueM
 	return
 }
 
-// Make a storage key for MigrationInProgress id={{false [532]}}
+// Make a storage key for OriginalAccount
 //
-//	A migration can span across multiple blocks. This storage defines a cursor to track the
-//	progress of the migration, enabling us to resume from the last completed position.
-func MakeMigrationInProgressStorageKey() (types.StorageKey, error) {
-	return types.CreateStorageKey(&types1.Meta, "Contracts", "MigrationInProgress")
+//	Map a Ethereum address to its original `AccountId32`.
+//
+//	When deriving a `H160` from an `AccountId32` we use a hash function. In order to
+//	reconstruct the original account we need to store the reverse mapping here.
+//	Register your `AccountId32` using [`Pallet::map_account`] in order to
+//	use it with this pallet.
+func MakeOriginalAccountStorageKey(byteArray200 [20]byte) (types.StorageKey, error) {
+	byteArgs := [][]byte{}
+	encBytes := []byte{}
+	var err error
+	encBytes, err = codec.Encode(byteArray200)
+	if err != nil {
+		return nil, err
+	}
+	byteArgs = append(byteArgs, encBytes)
+	return types.CreateStorageKey(&types1.Meta, "Revive", "OriginalAccount", byteArgs...)
 }
-func GetMigrationInProgress(state state.State, bhash types.Hash) (ret []byte, isSome bool, err error) {
-	key, err := MakeMigrationInProgressStorageKey()
+func GetOriginalAccount(state state.State, bhash types.Hash, byteArray200 [20]byte) (ret [32]byte, isSome bool, err error) {
+	key, err := MakeOriginalAccountStorageKey(byteArray200)
 	if err != nil {
 		return
 	}
@@ -293,8 +273,8 @@ func GetMigrationInProgress(state state.State, bhash types.Hash) (ret []byte, is
 	}
 	return
 }
-func GetMigrationInProgressLatest(state state.State) (ret []byte, isSome bool, err error) {
-	key, err := MakeMigrationInProgressStorageKey()
+func GetOriginalAccountLatest(state state.State, byteArray200 [20]byte) (ret [32]byte, isSome bool, err error) {
+	key, err := MakeOriginalAccountStorageKey(byteArray200)
 	if err != nil {
 		return
 	}
