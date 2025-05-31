@@ -66,7 +66,7 @@ func (r *Revive) QueryInk(
 	contractInput util.InkContractInput,
 	returnValue any,
 ) error {
-	result, err := r.TryCallInk(origin, amount, gas_limit, storage_deposit_limit, contract, contractInput)
+	result, err := r.DryRunInk(origin, amount, gas_limit, storage_deposit_limit, contract, contractInput)
 	if err != nil {
 		return err
 	}
@@ -76,7 +76,7 @@ func (r *Revive) QueryInk(
 }
 
 // try call ink contract
-func (r *Revive) TryCallInk(
+func (r *Revive) DryRunInk(
 	origin types.AccountID,
 	amount types.U128,
 	gas_limit util.Option[types.Weight],
@@ -103,6 +103,10 @@ func (r *Revive) TryCallInk(
 		return nil, errors.New("contractInput.Encode: " + err.Error())
 	}
 
+	// util.LogWithRed("[ TryCall contract ]", contract)
+	// util.LogWithRed("[ TryCall   origin ]", origin.ToHexString())
+	// util.LogWithRed("[ TryCall     args ]", "0x"+hex.EncodeToString(inputBt))
+
 	result := util.ContractResult{}
 	err = r.Client.CallRuntimeApi(
 		"ReviveApi",
@@ -117,10 +121,6 @@ func (r *Revive) TryCallInk(
 		},
 		&result,
 	)
-
-	util.LogWithRed("[ TryCall contract ]", contract)
-	util.LogWithRed("[ TryCall   origin ]", origin.ToHexString())
-	util.LogWithRed("[ TryCall     args ]", "0x"+hex.EncodeToString(inputBt))
 	if err != nil {
 		return nil, errors.New("CallRuntimeApi: " + err.Error())
 	}
@@ -143,8 +143,7 @@ func (r *Revive) TryCallInk(
 				info = r.GetErrorFromABI(returnValue.Data[2])
 			}
 
-			err = errors.New("TryCall: REVERT" + info)
-			// fmt.Println("REVERT Data:", returnValue.Data)
+			err = errors.New("TryCall: Contract Reverted" + info)
 			returnValue = nil
 		}
 	}
@@ -201,10 +200,10 @@ func (r *Revive) GetErrorFromABI(index uint8) string {
 	}
 
 	if index >= uint8(len(errors)) {
-		return " unknown"
+		return " -> unknown"
 	}
 
-	return " " + errors[index].Name
+	return " -> " + errors[index].Name
 }
 
 // Get error info from ABI

@@ -58,7 +58,7 @@ func main() {
 		fmt.Println("")
 	}
 
-	v, err := revice.TryCallInk(
+	v, err := revice.DryRunInk(
 		util.NewAccountID(signature.TestKeyringPairAlice.PublicKey),
 		types.NewU128(*big.NewInt(0)),
 		util.NewNone[types.Weight](),
