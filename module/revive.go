@@ -4,8 +4,8 @@ import (
 	"bytes"
 	"encoding/hex"
 	"errors"
-	"fmt"
 	"math/big"
+	"strconv"
 
 	"github.com/centrifuge/go-substrate-rpc-client/v4/scale"
 	"github.com/centrifuge/go-substrate-rpc-client/v4/types"
@@ -19,6 +19,19 @@ import (
 // Revive module
 type Revive struct {
 	Client *chain.ChainClient
+	Abi    *util.InkAbi
+}
+
+func NewRevive(client *chain.ChainClient, abiRaw []byte) (*Revive, error) {
+	abi, err := util.InitAbi(abiRaw)
+	if err != nil {
+		return nil, err
+	}
+
+	return &Revive{
+		Client: client,
+		Abi:    abi,
+	}, nil
 }
 
 // Get balance of h160
@@ -71,6 +84,15 @@ func (r *Revive) TryCallInk(
 	contract string,
 	contractInput util.InkContractInput,
 ) (*gtypes.ExecReturnValue, error) {
+	f, err := r.GetArgsFromABI(contractInput.Selector)
+	if err != nil {
+		return nil, err
+	}
+
+	if len(f.Args) != len(contractInput.Args) {
+		return nil, errors.New("Call args length not match, ABI expect: " + strconv.Itoa(len(f.Args)) + " actual: " + strconv.Itoa(len(contractInput.Args)))
+	}
+
 	contractAddress, err := util.H160HexToBt(contract)
 	if err != nil {
 		return nil, errors.New("H160HexToBt: " + err.Error())
@@ -96,9 +118,9 @@ func (r *Revive) TryCallInk(
 		&result,
 	)
 
-	util.LogWithRed("TryCall contract", contract)
-	util.LogWithRed("TryCall   origin", origin.ToHexString())
-	util.LogWithRed("TryCall     args", "0x"+hex.EncodeToString(inputBt))
+	util.LogWithRed("[ TryCall contract ]", contract)
+	util.LogWithRed("[ TryCall   origin ]", origin.ToHexString())
+	util.LogWithRed("[ TryCall     args ]", "0x"+hex.EncodeToString(inputBt))
 	if err != nil {
 		return nil, errors.New("CallRuntimeApi: " + err.Error())
 	}
@@ -114,9 +136,15 @@ func (r *Revive) TryCallInk(
 		}
 	} else {
 		returnValue = &result.Result.V
+		// util.PrintJson(returnValue)
 		if returnValue.Flags == 1 {
-			err = errors.New("TryCall: REVERT")
-			fmt.Println(returnValue.Data)
+			info := ""
+			if len(returnValue.Data) > 2 && returnValue.Data[1] == 1 {
+				info = r.GetErrorFromABI(returnValue.Data[2])
+			}
+
+			err = errors.New("TryCall: REVERT" + info)
+			// fmt.Println("REVERT Data:", returnValue.Data)
 			returnValue = nil
 		}
 	}
@@ -157,4 +185,35 @@ func (r *Revive) CallInk(
 	)
 
 	return r.Client.SignAndSubmit(signer, call, true)
+}
+
+// Get error info from ABI
+func (r *Revive) GetErrorFromABI(index uint8) string {
+	var errors = []util.SubVariant{}
+	for _, t := range r.Abi.Types {
+		if len(t.Type.Path) == 0 {
+			continue
+		}
+
+		if t.Type.Path[len(t.Type.Path)-1] == "Error" && t.Type.Def.Variant != nil {
+			errors = t.Type.Def.Variant.Variants
+		}
+	}
+
+	if index >= uint8(len(errors)) {
+		return " unknown"
+	}
+
+	return " " + errors[index].Name
+}
+
+// Get error info from ABI
+func (r *Revive) GetArgsFromABI(selector [4]byte) (*util.Message, error) {
+	for _, t := range r.Abi.Spec.Messages {
+		if t.Selector == "0x"+hex.EncodeToString(selector[:]) {
+			return &t, nil
+		}
+	}
+
+	return nil, errors.New("Message 0x" + hex.EncodeToString(selector[:]) + " not found in ABI")
 }
