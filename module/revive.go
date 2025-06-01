@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/hex"
 	"errors"
-	"math/big"
 	"strconv"
 
 	"github.com/centrifuge/go-substrate-rpc-client/v4/scale"
@@ -18,42 +17,22 @@ import (
 
 // Revive module
 type Revive struct {
-	Client *chain.ChainClient
-	Abi    *util.InkAbi
+	Client  *chain.ChainClient
+	Abi     *util.InkAbi
+	Address types.H160
 }
 
-func NewRevive(client *chain.ChainClient, abiRaw []byte) (*Revive, error) {
+func NewRevive(client *chain.ChainClient, address types.H160, abiRaw []byte) (*Revive, error) {
 	abi, err := util.InitAbi(abiRaw)
 	if err != nil {
 		return nil, err
 	}
 
 	return &Revive{
-		Client: client,
-		Abi:    abi,
+		Client:  client,
+		Abi:     abi,
+		Address: address,
 	}, nil
-}
-
-// Get balance of h160
-func (r *Revive) BalanceOfH160(address string) (types.U128, error) {
-	balance := types.NewU128(*big.NewInt(0))
-	bt, err := util.HexToH160(address)
-	if err != nil {
-		return types.U128{}, err
-	}
-	err = r.Client.CallRuntimeApi("ReviveApi", "balance", []any{bt}, &balance)
-	if err != nil {
-		return types.U128{}, err
-	}
-
-	return balance, nil
-}
-
-// Get block gas limit
-func (r *Revive) InkBlockGasLimit(address [32]byte) error {
-	balance := types.NewU128(*big.NewInt(0))
-	err := r.Client.CallRuntimeApi("ReviveApi", "block_gas_limit", []any{}, &balance)
-	return err
 }
 
 // Query ink contract data
@@ -62,17 +41,13 @@ func (r *Revive) QueryInk(
 	amount types.U128,
 	gas_limit util.Option[types.Weight],
 	storage_deposit_limit util.Option[types.U128],
-	contract string,
 	contractInput util.InkContractInput,
 	returnValue any,
 ) error {
-	result, err := r.DryRunInk(origin, amount, gas_limit, storage_deposit_limit, contract, contractInput)
+	result, err := r.DryRunInk(origin, amount, gas_limit, storage_deposit_limit, contractInput)
 	if err != nil {
 		return err
 	}
-
-	// util.PrintJson(result)
-	// fmt.Println(result.Data[1:])
 
 	if result.Data == nil {
 		return errors.New("result data is nil")
@@ -87,7 +62,6 @@ func (r *Revive) DryRunInk(
 	amount types.U128,
 	gas_limit util.Option[types.Weight],
 	storage_deposit_limit util.Option[types.U128],
-	contract string,
 	contractInput util.InkContractInput,
 ) (*gtypes.ExecReturnValue, error) {
 	f, err := r.GetArgsFromABI(contractInput.Selector)
@@ -99,17 +73,12 @@ func (r *Revive) DryRunInk(
 		return nil, errors.New("Call args length not match, ABI expect: " + strconv.Itoa(len(f.Args)) + " actual: " + strconv.Itoa(len(contractInput.Args)))
 	}
 
-	contractAddress, err := util.HexToH160(contract)
-	if err != nil {
-		return nil, errors.New("H160HexToBt: " + err.Error())
-	}
-
 	inputBt, err := contractInput.Encode()
 	if err != nil {
 		return nil, errors.New("contractInput.Encode: " + err.Error())
 	}
 
-	util.LogWithRed("[ TryCall contract ]", contract)
+	util.LogWithRed("[ TryCall contract ]", r.Address.Hex())
 	util.LogWithRed("[ TryCall   origin ]", origin.ToHexString())
 	util.LogWithRed("[ TryCall     args ]", "0x"+hex.EncodeToString(inputBt))
 
@@ -119,7 +88,7 @@ func (r *Revive) DryRunInk(
 		"call",
 		[]any{
 			origin,
-			contractAddress,
+			r.Address,
 			amount,
 			gas_limit,
 			storage_deposit_limit,
@@ -163,21 +132,15 @@ func (r *Revive) CallInk(
 	amount types.U128,
 	gas_limit types.Weight,
 	storage_deposit_limit types.U128,
-	contract string,
 	contractInput util.InkContractInput,
 ) error {
-	contractAddress, err := util.HexToH160(contract)
-	if err != nil {
-		return errors.New("H160HexToBt: " + err.Error())
-	}
-
 	inputBt, err := contractInput.Encode()
 	if err != nil {
 		return errors.New("contractInput.Encode: " + err.Error())
 	}
 
 	call := revive.MakeCallCall(
-		contractAddress,
+		r.Address,
 		types.NewUCompact(amount.Int),
 		gtypes.Weight{
 			RefTime:   gas_limit.RefTime,

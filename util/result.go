@@ -1,17 +1,10 @@
 package util
 
 import (
-	"encoding/hex"
 	"fmt"
 
 	"github.com/centrifuge/go-substrate-rpc-client/v4/scale"
 )
-
-type H160 [20]byte
-
-func (h *H160) String() string {
-	return "0x" + hex.EncodeToString(h[:])
-}
 
 type Result[T, Err any] struct {
 	IsErr bool

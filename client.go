@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"hash"
 	"log"
+	"math/big"
 	"time"
 
 	gsrpc "github.com/centrifuge/go-substrate-rpc-client/v4"
@@ -481,6 +482,28 @@ func (c *ChainClient) CallRuntimeApi(pallet, method string, args []any, result a
 
 	// Decode the result using scale.Decoder
 	return scale.NewDecoder(bytes.NewReader(resultBytes)).Decode(result)
+}
+
+// Get balance of h160
+func (c *ChainClient) BalanceOfH160(address string) (types.U128, error) {
+	balance := types.NewU128(*big.NewInt(0))
+	bt, err := util.HexToH160(address)
+	if err != nil {
+		return types.U128{}, err
+	}
+	err = c.CallRuntimeApi("ReviveApi", "balance", []any{bt}, &balance)
+	if err != nil {
+		return types.U128{}, err
+	}
+
+	return balance, nil
+}
+
+// Get block gas limit
+func (c *ChainClient) InkBlockGasLimit(address [32]byte) error {
+	balance := types.NewU128(*big.NewInt(0))
+	err := c.CallRuntimeApi("ReviveApi", "block_gas_limit", []any{}, &balance)
+	return err
 }
 
 // create prefixed key of {{pallet}}.{{method}}

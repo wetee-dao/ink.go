@@ -25,9 +25,15 @@ func main() {
 	}
 
 	contract := "0xFF9C30963C48949325E93e1D1BF02429f35382bA"
+	contractAddress, err := util.HexToH160(contract)
+	if err != nil {
+		util.LogWithRed("HexToH160", err)
+		return
+	}
 
 	revice, err := module.NewRevive(
 		client,
+		contractAddress,
 		data,
 	)
 	if err != nil {
@@ -35,21 +41,20 @@ func main() {
 		return
 	}
 
-	b, err := revice.BalanceOfH160(contract)
+	b, err := client.BalanceOfH160(contract)
 	if err != nil {
-		util.LogWithRed("getBy32", err)
+		util.LogWithRed("BalanceOfH160", err)
 		return
 	}
 	fmt.Println(b)
 	fmt.Println("")
 
-	mlist := make([]util.H160, 0, 10)
+	mlist := make([]types.H160, 0, 10)
 	err = revice.QueryInk(
 		util.NewAccountID(signature.TestKeyringPairAlice.PublicKey),
 		types.NewU128(*big.NewInt(0)),
 		util.NewNone[types.Weight](),
 		util.NewNone[types.U128](),
-		contract,
 		util.InkContractInput{
 			Selector: util.FuncToSelector("Member::list"),
 			Args:     []any{},
@@ -58,7 +63,7 @@ func main() {
 	)
 	if err == nil {
 		for _, m := range mlist {
-			fmt.Println(m.String())
+			fmt.Println(m.Hex())
 		}
 		fmt.Println("")
 	} else {
@@ -72,7 +77,6 @@ func main() {
 		types.NewU128(*big.NewInt(0)),
 		util.NewNone[types.Weight](),
 		util.NewNone[types.U128](),
-		contract,
 		util.InkContractInput{
 			Selector: util.FuncToSelector("Gov::defalut_track"),
 			Args:     []any{},
