@@ -21,7 +21,7 @@ func NewSome[T any](v T) Option[T] {
 	}
 }
 
-// Option type
+// Option is a type for rust Option
 type Option[T any] struct {
 	IsNone bool
 	V      T
@@ -60,6 +60,6 @@ func (ty *Option[T]) Decode(decoder scale.Decoder) (err error) {
 		}
 		return
 	default:
-		return fmt.Errorf("Unrecognized variant")
+		return fmt.Errorf("unrecognized enum")
 	}
 }

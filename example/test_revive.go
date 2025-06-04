@@ -8,6 +8,7 @@ import (
 	"github.com/centrifuge/go-substrate-rpc-client/v4/signature"
 	"github.com/centrifuge/go-substrate-rpc-client/v4/types"
 	chain "github.com/wetee-dao/go-sdk"
+	"github.com/wetee-dao/go-sdk/ink/dao"
 	"github.com/wetee-dao/go-sdk/module"
 	"github.com/wetee-dao/go-sdk/util"
 )
@@ -18,16 +19,18 @@ func main() {
 		panic(err)
 	}
 
-	data, err := os.ReadFile("./DAO.json")
+	fmt.Println(util.FuncToSelector("Treasury::payout"))
+
+	data, err := os.ReadFile("../ink/dao.json")
 	if err != nil {
 		fmt.Println("Error reading file:", err)
 		return
 	}
 
-	contract := "0xFF9C30963C48949325E93e1D1BF02429f35382bA"
+	contract := "0x5578537B6c44A654DdF461a0948FE50bb2E5F76C"
 	contractAddress, err := util.HexToH160(contract)
 	if err != nil {
-		util.LogWithRed("HexToH160", err)
+		util.LogWithPurple("HexToH160", err)
 		return
 	}
 
@@ -37,13 +40,13 @@ func main() {
 		data,
 	)
 	if err != nil {
-		util.LogWithRed("NewRevive", err)
+		util.LogWithPurple("NewRevive", err)
 		return
 	}
 
 	b, err := client.BalanceOfH160(contract)
 	if err != nil {
-		util.LogWithRed("BalanceOfH160", err)
+		util.LogWithPurple("BalanceOfH160", err)
 		return
 	}
 	fmt.Println(b)
@@ -71,20 +74,22 @@ func main() {
 		fmt.Println(err)
 	}
 
-	track := util.NewSome(types.NewU16(10))
+	track := util.NewSome(dao.Track{})
 	err = revice.QueryInk(
 		util.NewAccountID(signature.TestKeyringPairAlice.PublicKey),
 		types.NewU128(*big.NewInt(0)),
 		util.NewNone[types.Weight](),
 		util.NewNone[types.U128](),
 		util.InkContractInput{
-			Selector: util.FuncToSelector("Gov::defalut_track"),
-			Args:     []any{},
+			Selector: util.FuncToSelector("Gov::track"),
+			Args: []any{
+				types.NewU16(0),
+			},
 		},
 		&track,
 	)
 	if err == nil {
-		fmt.Println(track)
+		util.PrintJson(track)
 		fmt.Println("")
 	} else {
 		fmt.Println("-----------------")

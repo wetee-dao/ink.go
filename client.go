@@ -176,7 +176,7 @@ func (c *ChainClient) SignAndSubmit(signer *Signer, runtimeCall gtypes.RuntimeCa
 			}
 		case err := <-sub.Err():
 			if c.Debug {
-				util.LogWithRed("SubmitAndWatchExtrinsic ERROR", err.Error())
+				util.LogWithPurple("SubmitAndWatchExtrinsic ERROR", err.Error())
 			}
 
 			return err
@@ -220,14 +220,14 @@ func (c *ChainClient) checkExtrinsic(extHash types.Hash, blockHash types.Hash) (
 		}
 		if e.Event.AsSystemField0.IsExtrinsicSuccess {
 			if c.Debug {
-				util.LogWithRed("Extrinsic", "ExtrinsicSuccess")
+				util.LogWithPurple("Extrinsic", "ExtrinsicSuccess")
 			}
 			return cevents, nil
 		}
 		if e.Event.AsSystemField0.IsExtrinsicFailed {
 			errData := e.Event.AsSystemField0.AsExtrinsicFailedDispatchError0
 			if c.Debug {
-				util.LogWithRed("Extrinsic", "ExtrinsicFailed")
+				util.LogWithPurple("Extrinsic", "ExtrinsicFailed")
 			}
 
 			var errInfo error

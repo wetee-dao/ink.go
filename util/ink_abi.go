@@ -5,9 +5,15 @@ import (
 )
 
 type InkAbi struct {
-	Spec    Spec      `json:"spec"`
-	Types   []AbiType `json:"types"`
-	Version int       `json:"version,omitempty"`
+	Contract Contract  `json:"contract"`
+	Spec     Spec      `json:"spec"`
+	Types    []AbiType `json:"types"`
+	Version  int       `json:"version,omitempty"`
+}
+
+type Contract struct {
+	Name    string `json:"name"`
+	Version string `json:"version"`
 }
 
 type Spec struct {
@@ -56,40 +62,33 @@ type AbiType struct {
 
 type AbiSubType struct {
 	Path []string `json:"path,omitempty"`
-	Def  TypeDef  `json:"def"`
+	Def  Def      `json:"def"`
 	Docs []string `json:"docs,omitempty"`
 }
 
-type TypeDef struct {
-	Composite   *TypeDefComposite   `json:"composite,omitempty"`
-	Variant     *TypeDefVariant     `json:"variant,omitempty"`
-	Sequence    *TypeDefSequence    `json:"sequence,omitempty"`
-	Array       *TypeDefArray       `json:"array,omitempty"`
-	Tuple       *TypeDefTuple       `json:"tuple,omitempty"`
-	Primitive   *TypeDefPrimitive   `json:"primitive,omitempty"`
-	Compact     *TypeDefCompact     `json:"compact,omitempty"`
-	BitSequence *TypeDefBitSequence `json:"bitSequence,omitempty"`
-	Range       *TypeDefRange       `json:"range,omitempty"`
+type Def struct {
+	Composite   *DefComposite   `json:"composite,omitempty"` // 复合类型 struct
+	Variant     *DefVariant     `json:"variant,omitempty"`   // 枚举或变体 enum
+	Sequence    *DefSequence    `json:"sequence,omitempty"`  // 序列，通常指 Vec 或 BoundedVec
+	Array       *DefArray       `json:"array,omitempty"`     // 数组
+	Tuple       *DefTuple       `json:"tuple,omitempty"`     // 元组
+	Primitive   *DefPrimitive   `json:"primitive,omitempty"` // 原始类型 (Primitives)
+	Compact     *DefCompact     `json:"compact,omitempty"`   // Compact<T> 节省存储空间和 gas 成本
+	BitSequence *DefBitSequence `json:"bitSequence,omitempty"`
+	Range       *DefRange       `json:"range,omitempty"` // 表示一个半开区间 [start, end)
 }
 
-type TypeDefComposite struct {
+type DefComposite struct {
 	Fields []SubField `json:"fields"`
 }
 
-type SubField struct {
-	Name     string   `json:"name,omitempty"`
-	Type     int      `json:"type"`
-	TypeName string   `json:"typeName"`
-	Docs     []string `json:"docs,omitempty"`
-}
-
-type TypeDefRange struct {
+type DefRange struct {
 	Start     int  `json:"start"`
 	End       int  `json:"end"`
 	Inclusive bool `json:"inclusive"`
 }
 
-type TypeDefVariant struct {
+type DefVariant struct {
 	Variants []SubVariant `json:"variants"`
 }
 
@@ -100,24 +99,31 @@ type SubVariant struct {
 	Docs   []string   `json:"docs,omitempty"`
 }
 
-type TypeDefSequence struct {
+type DefSequence struct {
 	Type int `json:"type"`
 }
 
-type TypeDefArray struct {
+type DefArray struct {
 	Len  int `json:"len"`
 	Type int `json:"type"`
 }
 
-type TypeDefTuple []int
+type SubField struct {
+	Name     string   `json:"name,omitempty"`
+	Type     int      `json:"type"`
+	TypeName string   `json:"typeName"`
+	Docs     []string `json:"docs,omitempty"`
+}
 
-type TypeDefPrimitive string
+type DefTuple []int
 
-type TypeDefCompact struct {
+type DefPrimitive string
+
+type DefCompact struct {
 	Type int `json:"type"`
 }
 
-type TypeDefBitSequence struct {
+type DefBitSequence struct {
 	BitStoreType int `json:"bitStoreType"`
 	BitOrderType int `json:"bitOrderType"`
 }

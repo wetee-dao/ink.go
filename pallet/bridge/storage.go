@@ -164,3 +164,73 @@ func GetResultsLatest(state state.State, u1280 types.U128) (ret types1.ContractR
 	}
 	return
 }
+
+// Make a storage key for Enums
+func MakeEnumsStorageKey(u1280 types.U128) (types.StorageKey, error) {
+	byteArgs := [][]byte{}
+	encBytes := []byte{}
+	var err error
+	encBytes, err = codec.Encode(u1280)
+	if err != nil {
+		return nil, err
+	}
+	byteArgs = append(byteArgs, encBytes)
+	return types.CreateStorageKey(&types1.Meta, "Bridge", "Enums", byteArgs...)
+}
+func GetEnums(state state.State, bhash types.Hash, u1280 types.U128) (ret types1.Test, isSome bool, err error) {
+	key, err := MakeEnumsStorageKey(u1280)
+	if err != nil {
+		return
+	}
+	isSome, err = state.GetStorage(key, &ret, bhash)
+	if err != nil {
+		return
+	}
+	return
+}
+func GetEnumsLatest(state state.State, u1280 types.U128) (ret types1.Test, isSome bool, err error) {
+	key, err := MakeEnumsStorageKey(u1280)
+	if err != nil {
+		return
+	}
+	isSome, err = state.GetStorageLatest(key, &ret)
+	if err != nil {
+		return
+	}
+	return
+}
+
+// Make a storage key for Tuples
+func MakeTuplesStorageKey(u1280 types.U128) (types.StorageKey, error) {
+	byteArgs := [][]byte{}
+	encBytes := []byte{}
+	var err error
+	encBytes, err = codec.Encode(u1280)
+	if err != nil {
+		return nil, err
+	}
+	byteArgs = append(byteArgs, encBytes)
+	return types.CreateStorageKey(&types1.Meta, "Bridge", "Tuples", byteArgs...)
+}
+func GetTuples(state state.State, bhash types.Hash, u1280 types.U128) (ret types1.TupleOfUint32Uint32, isSome bool, err error) {
+	key, err := MakeTuplesStorageKey(u1280)
+	if err != nil {
+		return
+	}
+	isSome, err = state.GetStorage(key, &ret, bhash)
+	if err != nil {
+		return
+	}
+	return
+}
+func GetTuplesLatest(state state.State, u1280 types.U128) (ret types1.TupleOfUint32Uint32, isSome bool, err error) {
+	key, err := MakeTuplesStorageKey(u1280)
+	if err != nil {
+		return
+	}
+	isSome, err = state.GetStorageLatest(key, &ret)
+	if err != nil {
+		return
+	}
+	return
+}

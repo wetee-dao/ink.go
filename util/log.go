@@ -18,10 +18,32 @@ const (
 	White  = "\033[97m"
 )
 
-func LogWithRed(tag string, a ...any) {
+func LogWithYellow(tag string, a ...any) {
+	b := make([]any, 0, len(a)+3)
+
+	b = append(b, Yellow)
+	b = append(b, tag+": ")
+	b = append(b, Reset)
+	b = append(b, a...)
+
+	fmt.Println(b...)
+}
+
+func LogWithPurple(tag string, a ...any) {
 	b := make([]any, 0, len(a)+3)
 
 	b = append(b, Purple)
+	b = append(b, tag+": ")
+	b = append(b, Reset)
+	b = append(b, a...)
+
+	fmt.Println(b...)
+}
+
+func LogWithRed(tag string, a ...any) {
+	b := make([]any, 0, len(a)+3)
+
+	b = append(b, Red)
 	b = append(b, tag+": ")
 	b = append(b, Reset)
 	b = append(b, a...)

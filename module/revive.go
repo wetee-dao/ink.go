@@ -78,9 +78,9 @@ func (r *Revive) DryRunInk(
 		return nil, errors.New("contractInput.Encode: " + err.Error())
 	}
 
-	util.LogWithRed("[ TryCall contract ]", r.Address.Hex())
-	util.LogWithRed("[ TryCall   origin ]", origin.ToHexString())
-	util.LogWithRed("[ TryCall     args ]", "0x"+hex.EncodeToString(inputBt))
+	util.LogWithPurple("[ TryCall contract ]", r.Address.Hex())
+	util.LogWithPurple("[ TryCall   origin ]", origin.ToHexString())
+	util.LogWithPurple("[ TryCall     args ]", "0x"+hex.EncodeToString(inputBt))
 
 	result := util.ContractResult{}
 	err = r.Client.CallRuntimeApi(

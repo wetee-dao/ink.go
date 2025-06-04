@@ -6,6 +6,7 @@ import (
 	"github.com/centrifuge/go-substrate-rpc-client/v4/scale"
 )
 
+// Result is a type for rust  Result
 type Result[T, Err any] struct {
 	IsErr bool
 	E     Err
@@ -58,6 +59,6 @@ func (r *Result[T, Err]) Decode(decoder scale.Decoder) (err error) {
 		r.E = tmp
 		return
 	default:
-		return fmt.Errorf("Unrecognized variant")
+		return fmt.Errorf("unrecognized enum")
 	}
 }
