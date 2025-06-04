@@ -15,6 +15,7 @@ func (c *ChainClient) GetErrorInfo(index byte, err [4]byte) (*registry.TypeDecod
 	for i := 0; i < 4; i++ {
 		errIndex[i] = types.NewU8(err[i])
 	}
+
 	id := registry.ErrorID{
 		ModuleIndex: types.NewU8(index),
 		ErrorIndex:  errIndex,

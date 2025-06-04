@@ -75,6 +75,8 @@ func (r *ReviveGen) SaveTypes() {
 		data += r.TypeResult[t]
 	}
 
+	fmt.Println(data)
+
 	if err := os.MkdirAll("./"+name, os.ModePerm); err != nil {
 		log.Fatal(err)
 	}

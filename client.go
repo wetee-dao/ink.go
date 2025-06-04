@@ -218,12 +218,16 @@ func (c *ChainClient) checkExtrinsic(extHash types.Hash, blockHash types.Hash) (
 		if blake2b.Sum256(extBytes) != extHash || !e.Event.IsSystem {
 			continue
 		}
+
+		// 判断是否是交易成功的消息
 		if e.Event.AsSystemField0.IsExtrinsicSuccess {
 			if c.Debug {
 				util.LogWithPurple("Extrinsic", "ExtrinsicSuccess")
 			}
 			return cevents, nil
 		}
+
+		// 获取交易失败的消息
 		if e.Event.AsSystemField0.IsExtrinsicFailed {
 			errData := e.Event.AsSystemField0.AsExtrinsicFailedDispatchError0
 			if c.Debug {
@@ -231,6 +235,7 @@ func (c *ChainClient) checkExtrinsic(extHash types.Hash, blockHash types.Hash) (
 			}
 
 			var errInfo error
+			// 判断是否是区块链模块错误
 			if errData.IsModule {
 				merr := errData.AsModuleField0
 				info, ierr := c.GetErrorInfo(merr.Index, merr.Error)

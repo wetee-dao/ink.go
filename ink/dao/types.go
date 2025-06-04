@@ -92,7 +92,6 @@ func (ty *PropStatus) Decode(decoder scale.Decoder) (err error) {
 		return err
 	}
 	switch variant {
-
 	case 0:
 		t := true
 		ty.Pending = &t
@@ -121,7 +120,6 @@ func (ty *PropStatus) Decode(decoder scale.Decoder) (err error) {
 			return err
 		}
 		return
-
 	case 5:
 		t := true
 		ty.Canceled = &t
@@ -257,13 +255,10 @@ func (ty *Curve) Decode(decoder scale.Decoder) (err error) {
 		return err
 	}
 	switch variant {
-
 	case 0:
 		ty.LinearDecreasing = &struct {
-			Begin uint32
-
-			End uint32
-
+			Begin  uint32
+			End    uint32
 			Length uint32
 		}{}
 
@@ -286,12 +281,9 @@ func (ty *Curve) Decode(decoder scale.Decoder) (err error) {
 
 	case 1:
 		ty.SteppedDecreasing = &struct {
-			Begin uint32
-
-			End uint32
-
-			Step uint32
-
+			Begin  uint32
+			End    uint32
+			Step   uint32
 			Period uint32
 		}{}
 
@@ -319,12 +311,9 @@ func (ty *Curve) Decode(decoder scale.Decoder) (err error) {
 
 	case 2:
 		ty.Reciprocal = &struct {
-			Factor uint32
-
-			XScale uint32
-
+			Factor  uint32
+			XScale  uint32
 			XOffset int64
-
 			YOffset int64
 		}{}
 
@@ -397,7 +386,6 @@ func (ty *Opinion) Decode(decoder scale.Decoder) (err error) {
 		return err
 	}
 	switch variant {
-
 	case 0:
 		t := true
 		ty.YES = &t
@@ -688,7 +676,6 @@ func (ty *Error) Decode(decoder scale.Decoder) (err error) {
 		return err
 	}
 	switch variant {
-
 	case 0:
 		t := true
 		ty.MemberExisted = &t
@@ -921,7 +908,6 @@ func (ty *Test) Decode(decoder scale.Decoder) (err error) {
 		return err
 	}
 	switch variant {
-
 	case 0:
 		t := true
 		ty.BaseT = &t
@@ -930,7 +916,6 @@ func (ty *Test) Decode(decoder scale.Decoder) (err error) {
 	case 1:
 		ty.TupleT = &struct {
 			F0 byte
-
 			F1 uint16
 		}{}
 
@@ -949,7 +934,6 @@ func (ty *Test) Decode(decoder scale.Decoder) (err error) {
 	case 2:
 		ty.StructT = &struct {
 			F1 int32
-
 			F2 int32
 		}{}
 
@@ -971,7 +955,6 @@ func (ty *Test) Decode(decoder scale.Decoder) (err error) {
 			return err
 		}
 		return
-
 	default:
 		return fmt.Errorf("unrecognized enum")
 	}
@@ -1094,13 +1077,10 @@ func (ty *CurveArg) Decode(decoder scale.Decoder) (err error) {
 		return err
 	}
 	switch variant {
-
 	case 0:
 		ty.LinearDecreasing = &struct {
-			Begin uint32
-
-			End uint32
-
+			Begin  uint32
+			End    uint32
 			Length uint32
 		}{}
 
@@ -1123,12 +1103,9 @@ func (ty *CurveArg) Decode(decoder scale.Decoder) (err error) {
 
 	case 1:
 		ty.SteppedDecreasing = &struct {
-			Begin uint32
-
-			End uint32
-
-			Step uint32
-
+			Begin  uint32
+			End    uint32
+			Step   uint32
 			Period uint32
 		}{}
 
@@ -1157,12 +1134,9 @@ func (ty *CurveArg) Decode(decoder scale.Decoder) (err error) {
 	case 2:
 		ty.Reciprocal = &struct {
 			XOffsetPercent Percent
-
-			XScaleArg uint32
-
-			Begin uint32
-
-			End uint32
+			XScaleArg      uint32
+			Begin          uint32
+			End            uint32
 		}{}
 
 		err = decoder.Decode(&ty.Reciprocal.XOffsetPercent)

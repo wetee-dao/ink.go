@@ -122,8 +122,8 @@ func (r *ReviveGen) EnumGen(ty int, name string, items []util.SubVariant, subs [
 }
 
 var enumScaleTemp = `func (ty {{.Name}}) Encode(encoder scale.Encoder) (err error) {
-{{range $outerIndex, $outerItem := .Items}}
-	{{if eq .Type "Base"}}
+{{- range $outerIndex, $outerItem := .Items -}}
+	{{- if eq .Type "Base"}}
 	if ty.{{.Name}} != nil {
 		err = encoder.PushByte({{.Index}})
 		if err != nil {
@@ -132,22 +132,7 @@ var enumScaleTemp = `func (ty {{.Name}}) Encode(encoder scale.Encoder) (err erro
 		return nil
 	}
 	{{end}}
-	{{if eq .Type "Tuple"}}
-	if ty.{{.Name}} != nil {
-		err = encoder.PushByte({{.Index}})
-		if err != nil {
-			return err
-		}
-		{{range .Fields}}
-		err = encoder.Encode(ty.{{$outerItem.Name}}.{{.Name}})
-		if err != nil {
-			return err
-		}
-		{{end}}
-		return nil
-	}
-	{{end}}
-	{{if eq .Type "Struct"}}
+	{{- if eq .Type "Tuple"}}
 	if ty.{{.Name}} != nil {
 		err = encoder.PushByte({{.Index}})
 		if err != nil {
@@ -162,7 +147,22 @@ var enumScaleTemp = `func (ty {{.Name}}) Encode(encoder scale.Encoder) (err erro
 		return nil
 	}
 	{{end}}
-	{{if eq .Type "Inline"}}
+	{{- if eq .Type "Struct"}}
+	if ty.{{.Name}} != nil {
+		err = encoder.PushByte({{.Index}})
+		if err != nil {
+			return err
+		}
+		{{range .Fields}}
+		err = encoder.Encode(ty.{{$outerItem.Name}}.{{.Name}})
+		if err != nil {
+			return err
+		}
+		{{end}}
+		return nil
+	}
+	{{end}}
+	{{- if eq .Type "Inline"}}
 	if ty.{{.Name}} != nil {
 		err = encoder.PushByte({{.Index}})
 		if err != nil {
@@ -175,7 +175,7 @@ var enumScaleTemp = `func (ty {{.Name}}) Encode(encoder scale.Encoder) (err erro
 		return nil
 	}
 	{{end}}
-{{end}}
+{{- end -}}
 	return fmt.Errorf("unrecognized enum")
 }
 
@@ -185,18 +185,32 @@ func (ty *{{.Name}}) Decode(decoder scale.Decoder) (err error) {
 		return err
 	}
 	switch variant {
-{{range $outerIndex, $outerItem := .Items}}
-	{{if eq .Type "Base"}}
+{{- range $outerIndex, $outerItem := .Items -}}
+	{{- if eq .Type "Base" -}}
 	case {{.Index}}:
 		t := true
 		ty.{{.Name}} = &t
-		return
-	{{end}}
-	{{if eq .Type "Tuple"}}
+		return;
+	{{- end -}}
+	{{- if eq .Type "Tuple" -}}
 	case {{.Index}}:
 		ty.{{.Name}} = &struct {
-			{{range .Fields}}
-			{{.Name}} {{.Type}}
+			{{range .Fields}}{{.Name}} {{.Type}}
+			{{end}}
+		}{}
+
+		{{ range .Fields }}
+		err = decoder.Decode(&ty.{{$outerItem.Name}}.{{.Name}})
+		if err != nil {
+			return err
+		}
+		{{ end }}
+		return;
+	{{- end -}}
+	{{- if eq .Type "Struct" -}}
+	case {{.Index}}:
+		ty.{{.Name}} = &struct {
+			{{range .Fields}}{{.Name}} {{.Type}}
 			{{end}}
 		}{}
 
@@ -206,35 +220,18 @@ func (ty *{{.Name}}) Decode(decoder scale.Decoder) (err error) {
 			return err
 		}
 		{{end}}
-		
-		return
-	{{end}}
-	{{if eq .Type "Struct"}}
-	case {{.Index}}:
-		ty.{{.Name}} = &struct {
-			{{range .Fields}}
-			{{.Name}} {{.Type}}
-			{{end}}
-		}{}
-
-		{{range .Fields}}
-		err = decoder.Decode(&ty.{{$outerItem.Name}}.{{.Name}})
-		if err != nil {
-			return err
-		}
-		{{end}}
-
-		return
-	{{end}}
-	{{if eq .Type "Inline"}}
+		return;
+	{{- end -}}
+	{{- if eq .Type "Inline" -}}
 	case {{.Index}}:
 		err = decoder.Decode(ty.{{.Name}})
 		if err != nil {
 			return err
 		}
-		return
-	{{end}}
-{{end}}
+		return;
+	{{- end -}}
+{{- end -}}
+
 	default:
 		return fmt.Errorf("unrecognized enum")
 	}
