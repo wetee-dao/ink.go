@@ -1,4 +1,4 @@
-package main
+package example_test
 
 import (
 	"fmt"
@@ -12,7 +12,7 @@ import (
 	gtypes "github.com/wetee-dao/go-sdk/pallet/types"
 )
 
-func main() {
+func ExampleExtrinsic() {
 	fmt.Println(signature.TestKeyringPairAlice.Address)
 
 	client, err := chain.ClientInit("wss://xiaobai.asyou.me:30011/ws", true)

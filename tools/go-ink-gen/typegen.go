@@ -7,6 +7,7 @@ import (
 	"log"
 	"os"
 	"os/exec"
+	"sort"
 	"strings"
 	"unicode"
 
@@ -62,8 +63,16 @@ func (r *ReviveGen) SaveTypes() {
 	data += "  \"github.com/centrifuge/go-substrate-rpc-client/v4/types\"\n"
 	data += "  \"github.com/centrifuge/go-substrate-rpc-client/v4/scale\"\n"
 	data += ")\n"
-	for _, t := range r.TypeResult {
-		data += t
+
+	var keys []int
+	for k := range r.TypeResult {
+		keys = append(keys, k)
+	}
+
+	sort.Ints(keys)
+
+	for _, t := range keys {
+		data += r.TypeResult[t]
 	}
 
 	if err := os.MkdirAll("./"+name, os.ModePerm); err != nil {

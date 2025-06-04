@@ -1,4 +1,4 @@
-package main
+package example_test
 
 import (
 	"fmt"
@@ -13,13 +13,11 @@ import (
 	"github.com/wetee-dao/go-sdk/util"
 )
 
-func main() {
+func ExampleRevive() {
 	client, err := chain.ClientInit("ws://127.0.0.1:9944", true)
 	if err != nil {
 		panic(err)
 	}
-
-	fmt.Println(util.FuncToSelector("Treasury::payout"))
 
 	data, err := os.ReadFile("../ink/dao.json")
 	if err != nil {
@@ -44,13 +42,11 @@ func main() {
 		return
 	}
 
-	b, err := client.BalanceOfH160(contract)
+	_, err = client.BalanceOfH160(contract)
 	if err != nil {
 		util.LogWithPurple("BalanceOfH160", err)
 		return
 	}
-	fmt.Println(b)
-	fmt.Println("")
 
 	mlist := make([]types.H160, 0, 10)
 	err = revice.QueryInk(
@@ -64,13 +60,7 @@ func main() {
 		},
 		&mlist,
 	)
-	if err == nil {
-		for _, m := range mlist {
-			fmt.Println(m.Hex())
-		}
-		fmt.Println("")
-	} else {
-		fmt.Println("-----------------")
+	if err != nil {
 		fmt.Println(err)
 	}
 
@@ -88,11 +78,7 @@ func main() {
 		},
 		&track,
 	)
-	if err == nil {
-		util.PrintJson(track)
-		fmt.Println("")
-	} else {
-		fmt.Println("-----------------")
+	if err != nil {
 		fmt.Println(err)
 	}
 
@@ -111,4 +97,6 @@ func main() {
 	// if err == nil {
 	// 	fmt.Println(v)
 	// }
+
+	// Output:
 }

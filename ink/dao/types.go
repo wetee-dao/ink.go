@@ -8,6 +8,130 @@ import (
 	"github.com/wetee-dao/go-sdk/util"
 )
 
+type Call struct { // Composite
+	Contract     util.Option[types.H160]
+	Selector     [4]byte
+	Input        []byte
+	Amount       types.U256
+	RefTimeLimit uint64
+	AllowReentry bool
+}
+type PropStatus struct { // Enum
+	Pending    *bool   // 0
+	Ongoing    *bool   // 1
+	Confirming *bool   // 2
+	Approved   *uint32 // 3
+	Rejected   *uint32 // 4
+	Canceled   *bool   // 5
+}
+
+func (ty PropStatus) Encode(encoder scale.Encoder) (err error) {
+
+	if ty.Pending != nil {
+		err = encoder.PushByte(0)
+		if err != nil {
+			return err
+		}
+		return nil
+	}
+
+	if ty.Ongoing != nil {
+		err = encoder.PushByte(1)
+		if err != nil {
+			return err
+		}
+		return nil
+	}
+
+	if ty.Confirming != nil {
+		err = encoder.PushByte(2)
+		if err != nil {
+			return err
+		}
+		return nil
+	}
+
+	if ty.Approved != nil {
+		err = encoder.PushByte(3)
+		if err != nil {
+			return err
+		}
+		err = encoder.Encode(*ty.Approved)
+		if err != nil {
+			return err
+		}
+		return nil
+	}
+
+	if ty.Rejected != nil {
+		err = encoder.PushByte(4)
+		if err != nil {
+			return err
+		}
+		err = encoder.Encode(*ty.Rejected)
+		if err != nil {
+			return err
+		}
+		return nil
+	}
+
+	if ty.Canceled != nil {
+		err = encoder.PushByte(5)
+		if err != nil {
+			return err
+		}
+		return nil
+	}
+
+	return fmt.Errorf("unrecognized enum")
+}
+
+func (ty *PropStatus) Decode(decoder scale.Decoder) (err error) {
+	variant, err := decoder.ReadOneByte()
+	if err != nil {
+		return err
+	}
+	switch variant {
+
+	case 0:
+		t := true
+		ty.Pending = &t
+		return
+
+	case 1:
+		t := true
+		ty.Ongoing = &t
+		return
+
+	case 2:
+		t := true
+		ty.Confirming = &t
+		return
+
+	case 3:
+		err = decoder.Decode(ty.Approved)
+		if err != nil {
+			return err
+		}
+		return
+
+	case 4:
+		err = decoder.Decode(ty.Rejected)
+		if err != nil {
+			return err
+		}
+		return
+
+	case 5:
+		t := true
+		ty.Canceled = &t
+		return
+
+	default:
+		return fmt.Errorf("unrecognized enum")
+	}
+}
+
 type Track struct { // Composite
 	Name               []byte
 	PreparePeriod      uint32
@@ -20,6 +144,217 @@ type Track struct { // Composite
 	MinApproval        Curve
 	MinSupport         Curve
 }
+type Curve struct { // Enum
+	LinearDecreasing *struct { // 0
+		Begin  uint32
+		End    uint32
+		Length uint32
+	}
+	SteppedDecreasing *struct { // 1
+		Begin  uint32
+		End    uint32
+		Step   uint32
+		Period uint32
+	}
+	Reciprocal *struct { // 2
+		Factor  uint32
+		XScale  uint32
+		XOffset int64
+		YOffset int64
+	}
+}
+
+func (ty Curve) Encode(encoder scale.Encoder) (err error) {
+
+	if ty.LinearDecreasing != nil {
+		err = encoder.PushByte(0)
+		if err != nil {
+			return err
+		}
+
+		err = encoder.Encode(ty.LinearDecreasing.Begin)
+		if err != nil {
+			return err
+		}
+
+		err = encoder.Encode(ty.LinearDecreasing.End)
+		if err != nil {
+			return err
+		}
+
+		err = encoder.Encode(ty.LinearDecreasing.Length)
+		if err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	if ty.SteppedDecreasing != nil {
+		err = encoder.PushByte(1)
+		if err != nil {
+			return err
+		}
+
+		err = encoder.Encode(ty.SteppedDecreasing.Begin)
+		if err != nil {
+			return err
+		}
+
+		err = encoder.Encode(ty.SteppedDecreasing.End)
+		if err != nil {
+			return err
+		}
+
+		err = encoder.Encode(ty.SteppedDecreasing.Step)
+		if err != nil {
+			return err
+		}
+
+		err = encoder.Encode(ty.SteppedDecreasing.Period)
+		if err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	if ty.Reciprocal != nil {
+		err = encoder.PushByte(2)
+		if err != nil {
+			return err
+		}
+
+		err = encoder.Encode(ty.Reciprocal.Factor)
+		if err != nil {
+			return err
+		}
+
+		err = encoder.Encode(ty.Reciprocal.XScale)
+		if err != nil {
+			return err
+		}
+
+		err = encoder.Encode(ty.Reciprocal.XOffset)
+		if err != nil {
+			return err
+		}
+
+		err = encoder.Encode(ty.Reciprocal.YOffset)
+		if err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return fmt.Errorf("unrecognized enum")
+}
+
+func (ty *Curve) Decode(decoder scale.Decoder) (err error) {
+	variant, err := decoder.ReadOneByte()
+	if err != nil {
+		return err
+	}
+	switch variant {
+
+	case 0:
+		ty.LinearDecreasing = &struct {
+			Begin uint32
+
+			End uint32
+
+			Length uint32
+		}{}
+
+		err = decoder.Decode(&ty.LinearDecreasing.Begin)
+		if err != nil {
+			return err
+		}
+
+		err = decoder.Decode(&ty.LinearDecreasing.End)
+		if err != nil {
+			return err
+		}
+
+		err = decoder.Decode(&ty.LinearDecreasing.Length)
+		if err != nil {
+			return err
+		}
+
+		return
+
+	case 1:
+		ty.SteppedDecreasing = &struct {
+			Begin uint32
+
+			End uint32
+
+			Step uint32
+
+			Period uint32
+		}{}
+
+		err = decoder.Decode(&ty.SteppedDecreasing.Begin)
+		if err != nil {
+			return err
+		}
+
+		err = decoder.Decode(&ty.SteppedDecreasing.End)
+		if err != nil {
+			return err
+		}
+
+		err = decoder.Decode(&ty.SteppedDecreasing.Step)
+		if err != nil {
+			return err
+		}
+
+		err = decoder.Decode(&ty.SteppedDecreasing.Period)
+		if err != nil {
+			return err
+		}
+
+		return
+
+	case 2:
+		ty.Reciprocal = &struct {
+			Factor uint32
+
+			XScale uint32
+
+			XOffset int64
+
+			YOffset int64
+		}{}
+
+		err = decoder.Decode(&ty.Reciprocal.Factor)
+		if err != nil {
+			return err
+		}
+
+		err = decoder.Decode(&ty.Reciprocal.XScale)
+		if err != nil {
+			return err
+		}
+
+		err = decoder.Decode(&ty.Reciprocal.XOffset)
+		if err != nil {
+			return err
+		}
+
+		err = decoder.Decode(&ty.Reciprocal.YOffset)
+		if err != nil {
+			return err
+		}
+
+		return
+
+	default:
+		return fmt.Errorf("unrecognized enum")
+	}
+}
+
 type VoteInfo struct { // Composite
 	Pledge      types.U256
 	Opinion     Opinion
@@ -30,9 +365,54 @@ type VoteInfo struct { // Composite
 	VoteBlock   uint32
 	Deleted     bool
 }
-type Percent struct { // Composite
-	V uint32
+type Opinion struct { // Enum
+	YES *bool // 0
+	NO  *bool // 1
 }
+
+func (ty Opinion) Encode(encoder scale.Encoder) (err error) {
+
+	if ty.YES != nil {
+		err = encoder.PushByte(0)
+		if err != nil {
+			return err
+		}
+		return nil
+	}
+
+	if ty.NO != nil {
+		err = encoder.PushByte(1)
+		if err != nil {
+			return err
+		}
+		return nil
+	}
+
+	return fmt.Errorf("unrecognized enum")
+}
+
+func (ty *Opinion) Decode(decoder scale.Decoder) (err error) {
+	variant, err := decoder.ReadOneByte()
+	if err != nil {
+		return err
+	}
+	switch variant {
+
+	case 0:
+		t := true
+		ty.YES = &t
+		return
+
+	case 1:
+		t := true
+		ty.NO = &t
+		return
+
+	default:
+		return fmt.Errorf("unrecognized enum")
+	}
+}
+
 type Error struct { // Enum
 	MemberExisted         *bool // 0
 	MemberNotExisted      *bool // 1
@@ -459,6 +839,148 @@ func (ty *Error) Decode(decoder scale.Decoder) (err error) {
 	}
 }
 
+type Test struct { // Enum
+	BaseT  *bool     // 0
+	TupleT *struct { // 1
+		F0 byte
+		F1 uint16
+	}
+	StructT *struct { // 2
+		F1 int32
+		F2 int32
+	}
+	StrT *[]byte // 3
+}
+
+func (ty Test) Encode(encoder scale.Encoder) (err error) {
+
+	if ty.BaseT != nil {
+		err = encoder.PushByte(0)
+		if err != nil {
+			return err
+		}
+		return nil
+	}
+
+	if ty.TupleT != nil {
+		err = encoder.PushByte(1)
+		if err != nil {
+			return err
+		}
+
+		err = encoder.Encode(ty.TupleT.F0)
+		if err != nil {
+			return err
+		}
+
+		err = encoder.Encode(ty.TupleT.F1)
+		if err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	if ty.StructT != nil {
+		err = encoder.PushByte(2)
+		if err != nil {
+			return err
+		}
+
+		err = encoder.Encode(ty.StructT.F1)
+		if err != nil {
+			return err
+		}
+
+		err = encoder.Encode(ty.StructT.F2)
+		if err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	if ty.StrT != nil {
+		err = encoder.PushByte(3)
+		if err != nil {
+			return err
+		}
+		err = encoder.Encode(*ty.StrT)
+		if err != nil {
+			return err
+		}
+		return nil
+	}
+
+	return fmt.Errorf("unrecognized enum")
+}
+
+func (ty *Test) Decode(decoder scale.Decoder) (err error) {
+	variant, err := decoder.ReadOneByte()
+	if err != nil {
+		return err
+	}
+	switch variant {
+
+	case 0:
+		t := true
+		ty.BaseT = &t
+		return
+
+	case 1:
+		ty.TupleT = &struct {
+			F0 byte
+
+			F1 uint16
+		}{}
+
+		err = decoder.Decode(&ty.TupleT.F0)
+		if err != nil {
+			return err
+		}
+
+		err = decoder.Decode(&ty.TupleT.F1)
+		if err != nil {
+			return err
+		}
+
+		return
+
+	case 2:
+		ty.StructT = &struct {
+			F1 int32
+
+			F2 int32
+		}{}
+
+		err = decoder.Decode(&ty.StructT.F1)
+		if err != nil {
+			return err
+		}
+
+		err = decoder.Decode(&ty.StructT.F2)
+		if err != nil {
+			return err
+		}
+
+		return
+
+	case 3:
+		err = decoder.Decode(ty.StrT)
+		if err != nil {
+			return err
+		}
+		return
+
+	default:
+		return fmt.Errorf("unrecognized enum")
+	}
+}
+
+type Tuple_100 struct { // Tuple
+	F0 types.U256
+	F1 types.U256
+}
 type CurveArg struct { // Enum
 	LinearDecreasing *struct { // 0
 		Begin  uint32
@@ -670,528 +1192,6 @@ func (ty *CurveArg) Decode(decoder scale.Decoder) (err error) {
 	}
 }
 
-type Opinion struct { // Enum
-	YES *bool // 0
-	NO  *bool // 1
-}
-
-func (ty Opinion) Encode(encoder scale.Encoder) (err error) {
-
-	if ty.YES != nil {
-		err = encoder.PushByte(0)
-		if err != nil {
-			return err
-		}
-		return nil
-	}
-
-	if ty.NO != nil {
-		err = encoder.PushByte(1)
-		if err != nil {
-			return err
-		}
-		return nil
-	}
-
-	return fmt.Errorf("unrecognized enum")
-}
-
-func (ty *Opinion) Decode(decoder scale.Decoder) (err error) {
-	variant, err := decoder.ReadOneByte()
-	if err != nil {
-		return err
-	}
-	switch variant {
-
-	case 0:
-		t := true
-		ty.YES = &t
-		return
-
-	case 1:
-		t := true
-		ty.NO = &t
-		return
-
-	default:
-		return fmt.Errorf("unrecognized enum")
-	}
-}
-
-type Tuple_100 struct { // Tuple
-	F0 types.U256
-	F1 types.U256
-}
-type Curve struct { // Enum
-	LinearDecreasing *struct { // 0
-		Begin  uint32
-		End    uint32
-		Length uint32
-	}
-	SteppedDecreasing *struct { // 1
-		Begin  uint32
-		End    uint32
-		Step   uint32
-		Period uint32
-	}
-	Reciprocal *struct { // 2
-		Factor  uint32
-		XScale  uint32
-		XOffset int64
-		YOffset int64
-	}
-}
-
-func (ty Curve) Encode(encoder scale.Encoder) (err error) {
-
-	if ty.LinearDecreasing != nil {
-		err = encoder.PushByte(0)
-		if err != nil {
-			return err
-		}
-
-		err = encoder.Encode(ty.LinearDecreasing.Begin)
-		if err != nil {
-			return err
-		}
-
-		err = encoder.Encode(ty.LinearDecreasing.End)
-		if err != nil {
-			return err
-		}
-
-		err = encoder.Encode(ty.LinearDecreasing.Length)
-		if err != nil {
-			return err
-		}
-
-		return nil
-	}
-
-	if ty.SteppedDecreasing != nil {
-		err = encoder.PushByte(1)
-		if err != nil {
-			return err
-		}
-
-		err = encoder.Encode(ty.SteppedDecreasing.Begin)
-		if err != nil {
-			return err
-		}
-
-		err = encoder.Encode(ty.SteppedDecreasing.End)
-		if err != nil {
-			return err
-		}
-
-		err = encoder.Encode(ty.SteppedDecreasing.Step)
-		if err != nil {
-			return err
-		}
-
-		err = encoder.Encode(ty.SteppedDecreasing.Period)
-		if err != nil {
-			return err
-		}
-
-		return nil
-	}
-
-	if ty.Reciprocal != nil {
-		err = encoder.PushByte(2)
-		if err != nil {
-			return err
-		}
-
-		err = encoder.Encode(ty.Reciprocal.Factor)
-		if err != nil {
-			return err
-		}
-
-		err = encoder.Encode(ty.Reciprocal.XScale)
-		if err != nil {
-			return err
-		}
-
-		err = encoder.Encode(ty.Reciprocal.XOffset)
-		if err != nil {
-			return err
-		}
-
-		err = encoder.Encode(ty.Reciprocal.YOffset)
-		if err != nil {
-			return err
-		}
-
-		return nil
-	}
-
-	return fmt.Errorf("unrecognized enum")
-}
-
-func (ty *Curve) Decode(decoder scale.Decoder) (err error) {
-	variant, err := decoder.ReadOneByte()
-	if err != nil {
-		return err
-	}
-	switch variant {
-
-	case 0:
-		ty.LinearDecreasing = &struct {
-			Begin uint32
-
-			End uint32
-
-			Length uint32
-		}{}
-
-		err = decoder.Decode(&ty.LinearDecreasing.Begin)
-		if err != nil {
-			return err
-		}
-
-		err = decoder.Decode(&ty.LinearDecreasing.End)
-		if err != nil {
-			return err
-		}
-
-		err = decoder.Decode(&ty.LinearDecreasing.Length)
-		if err != nil {
-			return err
-		}
-
-		return
-
-	case 1:
-		ty.SteppedDecreasing = &struct {
-			Begin uint32
-
-			End uint32
-
-			Step uint32
-
-			Period uint32
-		}{}
-
-		err = decoder.Decode(&ty.SteppedDecreasing.Begin)
-		if err != nil {
-			return err
-		}
-
-		err = decoder.Decode(&ty.SteppedDecreasing.End)
-		if err != nil {
-			return err
-		}
-
-		err = decoder.Decode(&ty.SteppedDecreasing.Step)
-		if err != nil {
-			return err
-		}
-
-		err = decoder.Decode(&ty.SteppedDecreasing.Period)
-		if err != nil {
-			return err
-		}
-
-		return
-
-	case 2:
-		ty.Reciprocal = &struct {
-			Factor uint32
-
-			XScale uint32
-
-			XOffset int64
-
-			YOffset int64
-		}{}
-
-		err = decoder.Decode(&ty.Reciprocal.Factor)
-		if err != nil {
-			return err
-		}
-
-		err = decoder.Decode(&ty.Reciprocal.XScale)
-		if err != nil {
-			return err
-		}
-
-		err = decoder.Decode(&ty.Reciprocal.XOffset)
-		if err != nil {
-			return err
-		}
-
-		err = decoder.Decode(&ty.Reciprocal.YOffset)
-		if err != nil {
-			return err
-		}
-
-		return
-
-	default:
-		return fmt.Errorf("unrecognized enum")
-	}
-}
-
-type PropStatus struct { // Enum
-	Pending    *bool   // 0
-	Ongoing    *bool   // 1
-	Confirming *bool   // 2
-	Approved   *uint32 // 3
-	Rejected   *uint32 // 4
-	Canceled   *bool   // 5
-}
-
-func (ty PropStatus) Encode(encoder scale.Encoder) (err error) {
-
-	if ty.Pending != nil {
-		err = encoder.PushByte(0)
-		if err != nil {
-			return err
-		}
-		return nil
-	}
-
-	if ty.Ongoing != nil {
-		err = encoder.PushByte(1)
-		if err != nil {
-			return err
-		}
-		return nil
-	}
-
-	if ty.Confirming != nil {
-		err = encoder.PushByte(2)
-		if err != nil {
-			return err
-		}
-		return nil
-	}
-
-	if ty.Approved != nil {
-		err = encoder.PushByte(3)
-		if err != nil {
-			return err
-		}
-		err = encoder.Encode(*ty.Approved)
-		if err != nil {
-			return err
-		}
-		return nil
-	}
-
-	if ty.Rejected != nil {
-		err = encoder.PushByte(4)
-		if err != nil {
-			return err
-		}
-		err = encoder.Encode(*ty.Rejected)
-		if err != nil {
-			return err
-		}
-		return nil
-	}
-
-	if ty.Canceled != nil {
-		err = encoder.PushByte(5)
-		if err != nil {
-			return err
-		}
-		return nil
-	}
-
-	return fmt.Errorf("unrecognized enum")
-}
-
-func (ty *PropStatus) Decode(decoder scale.Decoder) (err error) {
-	variant, err := decoder.ReadOneByte()
-	if err != nil {
-		return err
-	}
-	switch variant {
-
-	case 0:
-		t := true
-		ty.Pending = &t
-		return
-
-	case 1:
-		t := true
-		ty.Ongoing = &t
-		return
-
-	case 2:
-		t := true
-		ty.Confirming = &t
-		return
-
-	case 3:
-		err = decoder.Decode(ty.Approved)
-		if err != nil {
-			return err
-		}
-		return
-
-	case 4:
-		err = decoder.Decode(ty.Rejected)
-		if err != nil {
-			return err
-		}
-		return
-
-	case 5:
-		t := true
-		ty.Canceled = &t
-		return
-
-	default:
-		return fmt.Errorf("unrecognized enum")
-	}
-}
-
-type Test struct { // Enum
-	BaseT  *bool     // 0
-	TupleT *struct { // 1
-		F0 byte
-		F1 uint16
-	}
-	StructT *struct { // 2
-		F1 int32
-		F2 int32
-	}
-	StrT *[]byte // 3
-}
-
-func (ty Test) Encode(encoder scale.Encoder) (err error) {
-
-	if ty.BaseT != nil {
-		err = encoder.PushByte(0)
-		if err != nil {
-			return err
-		}
-		return nil
-	}
-
-	if ty.TupleT != nil {
-		err = encoder.PushByte(1)
-		if err != nil {
-			return err
-		}
-
-		err = encoder.Encode(ty.TupleT.F0)
-		if err != nil {
-			return err
-		}
-
-		err = encoder.Encode(ty.TupleT.F1)
-		if err != nil {
-			return err
-		}
-
-		return nil
-	}
-
-	if ty.StructT != nil {
-		err = encoder.PushByte(2)
-		if err != nil {
-			return err
-		}
-
-		err = encoder.Encode(ty.StructT.F1)
-		if err != nil {
-			return err
-		}
-
-		err = encoder.Encode(ty.StructT.F2)
-		if err != nil {
-			return err
-		}
-
-		return nil
-	}
-
-	if ty.StrT != nil {
-		err = encoder.PushByte(3)
-		if err != nil {
-			return err
-		}
-		err = encoder.Encode(*ty.StrT)
-		if err != nil {
-			return err
-		}
-		return nil
-	}
-
-	return fmt.Errorf("unrecognized enum")
-}
-
-func (ty *Test) Decode(decoder scale.Decoder) (err error) {
-	variant, err := decoder.ReadOneByte()
-	if err != nil {
-		return err
-	}
-	switch variant {
-
-	case 0:
-		t := true
-		ty.BaseT = &t
-		return
-
-	case 1:
-		ty.TupleT = &struct {
-			F0 byte
-
-			F1 uint16
-		}{}
-
-		err = decoder.Decode(&ty.TupleT.F0)
-		if err != nil {
-			return err
-		}
-
-		err = decoder.Decode(&ty.TupleT.F1)
-		if err != nil {
-			return err
-		}
-
-		return
-
-	case 2:
-		ty.StructT = &struct {
-			F1 int32
-
-			F2 int32
-		}{}
-
-		err = decoder.Decode(&ty.StructT.F1)
-		if err != nil {
-			return err
-		}
-
-		err = decoder.Decode(&ty.StructT.F2)
-		if err != nil {
-			return err
-		}
-
-		return
-
-	case 3:
-		err = decoder.Decode(ty.StrT)
-		if err != nil {
-			return err
-		}
-		return
-
-	default:
-		return fmt.Errorf("unrecognized enum")
-	}
-}
-
-type Call struct { // Composite
-	Contract     util.Option[types.H160]
-	Selector     [4]byte
-	Input        []byte
-	Amount       types.U256
-	RefTimeLimit uint64
-	AllowReentry bool
+type Percent struct { // Composite
+	V uint32
 }
