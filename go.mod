@@ -3,7 +3,7 @@ module github.com/wetee-dao/go-sdk
 go 1.21
 
 require (
-	github.com/centrifuge/go-substrate-rpc-client/v4 v4.2.2-0.20240731190417-9d7be34be928
+	github.com/centrifuge/go-substrate-rpc-client/v4 v4.2.2-0.20240919131012-e3b938563803
 	github.com/vedhavyas/go-subkey/v2 v2.0.0
 	golang.org/x/crypto v0.25.0
 )

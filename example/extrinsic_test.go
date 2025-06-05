@@ -15,7 +15,7 @@ import (
 func ExampleExtrinsic() {
 	fmt.Println(signature.TestKeyringPairAlice.Address)
 
-	client, err := chain.ClientInit("wss://xiaobai.asyou.me:30011/ws", true)
+	client, err := chain.ClientInit("ws://127.0.0.1:9944", true)
 	if err != nil {
 		panic(err)
 	}
@@ -25,8 +25,6 @@ func ExampleExtrinsic() {
 	if err != nil {
 		panic(err)
 	}
-
-	fmt.Println("p.Address:", p.Address)
 
 	minter, _ := types.NewMultiAddressFromAccountID(signature.TestKeyringPairAlice.PublicKey)
 	minterWrap := gtypes.MultiAddress{
@@ -42,6 +40,8 @@ func ExampleExtrinsic() {
 	}
 
 	printErrorStack(err)
+
+	// Output:
 }
 
 func printErrorStack(err error) {

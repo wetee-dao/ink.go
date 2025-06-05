@@ -16,6 +16,7 @@ import (
 	"github.com/centrifuge/go-substrate-rpc-client/v4/scale"
 	"github.com/centrifuge/go-substrate-rpc-client/v4/types"
 	"github.com/centrifuge/go-substrate-rpc-client/v4/types/codec"
+	"github.com/centrifuge/go-substrate-rpc-client/v4/types/extrinsic"
 	"github.com/centrifuge/go-substrate-rpc-client/v4/xxhash"
 	"golang.org/x/crypto/blake2b"
 
@@ -128,17 +129,13 @@ func (c *ChainClient) SignAndSubmit(signer *Signer, runtimeCall gtypes.RuntimeCa
 	}
 
 	ext := NewExtrinsic(call)
-	o := types.SignatureOptions{
-		BlockHash:          c.Hash,
-		Era:                types.ExtrinsicEra{IsMortalEra: false},
-		GenesisHash:        c.Hash,
-		Nonce:              types.NewUCompactFromUInt(uint64(accountInfo.Nonce)),
-		SpecVersion:        c.Runtime.SpecVersion,
-		Tip:                types.NewUCompactFromUInt(0),
-		TransactionVersion: c.Runtime.TransactionVersion,
-	}
-
-	err = ext.Sign(signer, o)
+	err = ext.Sign(signer, c.Meta, extrinsic.WithEra(types.ExtrinsicEra{IsImmortalEra: true}, c.Hash),
+		extrinsic.WithNonce(types.NewUCompactFromUInt(uint64(accountInfo.Nonce))),
+		extrinsic.WithTip(types.NewUCompactFromUInt(0)),
+		extrinsic.WithSpecVersion(c.Runtime.SpecVersion),
+		extrinsic.WithTransactionVersion(c.Runtime.TransactionVersion),
+		extrinsic.WithGenesisHash(c.Hash),
+	)
 	if err != nil {
 		return err
 	}
@@ -431,7 +428,7 @@ func (c *ChainClient) GetDoubleMapPrefixKeys(pallet string, method string, keyar
 	return keys, nil
 }
 
-// get hashers of map {{pallet}}.{{method}}
+// Get hashers of map {{pallet}}.{{method}}
 func (c *ChainClient) GetHashers(pallet, method string) ([]hash.Hash, error) {
 	// get entry metadata
 	// 获取储存元数据
@@ -455,6 +452,7 @@ func (c *ChainClient) GetHashers(pallet, method string) ([]hash.Hash, error) {
 	return hashers, nil
 }
 
+// Call runtime api
 func (c *ChainClient) CallRuntimeApi(pallet, method string, args []any, result any) error {
 	var buffer bytes.Buffer
 	var err error
@@ -511,7 +509,7 @@ func (c *ChainClient) InkBlockGasLimit(address [32]byte) error {
 	return err
 }
 
-// create prefixed key of {{pallet}}.{{method}}
+// Create prefixed key of {{pallet}}.{{method}}
 func CreatePrefixedKey(pallet, method string) []byte {
 	return append(xxhash.New128([]byte(pallet)).Sum(nil), xxhash.New128([]byte(method)).Sum(nil)...)
 }

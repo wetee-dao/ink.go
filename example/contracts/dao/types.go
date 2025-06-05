@@ -26,7 +26,6 @@ type PropStatus struct { // Enum
 }
 
 func (ty PropStatus) Encode(encoder scale.Encoder) (err error) {
-
 	if ty.Pending != nil {
 		err = encoder.PushByte(0)
 		if err != nil {
@@ -82,7 +81,6 @@ func (ty PropStatus) Encode(encoder scale.Encoder) (err error) {
 		}
 		return nil
 	}
-
 	return fmt.Errorf("unrecognized enum")
 }
 
@@ -96,24 +94,20 @@ func (ty *PropStatus) Decode(decoder scale.Decoder) (err error) {
 		t := true
 		ty.Pending = &t
 		return
-
 	case 1:
 		t := true
 		ty.Ongoing = &t
 		return
-
 	case 2:
 		t := true
 		ty.Confirming = &t
 		return
-
 	case 3:
 		err = decoder.Decode(ty.Approved)
 		if err != nil {
 			return err
 		}
 		return
-
 	case 4:
 		err = decoder.Decode(ty.Rejected)
 		if err != nil {
@@ -124,7 +118,6 @@ func (ty *PropStatus) Decode(decoder scale.Decoder) (err error) {
 		t := true
 		ty.Canceled = &t
 		return
-
 	default:
 		return fmt.Errorf("unrecognized enum")
 	}
@@ -163,7 +156,6 @@ type Curve struct { // Enum
 }
 
 func (ty Curve) Encode(encoder scale.Encoder) (err error) {
-
 	if ty.LinearDecreasing != nil {
 		err = encoder.PushByte(0)
 		if err != nil {
@@ -245,7 +237,6 @@ func (ty Curve) Encode(encoder scale.Encoder) (err error) {
 
 		return nil
 	}
-
 	return fmt.Errorf("unrecognized enum")
 }
 
@@ -278,7 +269,6 @@ func (ty *Curve) Decode(decoder scale.Decoder) (err error) {
 		}
 
 		return
-
 	case 1:
 		ty.SteppedDecreasing = &struct {
 			Begin  uint32
@@ -308,7 +298,6 @@ func (ty *Curve) Decode(decoder scale.Decoder) (err error) {
 		}
 
 		return
-
 	case 2:
 		ty.Reciprocal = &struct {
 			Factor  uint32
@@ -338,7 +327,6 @@ func (ty *Curve) Decode(decoder scale.Decoder) (err error) {
 		}
 
 		return
-
 	default:
 		return fmt.Errorf("unrecognized enum")
 	}
@@ -360,7 +348,6 @@ type Opinion struct { // Enum
 }
 
 func (ty Opinion) Encode(encoder scale.Encoder) (err error) {
-
 	if ty.YES != nil {
 		err = encoder.PushByte(0)
 		if err != nil {
@@ -376,7 +363,6 @@ func (ty Opinion) Encode(encoder scale.Encoder) (err error) {
 		}
 		return nil
 	}
-
 	return fmt.Errorf("unrecognized enum")
 }
 
@@ -390,12 +376,10 @@ func (ty *Opinion) Decode(decoder scale.Decoder) (err error) {
 		t := true
 		ty.YES = &t
 		return
-
 	case 1:
 		t := true
 		ty.NO = &t
 		return
-
 	default:
 		return fmt.Errorf("unrecognized enum")
 	}
@@ -434,7 +418,6 @@ type Error struct { // Enum
 }
 
 func (ty Error) Encode(encoder scale.Encoder) (err error) {
-
 	if ty.MemberExisted != nil {
 		err = encoder.PushByte(0)
 		if err != nil {
@@ -666,7 +649,6 @@ func (ty Error) Encode(encoder scale.Encoder) (err error) {
 		}
 		return nil
 	}
-
 	return fmt.Errorf("unrecognized enum")
 }
 
@@ -680,147 +662,118 @@ func (ty *Error) Decode(decoder scale.Decoder) (err error) {
 		t := true
 		ty.MemberExisted = &t
 		return
-
 	case 1:
 		t := true
 		ty.MemberNotExisted = &t
 		return
-
 	case 2:
 		t := true
 		ty.MemberBalanceNotZero = &t
 		return
-
 	case 3:
 		t := true
 		ty.LowBalance = &t
 		return
-
 	case 4:
 		t := true
 		ty.CallFailed = &t
 		return
-
 	case 5:
 		t := true
 		ty.InvalidDeposit = &t
 		return
-
 	case 6:
 		t := true
 		ty.TransferFailed = &t
 		return
-
 	case 7:
 		t := true
 		ty.MustCallByGov = &t
 		return
-
 	case 8:
 		t := true
 		ty.PropNotOngoing = &t
 		return
-
 	case 9:
 		t := true
 		ty.PropNotEnd = &t
 		return
-
 	case 10:
 		t := true
 		ty.InvalidProposal = &t
 		return
-
 	case 11:
 		t := true
 		ty.InvalidProposalStatus = &t
 		return
-
 	case 12:
 		t := true
 		ty.InvalidProposalCaller = &t
 		return
-
 	case 13:
 		t := true
 		ty.InvalidDepositTime = &t
 		return
-
 	case 14:
 		t := true
 		ty.InvalidVoteTime = &t
 		return
-
 	case 15:
 		t := true
 		ty.InvalidVoteStatus = &t
 		return
-
 	case 16:
 		t := true
 		ty.InvalidVoteUser = &t
 		return
-
 	case 17:
 		t := true
 		ty.ProposalInDecision = &t
 		return
-
 	case 18:
 		t := true
 		ty.VoteAlreadyUnlocked = &t
 		return
-
 	case 19:
 		t := true
 		ty.InvalidVoteUnlockTime = &t
 		return
-
 	case 20:
 		t := true
 		ty.ProposalNotConfirmed = &t
 		return
-
 	case 21:
 		t := true
 		ty.NoTrack = &t
 		return
-
 	case 22:
 		t := true
 		ty.MaxBalanceOverflow = &t
 		return
-
 	case 23:
 		t := true
 		ty.TransferDisable = &t
 		return
-
 	case 24:
 		t := true
 		ty.InvalidVote = &t
 		return
-
 	case 25:
 		t := true
 		ty.SetCodeFailed = &t
 		return
-
 	case 26:
 		t := true
 		ty.SpendNotFound = &t
 		return
-
 	case 27:
 		t := true
 		ty.SpendAlreadyExecuted = &t
 		return
-
 	case 28:
 		t := true
 		ty.SpendTransferError = &t
 		return
-
 	default:
 		return fmt.Errorf("unrecognized enum")
 	}
@@ -840,7 +793,6 @@ type Test struct { // Enum
 }
 
 func (ty Test) Encode(encoder scale.Encoder) (err error) {
-
 	if ty.BaseT != nil {
 		err = encoder.PushByte(0)
 		if err != nil {
@@ -898,7 +850,6 @@ func (ty Test) Encode(encoder scale.Encoder) (err error) {
 		}
 		return nil
 	}
-
 	return fmt.Errorf("unrecognized enum")
 }
 
@@ -912,7 +863,6 @@ func (ty *Test) Decode(decoder scale.Decoder) (err error) {
 		t := true
 		ty.BaseT = &t
 		return
-
 	case 1:
 		ty.TupleT = &struct {
 			F0 byte
@@ -930,7 +880,6 @@ func (ty *Test) Decode(decoder scale.Decoder) (err error) {
 		}
 
 		return
-
 	case 2:
 		ty.StructT = &struct {
 			F1 int32
@@ -948,7 +897,6 @@ func (ty *Test) Decode(decoder scale.Decoder) (err error) {
 		}
 
 		return
-
 	case 3:
 		err = decoder.Decode(ty.StrT)
 		if err != nil {
@@ -985,7 +933,6 @@ type CurveArg struct { // Enum
 }
 
 func (ty CurveArg) Encode(encoder scale.Encoder) (err error) {
-
 	if ty.LinearDecreasing != nil {
 		err = encoder.PushByte(0)
 		if err != nil {
@@ -1067,7 +1014,6 @@ func (ty CurveArg) Encode(encoder scale.Encoder) (err error) {
 
 		return nil
 	}
-
 	return fmt.Errorf("unrecognized enum")
 }
 
@@ -1100,7 +1046,6 @@ func (ty *CurveArg) Decode(decoder scale.Decoder) (err error) {
 		}
 
 		return
-
 	case 1:
 		ty.SteppedDecreasing = &struct {
 			Begin  uint32
@@ -1130,7 +1075,6 @@ func (ty *CurveArg) Decode(decoder scale.Decoder) (err error) {
 		}
 
 		return
-
 	case 2:
 		ty.Reciprocal = &struct {
 			XOffsetPercent Percent
@@ -1160,7 +1104,6 @@ func (ty *CurveArg) Decode(decoder scale.Decoder) (err error) {
 		}
 
 		return
-
 	default:
 		return fmt.Errorf("unrecognized enum")
 	}

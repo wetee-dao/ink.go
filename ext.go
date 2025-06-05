@@ -1,52 +1,47 @@
 package client
 
 import (
-	"fmt"
-
-	"github.com/centrifuge/go-substrate-rpc-client/v4/scale"
 	"github.com/centrifuge/go-substrate-rpc-client/v4/types"
 	"github.com/centrifuge/go-substrate-rpc-client/v4/types/codec"
+	"github.com/centrifuge/go-substrate-rpc-client/v4/types/extrinsic"
+	"github.com/centrifuge/go-substrate-rpc-client/v4/types/extrinsic/extensions"
 )
 
 func NewExtrinsic(c types.Call) Extrinsic {
 	return Extrinsic{
-		types.Extrinsic{
-			Version: types.ExtrinsicVersion4,
+		extrinsic.Extrinsic{
+			Version: extrinsic.Version4,
 			Method:  c,
 		},
 	}
 }
 
 type Extrinsic struct {
-	types.Extrinsic
+	extrinsic.Extrinsic
 }
 
-func (e *Extrinsic) Sign(signer *Signer, o types.SignatureOptions) error {
-	if e.Type() != types.ExtrinsicVersion4 {
-		return fmt.Errorf("unsupported extrinsic version: %v (isSigned: %v, type: %v)", e.Version, e.IsSigned(), e.Type())
+func (e *Extrinsic) Sign(signer *Signer, meta *types.Metadata, opts ...extrinsic.SigningOption) error {
+	if e.Type() != extrinsic.Version4 {
+		return extrinsic.ErrInvalidVersion.WithMsg("unsupported extrinsic version: %v (isSigned: %v, type: %v)", e.Version, e.IsSigned(), e.Type())
 	}
 
-	mb, err := codec.Encode(e.Method)
+	encodedMethod, err := codec.Encode(e.Method)
 	if err != nil {
 		return err
 	}
 
-	era := o.Era
-	if !o.Era.IsMortalEra {
-		era = types.ExtrinsicEra{IsImmortalEra: true}
+	fieldValues := extrinsic.SignedFieldValues{}
+	for _, opt := range opts {
+		opt(fieldValues)
 	}
 
-	payload := ExtrinsicPayloadV4{
-		ExtrinsicPayloadV3: types.ExtrinsicPayloadV3{
-			Method:      mb,
-			Era:         era,
-			Nonce:       o.Nonce,
-			Tip:         o.Tip,
-			SpecVersion: o.SpecVersion,
-			GenesisHash: o.GenesisHash,
-			BlockHash:   o.BlockHash,
-		},
-		TransactionVersion: o.TransactionVersion,
+	payload, err := createPayload(meta, encodedMethod)
+	if err != nil {
+		return extrinsic.ErrPayloadCreation.Wrap(err)
+	}
+
+	if err := payload.MutateSignedFields(fieldValues); err != nil {
+		return extrinsic.ErrPayloadMutation.Wrap(err)
 	}
 
 	signerPubKey, err := types.NewMultiAddressFromAccountID(signer.Public())
@@ -54,9 +49,9 @@ func (e *Extrinsic) Sign(signer *Signer, o types.SignatureOptions) error {
 		return err
 	}
 
-	sig, err := payload.Sign(signer)
+	sig, err := PayloadSign(signer, payload) //payload.Sign(signer)
 	if err != nil {
-		return err
+		return extrinsic.ErrPayloadSigning.Wrap(err)
 	}
 
 	var signature types.MultiSignature
@@ -66,83 +61,58 @@ func (e *Extrinsic) Sign(signer *Signer, o types.SignatureOptions) error {
 		signature = types.MultiSignature{IsEd25519: true, AsEd25519: sig}
 	}
 
-	extSig := types.ExtrinsicSignatureV4{
-		Signer:    signerPubKey,
-		Signature: signature,
-		Era:       era,
-		Nonce:     o.Nonce,
-		Tip:       o.Tip,
+	extSignature := &extrinsic.Signature{
+		Signer:       signerPubKey,
+		Signature:    signature,
+		SignedFields: payload.SignedFields,
 	}
 
-	e.Signature = extSig
+	e.Signature = extSignature
 
 	// mark the extrinsic as signed
-	e.Version |= types.ExtrinsicBitSigned
+	e.Version |= extrinsic.BitSigned
 
 	return nil
 }
 
-type ExtrinsicPayloadV4 struct {
-	types.ExtrinsicPayloadV3
-	TransactionVersion types.U32
+func createPayload(meta *types.Metadata, encodedCall []byte) (*extrinsic.Payload, error) {
+	payload := &extrinsic.Payload{
+		EncodedCall: encodedCall,
+	}
+
+	for _, signedExtension := range meta.AsMetadataV14.Extrinsic.SignedExtensions {
+		signedExtensionType, ok := meta.AsMetadataV14.EfficientLookup[signedExtension.Type.Int64()]
+
+		if !ok {
+			return nil, extrinsic.ErrSignedExtensionTypeNotDefined.WithMsg("lookup ID - '%d'", signedExtension.Type.Int64())
+		}
+
+		signedExtensionName := extensions.SignedExtensionName(signedExtensionType.Path[len(signedExtensionType.Path)-1])
+
+		payloadMutatorFn, ok := extrinsic.PayloadMutatorFns[signedExtensionName]
+
+		if !ok {
+			return nil, extrinsic.ErrSignedExtensionTypeNotSupported.WithMsg("signed extension '%s'", signedExtensionName)
+		}
+
+		payloadMutatorFn(payload)
+	}
+
+	return payload, nil
 }
 
-// Sign the extrinsic payload with the given derivation path
-func (e ExtrinsicPayloadV4) Sign(signer *Signer) (types.Signature, error) {
-	b, err := codec.Encode(e)
+func PayloadSign(signer *Signer, p *extrinsic.Payload) (sig types.SignatureHash, err error) {
+	b, err := codec.Encode(p)
 	if err != nil {
-		return types.Signature{}, err
+		return sig, extrinsic.ErrPayloadEncoding.Wrap(err)
 	}
 
-	sig, err := signer.Sign(b)
-	return types.NewSignature(sig), err
-}
-
-func (e ExtrinsicPayloadV4) Encode(encoder scale.Encoder) error {
-	err := encoder.Encode(e.Method)
+	signatureBytes, err := signer.Sign(b)
 	if err != nil {
-		return err
+		return sig, extrinsic.ErrPayloadSigning.Wrap(err)
 	}
 
-	err = encoder.Encode(e.Era)
-	if err != nil {
-		return err
-	}
+	sig = types.NewSignature(signatureBytes)
 
-	err = encoder.Encode(e.Nonce)
-	if err != nil {
-		return err
-	}
-
-	err = encoder.Encode(e.Tip)
-	if err != nil {
-		return err
-	}
-
-	err = encoder.Encode(e.SpecVersion)
-	if err != nil {
-		return err
-	}
-
-	err = encoder.Encode(e.TransactionVersion)
-	if err != nil {
-		return err
-	}
-
-	err = encoder.Encode(e.GenesisHash)
-	if err != nil {
-		return err
-	}
-
-	err = encoder.Encode(e.BlockHash)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-// Decode does nothing and always returns an error. ExtrinsicPayloadV4 is only used for encoding, not for decoding
-func (e *ExtrinsicPayloadV4) Decode(decoder scale.Decoder) error {
-	return fmt.Errorf("decoding of ExtrinsicPayloadV4 is not supported")
+	return sig, nil
 }

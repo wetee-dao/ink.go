@@ -1,4 +1,4 @@
-package module
+package client
 
 import (
 	"bytes"
@@ -9,7 +9,6 @@ import (
 	"github.com/centrifuge/go-substrate-rpc-client/v4/scale"
 	"github.com/centrifuge/go-substrate-rpc-client/v4/types"
 
-	chain "github.com/wetee-dao/go-sdk"
 	"github.com/wetee-dao/go-sdk/pallet/revive"
 	gtypes "github.com/wetee-dao/go-sdk/pallet/types"
 	"github.com/wetee-dao/go-sdk/util"
@@ -17,12 +16,12 @@ import (
 
 // Revive module
 type Revive struct {
-	Client  *chain.ChainClient
+	Client  *ChainClient
 	Abi     *util.InkAbi
 	Address types.H160
 }
 
-func NewRevive(client *chain.ChainClient, address types.H160, abiRaw []byte) (*Revive, error) {
+func NewRevive(client *ChainClient, address types.H160, abiRaw []byte) (*Revive, error) {
 	abi, err := util.InitAbi(abiRaw)
 	if err != nil {
 		return nil, err
@@ -36,27 +35,6 @@ func NewRevive(client *chain.ChainClient, address types.H160, abiRaw []byte) (*R
 }
 
 // Query ink contract data
-func (r *Revive) QueryInk(
-	origin types.AccountID,
-	amount types.U128,
-	gas_limit util.Option[types.Weight],
-	storage_deposit_limit util.Option[types.U128],
-	contractInput util.InkContractInput,
-	returnValue any,
-) error {
-	result, err := r.DryRunInk(origin, amount, gas_limit, storage_deposit_limit, contractInput)
-	if err != nil {
-		return err
-	}
-
-	if result.Data == nil {
-		return errors.New("result data is nil")
-	}
-
-	return scale.NewDecoder(bytes.NewReader(result.Data[1:])).Decode(returnValue)
-}
-
-// Query ink contract data
 func QueryInk[T any](
 	ABI *Revive,
 	origin types.AccountID,
@@ -66,7 +44,7 @@ func QueryInk[T any](
 	contractInput util.InkContractInput,
 ) (*T, error) {
 	returnValue := new(T)
-	result, err := ABI.DryRunInk(origin, amount, gas_limit, storage_deposit_limit, contractInput)
+	result, err := ABI.DryRun(origin, amount, gas_limit, storage_deposit_limit, contractInput)
 	if err != nil {
 		return nil, err
 	}
@@ -80,8 +58,80 @@ func QueryInk[T any](
 	return returnValue, err
 }
 
+// Dryrun ink contract
+func DryRunInk(
+	ABI *Revive,
+	origin types.AccountID,
+	amount types.U128,
+	gas_limit util.Option[types.Weight],
+	storage_deposit_limit util.Option[types.U128],
+	contractInput util.InkContractInput,
+) (*gtypes.ExecReturnValue, error) {
+	return ABI.DryRun(origin, amount, gas_limit, storage_deposit_limit, contractInput)
+}
+
+// Call blockchain submit ink transaction
+func CallInk(
+	ABI *Revive,
+	signer *Signer,
+	amount types.U128,
+	gas_limit types.Weight,
+	storage_deposit_limit types.U128,
+	contractInput util.InkContractInput,
+) error {
+	return ABI.Call(signer, amount, gas_limit, storage_deposit_limit, contractInput)
+}
+
+// Query ink contract data
+func (r *Revive) Query(
+	origin types.AccountID,
+	amount types.U128,
+	gas_limit util.Option[types.Weight],
+	storage_deposit_limit util.Option[types.U128],
+	contractInput util.InkContractInput,
+	returnValue any,
+) error {
+	result, err := r.DryRun(origin, amount, gas_limit, storage_deposit_limit, contractInput)
+	if err != nil {
+		return err
+	}
+
+	if result.Data == nil {
+		return errors.New("result data is nil")
+	}
+
+	return scale.NewDecoder(bytes.NewReader(result.Data[1:])).Decode(returnValue)
+}
+
+// call blockchain submit transaction
+func (r *Revive) Call(
+	signer *Signer,
+	amount types.U128,
+	gas_limit types.Weight,
+	storage_deposit_limit types.U128,
+	contractInput util.InkContractInput,
+) error {
+	inputBt, err := contractInput.Encode()
+	if err != nil {
+		return errors.New("contractInput.Encode: " + err.Error())
+	}
+
+	call := revive.MakeCallCall(
+		r.Address,
+		types.NewUCompact(amount.Int),
+		gtypes.Weight{
+			RefTime:   gas_limit.RefTime,
+			ProofSize: gas_limit.ProofSize,
+		},
+		types.NewUCompact(storage_deposit_limit.Int),
+		inputBt,
+	)
+
+	return r.Client.SignAndSubmit(signer, call, true)
+}
+
 // try call ink contract
-func (r *Revive) DryRunInk(
+func (r *Revive) DryRun(
 	origin types.AccountID,
 	amount types.U128,
 	gas_limit util.Option[types.Weight],
@@ -147,34 +197,6 @@ func (r *Revive) DryRunInk(
 	}
 
 	return returnValue, err
-}
-
-// call blockchain submit transaction
-func (r *Revive) CallInk(
-	signer *chain.Signer,
-	origin types.AccountID,
-	amount types.U128,
-	gas_limit types.Weight,
-	storage_deposit_limit types.U128,
-	contractInput util.InkContractInput,
-) error {
-	inputBt, err := contractInput.Encode()
-	if err != nil {
-		return errors.New("contractInput.Encode: " + err.Error())
-	}
-
-	call := revive.MakeCallCall(
-		r.Address,
-		types.NewUCompact(amount.Int),
-		gtypes.Weight{
-			RefTime:   gas_limit.RefTime,
-			ProofSize: gas_limit.ProofSize,
-		},
-		types.NewUCompact(storage_deposit_limit.Int),
-		inputBt,
-	)
-
-	return r.Client.SignAndSubmit(signer, call, true)
 }
 
 // Get error info from ABI
