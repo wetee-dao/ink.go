@@ -20,6 +20,7 @@ import (
 	"github.com/centrifuge/go-substrate-rpc-client/v4/xxhash"
 	"golang.org/x/crypto/blake2b"
 
+	"github.com/wetee-dao/go-sdk/pallet/revive"
 	"github.com/wetee-dao/go-sdk/pallet/system"
 	gtypes "github.com/wetee-dao/go-sdk/pallet/types"
 	"github.com/wetee-dao/go-sdk/util"
@@ -88,6 +89,12 @@ func (c *ChainClient) CheckMetadata() error {
 		return err
 	}
 
+	errMap, err := InitErrors(meta)
+	if err != nil {
+		return err
+	}
+
+	c.ErrorMap = errMap
 	c.Runtime = runtime
 	c.Meta = meta
 	gtypes.Meta = *meta
@@ -500,6 +507,11 @@ func (c *ChainClient) BalanceOfH160(address string) (types.U128, error) {
 	}
 
 	return balance, nil
+}
+
+func (c *ChainClient) MapReviveAccount(signer *Signer) error {
+	call := revive.MakeMapAccountCall()
+	return c.SignAndSubmit(signer, call, true)
 }
 
 // Get block gas limit

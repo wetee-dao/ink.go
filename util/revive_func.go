@@ -2,10 +2,12 @@ package util
 
 import (
 	"encoding/hex"
+	"errors"
 	"fmt"
 
 	"github.com/centrifuge/go-substrate-rpc-client/v4/types"
 	"golang.org/x/crypto/blake2b"
+	"golang.org/x/crypto/sha3"
 )
 
 // Get selector of contract function
@@ -53,4 +55,36 @@ func HexToH160(hexString string) (types.H160, error) {
 	copy(byteArray[:20], dst[:])
 
 	return byteArray, nil
+}
+
+func H160FromPublicKey(bytes []byte) (types.H160, error) {
+	if len(bytes) < 20 {
+		return types.H160{}, errors.New("invalid byte array length")
+	}
+
+	if IsEthDerived(bytes) {
+		var byteArray [20]byte
+		copy(byteArray[:20], bytes[:])
+
+		return byteArray, nil
+	}
+
+	account_hash := Keccak256Hash(bytes)
+
+	var byteArray [20]byte
+	copy(byteArray[:20], account_hash[12:])
+
+	return byteArray, nil
+}
+
+func Keccak256Hash(data []byte) []byte {
+	hasher := sha3.NewLegacyKeccak256()
+	hasher.Write(data)
+	return hasher.Sum(nil)
+}
+
+var eth = []byte{0xEE, 0xEE, 0xEE, 0xEE, 0xEE, 0xEE, 0xEE, 0xEE, 0xEE, 0xEE, 0xEE, 0xEE}
+
+func IsEthDerived(account_bytes []byte) bool {
+	return hex.EncodeToString(account_bytes[:20]) == hex.EncodeToString(eth)
 }

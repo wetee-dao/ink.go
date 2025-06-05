@@ -13,8 +13,6 @@ import (
 )
 
 func ExampleExtrinsic() {
-	fmt.Println(signature.TestKeyringPairAlice.Address)
-
 	client, err := chain.ClientInit("ws://127.0.0.1:9944", true)
 	if err != nil {
 		panic(err)
@@ -31,6 +29,7 @@ func ExampleExtrinsic() {
 		IsId:       true,
 		AsIdField0: minter.AsID,
 	}
+
 	bal, _ := new(big.Int).SetString("500000000000", 10)
 	call := balances.MakeTransferAllowDeathCall(minterWrap, types.NewUCompact(bal))
 	err = client.SignAndSubmit(&p, call, true)

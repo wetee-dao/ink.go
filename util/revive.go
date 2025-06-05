@@ -21,7 +21,7 @@ func NewAccountID(pubkey []byte) types.AccountID {
 // Ink Contract input
 type InkContractInput struct {
 	/// The selector for the smart contract execution.
-	Selector [4]byte
+	Selector string
 	/// The arguments of the smart contract execution.
 	Args []any
 }
@@ -29,7 +29,8 @@ type InkContractInput struct {
 func (e *InkContractInput) Encode() ([]byte, error) {
 	var buffer bytes.Buffer
 	encoder := scale.NewEncoder(&buffer)
-	err := encoder.Encode(e.Selector)
+	selector := FuncToSelector(e.Selector)
+	err := encoder.Encode(selector)
 	if err != nil {
 		return nil, err
 	}
@@ -49,4 +50,11 @@ type ContractResult struct {
 	GasRequired    gtypes.Weight
 	StorageDeposit gtypes.StorageDeposit
 	Result         Result[gtypes.ExecReturnValue, gtypes.DispatchError]
+}
+
+type DryRunResult struct {
+	GasConsumed    gtypes.Weight
+	GasRequired    gtypes.Weight
+	StorageDeposit gtypes.StorageDeposit
+	Return         *gtypes.ExecReturnValue
 }

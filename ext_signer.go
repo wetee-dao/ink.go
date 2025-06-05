@@ -4,12 +4,15 @@ import (
 	"crypto"
 	goEd25519 "crypto/ed25519"
 
+	"github.com/centrifuge/go-substrate-rpc-client/v4/types"
 	"github.com/vedhavyas/go-subkey/v2"
 	"github.com/vedhavyas/go-subkey/v2/ed25519"
 	"github.com/vedhavyas/go-subkey/v2/sr25519"
+	"github.com/wetee-dao/go-sdk/util"
 	"golang.org/x/crypto/blake2b"
 )
 
+// Sr25519 Signer or Ed25519 Signer
 type Signer struct {
 	subkey.KeyPair
 	// Address is an SS58 address
@@ -38,7 +41,12 @@ func (e *Signer) Verify(msg []byte, signature []byte) bool {
 	return e.KeyPair.Verify(msg, signature)
 }
 
-// Sr25519PairFromSecret generates a sr25519 key pair from a seed or phrase
+func (e *Signer) H160Address() types.H160 {
+	h160, _ := util.H160FromPublicKey(e.PublicKey)
+	return h160
+}
+
+// Sr25519 PairFromSecret generates a sr25519 key pair from a seed or phrase
 func Sr25519PairFromSecret(seedOrPhrase string, network uint16) (Signer, error) {
 	scheme := sr25519.Scheme{}
 	kyr, err := subkey.DeriveKeyPair(scheme, seedOrPhrase)
@@ -54,7 +62,7 @@ func Sr25519PairFromSecret(seedOrPhrase string, network uint16) (Signer, error) 
 	}, nil
 }
 
-// Ed25519PairFromSecret generates a ed25519 key pair from a seed or phrase
+// Ed25519 PairFromSecret generates a ed25519 key pair from a seed or phrase
 func Ed25519PairFromSecret(seedOrPhrase string, network uint16) (Signer, error) {
 	scheme := ed25519.Scheme{}
 	kyr, err := subkey.DeriveKeyPair(scheme, seedOrPhrase)
@@ -71,7 +79,7 @@ func Ed25519PairFromSecret(seedOrPhrase string, network uint16) (Signer, error) 
 	}, nil
 }
 
-// Ed25519PairFromPk generates a ed25519 key pair from golang ed25519.PrivateKey
+// Ed25519 PairFromPk generates a ed25519 key pair from golang ed25519.PrivateKey
 func Ed25519PairFromPk(pk goEd25519.PrivateKey, network uint16) (Signer, error) {
 	pub := pk.Public().(goEd25519.PublicKey)
 	kyr := Ed25519Signer{
