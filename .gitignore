@@ -25,3 +25,4 @@ Dockerfile.cross
 *.swo
 *~
 gen/wetee-meta.json
+tools/go-ink-gen/dao

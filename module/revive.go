@@ -56,6 +56,30 @@ func (r *Revive) QueryInk(
 	return scale.NewDecoder(bytes.NewReader(result.Data[1:])).Decode(returnValue)
 }
 
+// Query ink contract data
+func QueryInk[T any](
+	ABI *Revive,
+	origin types.AccountID,
+	amount types.U128,
+	gas_limit util.Option[types.Weight],
+	storage_deposit_limit util.Option[types.U128],
+	contractInput util.InkContractInput,
+) (*T, error) {
+	returnValue := new(T)
+	result, err := ABI.DryRunInk(origin, amount, gas_limit, storage_deposit_limit, contractInput)
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Data == nil {
+		return nil, errors.New("result data is nil")
+	}
+
+	err = scale.NewDecoder(bytes.NewReader(result.Data[1:])).Decode(returnValue)
+
+	return returnValue, err
+}
+
 // try call ink contract
 func (r *Revive) DryRunInk(
 	origin types.AccountID,

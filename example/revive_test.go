@@ -48,8 +48,8 @@ func ExampleRevive() {
 		return
 	}
 
-	mlist := make([]types.H160, 0, 10)
-	err = revice.QueryInk(
+	_, err = module.QueryInk[[]types.H160](
+		revice,
 		util.NewAccountID(signature.TestKeyringPairAlice.PublicKey),
 		types.NewU128(*big.NewInt(0)),
 		util.NewNone[types.Weight](),
@@ -58,14 +58,14 @@ func ExampleRevive() {
 			Selector: util.FuncToSelector("Member::list"),
 			Args:     []any{},
 		},
-		&mlist,
 	)
+
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	track := util.NewSome(dao.Track{})
-	err = revice.QueryInk(
+	_, err = module.QueryInk[dao.Track](
+		revice,
 		util.NewAccountID(signature.TestKeyringPairAlice.PublicKey),
 		types.NewU128(*big.NewInt(0)),
 		util.NewNone[types.Weight](),
@@ -76,7 +76,6 @@ func ExampleRevive() {
 				types.NewU16(0),
 			},
 		},
-		&track,
 	)
 	if err != nil {
 		fmt.Println(err)
