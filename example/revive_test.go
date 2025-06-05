@@ -46,7 +46,6 @@ func ExampleRevive() {
 		contractAddress,
 		abiRaw,
 	)
-
 	if err != nil {
 		util.LogWithPurple("NewRevive", err)
 		return
@@ -56,9 +55,6 @@ func ExampleRevive() {
 	memberList, err := chain.QueryInk[[]types.H160](
 		contract,
 		util.NewAccountID(p.PublicKey),
-		types.NewU128(*big.NewInt(0)),
-		util.NewNone[types.Weight](),
-		util.NewNone[types.U128](),
 		util.InkContractInput{
 			Selector: "Member::list",
 			Args:     []any{},
@@ -72,9 +68,6 @@ func ExampleRevive() {
 	_, err = chain.QueryInk[util.Option[dao.Track]](
 		contract,
 		util.NewAccountID(p.PublicKey),
-		types.NewU128(*big.NewInt(0)),
-		util.NewNone[types.Weight](),
-		util.NewNone[types.U128](),
 		util.InkContractInput{
 			Selector: "Gov::track",
 			Args: []any{

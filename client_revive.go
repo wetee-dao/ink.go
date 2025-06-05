@@ -5,6 +5,7 @@ import (
 	"encoding/hex"
 	"errors"
 	"fmt"
+	"math/big"
 	"strconv"
 
 	"github.com/centrifuge/go-substrate-rpc-client/v4/scale"
@@ -39,14 +40,14 @@ func NewRevive(client *ChainClient, address types.H160, abiRaw []byte) (*Revive,
 
 // Query ink contract data
 func (r *Revive) Query(
-	origin types.AccountID,
-	amount types.U128,
-	gas_limit util.Option[types.Weight],
-	storage_deposit_limit util.Option[types.U128],
+	account types.AccountID,
 	contractInput util.InkContractInput,
 	returnValue any,
 ) error {
-	result, err := r.DryRun(origin, amount, gas_limit, storage_deposit_limit, contractInput)
+	amount := types.NewU128(*big.NewInt(0))
+	gas_limit := util.NewNone[types.Weight]()
+	storage_deposit_limit := util.NewNone[types.U128]()
+	result, err := r.DryRun(account, amount, gas_limit, storage_deposit_limit, contractInput)
 	if err != nil {
 		return err
 	}
@@ -61,14 +62,15 @@ func (r *Revive) Query(
 // Query ink contract data
 func QueryInk[T any](
 	ABI *Revive,
-	origin types.AccountID,
-	amount types.U128,
-	gas_limit util.Option[types.Weight],
-	storage_deposit_limit util.Option[types.U128],
+	account types.AccountID,
 	contractInput util.InkContractInput,
 ) (*T, error) {
+	amount := types.NewU128(*big.NewInt(0))
+	gas_limit := util.NewNone[types.Weight]()
+	storage_deposit_limit := util.NewNone[types.U128]()
+
 	returnValue := new(T)
-	result, err := ABI.DryRun(origin, amount, gas_limit, storage_deposit_limit, contractInput)
+	result, err := ABI.DryRun(account, amount, gas_limit, storage_deposit_limit, contractInput)
 	if err != nil {
 		return nil, err
 	}
