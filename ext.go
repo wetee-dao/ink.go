@@ -89,6 +89,11 @@ func createPayload(meta *types.Metadata, encodedCall []byte) (*extrinsic.Payload
 
 		signedExtensionName := extensions.SignedExtensionName(signedExtensionType.Path[len(signedExtensionType.Path)-1])
 
+		// TODO pull requset to go-substrate-rpc-client
+		if signedExtensionName == "WeightReclaim" {
+			continue
+		}
+
 		payloadMutatorFn, ok := extrinsic.PayloadMutatorFns[signedExtensionName]
 
 		if !ok {
