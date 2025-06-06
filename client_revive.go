@@ -222,7 +222,7 @@ func (r *Revive) Call(
 		fmt.Println("")
 	}
 
-	call := revive.MakeCallCall(
+	runtimeCall := revive.MakeCallCall(
 		r.Address,
 		types.NewUCompact(amount.Int),
 		gtypes.Weight{
@@ -232,6 +232,11 @@ func (r *Revive) Call(
 		types.NewUCompact(storage_deposit_limit.Int),
 		inputBt,
 	)
+
+	call, err := (runtimeCall).AsCall()
+	if err != nil {
+		return errors.New("(runtimeCall).AsCall() error: " + err.Error())
+	}
 
 	return r.Client.SignAndSubmit(signer, call, false)
 }

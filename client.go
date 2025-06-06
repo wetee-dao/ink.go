@@ -125,15 +125,15 @@ func (c *ChainClient) GetAccount(address *Signer) (*types.AccountInfo, error) {
 
 // 签名并提交交易
 // Sign and submit transaction
-func (c *ChainClient) SignAndSubmit(signer *Signer, runtimeCall gtypes.RuntimeCall, untilFinalized bool) error {
+func (c *ChainClient) SignAndSubmit(signer *Signer, call types.Call, untilFinalized bool) error {
 	accountInfo, err := c.GetAccount(signer)
 	if err != nil {
 		return errors.New("GetAccountInfo error: " + err.Error())
 	}
-	call, err := (runtimeCall).AsCall()
-	if err != nil {
-		return errors.New("(runtimeCall).AsCall() error: " + err.Error())
-	}
+	// call, err := (runtimeCall).AsCall()
+	// if err != nil {
+	// 	return errors.New("(runtimeCall).AsCall() error: " + err.Error())
+	// }
 
 	ext := NewExtrinsic(call)
 	err = ext.Sign(signer, c.Meta, extrinsic.WithEra(types.ExtrinsicEra{IsImmortalEra: true}, c.Hash),
@@ -510,7 +510,13 @@ func (c *ChainClient) BalanceOfH160(address string) (types.U128, error) {
 }
 
 func (c *ChainClient) MapReviveAccount(signer *Signer) error {
-	call := revive.MakeMapAccountCall()
+	runtimeCall := revive.MakeMapAccountCall()
+
+	call, err := (runtimeCall).AsCall()
+	if err != nil {
+		return errors.New("(runtimeCall).AsCall() error: " + err.Error())
+	}
+
 	return c.SignAndSubmit(signer, call, true)
 }
 

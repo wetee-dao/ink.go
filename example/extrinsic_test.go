@@ -31,7 +31,12 @@ func ExampleExtrinsic() {
 	}
 
 	bal, _ := new(big.Int).SetString("500000000000", 10)
-	call := balances.MakeTransferAllowDeathCall(minterWrap, types.NewUCompact(bal))
+	runtimeCall := balances.MakeTransferAllowDeathCall(minterWrap, types.NewUCompact(bal))
+	call, err := (runtimeCall).AsCall()
+	if err != nil {
+		panic(err)
+	}
+
 	err = client.SignAndSubmit(&p, call, true)
 	if err != nil {
 		printErrorStack(err)
