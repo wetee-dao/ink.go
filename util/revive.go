@@ -7,7 +7,7 @@ import (
 	"github.com/centrifuge/go-substrate-rpc-client/v4/scale"
 	"github.com/centrifuge/go-substrate-rpc-client/v4/types"
 
-	gtypes "github.com/wetee-dao/go-sdk/pallet/types"
+	gtypes "github.com/wetee-dao/ink.go/pallet/types"
 )
 
 // type AccountId [32]byte

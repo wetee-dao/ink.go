@@ -11,7 +11,7 @@ import (
 	"strings"
 	"unicode"
 
-	"github.com/wetee-dao/go-sdk/util"
+	"github.com/wetee-dao/ink.go/util"
 )
 
 // Revive module
@@ -59,7 +59,7 @@ func (r *ReviveGen) SaveTypes() {
 
 	var data = "package " + name + "\n"
 	data += "import (\n"
-	data += "  \"github.com/wetee-dao/go-sdk/util\"\n"
+	data += "  \"github.com/wetee-dao/ink.go/util\"\n"
 	data += "  \"github.com/centrifuge/go-substrate-rpc-client/v4/types\"\n"
 	data += "  \"github.com/centrifuge/go-substrate-rpc-client/v4/scale\"\n"
 	data += ")\n"

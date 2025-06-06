@@ -5,7 +5,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/wetee-dao/go-sdk/util"
+	"github.com/wetee-dao/ink.go/util"
 )
 
 func TestGen(t *testing.T) {

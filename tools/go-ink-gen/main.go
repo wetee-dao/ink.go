@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/wetee-dao/go-sdk/util"
+	"github.com/wetee-dao/ink.go/util"
 )
 
 func main() {

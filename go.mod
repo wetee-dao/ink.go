@@ -1,4 +1,4 @@
-module github.com/wetee-dao/go-sdk
+module github.com/wetee-dao/ink.go
 
 go 1.23.0
 

@@ -6,10 +6,10 @@ import (
 	"os"
 
 	"github.com/centrifuge/go-substrate-rpc-client/v4/types"
-	chain "github.com/wetee-dao/go-sdk"
+	chain "github.com/wetee-dao/ink.go"
 
-	"github.com/wetee-dao/go-sdk/example/contracts/dao"
-	"github.com/wetee-dao/go-sdk/util"
+	"github.com/wetee-dao/ink.go/example/contracts/dao"
+	"github.com/wetee-dao/ink.go/util"
 )
 
 var UTIL = big.NewInt(1_000_000_000_000)

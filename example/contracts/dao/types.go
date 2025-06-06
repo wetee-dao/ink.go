@@ -5,7 +5,7 @@ import (
 
 	"github.com/centrifuge/go-substrate-rpc-client/v4/scale"
 	"github.com/centrifuge/go-substrate-rpc-client/v4/types"
-	"github.com/wetee-dao/go-sdk/util"
+	"github.com/wetee-dao/ink.go/util"
 )
 
 type Call struct { // Composite

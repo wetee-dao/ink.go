@@ -8,7 +8,7 @@ import (
 	"github.com/vedhavyas/go-subkey/v2"
 	"github.com/vedhavyas/go-subkey/v2/ed25519"
 	"github.com/vedhavyas/go-subkey/v2/sr25519"
-	"github.com/wetee-dao/go-sdk/util"
+	"github.com/wetee-dao/ink.go/util"
 	"golang.org/x/crypto/blake2b"
 )
 

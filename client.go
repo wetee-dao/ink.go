@@ -20,10 +20,10 @@ import (
 	"github.com/centrifuge/go-substrate-rpc-client/v4/xxhash"
 	"golang.org/x/crypto/blake2b"
 
-	"github.com/wetee-dao/go-sdk/pallet/revive"
-	"github.com/wetee-dao/go-sdk/pallet/system"
-	gtypes "github.com/wetee-dao/go-sdk/pallet/types"
-	"github.com/wetee-dao/go-sdk/util"
+	"github.com/wetee-dao/ink.go/pallet/revive"
+	"github.com/wetee-dao/ink.go/pallet/system"
+	gtypes "github.com/wetee-dao/ink.go/pallet/types"
+	"github.com/wetee-dao/ink.go/util"
 )
 
 // 区块链链接

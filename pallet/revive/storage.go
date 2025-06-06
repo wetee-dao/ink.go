@@ -2,10 +2,11 @@ package revive
 
 import (
 	"encoding/hex"
+
 	state "github.com/centrifuge/go-substrate-rpc-client/v4/rpc/state"
 	types "github.com/centrifuge/go-substrate-rpc-client/v4/types"
 	codec "github.com/centrifuge/go-substrate-rpc-client/v4/types/codec"
-	types1 "github.com/wetee-dao/go-sdk/pallet/types"
+	types1 "github.com/wetee-dao/ink.go/pallet/types"
 )
 
 // Make a storage key for PristineCode

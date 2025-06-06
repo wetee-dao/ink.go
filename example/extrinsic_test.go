@@ -7,9 +7,9 @@ import (
 
 	"github.com/centrifuge/go-substrate-rpc-client/v4/signature"
 	"github.com/centrifuge/go-substrate-rpc-client/v4/types"
-	chain "github.com/wetee-dao/go-sdk"
-	"github.com/wetee-dao/go-sdk/pallet/balances"
-	gtypes "github.com/wetee-dao/go-sdk/pallet/types"
+	chain "github.com/wetee-dao/ink.go"
+	"github.com/wetee-dao/ink.go/pallet/balances"
+	gtypes "github.com/wetee-dao/ink.go/pallet/types"
 )
 
 func ExampleExtrinsic() {
