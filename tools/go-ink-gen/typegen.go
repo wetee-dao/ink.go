@@ -139,6 +139,7 @@ func (r *ReviveGen) RecursionTypes(ty int, name string, level int) []string {
 		if len(path) > 0 {
 			enumName = path[len(path)-1]
 		}
+		fmt.Println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>", enumName)
 		returnTraits = r.EnumGen(ty, enumName, def.Variant.Variants, enums)
 	} else if def.Sequence != nil {
 		f := r.RecursionTypes(def.Sequence.Type, "", level+1)
@@ -301,12 +302,12 @@ var primitiveMapping = map[string]string{
 	"i16":    "int16",
 	"i32":    "int32",
 	"i64":    "int64",
-	"i128":   "big.Int",
+	"i128":   "types.I128",
 	"u8":     "byte",
 	"u16":    "uint16",
 	"u32":    "uint32",
 	"u64":    "uint64",
-	"u128":   "big.Int",
+	"u128":   "types.U128",
 	"String": "string",
 	"&str":   "string",
 }

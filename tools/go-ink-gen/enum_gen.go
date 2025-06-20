@@ -45,18 +45,21 @@ type EnumItemField struct {
 
 // Enum generator
 func (r *ReviveGen) EnumGen(ty int, name string, items []util.SubVariant, subs [][][]string) string {
+	// 为Result和Option类型添加泛型
+	if name == "Result" || name == "Option" {
+		switch name {
+		case "Result":
+			return "[" + subs[0][0][1] + "," + subs[1][0][1] + "]"
+		case "Option":
+			fmt.Println(subs)
+			return "[" + subs[1][0][1] + "]"
+		}
+		return ""
+	}
+
 	var traits = ""
 	if r.CheckTypeIsSkip(ty, name) {
 		return traits
-	}
-
-	// 为Result和Option类型添加泛型
-	if name == "Result" || name == "Option" {
-		if name == "Result" {
-			return "[" + subs[0][0][1] + "," + subs[1][0][1] + "]"
-		} else if name == "Option" {
-			return "[" + subs[1][0][1] + "]"
-		}
 	}
 
 	typeStr := ("type " + name + " struct { // Enum" + "\n")
