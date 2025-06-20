@@ -58,3 +58,5 @@ type DryRunResult struct {
 	StorageDeposit gtypes.StorageDeposit
 	Return         *gtypes.ExecReturnValue
 }
+
+type NullTuple struct{}

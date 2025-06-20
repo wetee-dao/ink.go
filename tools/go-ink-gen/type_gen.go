@@ -40,22 +40,53 @@ func NewReviveGen(abiRaw []byte) (*ReviveGen, error) {
 }
 
 func (r *ReviveGen) SaveTypes() {
+	name := r.Abi.Contract.Name
+	calls := ContractCallBox{}
+	calls.PackageName = name
+	calls.Name = UnderscoreToCamelCase(name)
 	for i, t := range r.Abi.Spec.Messages {
+		msg := r.Abi.Spec.Messages[i]
 		// if t.Label != "Erc20::balance_of" {
 		// 	continue
 		// }
 
 		util.LogWithYellow("--------------------------------------------------" + t.Label)
-		for _, arg := range r.Abi.Spec.Messages[i].Args {
-			fmt.Print("arg: " + arg.Label + " ")
-			r.RecursionTypes(arg.Type.Type, arg.Type.DisplayName[len(arg.Type.DisplayName)-1], 1)
-			fmt.Println("")
+		args := []string{}
+		for _, arg := range msg.Args {
+			rtype := r.RecursionTypes(arg.Type.Type, arg.Type.DisplayName[len(arg.Type.DisplayName)-1], 1)
+			args = append(args, arg.Label+" "+rtype[1])
 		}
 
-		r.RecursionTypes(t.ReturnType.Type, t.ReturnType.DisplayName[len(t.ReturnType.DisplayName)-1], 1)
-	}
+		returnType, returnName := r.GetReturnValue(t.ReturnType.Type, t.ReturnType.DisplayName[len(t.ReturnType.DisplayName)-1], 1)
+		result := r.RecursionTypes(returnType, returnName, 1)
 
-	name := r.Abi.Contract.Name
+		util.LogWithYellow("--------------------------------------------------->", msg.Label+"("+strings.Join(args, ",")+")")
+		util.LogWithRed("--------------------------------------------------->", result[1])
+		fmt.Println("")
+
+		// funcs = append(funcs, "func "+msg.Label+"("+strings.Join(args, ",")+")"+" ("+result[1]+", error){"+"}\n")
+		argTypeStr := strings.Join(args, ",")
+		if argTypeStr != "" {
+			argTypeStr = argTypeStr + ","
+		}
+		argStr := ""
+		for i, arg := range args {
+			argType := strings.Split(arg, " ")
+			util.LogWithRed("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD", argType)
+			argStr = argStr + argType[0]
+			if i != len(args)-1 {
+				argStr = argStr + ","
+			}
+		}
+
+		calls.Funcs = append(calls.Funcs, Func{
+			FuncName:   msg.Label,
+			ArgStr:     argStr,
+			ArgTypeStr: argTypeStr,
+			Return:     result[1],
+			IsMut:      msg.Mutates,
+		})
+	}
 
 	var data = "package " + name + "\n"
 	data += "import (\n"
@@ -68,14 +99,10 @@ func (r *ReviveGen) SaveTypes() {
 	for k := range r.TypeResult {
 		keys = append(keys, k)
 	}
-
 	sort.Ints(keys)
-
 	for _, t := range keys {
 		data += r.TypeResult[t]
 	}
-
-	fmt.Println(data)
 
 	if err := os.MkdirAll("./"+name, os.ModePerm); err != nil {
 		log.Fatal(err)
@@ -91,10 +118,34 @@ func (r *ReviveGen) SaveTypes() {
 		log.Fatalf("Error formatting and cleaning code: %v", err)
 	}
 
+	os.Remove("./" + name + "/types.go")
+	os.Remove("./" + name + "/calls.go")
+
 	err = os.WriteFile("./"+name+"/types.go", formattedData, 0644)
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	callData := callGen(calls)
+	err = os.WriteFile("./"+name+"/calls.go", callData, 0644)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+}
+
+func (r *ReviveGen) GetReturnValue(ty int, name string, level int) (sty int, sname string) {
+	def := r.TypeMap[ty].Def
+	for _, v := range def.Variant.Variants {
+		for i := 0; i < len(v.Fields); i++ {
+			subfield := v.Fields[i]
+			if i == 0 {
+				return subfield.Type, subfield.Name
+			}
+		}
+	}
+
+	return 0, ""
 }
 
 func (r *ReviveGen) RecursionTypes(ty int, name string, level int) []string {
@@ -139,7 +190,6 @@ func (r *ReviveGen) RecursionTypes(ty int, name string, level int) []string {
 		if len(path) > 0 {
 			enumName = path[len(path)-1]
 		}
-		fmt.Println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>", enumName)
 		returnTraits = r.EnumGen(ty, enumName, def.Variant.Variants, enums)
 	} else if def.Sequence != nil {
 		f := r.RecursionTypes(def.Sequence.Type, "", level+1)
@@ -174,6 +224,12 @@ func (r *ReviveGen) RecursionTypes(ty int, name string, level int) []string {
 	}
 	if typeName == "" && curtype == "Tuple" {
 		typeName = "Tuple_" + fmt.Sprint(ty)
+		if len(fields) == 0 {
+			returnType = "util.NullTuple"
+		} else {
+			returnType = typeName
+		}
+
 	}
 
 	if !r.CheckTypeIsSkip(ty, typeName) {

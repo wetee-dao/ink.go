@@ -17,20 +17,20 @@ import (
 )
 
 // Revive module
-type Revive struct {
+type InkWithABI struct {
 	Client  *ChainClient
 	Abi     *util.InkAbi
 	Address types.H160
 	Debug   bool
 }
 
-func NewRevive(client *ChainClient, address types.H160, abiRaw []byte) (*Revive, error) {
+func NewRevive(client *ChainClient, address types.H160, abiRaw []byte) (*InkWithABI, error) {
 	abi, err := util.InitAbi(abiRaw)
 	if err != nil {
 		return nil, err
 	}
 
-	return &Revive{
+	return &InkWithABI{
 		Client:  client,
 		Abi:     abi,
 		Address: address,
@@ -39,7 +39,7 @@ func NewRevive(client *ChainClient, address types.H160, abiRaw []byte) (*Revive,
 }
 
 // Query ink contract data
-func (r *Revive) Query(
+func (r *InkWithABI) Query(
 	account types.AccountID,
 	contractInput util.InkContractInput,
 	returnValue any,
@@ -59,33 +59,8 @@ func (r *Revive) Query(
 	return scale.NewDecoder(bytes.NewReader(result.Return.Data[1:])).Decode(returnValue)
 }
 
-// Query ink contract data
-func QueryInk[T any](
-	ABI *Revive,
-	account types.AccountID,
-	contractInput util.InkContractInput,
-) (*T, error) {
-	amount := types.NewU128(*big.NewInt(0))
-	gas_limit := util.NewNone[types.Weight]()
-	storage_deposit_limit := util.NewNone[types.U128]()
-
-	returnValue := new(T)
-	result, err := ABI.DryRun(account, amount, gas_limit, storage_deposit_limit, contractInput)
-	if err != nil {
-		return nil, err
-	}
-
-	if result.Return.Data == nil {
-		return nil, errors.New("result data is nil")
-	}
-
-	err = scale.NewDecoder(bytes.NewReader(result.Return.Data[1:])).Decode(returnValue)
-
-	return returnValue, err
-}
-
 // try call ink contract
-func (r *Revive) DryRun(
+func (r *InkWithABI) DryRun(
 	origin types.AccountID,
 	amount types.U128,
 	gas_limit util.Option[types.Weight],
@@ -93,7 +68,7 @@ func (r *Revive) DryRun(
 	contractInput util.InkContractInput,
 ) (*util.DryRunResult, error) {
 	selector := util.FuncToSelector(contractInput.Selector)
-	f, err := r.GetArgsFromABI(selector)
+	f, err := r.CheckArgsFromABI(selector)
 	if err != nil {
 		return nil, err
 	}
@@ -144,17 +119,18 @@ func (r *Revive) DryRun(
 		} else {
 			err = errors.New("TryCall: unknown Module Error")
 		}
-	} else {
-		returnValue = &result.Result.V
-		if returnValue.Flags == 1 {
-			info := ""
-			if len(returnValue.Data) > 2 && returnValue.Data[1] == 1 {
-				info = r.GetErrorFromABI(returnValue.Data[2])
-			}
+		return nil, err
+	}
 
-			err = errors.New("TryCall: Contract Reverted" + info)
-			returnValue = nil
+	returnValue = &result.Result.V
+	if returnValue.Flags == 1 {
+		info := ""
+		if len(returnValue.Data) > 2 && returnValue.Data[1] == 1 {
+			info = r.GetErrorFromABI(returnValue.Data[2])
 		}
+
+		err = errors.New("TryCall: Contract Reverted" + info)
+		return nil, err
 	}
 
 	return &util.DryRunResult{
@@ -165,32 +141,8 @@ func (r *Revive) DryRun(
 	}, err
 }
 
-// Dryrun ink contract
-func DryRunInk(
-	ABI *Revive,
-	origin types.AccountID,
-	amount types.U128,
-	gas_limit util.Option[types.Weight],
-	storage_deposit_limit util.Option[types.U128],
-	contractInput util.InkContractInput,
-) (*util.DryRunResult, error) {
-	return ABI.DryRun(origin, amount, gas_limit, storage_deposit_limit, contractInput)
-}
-
-// Call blockchain submit ink transaction
-func CallInk(
-	ABI *Revive,
-	signer *Signer,
-	amount types.U128,
-	gas_limit types.Weight,
-	storage_deposit_limit types.U128,
-	contractInput util.InkContractInput,
-) error {
-	return ABI.Call(signer, amount, gas_limit, storage_deposit_limit, contractInput)
-}
-
 // call blockchain submit transaction
-func (r *Revive) Call(
+func (r *InkWithABI) Call(
 	signer *Signer,
 	amount types.U128,
 	gas_limit types.Weight,
@@ -241,8 +193,57 @@ func (r *Revive) Call(
 	return r.Client.SignAndSubmit(signer, call, false)
 }
 
+// Query ink contract data
+func QueryInk[T any](
+	ABI *InkWithABI,
+	account types.AccountID,
+	contractInput util.InkContractInput,
+) (*T, error) {
+	amount := types.NewU128(*big.NewInt(0))
+	gas_limit := util.NewNone[types.Weight]()
+	storage_deposit_limit := util.NewNone[types.U128]()
+
+	returnValue := new(T)
+	result, err := ABI.DryRun(account, amount, gas_limit, storage_deposit_limit, contractInput)
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Return.Data == nil {
+		return nil, errors.New("result data is nil")
+	}
+
+	err = scale.NewDecoder(bytes.NewReader(result.Return.Data[1:])).Decode(returnValue)
+
+	return returnValue, err
+}
+
+// Dryrun ink contract
+func DryRunInk(
+	ABI *InkWithABI,
+	origin types.AccountID,
+	amount types.U128,
+	gas_limit util.Option[types.Weight],
+	storage_deposit_limit util.Option[types.U128],
+	contractInput util.InkContractInput,
+) (*util.DryRunResult, error) {
+	return ABI.DryRun(origin, amount, gas_limit, storage_deposit_limit, contractInput)
+}
+
+// Call blockchain submit ink transaction
+func CallInk(
+	ABI *InkWithABI,
+	signer *Signer,
+	amount types.U128,
+	gas_limit types.Weight,
+	storage_deposit_limit types.U128,
+	contractInput util.InkContractInput,
+) error {
+	return ABI.Call(signer, amount, gas_limit, storage_deposit_limit, contractInput)
+}
+
 // Get error info from ABI
-func (r *Revive) GetErrorFromABI(index uint8) string {
+func (r *InkWithABI) GetErrorFromABI(index uint8) string {
 	var errors = []util.SubVariant{}
 	for _, t := range r.Abi.Types {
 		if len(t.Type.Path) == 0 {
@@ -262,7 +263,7 @@ func (r *Revive) GetErrorFromABI(index uint8) string {
 }
 
 // Get error info from ABI
-func (r *Revive) GetArgsFromABI(selector [4]byte) (*util.Message, error) {
+func (r *InkWithABI) CheckArgsFromABI(selector [4]byte) (*util.Message, error) {
 	for _, t := range r.Abi.Spec.Messages {
 		if t.Selector == "0x"+hex.EncodeToString(selector[:]) {
 			return &t, nil

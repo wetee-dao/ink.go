@@ -45,6 +45,7 @@ type Message struct {
 	Args       []MessageArg        `json:"args"`
 	Docs       []string            `json:"docs"`
 	Label      string              `json:"label"`
+	Mutates    bool                `json:"mutates"`
 	Payable    bool                `json:"payable"`
 	ReturnType TypeWithDisplayName `json:"returnType"`
 	Selector   string              `json:"selector"`

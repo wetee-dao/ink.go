@@ -12,7 +12,7 @@ func InitErrors(m *types.Metadata) (registry.ErrorRegistry, error) {
 
 func (c *ChainClient) GetErrorInfo(index byte, err [4]byte) (*registry.TypeDecoder, error) {
 	var errIndex = [4]types.U8{}
-	for i := 0; i < 4; i++ {
+	for i := range 4 {
 		errIndex[i] = types.NewU8(err[i])
 	}
 
