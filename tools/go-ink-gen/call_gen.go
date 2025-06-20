@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"fmt"
+	"strings"
 	"text/template"
 )
 
@@ -21,7 +22,14 @@ type Func struct {
 }
 
 func callGen(callData ContractCallBox) []byte {
-	t := template.Must(template.New("call").Funcs(template.FuncMap{"CamelCase": UnderscoreToCamelCase}).Parse(callTemp))
+	t := template.Must(template.New("call").Funcs(template.FuncMap{"CamelCase": func(v string) string {
+		vsplit := strings.Split(v, "::")
+		for i := range vsplit {
+			vsplit[i] = UnderscoreToCamelCase(vsplit[i])
+		}
+
+		return strings.Join(vsplit, "")
+	}}).Parse(callTemp))
 	var result bytes.Buffer
 	err := t.Execute(&result, callData)
 	fmt.Println(err)

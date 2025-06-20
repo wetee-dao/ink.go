@@ -72,7 +72,6 @@ func (r *ReviveGen) SaveTypes() {
 		argStr := ""
 		for i, arg := range args {
 			argType := strings.Split(arg, " ")
-			util.LogWithRed("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD", argType)
 			argStr = argStr + argType[0]
 			if i != len(args)-1 {
 				argStr = argStr + ","
@@ -113,21 +112,25 @@ func (r *ReviveGen) SaveTypes() {
 		log.Fatal(err)
 	}
 
+	os.Remove("./" + name + "/types.go")
 	formattedData, err = formatAndCleanCode(formattedData)
 	if err != nil {
 		log.Fatalf("Error formatting and cleaning code: %v", err)
 	}
-
-	os.Remove("./" + name + "/types.go")
-	os.Remove("./" + name + "/calls.go")
 
 	err = os.WriteFile("./"+name+"/types.go", formattedData, 0644)
 	if err != nil {
 		log.Fatal(err)
 	}
 
+	os.Remove("./" + name + "/calls.go")
 	callData := callGen(calls)
-	err = os.WriteFile("./"+name+"/calls.go", callData, 0644)
+	formattedCallData, err := formatAndCleanCode(callData)
+	if err != nil {
+		log.Fatalf("Error formatting and cleaning code: %v", err)
+	}
+
+	err = os.WriteFile("./"+name+"/calls.go", formattedCallData, 0644)
 	if err != nil {
 		log.Fatal(err)
 	}
