@@ -78,7 +78,7 @@ func (c *{{$.Name}}) {{if .IsMut}}DryRun{{else}}Query{{end}}{{CamelCase .FuncNam
 	)
 	{{if IsResult .Return}}
 	if v.IsErr {
-		return *v, errors.New("Contract Reverted:" + err.Error())
+		return *v, errors.New("Contract Reverted: " + v.E.Error())
 	}
 	{{end}}
 	return *v, err
