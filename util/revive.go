@@ -52,11 +52,4 @@ type ContractResult struct {
 	Result         Result[gtypes.ExecReturnValue, gtypes.DispatchError]
 }
 
-type DryRunResult struct {
-	GasConsumed    gtypes.Weight
-	GasRequired    gtypes.Weight
-	StorageDeposit gtypes.StorageDeposit
-	Return         *gtypes.ExecReturnValue
-}
-
 type NullTuple struct{}

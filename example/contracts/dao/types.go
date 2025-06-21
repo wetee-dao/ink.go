@@ -791,6 +791,128 @@ func (ty *Error) Decode(decoder scale.Decoder) (err error) {
 		return fmt.Errorf("unrecognized enum")
 	}
 }
+func (ty *Error) Error() string {
+	if ty.MemberExisted != nil {
+		return "MemberExisted"
+	}
+
+	if ty.MemberNotExisted != nil {
+		return "MemberNotExisted"
+	}
+
+	if ty.MemberBalanceNotZero != nil {
+		return "MemberBalanceNotZero"
+	}
+
+	if ty.PublicJoinNotAllowed != nil {
+		return "PublicJoinNotAllowed"
+	}
+
+	if ty.LowBalance != nil {
+		return "LowBalance"
+	}
+
+	if ty.CallFailed != nil {
+		return "CallFailed"
+	}
+
+	if ty.InvalidDeposit != nil {
+		return "InvalidDeposit"
+	}
+
+	if ty.TransferFailed != nil {
+		return "TransferFailed"
+	}
+
+	if ty.MustCallByGov != nil {
+		return "MustCallByGov"
+	}
+
+	if ty.PropNotOngoing != nil {
+		return "PropNotOngoing"
+	}
+
+	if ty.PropNotEnd != nil {
+		return "PropNotEnd"
+	}
+
+	if ty.InvalidProposal != nil {
+		return "InvalidProposal"
+	}
+
+	if ty.InvalidProposalStatus != nil {
+		return "InvalidProposalStatus"
+	}
+
+	if ty.InvalidProposalCaller != nil {
+		return "InvalidProposalCaller"
+	}
+
+	if ty.InvalidDepositTime != nil {
+		return "InvalidDepositTime"
+	}
+
+	if ty.InvalidVoteTime != nil {
+		return "InvalidVoteTime"
+	}
+
+	if ty.InvalidVoteStatus != nil {
+		return "InvalidVoteStatus"
+	}
+
+	if ty.InvalidVoteUser != nil {
+		return "InvalidVoteUser"
+	}
+
+	if ty.ProposalInDecision != nil {
+		return "ProposalInDecision"
+	}
+
+	if ty.VoteAlreadyUnlocked != nil {
+		return "VoteAlreadyUnlocked"
+	}
+
+	if ty.InvalidVoteUnlockTime != nil {
+		return "InvalidVoteUnlockTime"
+	}
+
+	if ty.ProposalNotConfirmed != nil {
+		return "ProposalNotConfirmed"
+	}
+
+	if ty.NoTrack != nil {
+		return "NoTrack"
+	}
+
+	if ty.MaxBalanceOverflow != nil {
+		return "MaxBalanceOverflow"
+	}
+
+	if ty.TransferDisable != nil {
+		return "TransferDisable"
+	}
+
+	if ty.InvalidVote != nil {
+		return "InvalidVote"
+	}
+
+	if ty.SetCodeFailed != nil {
+		return "SetCodeFailed"
+	}
+
+	if ty.SpendNotFound != nil {
+		return "SpendNotFound"
+	}
+
+	if ty.SpendAlreadyExecuted != nil {
+		return "SpendAlreadyExecuted"
+	}
+
+	if ty.SpendTransferError != nil {
+		return "SpendTransferError"
+	}
+	return "Unknown"
+}
 
 type Tuple_98 struct { // Tuple
 	F0 types.U256

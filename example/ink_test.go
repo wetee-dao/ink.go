@@ -39,7 +39,7 @@ func ExampleInk() {
 	}
 
 	// query Member::list
-	_, err = contract.QueryMemberList(
+	_, _, err = contract.QueryMemberList(
 		chain.DryRunCallParams{
 			Origin:              util.NewAccountID(p.PublicKey),
 			Amount:              types.NewU128(*big.NewInt(0)),
@@ -52,7 +52,7 @@ func ExampleInk() {
 	}
 
 	// query Gov::track return type is dao.Track
-	_, err = contract.QueryGovTrack(
+	_, _, err = contract.QueryGovTrack(
 		0,
 		chain.DryRunCallParams{
 			Origin:              util.NewAccountID(p.PublicKey),
@@ -66,7 +66,7 @@ func ExampleInk() {
 	}
 
 	// dry run contract
-	result, err := contract.DryRunErc20EnableTransfer(
+	result, _, err := contract.DryRunErc20EnableTransfer(
 		chain.DryRunCallParams{
 			Origin:              util.NewAccountID(p.PublicKey),
 			Amount:              types.NewU128(*big.NewInt(0)),

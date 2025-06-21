@@ -3,7 +3,6 @@ package main
 import (
 	"bytes"
 	"fmt"
-	"go/format"
 	"log"
 	"os"
 	"os/exec"
@@ -107,12 +106,10 @@ func (r *ReviveGen) SaveTypes() {
 		log.Fatal(err)
 	}
 
-	formattedData, err := format.Source([]byte(data))
-	if err != nil {
-		log.Fatal(err)
-	}
+	formattedData := []byte(data)
 
 	os.Remove("./" + name + "/types.go")
+	var err error
 	formattedData, err = formatAndCleanCode(formattedData)
 	if err != nil {
 		log.Fatalf("Error formatting and cleaning code: %v", err)
@@ -125,12 +122,12 @@ func (r *ReviveGen) SaveTypes() {
 
 	os.Remove("./" + name + "/calls.go")
 	callData := callGen(calls)
-	formattedCallData, err := formatAndCleanCode(callData)
+	callData, err = formatAndCleanCode(callData)
 	if err != nil {
 		log.Fatalf("Error formatting and cleaning code: %v", err)
 	}
 
-	err = os.WriteFile("./"+name+"/calls.go", formattedCallData, 0644)
+	err = os.WriteFile("./"+name+"/calls.go", callData, 0644)
 	if err != nil {
 		log.Fatal(err)
 	}

@@ -232,5 +232,6 @@ func (ty *{{.Name}}) Error() string {
 	{{ end -}}
 	return "Unknown"
 }
-{{ end -}}
+{{ end}}
+
 `

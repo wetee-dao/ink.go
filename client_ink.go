@@ -28,10 +28,10 @@ func DryRun[T any](
 	gas_limit util.Option[types.Weight],
 	storage_deposit_limit util.Option[types.U128],
 	contractInput util.InkContractInput,
-) (*T, error) {
+) (*T, *DryRunReturnGas, error) {
 	inputBt, err := contractInput.Encode()
 	if err != nil {
-		return nil, errors.New("contractInput.Encode: " + err.Error())
+		return nil, nil, errors.New("contractInput.Encode: " + err.Error())
 	}
 
 	client := contractIns.Client()
@@ -57,7 +57,7 @@ func DryRun[T any](
 		&result,
 	)
 	if err != nil {
-		return nil, errors.New("CallRuntimeApi: " + err.Error())
+		return nil, nil, errors.New("CallRuntimeApi: " + err.Error())
 	}
 
 	var returnValue *gtypes.ExecReturnValue
@@ -70,10 +70,10 @@ func DryRun[T any](
 			} else {
 				err = errors.New("DryRun: unknown Module Error")
 			}
-			return nil, err
+			return nil, nil, err
 		}
 		bt, _ := json.Marshal(result.Result.E)
-		return nil, errors.New(string(bt))
+		return nil, nil, errors.New(string(bt))
 	}
 
 	// 获取返回值
@@ -81,15 +81,19 @@ func DryRun[T any](
 	data := new(T)
 	err = scale.NewDecoder(bytes.NewReader(returnValue.Data[1:])).Decode(data)
 	if err != nil {
-		return nil, errors.New("DryRun scale.NewDecoder.Decode: " + err.Error())
+		return nil, nil, errors.New("DryRun scale.NewDecoder.Decode: " + err.Error())
 	}
 
 	// 判断是否执行错误
 	if returnValue.Flags == 1 {
-		return data, errors.New("contract reverted: the specific error information is in the second returned")
+		return data, nil, errors.New("contract reverted: the specific error information is in the second returned")
 	}
 
-	return data, nil
+	return data, &DryRunReturnGas{
+		GasConsumed:    result.GasConsumed,
+		GasRequired:    result.GasRequired,
+		StorageDeposit: result.StorageDeposit,
+	}, nil
 }
 
 // Call contract use substrate api
@@ -142,6 +146,13 @@ type DryRunCallParams struct {
 	Amount              types.U128
 	GasLimit            util.Option[types.Weight]
 	StorageDepositLimit util.Option[types.U128]
+}
+
+// DryRun return gas consumed
+type DryRunReturnGas struct {
+	GasConsumed    gtypes.Weight
+	GasRequired    gtypes.Weight
+	StorageDeposit gtypes.StorageDeposit
 }
 
 // Call param of Call
