@@ -34,9 +34,11 @@ func (c *Subnet) DryRunSetCode(
 			Args:     []any{code_hash},
 		},
 	)
-
+	if err != nil {
+		return util.Result[util.NullTuple, Error]{}, nil, err
+	}
 	if v.IsErr {
-		return *v, nil, errors.New("Contract Reverted: " + v.E.Error())
+		return util.Result[util.NullTuple, Error]{}, nil, errors.New("Contract Reverted: " + v.E.Error())
 	}
 
 	return *v, gas, err
@@ -73,9 +75,11 @@ func (c *Subnet) QueryBootNodes(
 			Args:     []any{},
 		},
 	)
-
+	if err != nil {
+		return util.Result[[]SecretNode, Error]{}, nil, err
+	}
 	if v.IsErr {
-		return *v, nil, errors.New("Contract Reverted: " + v.E.Error())
+		return util.Result[[]SecretNode, Error]{}, nil, errors.New("Contract Reverted: " + v.E.Error())
 	}
 
 	return *v, gas, err
@@ -95,9 +99,11 @@ func (c *Subnet) DryRunSetBootNodes(
 			Args:     []any{nodes},
 		},
 	)
-
+	if err != nil {
+		return util.Result[util.NullTuple, Error]{}, nil, err
+	}
 	if v.IsErr {
-		return *v, nil, errors.New("Contract Reverted: " + v.E.Error())
+		return util.Result[util.NullTuple, Error]{}, nil, errors.New("Contract Reverted: " + v.E.Error())
 	}
 
 	return *v, gas, err
@@ -134,9 +140,11 @@ func (c *Subnet) QueryWorkers(
 			Args:     []any{},
 		},
 	)
-
+	if err != nil {
+		return util.Result[[]K8sCluster, Error]{}, nil, err
+	}
 	if v.IsErr {
-		return *v, nil, errors.New("Contract Reverted: " + v.E.Error())
+		return util.Result[[]K8sCluster, Error]{}, nil, errors.New("Contract Reverted: " + v.E.Error())
 	}
 
 	return *v, gas, err
@@ -156,9 +164,11 @@ func (c *Subnet) DryRunWorkerRegister(
 			Args:     []any{name, ip, port, level},
 		},
 	)
-
+	if err != nil {
+		return util.Result[types.U128, Error]{}, nil, err
+	}
 	if v.IsErr {
-		return *v, nil, errors.New("Contract Reverted: " + v.E.Error())
+		return util.Result[types.U128, Error]{}, nil, errors.New("Contract Reverted: " + v.E.Error())
 	}
 
 	return *v, gas, err
@@ -195,9 +205,11 @@ func (c *Subnet) DryRunWorkerMortgage(
 			Args:     []any{id, cpu, mem, cvm_cpu, cvm_mem, disk, gpu, deposit},
 		},
 	)
-
+	if err != nil {
+		return util.Result[types.U128, Error]{}, nil, err
+	}
 	if v.IsErr {
-		return *v, nil, errors.New("Contract Reverted: " + v.E.Error())
+		return util.Result[types.U128, Error]{}, nil, errors.New("Contract Reverted: " + v.E.Error())
 	}
 
 	return *v, gas, err
@@ -234,9 +246,11 @@ func (c *Subnet) DryRunWorkerUnmortgage(
 			Args:     []any{id, mortgage_id},
 		},
 	)
-
+	if err != nil {
+		return util.Result[types.U128, Error]{}, nil, err
+	}
 	if v.IsErr {
-		return *v, nil, errors.New("Contract Reverted: " + v.E.Error())
+		return util.Result[types.U128, Error]{}, nil, errors.New("Contract Reverted: " + v.E.Error())
 	}
 
 	return *v, gas, err
@@ -273,9 +287,11 @@ func (c *Subnet) DryRunWorkerStop(
 			Args:     []any{id},
 		},
 	)
-
+	if err != nil {
+		return util.Result[types.U128, Error]{}, nil, err
+	}
 	if v.IsErr {
-		return *v, nil, errors.New("Contract Reverted: " + v.E.Error())
+		return util.Result[types.U128, Error]{}, nil, errors.New("Contract Reverted: " + v.E.Error())
 	}
 
 	return *v, gas, err
@@ -312,9 +328,11 @@ func (c *Subnet) DryRunSecretRegister(
 			Args:     []any{name, validator_id, p2p_id, ip, port},
 		},
 	)
-
+	if err != nil {
+		return util.Result[types.U128, Error]{}, nil, err
+	}
 	if v.IsErr {
-		return *v, nil, errors.New("Contract Reverted: " + v.E.Error())
+		return util.Result[types.U128, Error]{}, nil, errors.New("Contract Reverted: " + v.E.Error())
 	}
 
 	return *v, gas, err
@@ -351,9 +369,11 @@ func (c *Subnet) DryRunSecretDeposit(
 			Args:     []any{id, deposit},
 		},
 	)
-
+	if err != nil {
+		return util.Result[util.NullTuple, Error]{}, nil, err
+	}
 	if v.IsErr {
-		return *v, nil, errors.New("Contract Reverted: " + v.E.Error())
+		return util.Result[util.NullTuple, Error]{}, nil, errors.New("Contract Reverted: " + v.E.Error())
 	}
 
 	return *v, gas, err
@@ -390,9 +410,11 @@ func (c *Subnet) DryRunSecretJoin(
 			Args:     []any{id},
 		},
 	)
-
+	if err != nil {
+		return util.Result[util.NullTuple, Error]{}, nil, err
+	}
 	if v.IsErr {
-		return *v, nil, errors.New("Contract Reverted: " + v.E.Error())
+		return util.Result[util.NullTuple, Error]{}, nil, errors.New("Contract Reverted: " + v.E.Error())
 	}
 
 	return *v, gas, err
@@ -429,9 +451,11 @@ func (c *Subnet) DryRunSecretDelete(
 			Args:     []any{id},
 		},
 	)
-
+	if err != nil {
+		return util.Result[util.NullTuple, Error]{}, nil, err
+	}
 	if v.IsErr {
-		return *v, nil, errors.New("Contract Reverted: " + v.E.Error())
+		return util.Result[util.NullTuple, Error]{}, nil, errors.New("Contract Reverted: " + v.E.Error())
 	}
 
 	return *v, gas, err
@@ -468,7 +492,9 @@ func (c *Subnet) QueryEpoch(
 			Args:     []any{},
 		},
 	)
-
+	if err != nil {
+		return Tuple_70{}, nil, err
+	}
 	return *v, gas, err
 }
 
@@ -486,9 +512,11 @@ func (c *Subnet) DryRunNextEpoch(
 			Args:     []any{},
 		},
 	)
-
+	if err != nil {
+		return util.Result[util.NullTuple, Error]{}, nil, err
+	}
 	if v.IsErr {
-		return *v, nil, errors.New("Contract Reverted: " + v.E.Error())
+		return util.Result[util.NullTuple, Error]{}, nil, errors.New("Contract Reverted: " + v.E.Error())
 	}
 
 	return *v, gas, err
@@ -525,9 +553,11 @@ func (c *Subnet) DryRunNextEpochWithGov(
 			Args:     []any{},
 		},
 	)
-
+	if err != nil {
+		return util.Result[util.NullTuple, Error]{}, nil, err
+	}
 	if v.IsErr {
-		return *v, nil, errors.New("Contract Reverted: " + v.E.Error())
+		return util.Result[util.NullTuple, Error]{}, nil, errors.New("Contract Reverted: " + v.E.Error())
 	}
 
 	return *v, gas, err
