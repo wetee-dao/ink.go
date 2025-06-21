@@ -68,7 +68,7 @@ func (c *{{$.Name}}) {{if .IsMut}}DryRun{{else}}Query{{end}}{{CamelCase .FuncNam
 	v, gas, err := chain.DryRun[{{.Return}}](
 		c,
 		params.Origin,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
@@ -90,7 +90,7 @@ func (c *{{$.Name}}) Call{{CamelCase .FuncName}}(
 	err := chain.Call(
 		c,
 		params.Signer,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{

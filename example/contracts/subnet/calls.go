@@ -26,7 +26,7 @@ func (c *Subnet) DryRunSetCode(
 	v, gas, err := chain.DryRun[util.Result[util.NullTuple, Error]](
 		c,
 		params.Origin,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
@@ -48,7 +48,7 @@ func (c *Subnet) CallSetCode(
 	err := chain.Call(
 		c,
 		params.Signer,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
@@ -65,7 +65,7 @@ func (c *Subnet) QueryBootNodes(
 	v, gas, err := chain.DryRun[util.Result[[]SecretNode, Error]](
 		c,
 		params.Origin,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
@@ -87,7 +87,7 @@ func (c *Subnet) DryRunSetBootNodes(
 	v, gas, err := chain.DryRun[util.Result[util.NullTuple, Error]](
 		c,
 		params.Origin,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
@@ -109,7 +109,7 @@ func (c *Subnet) CallSetBootNodes(
 	err := chain.Call(
 		c,
 		params.Signer,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
@@ -126,7 +126,7 @@ func (c *Subnet) QueryWorkers(
 	v, gas, err := chain.DryRun[util.Result[[]K8sCluster, Error]](
 		c,
 		params.Origin,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
@@ -148,7 +148,7 @@ func (c *Subnet) DryRunWorkerRegister(
 	v, gas, err := chain.DryRun[util.Result[types.U128, Error]](
 		c,
 		params.Origin,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
@@ -170,7 +170,7 @@ func (c *Subnet) CallWorkerRegister(
 	err := chain.Call(
 		c,
 		params.Signer,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
@@ -187,7 +187,7 @@ func (c *Subnet) DryRunWorkerMortgage(
 	v, gas, err := chain.DryRun[util.Result[types.U128, Error]](
 		c,
 		params.Origin,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
@@ -209,7 +209,7 @@ func (c *Subnet) CallWorkerMortgage(
 	err := chain.Call(
 		c,
 		params.Signer,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
@@ -226,7 +226,7 @@ func (c *Subnet) DryRunWorkerUnmortgage(
 	v, gas, err := chain.DryRun[util.Result[types.U128, Error]](
 		c,
 		params.Origin,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
@@ -248,7 +248,7 @@ func (c *Subnet) CallWorkerUnmortgage(
 	err := chain.Call(
 		c,
 		params.Signer,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
@@ -265,7 +265,7 @@ func (c *Subnet) DryRunWorkerStop(
 	v, gas, err := chain.DryRun[util.Result[types.U128, Error]](
 		c,
 		params.Origin,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
@@ -287,7 +287,7 @@ func (c *Subnet) CallWorkerStop(
 	err := chain.Call(
 		c,
 		params.Signer,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
@@ -304,7 +304,7 @@ func (c *Subnet) DryRunSecretRegister(
 	v, gas, err := chain.DryRun[util.Result[types.U128, Error]](
 		c,
 		params.Origin,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
@@ -326,7 +326,7 @@ func (c *Subnet) CallSecretRegister(
 	err := chain.Call(
 		c,
 		params.Signer,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
@@ -343,7 +343,7 @@ func (c *Subnet) DryRunSecretDeposit(
 	v, gas, err := chain.DryRun[util.Result[util.NullTuple, Error]](
 		c,
 		params.Origin,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
@@ -365,7 +365,7 @@ func (c *Subnet) CallSecretDeposit(
 	err := chain.Call(
 		c,
 		params.Signer,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
@@ -382,7 +382,7 @@ func (c *Subnet) DryRunSecretJoin(
 	v, gas, err := chain.DryRun[util.Result[util.NullTuple, Error]](
 		c,
 		params.Origin,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
@@ -404,7 +404,7 @@ func (c *Subnet) CallSecretJoin(
 	err := chain.Call(
 		c,
 		params.Signer,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
@@ -421,7 +421,7 @@ func (c *Subnet) DryRunSecretDelete(
 	v, gas, err := chain.DryRun[util.Result[util.NullTuple, Error]](
 		c,
 		params.Origin,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
@@ -443,7 +443,7 @@ func (c *Subnet) CallSecretDelete(
 	err := chain.Call(
 		c,
 		params.Signer,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
@@ -460,7 +460,7 @@ func (c *Subnet) QueryEpoch(
 	v, gas, err := chain.DryRun[Tuple_70](
 		c,
 		params.Origin,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
@@ -478,7 +478,7 @@ func (c *Subnet) DryRunNextEpoch(
 	v, gas, err := chain.DryRun[util.Result[util.NullTuple, Error]](
 		c,
 		params.Origin,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
@@ -500,7 +500,7 @@ func (c *Subnet) CallNextEpoch(
 	err := chain.Call(
 		c,
 		params.Signer,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
@@ -517,7 +517,7 @@ func (c *Subnet) DryRunNextEpochWithGov(
 	v, gas, err := chain.DryRun[util.Result[util.NullTuple, Error]](
 		c,
 		params.Origin,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
@@ -539,7 +539,7 @@ func (c *Subnet) CallNextEpochWithGov(
 	err := chain.Call(
 		c,
 		params.Signer,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{

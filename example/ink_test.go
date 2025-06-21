@@ -42,7 +42,7 @@ func ExampleInk() {
 	_, _, err = contract.QueryMemberList(
 		chain.DryRunCallParams{
 			Origin:              util.NewAccountID(p.PublicKey),
-			Amount:              types.NewU128(*big.NewInt(0)),
+			PayAmount:           types.NewU128(*big.NewInt(0)),
 			GasLimit:            util.NewNone[types.Weight](),
 			StorageDepositLimit: util.NewNone[types.U128](),
 		},
@@ -56,7 +56,7 @@ func ExampleInk() {
 		0,
 		chain.DryRunCallParams{
 			Origin:              util.NewAccountID(p.PublicKey),
-			Amount:              types.NewU128(*big.NewInt(0)),
+			PayAmount:           types.NewU128(*big.NewInt(0)),
 			GasLimit:            util.NewNone[types.Weight](),
 			StorageDepositLimit: util.NewNone[types.U128](),
 		},
@@ -69,7 +69,7 @@ func ExampleInk() {
 	result, _, err := contract.DryRunErc20EnableTransfer(
 		chain.DryRunCallParams{
 			Origin:              util.NewAccountID(p.PublicKey),
-			Amount:              types.NewU128(*big.NewInt(0)),
+			PayAmount:           types.NewU128(*big.NewInt(0)),
 			GasLimit:            util.NewNone[types.Weight](),
 			StorageDepositLimit: util.NewNone[types.U128](),
 		},
@@ -80,8 +80,8 @@ func ExampleInk() {
 
 	err = contract.CallErc20EnableTransfer(
 		chain.CallParams{
-			Signer: &p,
-			Amount: types.NewU128(*big.NewInt(0)),
+			Signer:    &p,
+			PayAmount: types.NewU128(*big.NewInt(0)),
 			GasLimit: types.Weight{
 				RefTime:   types.NewUCompact(big.NewInt(1_100_000_000)),
 				ProofSize: types.NewUCompact(big.NewInt(100_000)),

@@ -26,7 +26,7 @@ func (c *Dao) DryRunSetCode(
 	v, gas, err := chain.DryRun[util.Result[util.NullTuple, Error]](
 		c,
 		params.Origin,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
@@ -48,7 +48,7 @@ func (c *Dao) CallSetCode(
 	err := chain.Call(
 		c,
 		params.Signer,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
@@ -65,7 +65,7 @@ func (c *Dao) QueryMemberList(
 	v, gas, err := chain.DryRun[[]types.H160](
 		c,
 		params.Origin,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
@@ -83,7 +83,7 @@ func (c *Dao) QueryMemberGetPublicJoin(
 	v, gas, err := chain.DryRun[bool](
 		c,
 		params.Origin,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
@@ -101,7 +101,7 @@ func (c *Dao) DryRunMemberPublicJoin(
 	v, gas, err := chain.DryRun[util.Result[util.NullTuple, Error]](
 		c,
 		params.Origin,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
@@ -123,7 +123,7 @@ func (c *Dao) CallMemberPublicJoin(
 	err := chain.Call(
 		c,
 		params.Signer,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
@@ -140,7 +140,7 @@ func (c *Dao) DryRunMemberSetPublicJoin(
 	v, gas, err := chain.DryRun[util.Result[util.NullTuple, Error]](
 		c,
 		params.Origin,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
@@ -162,7 +162,7 @@ func (c *Dao) CallMemberSetPublicJoin(
 	err := chain.Call(
 		c,
 		params.Signer,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
@@ -179,7 +179,7 @@ func (c *Dao) DryRunMemberJoin(
 	v, gas, err := chain.DryRun[util.Result[util.NullTuple, Error]](
 		c,
 		params.Origin,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
@@ -201,7 +201,7 @@ func (c *Dao) CallMemberJoin(
 	err := chain.Call(
 		c,
 		params.Signer,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
@@ -218,7 +218,7 @@ func (c *Dao) DryRunMemberLevae(
 	v, gas, err := chain.DryRun[util.Result[util.NullTuple, Error]](
 		c,
 		params.Origin,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
@@ -240,7 +240,7 @@ func (c *Dao) CallMemberLevae(
 	err := chain.Call(
 		c,
 		params.Signer,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
@@ -257,7 +257,7 @@ func (c *Dao) DryRunMemberLevaeWithBurn(
 	v, gas, err := chain.DryRun[util.Result[util.NullTuple, Error]](
 		c,
 		params.Origin,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
@@ -279,7 +279,7 @@ func (c *Dao) CallMemberLevaeWithBurn(
 	err := chain.Call(
 		c,
 		params.Signer,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
@@ -296,7 +296,7 @@ func (c *Dao) DryRunMemberDelete(
 	v, gas, err := chain.DryRun[util.Result[util.NullTuple, Error]](
 		c,
 		params.Origin,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
@@ -318,7 +318,7 @@ func (c *Dao) CallMemberDelete(
 	err := chain.Call(
 		c,
 		params.Signer,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
@@ -335,7 +335,7 @@ func (c *Dao) QueryErc20BalanceOf(
 	v, gas, err := chain.DryRun[Tuple_98](
 		c,
 		params.Origin,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
@@ -353,7 +353,7 @@ func (c *Dao) DryRunErc20EnableTransfer(
 	v, gas, err := chain.DryRun[util.Result[util.NullTuple, Error]](
 		c,
 		params.Origin,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
@@ -375,7 +375,7 @@ func (c *Dao) CallErc20EnableTransfer(
 	err := chain.Call(
 		c,
 		params.Signer,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
@@ -392,7 +392,7 @@ func (c *Dao) DryRunErc20Transfer(
 	v, gas, err := chain.DryRun[util.Result[util.NullTuple, Error]](
 		c,
 		params.Origin,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
@@ -414,7 +414,7 @@ func (c *Dao) CallErc20Transfer(
 	err := chain.Call(
 		c,
 		params.Signer,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
@@ -431,7 +431,7 @@ func (c *Dao) DryRunErc20Burn(
 	v, gas, err := chain.DryRun[util.Result[util.NullTuple, Error]](
 		c,
 		params.Origin,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
@@ -453,7 +453,7 @@ func (c *Dao) CallErc20Burn(
 	err := chain.Call(
 		c,
 		params.Signer,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
@@ -470,7 +470,7 @@ func (c *Dao) DryRunSudoSudo(
 	v, gas, err := chain.DryRun[util.Result[[]byte, Error]](
 		c,
 		params.Origin,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
@@ -492,7 +492,7 @@ func (c *Dao) CallSudoSudo(
 	err := chain.Call(
 		c,
 		params.Signer,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
@@ -509,7 +509,7 @@ func (c *Dao) DryRunSudoRemoveSudo(
 	v, gas, err := chain.DryRun[util.Result[util.NullTuple, Error]](
 		c,
 		params.Origin,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
@@ -531,7 +531,7 @@ func (c *Dao) CallSudoRemoveSudo(
 	err := chain.Call(
 		c,
 		params.Signer,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
@@ -548,7 +548,7 @@ func (c *Dao) DryRunGovSetDefalutTrack(
 	v, gas, err := chain.DryRun[util.Result[util.NullTuple, Error]](
 		c,
 		params.Origin,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
@@ -570,7 +570,7 @@ func (c *Dao) CallGovSetDefalutTrack(
 	err := chain.Call(
 		c,
 		params.Signer,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
@@ -587,7 +587,7 @@ func (c *Dao) QueryGovDefalutTrack(
 	v, gas, err := chain.DryRun[util.Option[uint16]](
 		c,
 		params.Origin,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
@@ -605,7 +605,7 @@ func (c *Dao) QueryGovTrackList(
 	v, gas, err := chain.DryRun[[]Track](
 		c,
 		params.Origin,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
@@ -623,7 +623,7 @@ func (c *Dao) QueryGovTrack(
 	v, gas, err := chain.DryRun[util.Option[Track]](
 		c,
 		params.Origin,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
@@ -641,7 +641,7 @@ func (c *Dao) DryRunGovAddTrack(
 	v, gas, err := chain.DryRun[util.Result[util.NullTuple, Error]](
 		c,
 		params.Origin,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
@@ -663,7 +663,7 @@ func (c *Dao) CallGovAddTrack(
 	err := chain.Call(
 		c,
 		params.Signer,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
@@ -680,7 +680,7 @@ func (c *Dao) DryRunGovEditTrack(
 	v, gas, err := chain.DryRun[util.Result[util.NullTuple, Error]](
 		c,
 		params.Origin,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
@@ -702,7 +702,7 @@ func (c *Dao) CallGovEditTrack(
 	err := chain.Call(
 		c,
 		params.Signer,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
@@ -719,7 +719,7 @@ func (c *Dao) QueryGovProposals(
 	v, gas, err := chain.DryRun[[]Call](
 		c,
 		params.Origin,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
@@ -737,7 +737,7 @@ func (c *Dao) QueryGovProposal(
 	v, gas, err := chain.DryRun[util.Option[Call]](
 		c,
 		params.Origin,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
@@ -755,7 +755,7 @@ func (c *Dao) DryRunGovSubmitProposal(
 	v, gas, err := chain.DryRun[util.Result[uint32, Error]](
 		c,
 		params.Origin,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
@@ -777,7 +777,7 @@ func (c *Dao) CallGovSubmitProposal(
 	err := chain.Call(
 		c,
 		params.Signer,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
@@ -794,7 +794,7 @@ func (c *Dao) DryRunGovCancelProposal(
 	v, gas, err := chain.DryRun[util.Result[util.NullTuple, Error]](
 		c,
 		params.Origin,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
@@ -816,7 +816,7 @@ func (c *Dao) CallGovCancelProposal(
 	err := chain.Call(
 		c,
 		params.Signer,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
@@ -833,7 +833,7 @@ func (c *Dao) DryRunGovDepositProposal(
 	v, gas, err := chain.DryRun[util.Result[util.NullTuple, Error]](
 		c,
 		params.Origin,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
@@ -855,7 +855,7 @@ func (c *Dao) CallGovDepositProposal(
 	err := chain.Call(
 		c,
 		params.Signer,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
@@ -872,7 +872,7 @@ func (c *Dao) QueryGovVoteList(
 	v, gas, err := chain.DryRun[[]VoteInfo](
 		c,
 		params.Origin,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
@@ -890,7 +890,7 @@ func (c *Dao) DryRunGovVote(
 	v, gas, err := chain.DryRun[util.Option[VoteInfo]](
 		c,
 		params.Origin,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
@@ -908,7 +908,7 @@ func (c *Dao) CallGovVote(
 	err := chain.Call(
 		c,
 		params.Signer,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
@@ -925,7 +925,7 @@ func (c *Dao) DryRunGovSubmitVote(
 	v, gas, err := chain.DryRun[util.Result[util.NullTuple, Error]](
 		c,
 		params.Origin,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
@@ -947,7 +947,7 @@ func (c *Dao) CallGovSubmitVote(
 	err := chain.Call(
 		c,
 		params.Signer,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
@@ -964,7 +964,7 @@ func (c *Dao) DryRunGovCancelVote(
 	v, gas, err := chain.DryRun[util.Result[util.NullTuple, Error]](
 		c,
 		params.Origin,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
@@ -986,7 +986,7 @@ func (c *Dao) CallGovCancelVote(
 	err := chain.Call(
 		c,
 		params.Signer,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
@@ -1003,7 +1003,7 @@ func (c *Dao) DryRunGovUnlock(
 	v, gas, err := chain.DryRun[util.Result[util.NullTuple, Error]](
 		c,
 		params.Origin,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
@@ -1025,7 +1025,7 @@ func (c *Dao) CallGovUnlock(
 	err := chain.Call(
 		c,
 		params.Signer,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
@@ -1042,7 +1042,7 @@ func (c *Dao) DryRunGovExecProposal(
 	v, gas, err := chain.DryRun[util.Result[[]byte, Error]](
 		c,
 		params.Origin,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
@@ -1064,7 +1064,7 @@ func (c *Dao) CallGovExecProposal(
 	err := chain.Call(
 		c,
 		params.Signer,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
@@ -1081,7 +1081,7 @@ func (c *Dao) QueryGovProposalStatus(
 	v, gas, err := chain.DryRun[util.Result[PropStatus, Error]](
 		c,
 		params.Origin,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
@@ -1103,7 +1103,7 @@ func (c *Dao) DryRunTreasurySpend(
 	v, gas, err := chain.DryRun[util.Result[uint64, Error]](
 		c,
 		params.Origin,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
@@ -1125,7 +1125,7 @@ func (c *Dao) CallTreasurySpend(
 	err := chain.Call(
 		c,
 		params.Signer,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
@@ -1142,7 +1142,7 @@ func (c *Dao) DryRunTreasuryPayout(
 	v, gas, err := chain.DryRun[util.Result[util.NullTuple, Error]](
 		c,
 		params.Origin,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
@@ -1164,7 +1164,7 @@ func (c *Dao) CallTreasuryPayout(
 	err := chain.Call(
 		c,
 		params.Signer,
-		params.Amount,
+		params.PayAmount,
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{

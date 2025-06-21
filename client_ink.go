@@ -143,7 +143,7 @@ func Call(
 // DryRun param of DryRun
 type DryRunCallParams struct {
 	Origin              types.AccountID
-	Amount              types.U128
+	PayAmount           types.U128
 	GasLimit            util.Option[types.Weight]
 	StorageDepositLimit util.Option[types.U128]
 }
@@ -158,7 +158,7 @@ type DryRunReturnGas struct {
 // Call param of Call
 type CallParams struct {
 	Signer              *Signer
-	Amount              types.U128
+	PayAmount           types.U128
 	GasLimit            types.Weight
 	StorageDepositLimit types.U128
 }
