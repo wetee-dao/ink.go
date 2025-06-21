@@ -3,7 +3,6 @@ package example_test
 import (
 	"fmt"
 	"math/big"
-	"os"
 
 	"github.com/centrifuge/go-substrate-rpc-client/v4/types"
 	chain "github.com/wetee-dao/ink.go"
@@ -34,28 +33,18 @@ func ExampleInk() {
 	}
 
 	// init contract
-	abiRaw, err := os.ReadFile("./contracts/dao.json")
-	if err != nil {
-		fmt.Println("Error reading file:", err)
-		return
-	}
-	contract, err := chain.NewRevive(
-		chainClient,
-		contractAddress,
-		abiRaw,
-	)
-	if err != nil {
-		util.LogWithPurple("NewRevive", err)
-		return
+	contract := dao.Dao{
+		ChainClient: chainClient,
+		Address:     contractAddress,
 	}
 
 	// query Member::list
-	memberList, err := chain.QueryInk[[]types.H160](
-		contract,
-		util.NewAccountID(p.PublicKey),
-		util.InkContractInput{
-			Selector: "Member::list",
-			Args:     []any{},
+	_, err = contract.QueryMemberList(
+		chain.DryRunCallParams{
+			Origin:              util.NewAccountID(p.PublicKey),
+			Amount:              types.NewU128(*big.NewInt(0)),
+			GasLimit:            util.NewNone[types.Weight](),
+			StorageDepositLimit: util.NewNone[types.U128](),
 		},
 	)
 	if err != nil {
@@ -63,14 +52,13 @@ func ExampleInk() {
 	}
 
 	// query Gov::track return type is dao.Track
-	_, err = chain.QueryInk[util.Option[dao.Track]](
-		contract,
-		util.NewAccountID(p.PublicKey),
-		util.InkContractInput{
-			Selector: "Gov::track",
-			Args: []any{
-				types.NewU16(0),
-			},
+	_, err = contract.QueryGovTrack(
+		0,
+		chain.DryRunCallParams{
+			Origin:              util.NewAccountID(p.PublicKey),
+			Amount:              types.NewU128(*big.NewInt(0)),
+			GasLimit:            util.NewNone[types.Weight](),
+			StorageDepositLimit: util.NewNone[types.U128](),
 		},
 	)
 	if err != nil {
@@ -78,56 +66,31 @@ func ExampleInk() {
 	}
 
 	// dry run contract
-	result, err := chain.DryRunInk(
-		contract,
-		util.NewAccountID(p.PublicKey),
-		types.NewU128(*big.NewInt(0)),
-		util.NewNone[types.Weight](),
-		util.NewNone[types.U128](),
-		util.InkContractInput{
-			Selector: "Erc20::enable_transfer",
-			Args:     []any{},
+	result, err := contract.DryRunErc20EnableTransfer(
+		chain.DryRunCallParams{
+			Origin:              util.NewAccountID(p.PublicKey),
+			Amount:              types.NewU128(*big.NewInt(0)),
+			GasLimit:            util.NewNone[types.Weight](),
+			StorageDepositLimit: util.NewNone[types.U128](),
 		},
 	)
 	if err == nil {
-		fmt.Println(result)
+		fmt.Println(result.E)
 	}
 
-	// err = chainClient.MapReviveAccount(&p)
-	// if err != nil {
-	// 	panic(err)
-	// }
-
-	err = chain.CallInk(
-		contract,
-		&p,
-		types.NewU128(*big.NewInt(0)),
-		types.Weight{
-			RefTime:   types.NewUCompact(big.NewInt(1_100_000_000)),
-			ProofSize: types.NewUCompact(big.NewInt(100_000)),
-		},
-		types.NewU128(*big.NewInt(110_000_000_000)),
-		util.InkContractInput{
-			Selector: "Member::public_join",
-			Args:     []any{},
+	err = contract.CallErc20EnableTransfer(
+		chain.CallParams{
+			Signer: &p,
+			Amount: types.NewU128(*big.NewInt(0)),
+			GasLimit: types.Weight{
+				RefTime:   types.NewUCompact(big.NewInt(1_100_000_000)),
+				ProofSize: types.NewUCompact(big.NewInt(100_000)),
+			},
+			StorageDepositLimit: types.NewU128(*big.NewInt(110_000_000_000)),
 		},
 	)
-
-	isIn := false
-	for _, m := range *memberList {
-		if m.Hex() == p.H160Address().Hex() {
-			isIn = true
-		}
-	}
-
-	if isIn {
-		if err == nil {
-			fmt.Println("error")
-		}
-	} else {
-		if err != nil {
-			fmt.Println(err)
-		}
+	if err != nil {
+		fmt.Println(err)
 	}
 
 	// Output:

@@ -13,6 +13,13 @@ type Result[T, Err any] struct {
 	V     T
 }
 
+func (r Result[T, Err]) UnWrap() (T, error) {
+	if r.IsErr {
+		return r.V, fmt.Errorf("unwrap error: %v", r.E)
+	}
+	return r.V, nil
+}
+
 func (r Result[T, Err]) Encode(encoder scale.Encoder) (err error) {
 	if r.IsErr {
 		err = encoder.PushByte(1)

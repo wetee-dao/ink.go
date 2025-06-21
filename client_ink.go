@@ -20,6 +20,7 @@ type Ink interface {
 	ContractAddress() types.H160
 }
 
+// Dry run contract
 func DryRun[T any](
 	contractIns Ink,
 	origin types.AccountID,
@@ -37,12 +38,12 @@ func DryRun[T any](
 	addres := contractIns.ContractAddress()
 
 	if client.Debug {
-		util.LogWithPurple("[ TryCall contract ]", addres.Hex())
-		util.LogWithPurple("[ TryCall   method ]", contractInput.Selector)
-		util.LogWithPurple("[ TryCall   origin ]", origin.ToHexString())
-		util.LogWithPurple("[ TryCall     args ]", "0x"+hex.EncodeToString(inputBt))
-		util.LogWithPurple("[ TryCall gaslimit ]", gas_limit)
-		util.LogWithPurple("[ TryCall  storage ]", storage_deposit_limit)
+		util.LogWithPurple("[ DryRun contract ]", addres.Hex())
+		util.LogWithPurple("[ DryRun   method ]", contractInput.Selector)
+		util.LogWithPurple("[ DryRun   origin ]", origin.ToHexString())
+		util.LogWithPurple("[ DryRun     args ]", "0x"+hex.EncodeToString(inputBt))
+		util.LogWithPurple("[ DryRun gaslimit ]", gas_limit)
+		util.LogWithPurple("[ DryRun  storage ]", storage_deposit_limit)
 		fmt.Println("")
 	}
 
@@ -51,12 +52,7 @@ func DryRun[T any](
 		"ReviveApi",
 		"call",
 		[]any{
-			origin,
-			addres,
-			amount,
-			gas_limit,
-			storage_deposit_limit,
-			inputBt,
+			origin, addres, amount, gas_limit, storage_deposit_limit, inputBt,
 		},
 		&result,
 	)
@@ -70,9 +66,9 @@ func DryRun[T any](
 			merr := result.Result.E.AsModuleField0
 			info, ierr := client.GetErrorInfo(merr.Index, merr.Error)
 			if ierr == nil {
-				err = errors.New("TryCall: Module Error" + info.Name)
+				err = errors.New("DryRun: Module Error" + info.Name)
 			} else {
-				err = errors.New("TryCall: unknown Module Error")
+				err = errors.New("DryRun: unknown Module Error")
 			}
 			return nil, err
 		}
@@ -80,9 +76,13 @@ func DryRun[T any](
 		return nil, errors.New(string(bt))
 	}
 
+	// 获取返回值
 	returnValue = &result.Result.V
 	data := new(T)
-	scale.NewDecoder(bytes.NewReader(returnValue.Data)).Decode(data)
+	err = scale.NewDecoder(bytes.NewReader(returnValue.Data[1:])).Decode(data)
+	if err != nil {
+		return nil, errors.New("DryRun scale.NewDecoder.Decode: " + err.Error())
+	}
 
 	// 判断是否执行错误
 	if returnValue.Flags == 1 {
@@ -92,6 +92,7 @@ func DryRun[T any](
 	return data, nil
 }
 
+// Call contract use substrate api
 func Call(
 	contractIns Ink,
 	signer *Signer,
@@ -135,6 +136,7 @@ func Call(
 	return client.SignAndSubmit(signer, call, false)
 }
 
+// DryRun param of DryRun
 type DryRunCallParams struct {
 	Origin              types.AccountID
 	Amount              types.U128
@@ -142,6 +144,7 @@ type DryRunCallParams struct {
 	StorageDepositLimit util.Option[types.U128]
 }
 
+// Call param of Call
 type CallParams struct {
 	Signer              *Signer
 	Amount              types.U128

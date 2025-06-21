@@ -22,14 +22,19 @@ type Func struct {
 }
 
 func callGen(callData ContractCallBox) []byte {
-	t := template.Must(template.New("call").Funcs(template.FuncMap{"CamelCase": func(v string) string {
-		vsplit := strings.Split(v, "::")
-		for i := range vsplit {
-			vsplit[i] = UnderscoreToCamelCase(vsplit[i])
-		}
+	t := template.Must(template.New("call").Funcs(template.FuncMap{
+		"CamelCase": func(v string) string {
+			vsplit := strings.Split(v, "::")
+			for i := range vsplit {
+				vsplit[i] = UnderscoreToCamelCase(vsplit[i])
+			}
 
-		return strings.Join(vsplit, "")
-	}}).Parse(callTemp))
+			return strings.Join(vsplit, "")
+		},
+		"IsResult": func(v string) bool {
+			return strings.HasPrefix(v, "util.Result[")
+		},
+	}).Parse(callTemp))
 	var result bytes.Buffer
 	err := t.Execute(&result, callData)
 	fmt.Println(err)
@@ -71,6 +76,11 @@ func (c *{{$.Name}}) {{if .IsMut}}DryRun{{else}}Query{{end}}{{CamelCase .FuncNam
 			Args:     []any{ {{.ArgStr}} },
 		},
 	)
+	{{if IsResult .Return}}
+	if v.IsErr {
+		return *v, errors.New("Contract Reverted:" + err.Error())
+	}
+	{{end}}
 	return *v, err
 }
 {{if .IsMut}}

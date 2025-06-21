@@ -27,6 +27,13 @@ type Option[T any] struct {
 	V      T
 }
 
+func (t Option[T]) UnWrap() (T, error) {
+	if t.IsNone {
+		return t.V, fmt.Errorf("unwrap error: Option isNone")
+	}
+	return t.V, nil
+}
+
 func (ty Option[T]) Encode(encoder scale.Encoder) (err error) {
 	if ty.IsNone {
 		err = encoder.PushByte(0)

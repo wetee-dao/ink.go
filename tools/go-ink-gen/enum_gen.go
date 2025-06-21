@@ -8,29 +8,13 @@ import (
 	"github.com/wetee-dao/ink.go/util"
 )
 
-// BaseT,
-// TupleT(u8, u16),
-// StructT{ f1: i32, f2: i32 },
-// StrT(Vec<u8>),
-
-// type Test struct {
-// 	BaseT  *bool
-// 	TupleT *struct {
-// 		F0 byte
-// 		F1 uint16
-// 	}
-// 	StructT *struct {
-// 		F1 int32
-// 		F2 int32
-// 	}
-// 	StrT *[]byte
-// }
-
+// EnumBox for code generator
 type EnumBox struct {
 	Name  string
 	Items []EnumItem
 }
 
+// EnumItem of enum
 type EnumItem struct {
 	Name   string
 	Type   string //Inline Base Tuple Struct
@@ -38,6 +22,7 @@ type EnumItem struct {
 	Index  int
 }
 
+// EnumItemField of enum
 type EnumItemField struct {
 	Name string
 	Type string
@@ -233,10 +218,19 @@ func (ty *{{.Name}}) Decode(decoder scale.Decoder) (err error) {
 		}
 		return;
 	{{- end -}}
-{{- end -}}
-
+{{- end }}
 	default:
 		return fmt.Errorf("unrecognized enum")
 	}
 }
+{{- if eq .Name "Error" }}
+func (ty *{{.Name}}) Error() string {
+	{{- range .Items }}
+	if ty.{{.Name}} != nil {
+		return "{{.Name}}"
+	}
+	{{ end -}}
+	return "Unknown"
+}
+{{ end -}}
 `
