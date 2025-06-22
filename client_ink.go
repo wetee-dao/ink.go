@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"math/big"
 
 	"github.com/centrifuge/go-substrate-rpc-client/v4/scale"
 	"github.com/centrifuge/go-substrate-rpc-client/v4/types"
@@ -13,6 +14,8 @@ import (
 	gtypes "github.com/wetee-dao/ink.go/pallet/types"
 	"github.com/wetee-dao/ink.go/util"
 )
+
+var ContractReverted = errors.New("contract reverted: the specific error information is in the second returned")
 
 // Revive module
 type Ink interface {
@@ -86,7 +89,7 @@ func DryRun[T any](
 
 	// 判断是否执行错误
 	if returnValue.Flags == 1 {
-		return data, nil, errors.New("contract reverted: the specific error information is in the second returned")
+		return data, nil, ContractReverted
 	}
 
 	return data, &DryRunReturnGas{
@@ -146,6 +149,16 @@ type DryRunCallParams struct {
 	PayAmount           types.U128
 	GasLimit            util.Option[types.Weight]
 	StorageDepositLimit util.Option[types.U128]
+}
+
+func DefaultParamWithOragin(origin types.AccountID) DryRunCallParams {
+	var defaultParam = DryRunCallParams{
+		PayAmount:           types.NewU128(*big.NewInt(0)),
+		GasLimit:            util.NewNone[types.Weight](),
+		StorageDepositLimit: util.NewNone[types.U128](),
+	}
+	defaultParam.Origin = origin
+	return defaultParam
 }
 
 // DryRun return gas consumed

@@ -34,12 +34,14 @@ func (c *Dao) DryRunSetCode(
 			Args:     []any{code_hash},
 		},
 	)
-
+	if err != nil && !errors.Is(err, chain.ContractReverted) {
+		return *v, nil, err
+	}
 	if v.IsErr {
 		return *v, nil, errors.New("Contract Reverted: " + v.E.Error())
 	}
 
-	return *v, gas, err
+	return *v, gas, nil
 }
 
 func (c *Dao) CallSetCode(
@@ -73,8 +75,10 @@ func (c *Dao) QueryMemberList(
 			Args:     []any{},
 		},
 	)
-
-	return *v, gas, err
+	if err != nil && !errors.Is(err, chain.ContractReverted) {
+		return *v, nil, err
+	}
+	return *v, gas, nil
 }
 
 func (c *Dao) QueryMemberGetPublicJoin(
@@ -91,8 +95,10 @@ func (c *Dao) QueryMemberGetPublicJoin(
 			Args:     []any{},
 		},
 	)
-
-	return *v, gas, err
+	if err != nil && !errors.Is(err, chain.ContractReverted) {
+		return *v, nil, err
+	}
+	return *v, gas, nil
 }
 
 func (c *Dao) DryRunMemberPublicJoin(
@@ -109,12 +115,14 @@ func (c *Dao) DryRunMemberPublicJoin(
 			Args:     []any{},
 		},
 	)
-
+	if err != nil && !errors.Is(err, chain.ContractReverted) {
+		return *v, nil, err
+	}
 	if v.IsErr {
 		return *v, nil, errors.New("Contract Reverted: " + v.E.Error())
 	}
 
-	return *v, gas, err
+	return *v, gas, nil
 }
 
 func (c *Dao) CallMemberPublicJoin(
@@ -148,12 +156,14 @@ func (c *Dao) DryRunMemberSetPublicJoin(
 			Args:     []any{public_join},
 		},
 	)
-
+	if err != nil && !errors.Is(err, chain.ContractReverted) {
+		return *v, nil, err
+	}
 	if v.IsErr {
 		return *v, nil, errors.New("Contract Reverted: " + v.E.Error())
 	}
 
-	return *v, gas, err
+	return *v, gas, nil
 }
 
 func (c *Dao) CallMemberSetPublicJoin(
@@ -187,12 +197,14 @@ func (c *Dao) DryRunMemberJoin(
 			Args:     []any{new_user, balance},
 		},
 	)
-
+	if err != nil && !errors.Is(err, chain.ContractReverted) {
+		return *v, nil, err
+	}
 	if v.IsErr {
 		return *v, nil, errors.New("Contract Reverted: " + v.E.Error())
 	}
 
-	return *v, gas, err
+	return *v, gas, nil
 }
 
 func (c *Dao) CallMemberJoin(
@@ -226,12 +238,14 @@ func (c *Dao) DryRunMemberLevae(
 			Args:     []any{},
 		},
 	)
-
+	if err != nil && !errors.Is(err, chain.ContractReverted) {
+		return *v, nil, err
+	}
 	if v.IsErr {
 		return *v, nil, errors.New("Contract Reverted: " + v.E.Error())
 	}
 
-	return *v, gas, err
+	return *v, gas, nil
 }
 
 func (c *Dao) CallMemberLevae(
@@ -265,12 +279,14 @@ func (c *Dao) DryRunMemberLevaeWithBurn(
 			Args:     []any{},
 		},
 	)
-
+	if err != nil && !errors.Is(err, chain.ContractReverted) {
+		return *v, nil, err
+	}
 	if v.IsErr {
 		return *v, nil, errors.New("Contract Reverted: " + v.E.Error())
 	}
 
-	return *v, gas, err
+	return *v, gas, nil
 }
 
 func (c *Dao) CallMemberLevaeWithBurn(
@@ -304,12 +320,14 @@ func (c *Dao) DryRunMemberDelete(
 			Args:     []any{user},
 		},
 	)
-
+	if err != nil && !errors.Is(err, chain.ContractReverted) {
+		return *v, nil, err
+	}
 	if v.IsErr {
 		return *v, nil, errors.New("Contract Reverted: " + v.E.Error())
 	}
 
-	return *v, gas, err
+	return *v, gas, nil
 }
 
 func (c *Dao) CallMemberDelete(
@@ -343,8 +361,10 @@ func (c *Dao) QueryErc20BalanceOf(
 			Args:     []any{user},
 		},
 	)
-
-	return *v, gas, err
+	if err != nil && !errors.Is(err, chain.ContractReverted) {
+		return *v, nil, err
+	}
+	return *v, gas, nil
 }
 
 func (c *Dao) DryRunErc20EnableTransfer(
@@ -361,12 +381,14 @@ func (c *Dao) DryRunErc20EnableTransfer(
 			Args:     []any{},
 		},
 	)
-
+	if err != nil && !errors.Is(err, chain.ContractReverted) {
+		return *v, nil, err
+	}
 	if v.IsErr {
 		return *v, nil, errors.New("Contract Reverted: " + v.E.Error())
 	}
 
-	return *v, gas, err
+	return *v, gas, nil
 }
 
 func (c *Dao) CallErc20EnableTransfer(
@@ -400,12 +422,14 @@ func (c *Dao) DryRunErc20Transfer(
 			Args:     []any{to, amount},
 		},
 	)
-
+	if err != nil && !errors.Is(err, chain.ContractReverted) {
+		return *v, nil, err
+	}
 	if v.IsErr {
 		return *v, nil, errors.New("Contract Reverted: " + v.E.Error())
 	}
 
-	return *v, gas, err
+	return *v, gas, nil
 }
 
 func (c *Dao) CallErc20Transfer(
@@ -439,12 +463,14 @@ func (c *Dao) DryRunErc20Burn(
 			Args:     []any{amount},
 		},
 	)
-
+	if err != nil && !errors.Is(err, chain.ContractReverted) {
+		return *v, nil, err
+	}
 	if v.IsErr {
 		return *v, nil, errors.New("Contract Reverted: " + v.E.Error())
 	}
 
-	return *v, gas, err
+	return *v, gas, nil
 }
 
 func (c *Dao) CallErc20Burn(
@@ -478,12 +504,14 @@ func (c *Dao) DryRunSudoSudo(
 			Args:     []any{call},
 		},
 	)
-
+	if err != nil && !errors.Is(err, chain.ContractReverted) {
+		return *v, nil, err
+	}
 	if v.IsErr {
 		return *v, nil, errors.New("Contract Reverted: " + v.E.Error())
 	}
 
-	return *v, gas, err
+	return *v, gas, nil
 }
 
 func (c *Dao) CallSudoSudo(
@@ -517,12 +545,14 @@ func (c *Dao) DryRunSudoRemoveSudo(
 			Args:     []any{},
 		},
 	)
-
+	if err != nil && !errors.Is(err, chain.ContractReverted) {
+		return *v, nil, err
+	}
 	if v.IsErr {
 		return *v, nil, errors.New("Contract Reverted: " + v.E.Error())
 	}
 
-	return *v, gas, err
+	return *v, gas, nil
 }
 
 func (c *Dao) CallSudoRemoveSudo(
@@ -556,12 +586,14 @@ func (c *Dao) DryRunGovSetDefalutTrack(
 			Args:     []any{id},
 		},
 	)
-
+	if err != nil && !errors.Is(err, chain.ContractReverted) {
+		return *v, nil, err
+	}
 	if v.IsErr {
 		return *v, nil, errors.New("Contract Reverted: " + v.E.Error())
 	}
 
-	return *v, gas, err
+	return *v, gas, nil
 }
 
 func (c *Dao) CallGovSetDefalutTrack(
@@ -595,8 +627,10 @@ func (c *Dao) QueryGovDefalutTrack(
 			Args:     []any{},
 		},
 	)
-
-	return *v, gas, err
+	if err != nil && !errors.Is(err, chain.ContractReverted) {
+		return *v, nil, err
+	}
+	return *v, gas, nil
 }
 
 func (c *Dao) QueryGovTrackList(
@@ -613,8 +647,10 @@ func (c *Dao) QueryGovTrackList(
 			Args:     []any{page, size},
 		},
 	)
-
-	return *v, gas, err
+	if err != nil && !errors.Is(err, chain.ContractReverted) {
+		return *v, nil, err
+	}
+	return *v, gas, nil
 }
 
 func (c *Dao) QueryGovTrack(
@@ -631,8 +667,10 @@ func (c *Dao) QueryGovTrack(
 			Args:     []any{id},
 		},
 	)
-
-	return *v, gas, err
+	if err != nil && !errors.Is(err, chain.ContractReverted) {
+		return *v, nil, err
+	}
+	return *v, gas, nil
 }
 
 func (c *Dao) DryRunGovAddTrack(
@@ -649,12 +687,14 @@ func (c *Dao) DryRunGovAddTrack(
 			Args:     []any{name, prepare_period, decision_deposit, max_deciding, confirm_period, decision_period, min_enactment_period, max_balance, min_approval, min_support},
 		},
 	)
-
+	if err != nil && !errors.Is(err, chain.ContractReverted) {
+		return *v, nil, err
+	}
 	if v.IsErr {
 		return *v, nil, errors.New("Contract Reverted: " + v.E.Error())
 	}
 
-	return *v, gas, err
+	return *v, gas, nil
 }
 
 func (c *Dao) CallGovAddTrack(
@@ -688,12 +728,14 @@ func (c *Dao) DryRunGovEditTrack(
 			Args:     []any{id, name, prepare_period, decision_deposit, max_deciding, confirm_period, decision_period, min_enactment_period, max_balance, min_approval, min_support},
 		},
 	)
-
+	if err != nil && !errors.Is(err, chain.ContractReverted) {
+		return *v, nil, err
+	}
 	if v.IsErr {
 		return *v, nil, errors.New("Contract Reverted: " + v.E.Error())
 	}
 
-	return *v, gas, err
+	return *v, gas, nil
 }
 
 func (c *Dao) CallGovEditTrack(
@@ -727,8 +769,10 @@ func (c *Dao) QueryGovProposals(
 			Args:     []any{page, size},
 		},
 	)
-
-	return *v, gas, err
+	if err != nil && !errors.Is(err, chain.ContractReverted) {
+		return *v, nil, err
+	}
+	return *v, gas, nil
 }
 
 func (c *Dao) QueryGovProposal(
@@ -745,8 +789,10 @@ func (c *Dao) QueryGovProposal(
 			Args:     []any{id},
 		},
 	)
-
-	return *v, gas, err
+	if err != nil && !errors.Is(err, chain.ContractReverted) {
+		return *v, nil, err
+	}
+	return *v, gas, nil
 }
 
 func (c *Dao) DryRunGovSubmitProposal(
@@ -763,12 +809,14 @@ func (c *Dao) DryRunGovSubmitProposal(
 			Args:     []any{call, track_id},
 		},
 	)
-
+	if err != nil && !errors.Is(err, chain.ContractReverted) {
+		return *v, nil, err
+	}
 	if v.IsErr {
 		return *v, nil, errors.New("Contract Reverted: " + v.E.Error())
 	}
 
-	return *v, gas, err
+	return *v, gas, nil
 }
 
 func (c *Dao) CallGovSubmitProposal(
@@ -802,12 +850,14 @@ func (c *Dao) DryRunGovCancelProposal(
 			Args:     []any{proposal_id},
 		},
 	)
-
+	if err != nil && !errors.Is(err, chain.ContractReverted) {
+		return *v, nil, err
+	}
 	if v.IsErr {
 		return *v, nil, errors.New("Contract Reverted: " + v.E.Error())
 	}
 
-	return *v, gas, err
+	return *v, gas, nil
 }
 
 func (c *Dao) CallGovCancelProposal(
@@ -841,12 +891,14 @@ func (c *Dao) DryRunGovDepositProposal(
 			Args:     []any{proposal_id},
 		},
 	)
-
+	if err != nil && !errors.Is(err, chain.ContractReverted) {
+		return *v, nil, err
+	}
 	if v.IsErr {
 		return *v, nil, errors.New("Contract Reverted: " + v.E.Error())
 	}
 
-	return *v, gas, err
+	return *v, gas, nil
 }
 
 func (c *Dao) CallGovDepositProposal(
@@ -880,8 +932,10 @@ func (c *Dao) QueryGovVoteList(
 			Args:     []any{proposal_id},
 		},
 	)
-
-	return *v, gas, err
+	if err != nil && !errors.Is(err, chain.ContractReverted) {
+		return *v, nil, err
+	}
+	return *v, gas, nil
 }
 
 func (c *Dao) DryRunGovVote(
@@ -898,8 +952,10 @@ func (c *Dao) DryRunGovVote(
 			Args:     []any{vote_id},
 		},
 	)
-
-	return *v, gas, err
+	if err != nil && !errors.Is(err, chain.ContractReverted) {
+		return *v, nil, err
+	}
+	return *v, gas, nil
 }
 
 func (c *Dao) CallGovVote(
@@ -933,12 +989,14 @@ func (c *Dao) DryRunGovSubmitVote(
 			Args:     []any{proposal_id, opinion},
 		},
 	)
-
+	if err != nil && !errors.Is(err, chain.ContractReverted) {
+		return *v, nil, err
+	}
 	if v.IsErr {
 		return *v, nil, errors.New("Contract Reverted: " + v.E.Error())
 	}
 
-	return *v, gas, err
+	return *v, gas, nil
 }
 
 func (c *Dao) CallGovSubmitVote(
@@ -972,12 +1030,14 @@ func (c *Dao) DryRunGovCancelVote(
 			Args:     []any{vote_id},
 		},
 	)
-
+	if err != nil && !errors.Is(err, chain.ContractReverted) {
+		return *v, nil, err
+	}
 	if v.IsErr {
 		return *v, nil, errors.New("Contract Reverted: " + v.E.Error())
 	}
 
-	return *v, gas, err
+	return *v, gas, nil
 }
 
 func (c *Dao) CallGovCancelVote(
@@ -1011,12 +1071,14 @@ func (c *Dao) DryRunGovUnlock(
 			Args:     []any{vote_id},
 		},
 	)
-
+	if err != nil && !errors.Is(err, chain.ContractReverted) {
+		return *v, nil, err
+	}
 	if v.IsErr {
 		return *v, nil, errors.New("Contract Reverted: " + v.E.Error())
 	}
 
-	return *v, gas, err
+	return *v, gas, nil
 }
 
 func (c *Dao) CallGovUnlock(
@@ -1050,12 +1112,14 @@ func (c *Dao) DryRunGovExecProposal(
 			Args:     []any{proposal_id},
 		},
 	)
-
+	if err != nil && !errors.Is(err, chain.ContractReverted) {
+		return *v, nil, err
+	}
 	if v.IsErr {
 		return *v, nil, errors.New("Contract Reverted: " + v.E.Error())
 	}
 
-	return *v, gas, err
+	return *v, gas, nil
 }
 
 func (c *Dao) CallGovExecProposal(
@@ -1089,12 +1153,14 @@ func (c *Dao) QueryGovProposalStatus(
 			Args:     []any{proposal_id},
 		},
 	)
-
+	if err != nil && !errors.Is(err, chain.ContractReverted) {
+		return *v, nil, err
+	}
 	if v.IsErr {
 		return *v, nil, errors.New("Contract Reverted: " + v.E.Error())
 	}
 
-	return *v, gas, err
+	return *v, gas, nil
 }
 
 func (c *Dao) DryRunTreasurySpend(
@@ -1111,12 +1177,14 @@ func (c *Dao) DryRunTreasurySpend(
 			Args:     []any{track_id, to, _assert_id, amount},
 		},
 	)
-
+	if err != nil && !errors.Is(err, chain.ContractReverted) {
+		return *v, nil, err
+	}
 	if v.IsErr {
 		return *v, nil, errors.New("Contract Reverted: " + v.E.Error())
 	}
 
-	return *v, gas, err
+	return *v, gas, nil
 }
 
 func (c *Dao) CallTreasurySpend(
@@ -1150,12 +1218,14 @@ func (c *Dao) DryRunTreasuryPayout(
 			Args:     []any{spend_index},
 		},
 	)
-
+	if err != nil && !errors.Is(err, chain.ContractReverted) {
+		return *v, nil, err
+	}
 	if v.IsErr {
 		return *v, nil, errors.New("Contract Reverted: " + v.E.Error())
 	}
 
-	return *v, gas, err
+	return *v, gas, nil
 }
 
 func (c *Dao) CallTreasuryPayout(

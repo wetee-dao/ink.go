@@ -34,12 +34,14 @@ func (c *Subnet) DryRunSetCode(
 			Args:     []any{code_hash},
 		},
 	)
-
+	if err != nil && !errors.Is(err, chain.ContractReverted) {
+		return *v, nil, err
+	}
 	if v.IsErr {
 		return *v, nil, errors.New("Contract Reverted: " + v.E.Error())
 	}
 
-	return *v, gas, err
+	return *v, gas, nil
 }
 
 func (c *Subnet) CallSetCode(
@@ -73,12 +75,14 @@ func (c *Subnet) QueryBootNodes(
 			Args:     []any{},
 		},
 	)
-
+	if err != nil && !errors.Is(err, chain.ContractReverted) {
+		return *v, nil, err
+	}
 	if v.IsErr {
 		return *v, nil, errors.New("Contract Reverted: " + v.E.Error())
 	}
 
-	return *v, gas, err
+	return *v, gas, nil
 }
 
 func (c *Subnet) DryRunSetBootNodes(
@@ -95,12 +99,14 @@ func (c *Subnet) DryRunSetBootNodes(
 			Args:     []any{nodes},
 		},
 	)
-
+	if err != nil && !errors.Is(err, chain.ContractReverted) {
+		return *v, nil, err
+	}
 	if v.IsErr {
 		return *v, nil, errors.New("Contract Reverted: " + v.E.Error())
 	}
 
-	return *v, gas, err
+	return *v, gas, nil
 }
 
 func (c *Subnet) CallSetBootNodes(
@@ -134,12 +140,14 @@ func (c *Subnet) QueryWorkers(
 			Args:     []any{},
 		},
 	)
-
+	if err != nil && !errors.Is(err, chain.ContractReverted) {
+		return *v, nil, err
+	}
 	if v.IsErr {
 		return *v, nil, errors.New("Contract Reverted: " + v.E.Error())
 	}
 
-	return *v, gas, err
+	return *v, gas, nil
 }
 
 func (c *Subnet) DryRunWorkerRegister(
@@ -156,12 +164,14 @@ func (c *Subnet) DryRunWorkerRegister(
 			Args:     []any{name, ip, port, level},
 		},
 	)
-
+	if err != nil && !errors.Is(err, chain.ContractReverted) {
+		return *v, nil, err
+	}
 	if v.IsErr {
 		return *v, nil, errors.New("Contract Reverted: " + v.E.Error())
 	}
 
-	return *v, gas, err
+	return *v, gas, nil
 }
 
 func (c *Subnet) CallWorkerRegister(
@@ -195,12 +205,14 @@ func (c *Subnet) DryRunWorkerMortgage(
 			Args:     []any{id, cpu, mem, cvm_cpu, cvm_mem, disk, gpu, deposit},
 		},
 	)
-
+	if err != nil && !errors.Is(err, chain.ContractReverted) {
+		return *v, nil, err
+	}
 	if v.IsErr {
 		return *v, nil, errors.New("Contract Reverted: " + v.E.Error())
 	}
 
-	return *v, gas, err
+	return *v, gas, nil
 }
 
 func (c *Subnet) CallWorkerMortgage(
@@ -234,12 +246,14 @@ func (c *Subnet) DryRunWorkerUnmortgage(
 			Args:     []any{id, mortgage_id},
 		},
 	)
-
+	if err != nil && !errors.Is(err, chain.ContractReverted) {
+		return *v, nil, err
+	}
 	if v.IsErr {
 		return *v, nil, errors.New("Contract Reverted: " + v.E.Error())
 	}
 
-	return *v, gas, err
+	return *v, gas, nil
 }
 
 func (c *Subnet) CallWorkerUnmortgage(
@@ -273,12 +287,14 @@ func (c *Subnet) DryRunWorkerStop(
 			Args:     []any{id},
 		},
 	)
-
+	if err != nil && !errors.Is(err, chain.ContractReverted) {
+		return *v, nil, err
+	}
 	if v.IsErr {
 		return *v, nil, errors.New("Contract Reverted: " + v.E.Error())
 	}
 
-	return *v, gas, err
+	return *v, gas, nil
 }
 
 func (c *Subnet) CallWorkerStop(
@@ -312,12 +328,14 @@ func (c *Subnet) DryRunSecretRegister(
 			Args:     []any{name, validator_id, p2p_id, ip, port},
 		},
 	)
-
+	if err != nil && !errors.Is(err, chain.ContractReverted) {
+		return *v, nil, err
+	}
 	if v.IsErr {
 		return *v, nil, errors.New("Contract Reverted: " + v.E.Error())
 	}
 
-	return *v, gas, err
+	return *v, gas, nil
 }
 
 func (c *Subnet) CallSecretRegister(
@@ -351,12 +369,14 @@ func (c *Subnet) DryRunSecretDeposit(
 			Args:     []any{id, deposit},
 		},
 	)
-
+	if err != nil && !errors.Is(err, chain.ContractReverted) {
+		return *v, nil, err
+	}
 	if v.IsErr {
 		return *v, nil, errors.New("Contract Reverted: " + v.E.Error())
 	}
 
-	return *v, gas, err
+	return *v, gas, nil
 }
 
 func (c *Subnet) CallSecretDeposit(
@@ -390,12 +410,14 @@ func (c *Subnet) DryRunSecretJoin(
 			Args:     []any{id},
 		},
 	)
-
+	if err != nil && !errors.Is(err, chain.ContractReverted) {
+		return *v, nil, err
+	}
 	if v.IsErr {
 		return *v, nil, errors.New("Contract Reverted: " + v.E.Error())
 	}
 
-	return *v, gas, err
+	return *v, gas, nil
 }
 
 func (c *Subnet) CallSecretJoin(
@@ -429,12 +451,14 @@ func (c *Subnet) DryRunSecretDelete(
 			Args:     []any{id},
 		},
 	)
-
+	if err != nil && !errors.Is(err, chain.ContractReverted) {
+		return *v, nil, err
+	}
 	if v.IsErr {
 		return *v, nil, errors.New("Contract Reverted: " + v.E.Error())
 	}
 
-	return *v, gas, err
+	return *v, gas, nil
 }
 
 func (c *Subnet) CallSecretDelete(
@@ -468,8 +492,10 @@ func (c *Subnet) QueryEpoch(
 			Args:     []any{},
 		},
 	)
-
-	return *v, gas, err
+	if err != nil && !errors.Is(err, chain.ContractReverted) {
+		return *v, nil, err
+	}
+	return *v, gas, nil
 }
 
 func (c *Subnet) DryRunNextEpoch(
@@ -486,12 +512,14 @@ func (c *Subnet) DryRunNextEpoch(
 			Args:     []any{},
 		},
 	)
-
+	if err != nil && !errors.Is(err, chain.ContractReverted) {
+		return *v, nil, err
+	}
 	if v.IsErr {
 		return *v, nil, errors.New("Contract Reverted: " + v.E.Error())
 	}
 
-	return *v, gas, err
+	return *v, gas, nil
 }
 
 func (c *Subnet) CallNextEpoch(
@@ -525,12 +553,14 @@ func (c *Subnet) DryRunNextEpochWithGov(
 			Args:     []any{},
 		},
 	)
-
+	if err != nil && !errors.Is(err, chain.ContractReverted) {
+		return *v, nil, err
+	}
 	if v.IsErr {
 		return *v, nil, errors.New("Contract Reverted: " + v.E.Error())
 	}
 
-	return *v, gas, err
+	return *v, gas, nil
 }
 
 func (c *Subnet) CallNextEpochWithGov(

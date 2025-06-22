@@ -64,7 +64,7 @@ func (c *{{.Name}}) ContractAddress() types.H160 {
 {{ range .Funcs }}
 func (c *{{$.Name}}) {{if .IsMut}}DryRun{{else}}Query{{end}}{{CamelCase .FuncName}}(
 	{{.ArgTypeStr}} params chain.DryRunCallParams,
-) ({{.Return}}, *chain.DryRunReturnGas, error) {
+) (*{{.Return}}, *chain.DryRunReturnGas, error) {
 	v, gas, err := chain.DryRun[{{.Return}}](
 		c,
 		params.Origin,
@@ -76,15 +76,15 @@ func (c *{{$.Name}}) {{if .IsMut}}DryRun{{else}}Query{{end}}{{CamelCase .FuncNam
 			Args:     []any{ {{.ArgStr}} },
 		},
 	)
-	if err != nil {
-		return {{.Return}}{}, nil, err
+	if err != nil && !errors.Is(err, chain.ContractReverted) {
+		return nil, nil, err
 	}
 	{{- if IsResult .Return}}
-	if v.IsErr {
-		return {{.Return}}{}, nil, errors.New("Contract Reverted: " + v.E.Error())
+	if v != nil && v.IsErr {
+		return nil, nil, errors.New("Contract Reverted: " + v.E.Error())
 	}
 	{{end}}
-	return *v, gas, err
+	return v, gas, nil
 }
 {{if .IsMut}}
 func (c *{{$.Name}}) Call{{CamelCase .FuncName}}(
