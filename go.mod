@@ -1,8 +1,6 @@
 module github.com/wetee-dao/ink.go
 
-go 1.23.0
-
-toolchain go1.23.8
+go 1.23.5
 
 require (
 	github.com/centrifuge/go-substrate-rpc-client/v4 v4.2.2-0.20240919131012-e3b938563803
