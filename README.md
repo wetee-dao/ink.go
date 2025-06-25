@@ -5,7 +5,7 @@
 ### 1. Install the code generation tool for ink! contracts
 used to generate contract call code through ABI files.
 ```
-go install github.com/wetee-dao/ink.go/tools/go-ink-gen
+go install github.com/wetee-dao/ink.go/tools/go-ink-gen@latest
 ```
 
 ### 2. Install the ink.go package
