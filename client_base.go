@@ -130,6 +130,7 @@ func (c *ChainClient) SignAndSubmit(signer *Signer, call types.Call, untilFinali
 	if err != nil {
 		return errors.New("GetAccountInfo error: " + err.Error())
 	}
+
 	// call, err := (runtimeCall).AsCall()
 	// if err != nil {
 	// 	return errors.New("(runtimeCall).AsCall() error: " + err.Error())

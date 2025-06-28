@@ -92,10 +92,21 @@ func DryRun[T any](
 		return data, nil, ContractReverted
 	}
 
+	var storageDeposit types.U128
+	if result.StorageDeposit.IsCharge {
+		storageDeposit = result.StorageDeposit.AsChargeField0
+	}
+
 	return data, &DryRunReturnGas{
-		GasConsumed:    result.GasConsumed,
-		GasRequired:    result.GasRequired,
-		StorageDeposit: result.StorageDeposit,
+		GasConsumed: types.Weight{
+			RefTime:   result.GasConsumed.RefTime,
+			ProofSize: result.GasConsumed.ProofSize,
+		},
+		GasRequired: types.Weight{
+			RefTime:   result.GasRequired.RefTime,
+			ProofSize: result.GasRequired.ProofSize,
+		},
+		StorageDeposit: storageDeposit,
 	}, nil
 }
 
@@ -163,9 +174,9 @@ func DefaultParamWithOragin(origin types.AccountID) DryRunCallParams {
 
 // DryRun return gas consumed
 type DryRunReturnGas struct {
-	GasConsumed    gtypes.Weight
-	GasRequired    gtypes.Weight
-	StorageDeposit gtypes.StorageDeposit
+	GasConsumed    types.Weight
+	GasRequired    types.Weight
+	StorageDeposit types.U128
 }
 
 // Call param of Call

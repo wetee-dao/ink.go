@@ -40,12 +40,7 @@ func ExampleInk() {
 
 	// query Member::list
 	_, _, err = contract.QueryMemberList(
-		chain.DryRunCallParams{
-			Origin:              util.NewAccountID(p.PublicKey),
-			PayAmount:           types.NewU128(*big.NewInt(0)),
-			GasLimit:            util.NewNone[types.Weight](),
-			StorageDepositLimit: util.NewNone[types.U128](),
-		},
+		chain.DefaultParamWithOragin(p.AccountID()),
 	)
 	if err != nil {
 		fmt.Println(err)
@@ -54,39 +49,29 @@ func ExampleInk() {
 	// query Gov::track return type is dao.Track
 	_, _, err = contract.QueryGovTrack(
 		0,
-		chain.DryRunCallParams{
-			Origin:              util.NewAccountID(p.PublicKey),
-			PayAmount:           types.NewU128(*big.NewInt(0)),
-			GasLimit:            util.NewNone[types.Weight](),
-			StorageDepositLimit: util.NewNone[types.U128](),
-		},
+		chain.DefaultParamWithOragin(p.AccountID()),
 	)
 	if err != nil {
 		fmt.Println(err)
 	}
 
 	// dry run contract
-	result, _, err := contract.DryRunErc20EnableTransfer(
-		chain.DryRunCallParams{
-			Origin:              util.NewAccountID(p.PublicKey),
-			PayAmount:           types.NewU128(*big.NewInt(0)),
-			GasLimit:            util.NewNone[types.Weight](),
-			StorageDepositLimit: util.NewNone[types.U128](),
-		},
+	result, gas, err := contract.DryRunMemberPublicJoin(
+		chain.DefaultParamWithOragin(p.AccountID()),
 	)
 	if err == nil {
 		fmt.Println(result.E)
+	} else {
+		fmt.Println(err)
+		return
 	}
 
-	err = contract.CallErc20EnableTransfer(
+	err = contract.CallMemberPublicJoin(
 		chain.CallParams{
-			Signer:    &p,
-			PayAmount: types.NewU128(*big.NewInt(0)),
-			GasLimit: types.Weight{
-				RefTime:   types.NewUCompact(big.NewInt(1_100_000_000)),
-				ProofSize: types.NewUCompact(big.NewInt(100_000)),
-			},
-			StorageDepositLimit: types.NewU128(*big.NewInt(110_000_000_000)),
+			Signer:              &p,
+			PayAmount:           types.NewU128(*big.NewInt(0)),
+			GasLimit:            gas.GasConsumed,
+			StorageDepositLimit: gas.StorageDeposit,
 		},
 	)
 	if err != nil {

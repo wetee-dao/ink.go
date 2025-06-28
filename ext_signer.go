@@ -46,6 +46,27 @@ func (e *Signer) H160Address() types.H160 {
 	return h160
 }
 
+func (e *Signer) AccountID() types.AccountID {
+	var bt [32]byte
+	copy(bt[:], e.PublicKey)
+
+	return types.AccountID(bt)
+}
+
+func NewSr25519Pair() (Signer, error) {
+	kyr, err := sr25519.Scheme{}.Generate()
+	if err != nil {
+		return Signer{}, err
+	}
+
+	ss58Address := kyr.SS58Address(42)
+	return Signer{
+		KeyPair:   kyr,
+		Address:   ss58Address,
+		PublicKey: kyr.Public(),
+	}, nil
+}
+
 // Sr25519 PairFromSecret generates a sr25519 key pair from a seed or phrase
 func Sr25519PairFromSecret(seedOrPhrase string, network uint16) (Signer, error) {
 	scheme := sr25519.Scheme{}
@@ -56,6 +77,21 @@ func Sr25519PairFromSecret(seedOrPhrase string, network uint16) (Signer, error) 
 
 	ss58Address := kyr.SS58Address(network)
 	return Signer{
+		KeyPair:   kyr,
+		Address:   ss58Address,
+		PublicKey: kyr.Public(),
+	}, nil
+}
+
+func NewEd25519Pair() (Signer, error) {
+	kyr, err := ed25519.Scheme{}.Generate()
+	if err != nil {
+		return Signer{}, err
+	}
+
+	ss58Address := kyr.SS58Address(42)
+	return Signer{
+		KeyType:   1,
 		KeyPair:   kyr,
 		Address:   ss58Address,
 		PublicKey: kyr.Public(),
