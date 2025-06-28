@@ -15,7 +15,7 @@ import (
 	"github.com/wetee-dao/ink.go/util"
 )
 
-var ContractReverted = errors.New("contract reverted: the specific error information is in the second returned")
+var ErrContractReverted = errors.New("contract reverted: the specific error information is in the second returned")
 
 // Revive module
 type Ink interface {
@@ -89,7 +89,7 @@ func DryRun[T any](
 
 	// 判断是否执行错误
 	if returnValue.Flags == 1 {
-		return data, nil, ContractReverted
+		return data, nil, ErrContractReverted
 	}
 
 	var storageDeposit types.U128

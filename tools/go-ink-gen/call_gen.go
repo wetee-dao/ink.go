@@ -76,7 +76,7 @@ func (c *{{$.Name}}) {{if .IsMut}}DryRun{{else}}Query{{end}}{{CamelCase .FuncNam
 			Args:     []any{ {{.ArgStr}} },
 		},
 	)
-	if err != nil && !errors.Is(err, chain.ContractReverted) {
+	if err != nil && !errors.Is(err, chain.ErrContractReverted) {
 		return nil, nil, err
 	}
 	{{- if IsResult .Return}}

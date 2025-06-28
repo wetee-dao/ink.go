@@ -34,7 +34,7 @@ func (c *Subnet) DryRunSetCode(
 			Args:     []any{code_hash},
 		},
 	)
-	if err != nil && !errors.Is(err, chain.ContractReverted) {
+	if err != nil && !errors.Is(err, chain.ErrContractReverted) {
 		return nil, nil, err
 	}
 	if v != nil && v.IsErr {
@@ -75,7 +75,7 @@ func (c *Subnet) QueryBootNodes(
 			Args:     []any{},
 		},
 	)
-	if err != nil && !errors.Is(err, chain.ContractReverted) {
+	if err != nil && !errors.Is(err, chain.ErrContractReverted) {
 		return nil, nil, err
 	}
 	if v != nil && v.IsErr {
@@ -99,7 +99,7 @@ func (c *Subnet) DryRunSetBootNodes(
 			Args:     []any{nodes},
 		},
 	)
-	if err != nil && !errors.Is(err, chain.ContractReverted) {
+	if err != nil && !errors.Is(err, chain.ErrContractReverted) {
 		return nil, nil, err
 	}
 	if v != nil && v.IsErr {
@@ -140,7 +140,7 @@ func (c *Subnet) QueryWorkers(
 			Args:     []any{},
 		},
 	)
-	if err != nil && !errors.Is(err, chain.ContractReverted) {
+	if err != nil && !errors.Is(err, chain.ErrContractReverted) {
 		return nil, nil, err
 	}
 	if v != nil && v.IsErr {
@@ -164,7 +164,7 @@ func (c *Subnet) DryRunWorkerRegister(
 			Args:     []any{name, ip, port, level},
 		},
 	)
-	if err != nil && !errors.Is(err, chain.ContractReverted) {
+	if err != nil && !errors.Is(err, chain.ErrContractReverted) {
 		return nil, nil, err
 	}
 	if v != nil && v.IsErr {
@@ -205,7 +205,7 @@ func (c *Subnet) DryRunWorkerMortgage(
 			Args:     []any{id, cpu, mem, cvm_cpu, cvm_mem, disk, gpu, deposit},
 		},
 	)
-	if err != nil && !errors.Is(err, chain.ContractReverted) {
+	if err != nil && !errors.Is(err, chain.ErrContractReverted) {
 		return nil, nil, err
 	}
 	if v != nil && v.IsErr {
@@ -246,7 +246,7 @@ func (c *Subnet) DryRunWorkerUnmortgage(
 			Args:     []any{id, mortgage_id},
 		},
 	)
-	if err != nil && !errors.Is(err, chain.ContractReverted) {
+	if err != nil && !errors.Is(err, chain.ErrContractReverted) {
 		return nil, nil, err
 	}
 	if v != nil && v.IsErr {
@@ -287,7 +287,7 @@ func (c *Subnet) DryRunWorkerStop(
 			Args:     []any{id},
 		},
 	)
-	if err != nil && !errors.Is(err, chain.ContractReverted) {
+	if err != nil && !errors.Is(err, chain.ErrContractReverted) {
 		return nil, nil, err
 	}
 	if v != nil && v.IsErr {
@@ -328,7 +328,7 @@ func (c *Subnet) DryRunSecretRegister(
 			Args:     []any{name, validator_id, p2p_id, ip, port},
 		},
 	)
-	if err != nil && !errors.Is(err, chain.ContractReverted) {
+	if err != nil && !errors.Is(err, chain.ErrContractReverted) {
 		return nil, nil, err
 	}
 	if v != nil && v.IsErr {
@@ -369,7 +369,7 @@ func (c *Subnet) DryRunSecretDeposit(
 			Args:     []any{id, deposit},
 		},
 	)
-	if err != nil && !errors.Is(err, chain.ContractReverted) {
+	if err != nil && !errors.Is(err, chain.ErrContractReverted) {
 		return nil, nil, err
 	}
 	if v != nil && v.IsErr {
@@ -410,7 +410,7 @@ func (c *Subnet) DryRunSecretJoin(
 			Args:     []any{id},
 		},
 	)
-	if err != nil && !errors.Is(err, chain.ContractReverted) {
+	if err != nil && !errors.Is(err, chain.ErrContractReverted) {
 		return nil, nil, err
 	}
 	if v != nil && v.IsErr {
@@ -451,7 +451,7 @@ func (c *Subnet) DryRunSecretDelete(
 			Args:     []any{id},
 		},
 	)
-	if err != nil && !errors.Is(err, chain.ContractReverted) {
+	if err != nil && !errors.Is(err, chain.ErrContractReverted) {
 		return nil, nil, err
 	}
 	if v != nil && v.IsErr {
@@ -492,7 +492,7 @@ func (c *Subnet) QueryEpoch(
 			Args:     []any{},
 		},
 	)
-	if err != nil && !errors.Is(err, chain.ContractReverted) {
+	if err != nil && !errors.Is(err, chain.ErrContractReverted) {
 		return nil, nil, err
 	}
 	return v, gas, nil
@@ -512,7 +512,7 @@ func (c *Subnet) DryRunNextEpoch(
 			Args:     []any{},
 		},
 	)
-	if err != nil && !errors.Is(err, chain.ContractReverted) {
+	if err != nil && !errors.Is(err, chain.ErrContractReverted) {
 		return nil, nil, err
 	}
 	if v != nil && v.IsErr {
@@ -553,7 +553,7 @@ func (c *Subnet) DryRunNextEpochWithGov(
 			Args:     []any{},
 		},
 	)
-	if err != nil && !errors.Is(err, chain.ContractReverted) {
+	if err != nil && !errors.Is(err, chain.ErrContractReverted) {
 		return nil, nil, err
 	}
 	if v != nil && v.IsErr {
