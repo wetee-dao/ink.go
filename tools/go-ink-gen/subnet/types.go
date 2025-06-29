@@ -8,24 +8,25 @@ import (
 	"github.com/wetee-dao/ink.go/util"
 )
 
-type Ip struct { // Composite
-	Ipv4   util.Option[uint32]
-	Ipv6   util.Option[types.U128]
-	Domain util.Option[[]byte]
-}
-type K8sCluster struct { // Composite
+type AccountId = [32]byte // Composite
+type K8sCluster struct {  // Composite
+	Name          []byte
 	Owner         types.H160
 	Level         byte
 	StartBlock    uint32
 	StopBlock     util.Option[uint32]
 	TerminalBlock util.Option[uint32]
-	Name          []byte
-	Ip            []Ip
+	P2pId         AccountId
+	Ip            Ip
 	Port          uint32
 	Status        byte
 }
-type AccountId = [32]byte // Composite
-type SecretNode struct {  // Composite
+type Ip struct { // Composite
+	Ipv4   util.Option[uint32]
+	Ipv6   util.Option[types.U128]
+	Domain util.Option[[]byte]
+}
+type SecretNode struct { // Composite
 	Name          []byte
 	Owner         types.H160
 	ValidatorId   AccountId
@@ -33,23 +34,24 @@ type SecretNode struct {  // Composite
 	StartBlock    uint32
 	StopBlock     util.Option[uint32]
 	TerminalBlock util.Option[uint32]
-	Ip            []Ip
+	Ip            Ip
 	Port          uint32
 	Status        byte
 }
 type Error struct { // Enum
-	NotEnoughBalance        *bool // 0
-	MustCallByMainContract  *bool // 1
-	WorkerNotExist          *bool // 2
-	WorkerNotOwnedByCaller  *bool // 3
-	WorkerStatusNotReady    *bool // 4
-	WorkerMortgageNotExist  *bool // 5
-	TransferFailed          *bool // 6
-	WorkerIsUseByUser       *bool // 7
-	NodeNotExist            *bool // 8
-	SecretNodeAlreadyExists *bool // 9
-	SetCodeFailed           *bool // 10
-	EpochNotExpired         *bool // 11
+	NotEnoughBalance          *bool // 0
+	MustCallByMainContract    *bool // 1
+	WorkerNotExist            *bool // 2
+	WorkerNotOwnedByCaller    *bool // 3
+	WorkerStatusNotReady      *bool // 4
+	WorkerMortgageNotExist    *bool // 5
+	TransferFailed            *bool // 6
+	WorkerIsUseByUser         *bool // 7
+	NodeNotExist              *bool // 8
+	SecretNodeAlreadyExists   *bool // 9
+	SetCodeFailed             *bool // 10
+	EpochNotExpired           *bool // 11
+	InvalidSideChainSignature *bool // 12
 }
 
 func (ty Error) Encode(encoder scale.Encoder) (err error) {
@@ -148,6 +150,14 @@ func (ty Error) Encode(encoder scale.Encoder) (err error) {
 		}
 		return nil
 	}
+
+	if ty.InvalidSideChainSignature != nil {
+		err = encoder.PushByte(12)
+		if err != nil {
+			return err
+		}
+		return nil
+	}
 	return fmt.Errorf("unrecognized enum")
 }
 
@@ -205,6 +215,10 @@ func (ty *Error) Decode(decoder scale.Decoder) (err error) {
 		t := true
 		ty.EpochNotExpired = &t
 		return
+	case 12:
+		t := true
+		ty.InvalidSideChainSignature = &t
+		return
 	default:
 		return fmt.Errorf("unrecognized enum")
 	}
@@ -257,11 +271,24 @@ func (ty *Error) Error() string {
 	if ty.EpochNotExpired != nil {
 		return "EpochNotExpired"
 	}
+
+	if ty.InvalidSideChainSignature != nil {
+		return "InvalidSideChainSignature"
+	}
 	return "Unknown"
 }
 
 type Tuple_70 struct { // Tuple
+	F0 uint64
+	F1 K8sCluster
+}
+type Tuple_78 struct { // Tuple
+	F0 uint64
+	F1 SecretNode
+}
+type Tuple_80 struct { // Tuple
 	F0 uint32
 	F1 uint32
 	F2 uint32
+	F3 [32]byte
 }

@@ -86,7 +86,7 @@ func (c *Subnet) QueryBootNodes(
 }
 
 func (c *Subnet) DryRunSetBootNodes(
-	nodes []types.U128, params chain.DryRunCallParams,
+	nodes []uint64, params chain.DryRunCallParams,
 ) (*util.Result[util.NullTuple, Error], *chain.DryRunReturnGas, error) {
 	v, gas, err := chain.DryRun[util.Result[util.NullTuple, Error]](
 		c,
@@ -110,7 +110,7 @@ func (c *Subnet) DryRunSetBootNodes(
 }
 
 func (c *Subnet) CallSetBootNodes(
-	nodes []types.U128, params chain.CallParams,
+	nodes []uint64, params chain.CallParams,
 ) error {
 	err := chain.Call(
 		c,
@@ -128,8 +128,8 @@ func (c *Subnet) CallSetBootNodes(
 
 func (c *Subnet) QueryWorkers(
 	params chain.DryRunCallParams,
-) (*util.Result[[]K8sCluster, Error], *chain.DryRunReturnGas, error) {
-	v, gas, err := chain.DryRun[util.Result[[]K8sCluster, Error]](
+) (*util.Result[[]Tuple_70, Error], *chain.DryRunReturnGas, error) {
+	v, gas, err := chain.DryRun[util.Result[[]Tuple_70, Error]](
 		c,
 		params.Origin,
 		params.PayAmount,
@@ -151,9 +151,9 @@ func (c *Subnet) QueryWorkers(
 }
 
 func (c *Subnet) DryRunWorkerRegister(
-	name []byte, ip []Ip, port uint32, level byte, params chain.DryRunCallParams,
-) (*util.Result[types.U128, Error], *chain.DryRunReturnGas, error) {
-	v, gas, err := chain.DryRun[util.Result[types.U128, Error]](
+	name []byte, p2p_id AccountId, ip Ip, port uint32, level byte, params chain.DryRunCallParams,
+) (*util.Result[uint64, Error], *chain.DryRunReturnGas, error) {
+	v, gas, err := chain.DryRun[util.Result[uint64, Error]](
 		c,
 		params.Origin,
 		params.PayAmount,
@@ -161,7 +161,7 @@ func (c *Subnet) DryRunWorkerRegister(
 		params.StorageDepositLimit,
 		util.InkContractInput{
 			Selector: "worker_register",
-			Args:     []any{name, ip, port, level},
+			Args:     []any{name, p2p_id, ip, port, level},
 		},
 	)
 	if err != nil && !errors.Is(err, chain.ErrContractReverted) {
@@ -175,7 +175,7 @@ func (c *Subnet) DryRunWorkerRegister(
 }
 
 func (c *Subnet) CallWorkerRegister(
-	name []byte, ip []Ip, port uint32, level byte, params chain.CallParams,
+	name []byte, p2p_id AccountId, ip Ip, port uint32, level byte, params chain.CallParams,
 ) error {
 	err := chain.Call(
 		c,
@@ -185,16 +185,16 @@ func (c *Subnet) CallWorkerRegister(
 		params.StorageDepositLimit,
 		util.InkContractInput{
 			Selector: "worker_register",
-			Args:     []any{name, ip, port, level},
+			Args:     []any{name, p2p_id, ip, port, level},
 		},
 	)
 	return err
 }
 
 func (c *Subnet) DryRunWorkerMortgage(
-	id types.U128, cpu uint32, mem uint32, cvm_cpu uint32, cvm_mem uint32, disk uint32, gpu uint32, deposit types.U256, params chain.DryRunCallParams,
-) (*util.Result[types.U128, Error], *chain.DryRunReturnGas, error) {
-	v, gas, err := chain.DryRun[util.Result[types.U128, Error]](
+	id uint64, cpu uint32, mem uint32, cvm_cpu uint32, cvm_mem uint32, disk uint32, gpu uint32, deposit types.U256, params chain.DryRunCallParams,
+) (*util.Result[uint32, Error], *chain.DryRunReturnGas, error) {
+	v, gas, err := chain.DryRun[util.Result[uint32, Error]](
 		c,
 		params.Origin,
 		params.PayAmount,
@@ -216,7 +216,7 @@ func (c *Subnet) DryRunWorkerMortgage(
 }
 
 func (c *Subnet) CallWorkerMortgage(
-	id types.U128, cpu uint32, mem uint32, cvm_cpu uint32, cvm_mem uint32, disk uint32, gpu uint32, deposit types.U256, params chain.CallParams,
+	id uint64, cpu uint32, mem uint32, cvm_cpu uint32, cvm_mem uint32, disk uint32, gpu uint32, deposit types.U256, params chain.CallParams,
 ) error {
 	err := chain.Call(
 		c,
@@ -233,9 +233,9 @@ func (c *Subnet) CallWorkerMortgage(
 }
 
 func (c *Subnet) DryRunWorkerUnmortgage(
-	id types.U128, mortgage_id types.U128, params chain.DryRunCallParams,
-) (*util.Result[types.U128, Error], *chain.DryRunReturnGas, error) {
-	v, gas, err := chain.DryRun[util.Result[types.U128, Error]](
+	id uint64, mortgage_id uint32, params chain.DryRunCallParams,
+) (*util.Result[uint32, Error], *chain.DryRunReturnGas, error) {
+	v, gas, err := chain.DryRun[util.Result[uint32, Error]](
 		c,
 		params.Origin,
 		params.PayAmount,
@@ -257,7 +257,7 @@ func (c *Subnet) DryRunWorkerUnmortgage(
 }
 
 func (c *Subnet) CallWorkerUnmortgage(
-	id types.U128, mortgage_id types.U128, params chain.CallParams,
+	id uint64, mortgage_id uint32, params chain.CallParams,
 ) error {
 	err := chain.Call(
 		c,
@@ -274,9 +274,9 @@ func (c *Subnet) CallWorkerUnmortgage(
 }
 
 func (c *Subnet) DryRunWorkerStop(
-	id types.U128, params chain.DryRunCallParams,
-) (*util.Result[types.U128, Error], *chain.DryRunReturnGas, error) {
-	v, gas, err := chain.DryRun[util.Result[types.U128, Error]](
+	id uint64, params chain.DryRunCallParams,
+) (*util.Result[uint64, Error], *chain.DryRunReturnGas, error) {
+	v, gas, err := chain.DryRun[util.Result[uint64, Error]](
 		c,
 		params.Origin,
 		params.PayAmount,
@@ -298,7 +298,7 @@ func (c *Subnet) DryRunWorkerStop(
 }
 
 func (c *Subnet) CallWorkerStop(
-	id types.U128, params chain.CallParams,
+	id uint64, params chain.CallParams,
 ) error {
 	err := chain.Call(
 		c,
@@ -314,10 +314,34 @@ func (c *Subnet) CallWorkerStop(
 	return err
 }
 
+func (c *Subnet) QuerySecrets(
+	params chain.DryRunCallParams,
+) (*util.Result[[]Tuple_78, Error], *chain.DryRunReturnGas, error) {
+	v, gas, err := chain.DryRun[util.Result[[]Tuple_78, Error]](
+		c,
+		params.Origin,
+		params.PayAmount,
+		params.GasLimit,
+		params.StorageDepositLimit,
+		util.InkContractInput{
+			Selector: "secrets",
+			Args:     []any{},
+		},
+	)
+	if err != nil && !errors.Is(err, chain.ErrContractReverted) {
+		return nil, nil, err
+	}
+	if v != nil && v.IsErr {
+		return nil, nil, errors.New("Contract Reverted: " + v.E.Error())
+	}
+
+	return v, gas, nil
+}
+
 func (c *Subnet) DryRunSecretRegister(
-	name []byte, validator_id AccountId, p2p_id AccountId, ip []Ip, port uint32, params chain.DryRunCallParams,
-) (*util.Result[types.U128, Error], *chain.DryRunReturnGas, error) {
-	v, gas, err := chain.DryRun[util.Result[types.U128, Error]](
+	name []byte, validator_id AccountId, p2p_id AccountId, ip Ip, port uint32, params chain.DryRunCallParams,
+) (*util.Result[uint64, Error], *chain.DryRunReturnGas, error) {
+	v, gas, err := chain.DryRun[util.Result[uint64, Error]](
 		c,
 		params.Origin,
 		params.PayAmount,
@@ -339,7 +363,7 @@ func (c *Subnet) DryRunSecretRegister(
 }
 
 func (c *Subnet) CallSecretRegister(
-	name []byte, validator_id AccountId, p2p_id AccountId, ip []Ip, port uint32, params chain.CallParams,
+	name []byte, validator_id AccountId, p2p_id AccountId, ip Ip, port uint32, params chain.CallParams,
 ) error {
 	err := chain.Call(
 		c,
@@ -356,7 +380,7 @@ func (c *Subnet) CallSecretRegister(
 }
 
 func (c *Subnet) DryRunSecretDeposit(
-	id types.U128, deposit types.U256, params chain.DryRunCallParams,
+	id uint64, deposit types.U256, params chain.DryRunCallParams,
 ) (*util.Result[util.NullTuple, Error], *chain.DryRunReturnGas, error) {
 	v, gas, err := chain.DryRun[util.Result[util.NullTuple, Error]](
 		c,
@@ -380,7 +404,7 @@ func (c *Subnet) DryRunSecretDeposit(
 }
 
 func (c *Subnet) CallSecretDeposit(
-	id types.U128, deposit types.U256, params chain.CallParams,
+	id uint64, deposit types.U256, params chain.CallParams,
 ) error {
 	err := chain.Call(
 		c,
@@ -397,7 +421,7 @@ func (c *Subnet) CallSecretDeposit(
 }
 
 func (c *Subnet) DryRunSecretJoin(
-	id types.U128, params chain.DryRunCallParams,
+	id uint64, params chain.DryRunCallParams,
 ) (*util.Result[util.NullTuple, Error], *chain.DryRunReturnGas, error) {
 	v, gas, err := chain.DryRun[util.Result[util.NullTuple, Error]](
 		c,
@@ -421,7 +445,7 @@ func (c *Subnet) DryRunSecretJoin(
 }
 
 func (c *Subnet) CallSecretJoin(
-	id types.U128, params chain.CallParams,
+	id uint64, params chain.CallParams,
 ) error {
 	err := chain.Call(
 		c,
@@ -438,7 +462,7 @@ func (c *Subnet) CallSecretJoin(
 }
 
 func (c *Subnet) DryRunSecretDelete(
-	id types.U128, params chain.DryRunCallParams,
+	id uint64, params chain.DryRunCallParams,
 ) (*util.Result[util.NullTuple, Error], *chain.DryRunReturnGas, error) {
 	v, gas, err := chain.DryRun[util.Result[util.NullTuple, Error]](
 		c,
@@ -462,7 +486,7 @@ func (c *Subnet) DryRunSecretDelete(
 }
 
 func (c *Subnet) CallSecretDelete(
-	id types.U128, params chain.CallParams,
+	id uint64, params chain.CallParams,
 ) error {
 	err := chain.Call(
 		c,
@@ -480,8 +504,8 @@ func (c *Subnet) CallSecretDelete(
 
 func (c *Subnet) QueryEpoch(
 	params chain.DryRunCallParams,
-) (*Tuple_70, *chain.DryRunReturnGas, error) {
-	v, gas, err := chain.DryRun[Tuple_70](
+) (*Tuple_80, *chain.DryRunReturnGas, error) {
+	v, gas, err := chain.DryRun[Tuple_80](
 		c,
 		params.Origin,
 		params.PayAmount,
@@ -499,7 +523,7 @@ func (c *Subnet) QueryEpoch(
 }
 
 func (c *Subnet) DryRunNextEpoch(
-	params chain.DryRunCallParams,
+	new_key [32]byte, sig [64]byte, params chain.DryRunCallParams,
 ) (*util.Result[util.NullTuple, Error], *chain.DryRunReturnGas, error) {
 	v, gas, err := chain.DryRun[util.Result[util.NullTuple, Error]](
 		c,
@@ -509,7 +533,7 @@ func (c *Subnet) DryRunNextEpoch(
 		params.StorageDepositLimit,
 		util.InkContractInput{
 			Selector: "next_epoch",
-			Args:     []any{},
+			Args:     []any{new_key, sig},
 		},
 	)
 	if err != nil && !errors.Is(err, chain.ErrContractReverted) {
@@ -523,7 +547,7 @@ func (c *Subnet) DryRunNextEpoch(
 }
 
 func (c *Subnet) CallNextEpoch(
-	params chain.CallParams,
+	new_key [32]byte, sig [64]byte, params chain.CallParams,
 ) error {
 	err := chain.Call(
 		c,
@@ -533,7 +557,7 @@ func (c *Subnet) CallNextEpoch(
 		params.StorageDepositLimit,
 		util.InkContractInput{
 			Selector: "next_epoch",
-			Args:     []any{},
+			Args:     []any{new_key, sig},
 		},
 	)
 	return err

@@ -52,7 +52,12 @@ func (r *ReviveGen) SaveTypes() {
 		util.LogWithYellow("--------------------------------------------------" + t.Label)
 		args := []string{}
 		for _, arg := range msg.Args {
-			rtype := r.RecursionTypes(arg.Type.Type, arg.Type.DisplayName[len(arg.Type.DisplayName)-1], 1)
+			util.LogWithYellow("--------------------------------------------------->", arg)
+			typeName := ""
+			if len(arg.Type.DisplayName) > 0 {
+				typeName = arg.Type.DisplayName[len(arg.Type.DisplayName)-1]
+			}
+			rtype := r.RecursionTypes(arg.Type.Type, typeName, 1)
 			args = append(args, arg.Label+" "+rtype[1])
 		}
 
