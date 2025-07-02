@@ -132,6 +132,9 @@ func Call(
 		util.LogWithYellow("[ Call   method ]", contractInput.Selector)
 		util.LogWithYellow("[ Call   origin ]", "0x"+hex.EncodeToString(signer.PublicKey))
 		util.LogWithYellow("[ Call     args ]", "0x"+hex.EncodeToString(inputBt))
+		util.LogWithYellow("[       RefTime ]", gas_limit.RefTime.Int64())
+		util.LogWithYellow("[     ProofSize ]", gas_limit.ProofSize.Int64())
+		util.LogWithYellow("[  DepositLimit ]", storage_deposit_limit.Int.String())
 		fmt.Println("")
 	}
 
@@ -151,7 +154,7 @@ func Call(
 		return errors.New("(runtimeCall).AsCall() error: " + err.Error())
 	}
 
-	return client.SignAndSubmit(signer, call, false)
+	return client.SignAndSubmit(signer, call, true)
 }
 
 // DryRun param of DryRun

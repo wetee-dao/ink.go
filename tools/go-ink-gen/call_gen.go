@@ -90,7 +90,7 @@ func (c *{{$.Name}}) {{if .IsMut}}DryRun{{else}}Query{{end}}{{CamelCase .FuncNam
 func (c *{{$.Name}}) Call{{CamelCase .FuncName}}(
 	{{.ArgTypeStr}} params chain.CallParams,
 ) error {
-	err := chain.Call(
+	return chain.Call(
 		c,
 		params.Signer,
 		params.PayAmount,
@@ -101,7 +101,6 @@ func (c *{{$.Name}}) Call{{CamelCase .FuncName}}(
 			Args:     []any{ {{.ArgStr}} },
 		},
 	)
-	return err
 }
 {{ end }}
 {{ end }}

@@ -16,10 +16,11 @@ type EnumBox struct {
 
 // EnumItem of enum
 type EnumItem struct {
-	Name   string
-	Type   string //Inline Base Tuple Struct
-	Fields []EnumItemField
-	Index  int
+	Name       string
+	Type       string //Inline Base Tuple Struct
+	InlineName string
+	Fields     []EnumItemField
+	Index      int
 }
 
 // EnumItemField of enum
@@ -63,10 +64,11 @@ func (r *ReviveGen) EnumGen(ty int, name string, items []util.SubVariant, subs [
 		} else if len(v.Fields) == 1 && subs[i][0][2] == "Primitive" { // inline type
 			typeStr += (" *" + subs[i][0][1] + " // " + fmt.Sprint(v.Index) + "\n")
 			tempItems = append(tempItems, EnumItem{
-				Name:   v.Name,
-				Type:   "Inline",
-				Fields: []EnumItemField{},
-				Index:  v.Index,
+				Name:       v.Name,
+				Type:       "Inline",
+				InlineName: subs[i][0][1],
+				Fields:     []EnumItemField{},
+				Index:      v.Index,
 			})
 		} else { // multiple fields
 			typeStr += (" *struct{ // " + fmt.Sprint(v.Index) + "\n")
@@ -101,6 +103,7 @@ func (r *ReviveGen) EnumGen(ty int, name string, items []util.SubVariant, subs [
 	}
 	t := template.Must(template.New("scale").Parse(enumScaleTemp))
 
+	util.PrintJson(p)
 	var result bytes.Buffer
 	t.Execute(&result, p)
 
@@ -175,13 +178,13 @@ func (ty *{{.Name}}) Decode(decoder scale.Decoder) (err error) {
 	switch variant {
 {{- range $outerIndex, $outerItem := .Items -}}
 	{{- if eq .Type "Base" -}}
-	case {{.Index}}:
+	case {{.Index}}: // Base
 		t := true
 		ty.{{.Name}} = &t
 		return;
 	{{- end -}}
 	{{- if eq .Type "Tuple" -}}
-	case {{.Index}}:
+	case {{.Index}}: // Tuple
 		ty.{{.Name}} = &struct {
 			{{range .Fields}}{{.Name}} {{.Type}}
 			{{end}}
@@ -196,7 +199,7 @@ func (ty *{{.Name}}) Decode(decoder scale.Decoder) (err error) {
 		return;
 	{{- end -}}
 	{{- if eq .Type "Struct" -}}
-	case {{.Index}}:
+	case {{.Index}}: // Struct
 		ty.{{.Name}} = &struct {
 			{{range .Fields}}{{.Name}} {{.Type}}
 			{{end}}
@@ -211,7 +214,8 @@ func (ty *{{.Name}}) Decode(decoder scale.Decoder) (err error) {
 		return;
 	{{- end -}}
 	{{- if eq .Type "Inline" -}}
-	case {{.Index}}:
+	case {{.Index}}: // Inline
+		ty.{{.Name}} = new({{.InlineName}})
 		err = decoder.Decode(ty.{{.Name}})
 		if err != nil {
 			return err

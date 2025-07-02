@@ -9,7 +9,7 @@ import (
 )
 
 func TestGen(t *testing.T) {
-	data, err := os.ReadFile("../../example/contracts/subnet.json")
+	data, err := os.ReadFile("../../example/contracts/cloud.json")
 	if err != nil {
 		fmt.Println("Error reading file:", err)
 		return

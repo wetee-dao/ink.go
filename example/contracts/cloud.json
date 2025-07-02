@@ -1,0 +1,1813 @@
+{
+  "source": {
+    "hash": "0xf492b3ec65d94b93a2909cccefc581912ba9480d12987edfaaacd0150158e1cb",
+    "language": "ink! 6.0.0-alpha",
+    "compiler": "rustc 1.85.0",
+    "build_info": {
+      "build_mode": "Release",
+      "cargo_contract_version": "6.0.0-alpha",
+      "rust_toolchain": "stable-x86_64-unknown-linux-gnu"
+    }
+  },
+  "contract": {
+    "name": "cloud",
+    "version": "0.1.0",
+    "authors": [
+      "[your_name] <[your_email]>"
+    ]
+  },
+  "image": null,
+  "spec": {
+    "constructors": [
+      {
+        "args": [],
+        "default": false,
+        "docs": [],
+        "label": "new",
+        "payable": false,
+        "returnType": {
+          "displayName": [
+            "ink_primitives",
+            "ConstructorResult"
+          ],
+          "type": 37
+        },
+        "selector": "0x9bae9d5e"
+      }
+    ],
+    "docs": [],
+    "environment": {
+      "accountId": {
+        "displayName": [
+          "AccountId"
+        ],
+        "type": 49
+      },
+      "balance": {
+        "displayName": [
+          "Balance"
+        ],
+        "type": 6
+      },
+      "blockNumber": {
+        "displayName": [
+          "BlockNumber"
+        ],
+        "type": 4
+      },
+      "chainExtension": {
+        "displayName": [
+          "ChainExtension"
+        ],
+        "type": 51
+      },
+      "hash": {
+        "displayName": [
+          "Hash"
+        ],
+        "type": 50
+      },
+      "maxEventTopics": 4,
+      "staticBufferSize": 16384,
+      "timestamp": {
+        "displayName": [
+          "Timestamp"
+        ],
+        "type": 3
+      }
+    },
+    "events": [],
+    "lang_error": {
+      "displayName": [
+        "ink",
+        "LangError"
+      ],
+      "type": 38
+    },
+    "messages": [
+      {
+        "args": [
+          {
+            "label": "code_hash",
+            "type": {
+              "displayName": [
+                "H256"
+              ],
+              "type": 39
+            }
+          }
+        ],
+        "default": false,
+        "docs": [
+          " Update contract with gov"
+        ],
+        "label": "set_code",
+        "mutates": true,
+        "payable": false,
+        "returnType": {
+          "displayName": [
+            "ink",
+            "MessageResult"
+          ],
+          "type": 41
+        },
+        "selector": "0x694fb50f"
+      },
+      {
+        "args": [],
+        "default": false,
+        "docs": [],
+        "label": "pod_len",
+        "mutates": true,
+        "payable": false,
+        "returnType": {
+          "displayName": [
+            "ink",
+            "MessageResult"
+          ],
+          "type": 44
+        },
+        "selector": "0xaf63d0e1"
+      },
+      {
+        "args": [],
+        "default": false,
+        "docs": [],
+        "label": "create_user_pod",
+        "mutates": true,
+        "payable": false,
+        "returnType": {
+          "displayName": [
+            "ink",
+            "MessageResult"
+          ],
+          "type": 41
+        },
+        "selector": "0x1035bf95"
+      },
+      {
+        "args": [],
+        "default": false,
+        "docs": [],
+        "label": "user_pods",
+        "mutates": false,
+        "payable": false,
+        "returnType": {
+          "displayName": [
+            "ink",
+            "MessageResult"
+          ],
+          "type": 46
+        },
+        "selector": "0x2ba5c5d5"
+      }
+    ]
+  },
+  "storage": {
+    "root": {
+      "layout": {
+        "struct": {
+          "fields": [
+            {
+              "layout": {
+                "leaf": {
+                  "key": "0x00000000",
+                  "ty": 0
+                }
+              },
+              "name": "parent_contract"
+            },
+            {
+              "layout": {
+                "struct": {
+                  "fields": [
+                    {
+                      "layout": {
+                        "leaf": {
+                          "key": "0x00000000",
+                          "ty": 3
+                        }
+                      },
+                      "name": "next_id"
+                    },
+                    {
+                      "layout": {
+                        "root": {
+                          "layout": {
+                            "struct": {
+                              "fields": [
+                                {
+                                  "layout": {
+                                    "leaf": {
+                                      "key": "0x0c4ca8e4",
+                                      "ty": 3
+                                    }
+                                  },
+                                  "name": "id"
+                                },
+                                {
+                                  "layout": {
+                                    "leaf": {
+                                      "key": "0x0c4ca8e4",
+                                      "ty": 0
+                                    }
+                                  },
+                                  "name": "creator"
+                                },
+                                {
+                                  "layout": {
+                                    "leaf": {
+                                      "key": "0x0c4ca8e4",
+                                      "ty": 0
+                                    }
+                                  },
+                                  "name": "contract_id"
+                                },
+                                {
+                                  "layout": {
+                                    "leaf": {
+                                      "key": "0x0c4ca8e4",
+                                      "ty": 4
+                                    }
+                                  },
+                                  "name": "start_block"
+                                },
+                                {
+                                  "layout": {
+                                    "leaf": {
+                                      "key": "0x0c4ca8e4",
+                                      "ty": 5
+                                    }
+                                  },
+                                  "name": "name"
+                                },
+                                {
+                                  "layout": {
+                                    "enum": {
+                                      "dispatchKey": "0x0c4ca8e4",
+                                      "name": "Option",
+                                      "variants": {
+                                        "0": {
+                                          "fields": [],
+                                          "name": "None"
+                                        },
+                                        "1": {
+                                          "fields": [
+                                            {
+                                              "layout": {
+                                                "leaf": {
+                                                  "key": "0x0c4ca8e4",
+                                                  "ty": 6
+                                                }
+                                              },
+                                              "name": "0"
+                                            }
+                                          ],
+                                          "name": "Some"
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "name": "template_id"
+                                },
+                                {
+                                  "layout": {
+                                    "leaf": {
+                                      "key": "0x0c4ca8e4",
+                                      "ty": 5
+                                    }
+                                  },
+                                  "name": "image"
+                                },
+                                {
+                                  "layout": {
+                                    "leaf": {
+                                      "key": "0x0c4ca8e4",
+                                      "ty": 5
+                                    }
+                                  },
+                                  "name": "meta"
+                                },
+                                {
+                                  "layout": {
+                                    "enum": {
+                                      "dispatchKey": "0x0c4ca8e4",
+                                      "name": "Command",
+                                      "variants": {
+                                        "0": {
+                                          "fields": [
+                                            {
+                                              "layout": {
+                                                "leaf": {
+                                                  "key": "0x0c4ca8e4",
+                                                  "ty": 5
+                                                }
+                                              },
+                                              "name": "0"
+                                            }
+                                          ],
+                                          "name": "SH"
+                                        },
+                                        "1": {
+                                          "fields": [
+                                            {
+                                              "layout": {
+                                                "leaf": {
+                                                  "key": "0x0c4ca8e4",
+                                                  "ty": 5
+                                                }
+                                              },
+                                              "name": "0"
+                                            }
+                                          ],
+                                          "name": "BASH"
+                                        },
+                                        "2": {
+                                          "fields": [
+                                            {
+                                              "layout": {
+                                                "leaf": {
+                                                  "key": "0x0c4ca8e4",
+                                                  "ty": 5
+                                                }
+                                              },
+                                              "name": "0"
+                                            }
+                                          ],
+                                          "name": "ZSH"
+                                        },
+                                        "3": {
+                                          "fields": [],
+                                          "name": "NONE"
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "name": "command"
+                                },
+                                {
+                                  "layout": {
+                                    "leaf": {
+                                      "key": "0x0c4ca8e4",
+                                      "ty": 7
+                                    }
+                                  },
+                                  "name": "port"
+                                },
+                                {
+                                  "layout": {
+                                    "struct": {
+                                      "fields": [
+                                        {
+                                          "layout": {
+                                            "leaf": {
+                                              "key": "0x0c4ca8e4",
+                                              "ty": 4
+                                            }
+                                          },
+                                          "name": "cpu"
+                                        },
+                                        {
+                                          "layout": {
+                                            "leaf": {
+                                              "key": "0x0c4ca8e4",
+                                              "ty": 4
+                                            }
+                                          },
+                                          "name": "mem"
+                                        },
+                                        {
+                                          "layout": {
+                                            "leaf": {
+                                              "key": "0x0c4ca8e4",
+                                              "ty": 10
+                                            }
+                                          },
+                                          "name": "disk"
+                                        },
+                                        {
+                                          "layout": {
+                                            "leaf": {
+                                              "key": "0x0c4ca8e4",
+                                              "ty": 4
+                                            }
+                                          },
+                                          "name": "gpu"
+                                        }
+                                      ],
+                                      "name": "Cr"
+                                    }
+                                  },
+                                  "name": "cr"
+                                },
+                                {
+                                  "layout": {
+                                    "leaf": {
+                                      "key": "0x0c4ca8e4",
+                                      "ty": 13
+                                    }
+                                  },
+                                  "name": "side_container"
+                                },
+                                {
+                                  "layout": {
+                                    "enum": {
+                                      "dispatchKey": "0x0c4ca8e4",
+                                      "name": "TEEVersion",
+                                      "variants": {
+                                        "0": {
+                                          "fields": [],
+                                          "name": "SGX"
+                                        },
+                                        "1": {
+                                          "fields": [],
+                                          "name": "CVM"
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "name": "tee_version"
+                                }
+                              ],
+                              "name": "Pod"
+                            }
+                          },
+                          "root_key": "0x0c4ca8e4",
+                          "ty": 17
+                        }
+                      },
+                      "name": "store"
+                    }
+                  ],
+                  "name": "Pods"
+                }
+              },
+              "name": "pods"
+            },
+            {
+              "layout": {
+                "struct": {
+                  "fields": [
+                    {
+                      "layout": {
+                        "root": {
+                          "layout": {
+                            "leaf": {
+                              "key": "0xc4bc5860",
+                              "ty": 4
+                            }
+                          },
+                          "root_key": "0xc4bc5860",
+                          "ty": 25
+                        }
+                      },
+                      "name": "k1"
+                    },
+                    {
+                      "layout": {
+                        "leaf": {
+                          "key": "0x00000000",
+                          "ty": 4
+                        }
+                      },
+                      "name": "k1_length"
+                    },
+                    {
+                      "layout": {
+                        "root": {
+                          "layout": {
+                            "leaf": {
+                              "key": "0xbd4014c0",
+                              "ty": 4
+                            }
+                          },
+                          "root_key": "0xbd4014c0",
+                          "ty": 28
+                        }
+                      },
+                      "name": "k2_next_id"
+                    },
+                    {
+                      "layout": {
+                        "root": {
+                          "layout": {
+                            "leaf": {
+                              "key": "0x8bbb94cf",
+                              "ty": 3
+                            }
+                          },
+                          "root_key": "0x8bbb94cf",
+                          "ty": 31
+                        }
+                      },
+                      "name": "store"
+                    }
+                  ],
+                  "name": "UserPods"
+                }
+              },
+              "name": "pod_of_user"
+            }
+          ],
+          "name": "Cloud"
+        }
+      },
+      "root_key": "0x00000000",
+      "ty": 34
+    }
+  },
+  "types": [
+    {
+      "id": 0,
+      "type": {
+        "def": {
+          "composite": {
+            "fields": [
+              {
+                "type": 1,
+                "typeName": "[u8; 20]"
+              }
+            ]
+          }
+        },
+        "path": [
+          "primitive_types",
+          "H160"
+        ]
+      }
+    },
+    {
+      "id": 1,
+      "type": {
+        "def": {
+          "array": {
+            "len": 20,
+            "type": 2
+          }
+        }
+      }
+    },
+    {
+      "id": 2,
+      "type": {
+        "def": {
+          "primitive": "u8"
+        }
+      }
+    },
+    {
+      "id": 3,
+      "type": {
+        "def": {
+          "primitive": "u64"
+        }
+      }
+    },
+    {
+      "id": 4,
+      "type": {
+        "def": {
+          "primitive": "u32"
+        }
+      }
+    },
+    {
+      "id": 5,
+      "type": {
+        "def": {
+          "sequence": {
+            "type": 2
+          }
+        }
+      }
+    },
+    {
+      "id": 6,
+      "type": {
+        "def": {
+          "primitive": "u128"
+        }
+      }
+    },
+    {
+      "id": 7,
+      "type": {
+        "def": {
+          "sequence": {
+            "type": 8
+          }
+        }
+      }
+    },
+    {
+      "id": 8,
+      "type": {
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "fields": [
+                  {
+                    "type": 9,
+                    "typeName": "u16"
+                  }
+                ],
+                "index": 0,
+                "name": "Tcp"
+              },
+              {
+                "fields": [
+                  {
+                    "type": 9,
+                    "typeName": "u16"
+                  }
+                ],
+                "index": 1,
+                "name": "Udp"
+              },
+              {
+                "fields": [
+                  {
+                    "type": 9,
+                    "typeName": "u16"
+                  }
+                ],
+                "index": 2,
+                "name": "Http"
+              },
+              {
+                "fields": [
+                  {
+                    "type": 9,
+                    "typeName": "u16"
+                  }
+                ],
+                "index": 3,
+                "name": "Https"
+              },
+              {
+                "fields": [
+                  {
+                    "type": 9,
+                    "typeName": "u16"
+                  }
+                ],
+                "index": 4,
+                "name": "ProjectTcp"
+              },
+              {
+                "fields": [
+                  {
+                    "type": 9,
+                    "typeName": "u16"
+                  }
+                ],
+                "index": 5,
+                "name": "ProjectUdp"
+              }
+            ]
+          }
+        },
+        "path": [
+          "cloud",
+          "datas",
+          "Service"
+        ]
+      }
+    },
+    {
+      "id": 9,
+      "type": {
+        "def": {
+          "primitive": "u16"
+        }
+      }
+    },
+    {
+      "id": 10,
+      "type": {
+        "def": {
+          "sequence": {
+            "type": 11
+          }
+        }
+      }
+    },
+    {
+      "id": 11,
+      "type": {
+        "def": {
+          "composite": {
+            "fields": [
+              {
+                "name": "path",
+                "type": 12,
+                "typeName": "DiskClass"
+              },
+              {
+                "name": "size",
+                "type": 4,
+                "typeName": "u32"
+              }
+            ]
+          }
+        },
+        "path": [
+          "cloud",
+          "datas",
+          "Disk"
+        ]
+      }
+    },
+    {
+      "id": 12,
+      "type": {
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "fields": [
+                  {
+                    "type": 5,
+                    "typeName": "Vec<u8>"
+                  }
+                ],
+                "index": 0,
+                "name": "SSD"
+              }
+            ]
+          }
+        },
+        "path": [
+          "cloud",
+          "datas",
+          "DiskClass"
+        ]
+      }
+    },
+    {
+      "id": 13,
+      "type": {
+        "def": {
+          "sequence": {
+            "type": 14
+          }
+        }
+      }
+    },
+    {
+      "id": 14,
+      "type": {
+        "def": {
+          "composite": {
+            "fields": [
+              {
+                "name": "image",
+                "type": 5,
+                "typeName": "Vec<u8>"
+              },
+              {
+                "name": "command",
+                "type": 15,
+                "typeName": "Command"
+              },
+              {
+                "name": "port",
+                "type": 7,
+                "typeName": "Vec<Service>"
+              },
+              {
+                "name": "cr",
+                "type": 16,
+                "typeName": "Cr"
+              }
+            ]
+          }
+        },
+        "path": [
+          "cloud",
+          "datas",
+          "Container"
+        ]
+      }
+    },
+    {
+      "id": 15,
+      "type": {
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "fields": [
+                  {
+                    "type": 5,
+                    "typeName": "Vec<u8>"
+                  }
+                ],
+                "index": 0,
+                "name": "SH"
+              },
+              {
+                "fields": [
+                  {
+                    "type": 5,
+                    "typeName": "Vec<u8>"
+                  }
+                ],
+                "index": 1,
+                "name": "BASH"
+              },
+              {
+                "fields": [
+                  {
+                    "type": 5,
+                    "typeName": "Vec<u8>"
+                  }
+                ],
+                "index": 2,
+                "name": "ZSH"
+              },
+              {
+                "index": 3,
+                "name": "NONE"
+              }
+            ]
+          }
+        },
+        "path": [
+          "cloud",
+          "datas",
+          "Command"
+        ]
+      }
+    },
+    {
+      "id": 16,
+      "type": {
+        "def": {
+          "composite": {
+            "fields": [
+              {
+                "name": "cpu",
+                "type": 4,
+                "typeName": "u32"
+              },
+              {
+                "name": "mem",
+                "type": 4,
+                "typeName": "u32"
+              },
+              {
+                "name": "disk",
+                "type": 10,
+                "typeName": "Vec<Disk>"
+              },
+              {
+                "name": "gpu",
+                "type": 4,
+                "typeName": "u32"
+              }
+            ]
+          }
+        },
+        "path": [
+          "cloud",
+          "datas",
+          "Cr"
+        ]
+      }
+    },
+    {
+      "id": 17,
+      "type": {
+        "def": {
+          "composite": {}
+        },
+        "params": [
+          {
+            "name": "K",
+            "type": 3
+          },
+          {
+            "name": "V",
+            "type": 18
+          },
+          {
+            "name": "KeyType",
+            "type": 21
+          }
+        ],
+        "path": [
+          "ink_storage",
+          "lazy",
+          "mapping",
+          "Mapping"
+        ]
+      }
+    },
+    {
+      "id": 18,
+      "type": {
+        "def": {
+          "composite": {
+            "fields": [
+              {
+                "name": "id",
+                "type": 3,
+                "typeName": "u64"
+              },
+              {
+                "name": "creator",
+                "type": 0,
+                "typeName": "Address"
+              },
+              {
+                "name": "contract_id",
+                "type": 0,
+                "typeName": "Address"
+              },
+              {
+                "name": "start_block",
+                "type": 4,
+                "typeName": "BlockNumber"
+              },
+              {
+                "name": "name",
+                "type": 5,
+                "typeName": "Vec<u8>"
+              },
+              {
+                "name": "template_id",
+                "type": 19,
+                "typeName": "Option<u128>"
+              },
+              {
+                "name": "image",
+                "type": 5,
+                "typeName": "Vec<u8>"
+              },
+              {
+                "name": "meta",
+                "type": 5,
+                "typeName": "Vec<u8>"
+              },
+              {
+                "name": "command",
+                "type": 15,
+                "typeName": "Command"
+              },
+              {
+                "name": "port",
+                "type": 7,
+                "typeName": "Vec<Service>"
+              },
+              {
+                "name": "cr",
+                "type": 16,
+                "typeName": "Cr"
+              },
+              {
+                "name": "side_container",
+                "type": 13,
+                "typeName": "Vec<Container>"
+              },
+              {
+                "name": "tee_version",
+                "type": 20,
+                "typeName": "TEEVersion"
+              }
+            ]
+          }
+        },
+        "path": [
+          "cloud",
+          "datas",
+          "Pod"
+        ]
+      }
+    },
+    {
+      "id": 19,
+      "type": {
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "index": 0,
+                "name": "None"
+              },
+              {
+                "fields": [
+                  {
+                    "type": 6
+                  }
+                ],
+                "index": 1,
+                "name": "Some"
+              }
+            ]
+          }
+        },
+        "params": [
+          {
+            "name": "T",
+            "type": 6
+          }
+        ],
+        "path": [
+          "Option"
+        ]
+      }
+    },
+    {
+      "id": 20,
+      "type": {
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "index": 0,
+                "name": "SGX"
+              },
+              {
+                "index": 1,
+                "name": "CVM"
+              }
+            ]
+          }
+        },
+        "path": [
+          "cloud",
+          "datas",
+          "TEEVersion"
+        ]
+      }
+    },
+    {
+      "id": 21,
+      "type": {
+        "def": {
+          "composite": {}
+        },
+        "params": [
+          {
+            "name": "L",
+            "type": 22
+          },
+          {
+            "name": "R",
+            "type": 23
+          }
+        ],
+        "path": [
+          "ink_storage_traits",
+          "impls",
+          "ResolverKey"
+        ]
+      }
+    },
+    {
+      "id": 22,
+      "type": {
+        "def": {
+          "composite": {}
+        },
+        "path": [
+          "ink_storage_traits",
+          "impls",
+          "AutoKey"
+        ]
+      }
+    },
+    {
+      "id": 23,
+      "type": {
+        "def": {
+          "composite": {}
+        },
+        "params": [
+          {
+            "name": "ParentKey",
+            "type": 24
+          }
+        ],
+        "path": [
+          "ink_storage_traits",
+          "impls",
+          "ManualKey"
+        ]
+      }
+    },
+    {
+      "id": 24,
+      "type": {
+        "def": {
+          "tuple": []
+        }
+      }
+    },
+    {
+      "id": 25,
+      "type": {
+        "def": {
+          "composite": {}
+        },
+        "params": [
+          {
+            "name": "K",
+            "type": 0
+          },
+          {
+            "name": "V",
+            "type": 4
+          },
+          {
+            "name": "KeyType",
+            "type": 26
+          }
+        ],
+        "path": [
+          "ink_storage",
+          "lazy",
+          "mapping",
+          "Mapping"
+        ]
+      }
+    },
+    {
+      "id": 26,
+      "type": {
+        "def": {
+          "composite": {}
+        },
+        "params": [
+          {
+            "name": "L",
+            "type": 22
+          },
+          {
+            "name": "R",
+            "type": 27
+          }
+        ],
+        "path": [
+          "ink_storage_traits",
+          "impls",
+          "ResolverKey"
+        ]
+      }
+    },
+    {
+      "id": 27,
+      "type": {
+        "def": {
+          "composite": {}
+        },
+        "params": [
+          {
+            "name": "ParentKey",
+            "type": 24
+          }
+        ],
+        "path": [
+          "ink_storage_traits",
+          "impls",
+          "ManualKey"
+        ]
+      }
+    },
+    {
+      "id": 28,
+      "type": {
+        "def": {
+          "composite": {}
+        },
+        "params": [
+          {
+            "name": "K",
+            "type": 4
+          },
+          {
+            "name": "V",
+            "type": 4
+          },
+          {
+            "name": "KeyType",
+            "type": 29
+          }
+        ],
+        "path": [
+          "ink_storage",
+          "lazy",
+          "mapping",
+          "Mapping"
+        ]
+      }
+    },
+    {
+      "id": 29,
+      "type": {
+        "def": {
+          "composite": {}
+        },
+        "params": [
+          {
+            "name": "L",
+            "type": 22
+          },
+          {
+            "name": "R",
+            "type": 30
+          }
+        ],
+        "path": [
+          "ink_storage_traits",
+          "impls",
+          "ResolverKey"
+        ]
+      }
+    },
+    {
+      "id": 30,
+      "type": {
+        "def": {
+          "composite": {}
+        },
+        "params": [
+          {
+            "name": "ParentKey",
+            "type": 24
+          }
+        ],
+        "path": [
+          "ink_storage_traits",
+          "impls",
+          "ManualKey"
+        ]
+      }
+    },
+    {
+      "id": 31,
+      "type": {
+        "def": {
+          "composite": {}
+        },
+        "params": [
+          {
+            "name": "K",
+            "type": 3
+          },
+          {
+            "name": "V",
+            "type": 3
+          },
+          {
+            "name": "KeyType",
+            "type": 32
+          }
+        ],
+        "path": [
+          "ink_storage",
+          "lazy",
+          "mapping",
+          "Mapping"
+        ]
+      }
+    },
+    {
+      "id": 32,
+      "type": {
+        "def": {
+          "composite": {}
+        },
+        "params": [
+          {
+            "name": "L",
+            "type": 22
+          },
+          {
+            "name": "R",
+            "type": 33
+          }
+        ],
+        "path": [
+          "ink_storage_traits",
+          "impls",
+          "ResolverKey"
+        ]
+      }
+    },
+    {
+      "id": 33,
+      "type": {
+        "def": {
+          "composite": {}
+        },
+        "params": [
+          {
+            "name": "ParentKey",
+            "type": 24
+          }
+        ],
+        "path": [
+          "ink_storage_traits",
+          "impls",
+          "ManualKey"
+        ]
+      }
+    },
+    {
+      "id": 34,
+      "type": {
+        "def": {
+          "composite": {
+            "fields": [
+              {
+                "name": "parent_contract",
+                "type": 0,
+                "typeName": "<Address as::ink::storage::traits::AutoStorableHint<::ink::\nstorage::traits::ManualKey<4096766119u32, ()>,>>::Type"
+              },
+              {
+                "name": "pods",
+                "type": 35,
+                "typeName": "<Pods as::ink::storage::traits::AutoStorableHint<::ink::storage\n::traits::ManualKey<1631548939u32, ()>,>>::Type"
+              },
+              {
+                "name": "pod_of_user",
+                "type": 36,
+                "typeName": "<UserPods as::ink::storage::traits::AutoStorableHint<::ink::\nstorage::traits::ManualKey<4225538437u32, ()>,>>::Type"
+              }
+            ]
+          }
+        },
+        "path": [
+          "cloud",
+          "cloud",
+          "Cloud"
+        ]
+      }
+    },
+    {
+      "id": 35,
+      "type": {
+        "def": {
+          "composite": {
+            "fields": [
+              {
+                "name": "next_id",
+                "type": 3,
+                "typeName": "<u64 as::ink::storage::traits::AutoStorableHint<::ink::storage\n::traits::ManualKey<3892958285u32, ()>,>>::Type"
+              },
+              {
+                "name": "store",
+                "type": 17,
+                "typeName": "<ink::storage::Mapping<u64, Pod, ink::storage::traits::AutoKey>\nas::ink::storage::traits::AutoStorableHint<::ink::storage::\ntraits::ManualKey<3836234764u32, ()>,>>::Type"
+              }
+            ]
+          }
+        },
+        "path": [
+          "cloud",
+          "datas",
+          "Pods"
+        ]
+      }
+    },
+    {
+      "id": 36,
+      "type": {
+        "def": {
+          "composite": {
+            "fields": [
+              {
+                "name": "k1",
+                "type": 25,
+                "typeName": "<ink::storage::Mapping<Address, u32> as::ink::storage::traits::\nAutoStorableHint<::ink::storage::traits::ManualKey<1616428228u32,\n()>,>>::Type"
+              },
+              {
+                "name": "k1_length",
+                "type": 4,
+                "typeName": "<u32 as::ink::storage::traits::AutoStorableHint<::ink::storage\n::traits::ManualKey<1978835996u32, ()>,>>::Type"
+              },
+              {
+                "name": "k2_next_id",
+                "type": 28,
+                "typeName": "<ink::storage::Mapping<u32, u32> as::ink::storage::traits::\nAutoStorableHint<::ink::storage::traits::ManualKey<3222552765u32,\n()>,>>::Type"
+              },
+              {
+                "name": "store",
+                "type": 31,
+                "typeName": "<ink::storage::Mapping<u64, u64> as::ink::storage::traits::\nAutoStorableHint<::ink::storage::traits::ManualKey<3482631051u32,\n()>,>>::Type"
+              }
+            ]
+          }
+        },
+        "path": [
+          "cloud",
+          "datas",
+          "UserPods"
+        ]
+      }
+    },
+    {
+      "id": 37,
+      "type": {
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "fields": [
+                  {
+                    "type": 24
+                  }
+                ],
+                "index": 0,
+                "name": "Ok"
+              },
+              {
+                "fields": [
+                  {
+                    "type": 38
+                  }
+                ],
+                "index": 1,
+                "name": "Err"
+              }
+            ]
+          }
+        },
+        "params": [
+          {
+            "name": "T",
+            "type": 24
+          },
+          {
+            "name": "E",
+            "type": 38
+          }
+        ],
+        "path": [
+          "Result"
+        ]
+      }
+    },
+    {
+      "id": 38,
+      "type": {
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "index": 1,
+                "name": "CouldNotReadInput"
+              }
+            ]
+          }
+        },
+        "path": [
+          "ink_primitives",
+          "LangError"
+        ]
+      }
+    },
+    {
+      "id": 39,
+      "type": {
+        "def": {
+          "composite": {
+            "fields": [
+              {
+                "type": 40,
+                "typeName": "[u8; 32]"
+              }
+            ]
+          }
+        },
+        "path": [
+          "primitive_types",
+          "H256"
+        ]
+      }
+    },
+    {
+      "id": 40,
+      "type": {
+        "def": {
+          "array": {
+            "len": 32,
+            "type": 2
+          }
+        }
+      }
+    },
+    {
+      "id": 41,
+      "type": {
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "fields": [
+                  {
+                    "type": 42
+                  }
+                ],
+                "index": 0,
+                "name": "Ok"
+              },
+              {
+                "fields": [
+                  {
+                    "type": 38
+                  }
+                ],
+                "index": 1,
+                "name": "Err"
+              }
+            ]
+          }
+        },
+        "params": [
+          {
+            "name": "T",
+            "type": 42
+          },
+          {
+            "name": "E",
+            "type": 38
+          }
+        ],
+        "path": [
+          "Result"
+        ]
+      }
+    },
+    {
+      "id": 42,
+      "type": {
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "fields": [
+                  {
+                    "type": 24
+                  }
+                ],
+                "index": 0,
+                "name": "Ok"
+              },
+              {
+                "fields": [
+                  {
+                    "type": 43
+                  }
+                ],
+                "index": 1,
+                "name": "Err"
+              }
+            ]
+          }
+        },
+        "params": [
+          {
+            "name": "T",
+            "type": 24
+          },
+          {
+            "name": "E",
+            "type": 43
+          }
+        ],
+        "path": [
+          "Result"
+        ]
+      }
+    },
+    {
+      "id": 43,
+      "type": {
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "index": 0,
+                "name": "SetCodeFailed"
+              },
+              {
+                "index": 1,
+                "name": "MustCallByMainContract"
+              }
+            ]
+          }
+        },
+        "path": [
+          "cloud",
+          "errors",
+          "Error"
+        ]
+      }
+    },
+    {
+      "id": 44,
+      "type": {
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "fields": [
+                  {
+                    "type": 45
+                  }
+                ],
+                "index": 0,
+                "name": "Ok"
+              },
+              {
+                "fields": [
+                  {
+                    "type": 38
+                  }
+                ],
+                "index": 1,
+                "name": "Err"
+              }
+            ]
+          }
+        },
+        "params": [
+          {
+            "name": "T",
+            "type": 45
+          },
+          {
+            "name": "E",
+            "type": 38
+          }
+        ],
+        "path": [
+          "Result"
+        ]
+      }
+    },
+    {
+      "id": 45,
+      "type": {
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "fields": [
+                  {
+                    "type": 3
+                  }
+                ],
+                "index": 0,
+                "name": "Ok"
+              },
+              {
+                "fields": [
+                  {
+                    "type": 43
+                  }
+                ],
+                "index": 1,
+                "name": "Err"
+              }
+            ]
+          }
+        },
+        "params": [
+          {
+            "name": "T",
+            "type": 3
+          },
+          {
+            "name": "E",
+            "type": 43
+          }
+        ],
+        "path": [
+          "Result"
+        ]
+      }
+    },
+    {
+      "id": 46,
+      "type": {
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "fields": [
+                  {
+                    "type": 47
+                  }
+                ],
+                "index": 0,
+                "name": "Ok"
+              },
+              {
+                "fields": [
+                  {
+                    "type": 38
+                  }
+                ],
+                "index": 1,
+                "name": "Err"
+              }
+            ]
+          }
+        },
+        "params": [
+          {
+            "name": "T",
+            "type": 47
+          },
+          {
+            "name": "E",
+            "type": 38
+          }
+        ],
+        "path": [
+          "Result"
+        ]
+      }
+    },
+    {
+      "id": 47,
+      "type": {
+        "def": {
+          "sequence": {
+            "type": 48
+          }
+        }
+      }
+    },
+    {
+      "id": 48,
+      "type": {
+        "def": {
+          "tuple": [
+            4,
+            18
+          ]
+        }
+      }
+    },
+    {
+      "id": 49,
+      "type": {
+        "def": {
+          "composite": {
+            "fields": [
+              {
+                "type": 40,
+                "typeName": "[u8; 32]"
+              }
+            ]
+          }
+        },
+        "path": [
+          "ink_primitives",
+          "types",
+          "AccountId"
+        ]
+      }
+    },
+    {
+      "id": 50,
+      "type": {
+        "def": {
+          "composite": {
+            "fields": [
+              {
+                "type": 40,
+                "typeName": "[u8; 32]"
+              }
+            ]
+          }
+        },
+        "path": [
+          "ink_primitives",
+          "types",
+          "Hash"
+        ]
+      }
+    },
+    {
+      "id": 51,
+      "type": {
+        "def": {
+          "variant": {}
+        },
+        "path": [
+          "ink_primitives",
+          "types",
+          "NoChainExtension"
+        ]
+      }
+    }
+  ],
+  "version": 5
+}
