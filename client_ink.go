@@ -24,7 +24,7 @@ type Ink interface {
 }
 
 // Dry run contract
-func DryRun[T any](
+func DryRunInk[T any](
 	contractIns Ink,
 	origin types.AccountID,
 	amount types.U128,
@@ -111,9 +111,9 @@ func DryRun[T any](
 }
 
 // Call contract use substrate api
-func Call(
+func CallInk(
 	contractIns Ink,
-	signer *Signer,
+	signer SignerType,
 	amount types.U128,
 	gas_limit types.Weight,
 	storage_deposit_limit types.U128,
@@ -130,7 +130,7 @@ func Call(
 	if client.Debug {
 		util.LogWithYellow("[ Call contract ]", addres.Hex())
 		util.LogWithYellow("[ Call   method ]", contractInput.Selector)
-		util.LogWithYellow("[ Call   origin ]", "0x"+hex.EncodeToString(signer.PublicKey))
+		util.LogWithYellow("[ Call   origin ]", "0x"+hex.EncodeToString(signer.Public()))
 		util.LogWithYellow("[ Call     args ]", "0x"+hex.EncodeToString(inputBt))
 		util.LogWithYellow("[       RefTime ]", gas_limit.RefTime.Int64())
 		util.LogWithYellow("[     ProofSize ]", gas_limit.ProofSize.Int64())
@@ -155,6 +155,48 @@ func Call(
 	}
 
 	return client.SignAndSubmit(signer, call, true)
+}
+
+func TxCall(
+	contractIns Ink,
+	signer SignerType,
+	amount types.U128,
+	gas_limit types.Weight,
+	storage_deposit_limit types.U128,
+	contractInput util.InkContractInput,
+) (*types.Call, error) {
+	inputBt, err := contractInput.Encode()
+	if err != nil {
+		return nil, errors.New("contractInput.Encode: " + err.Error())
+	}
+
+	client := contractIns.Client()
+	addres := contractIns.ContractAddress()
+
+	if client.Debug {
+		util.LogWithYellow("[ Call contract ]", addres.Hex())
+		util.LogWithYellow("[ Call   method ]", contractInput.Selector)
+		util.LogWithYellow("[ Call   origin ]", "0x"+hex.EncodeToString(signer.Public()))
+		util.LogWithYellow("[ Call     args ]", "0x"+hex.EncodeToString(inputBt))
+		util.LogWithYellow("[       RefTime ]", gas_limit.RefTime.Int64())
+		util.LogWithYellow("[     ProofSize ]", gas_limit.ProofSize.Int64())
+		util.LogWithYellow("[  DepositLimit ]", storage_deposit_limit.Int.String())
+		fmt.Println("")
+	}
+
+	runtimeCall := revive.MakeCallCall(
+		addres,
+		types.NewUCompact(amount.Int),
+		gtypes.Weight{
+			RefTime:   gas_limit.RefTime,
+			ProofSize: gas_limit.ProofSize,
+		},
+		types.NewUCompact(storage_deposit_limit.Int),
+		inputBt,
+	)
+
+	call, err := (runtimeCall).AsCall()
+	return &call, err
 }
 
 // DryRun param of DryRun
@@ -184,8 +226,6 @@ type DryRunReturnGas struct {
 
 // Call param of Call
 type CallParams struct {
-	Signer              *Signer
-	PayAmount           types.U128
-	GasLimit            types.Weight
-	StorageDepositLimit types.U128
+	Signer    SignerType
+	PayAmount types.U128
 }

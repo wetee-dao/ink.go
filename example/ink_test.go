@@ -19,7 +19,6 @@ func TestInk(t *testing.T) {
 	}
 
 	// 初始化私钥
-
 	p, err := chain.Sr25519PairFromSecret("//Alice", 42)
 	if err != nil {
 		util.LogWithPurple("Sr25519PairFromSecret", err)
@@ -49,26 +48,15 @@ func TestInk(t *testing.T) {
 	}
 	initLen := len(*data)
 
-	_, gas, err := contract.DryRunCreateUserPod(
-		chain.DefaultParamWithOragin(p.AccountID()),
-	)
-	if err != nil {
-		fmt.Println(err)
-	}
-
 	err = contract.CallCreateUserPod(
 		chain.CallParams{
-			Signer:              &p,
-			PayAmount:           types.NewU128(*big.NewInt(0)),
-			GasLimit:            gas.GasRequired,
-			StorageDepositLimit: gas.StorageDeposit,
+			Signer:    &p,
+			PayAmount: types.NewU128(*big.NewInt(0)),
 		},
 	)
 	if err != nil {
-		fmt.Println(err)
+		t.Fatal(err)
 	}
-
-	fmt.Println(err)
 
 	// query data
 	data2, _, err := contract.QueryUserPods(

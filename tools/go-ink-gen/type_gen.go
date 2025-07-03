@@ -74,12 +74,10 @@ func (r *ReviveGen) SaveTypes() {
 			argTypeStr = argTypeStr + ","
 		}
 		argStr := ""
-		for i, arg := range args {
+		for _, arg := range args {
 			argType := strings.Split(arg, " ")
 			argStr = argStr + argType[0]
-			if i != len(args)-1 {
-				argStr = argStr + ","
-			}
+			argStr = argStr + ","
 		}
 
 		calls.Funcs = append(calls.Funcs, Func{

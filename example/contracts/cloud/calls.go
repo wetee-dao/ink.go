@@ -23,7 +23,7 @@ func (c *Cloud) ContractAddress() types.H160 {
 func (c *Cloud) DryRunSetCode(
 	code_hash types.H256, params chain.DryRunCallParams,
 ) (*util.Result[util.NullTuple, Error], *chain.DryRunReturnGas, error) {
-	v, gas, err := chain.DryRun[util.Result[util.NullTuple, Error]](
+	v, gas, err := chain.DryRunInk[util.Result[util.NullTuple, Error]](
 		c,
 		params.Origin,
 		params.PayAmount,
@@ -47,12 +47,40 @@ func (c *Cloud) DryRunSetCode(
 func (c *Cloud) CallSetCode(
 	code_hash types.H256, params chain.CallParams,
 ) error {
-	return chain.Call(
+	_param := chain.DefaultParamWithOragin(params.Signer.AccountID())
+	_param.PayAmount = params.PayAmount
+	_, gas, err := c.DryRunSetCode(code_hash, _param)
+	if err != nil {
+		return err
+	}
+	return chain.CallInk(
 		c,
 		params.Signer,
 		params.PayAmount,
-		params.GasLimit,
-		params.StorageDepositLimit,
+		gas.GasRequired,
+		gas.StorageDeposit,
+		util.InkContractInput{
+			Selector: "set_code",
+			Args:     []any{code_hash},
+		},
+	)
+}
+
+func (c *Cloud) TxCallOfSetCode(
+	code_hash types.H256, params chain.CallParams,
+) (*types.Call, error) {
+	_param := chain.DefaultParamWithOragin(params.Signer.AccountID())
+	_param.PayAmount = params.PayAmount
+	_, gas, err := c.DryRunSetCode(code_hash, _param)
+	if err != nil {
+		return nil, err
+	}
+	return chain.TxCall(
+		c,
+		params.Signer,
+		params.PayAmount,
+		gas.GasRequired,
+		gas.StorageDeposit,
 		util.InkContractInput{
 			Selector: "set_code",
 			Args:     []any{code_hash},
@@ -63,7 +91,7 @@ func (c *Cloud) CallSetCode(
 func (c *Cloud) DryRunPodLen(
 	params chain.DryRunCallParams,
 ) (*util.Result[uint64, Error], *chain.DryRunReturnGas, error) {
-	v, gas, err := chain.DryRun[util.Result[uint64, Error]](
+	v, gas, err := chain.DryRunInk[util.Result[uint64, Error]](
 		c,
 		params.Origin,
 		params.PayAmount,
@@ -87,12 +115,40 @@ func (c *Cloud) DryRunPodLen(
 func (c *Cloud) CallPodLen(
 	params chain.CallParams,
 ) error {
-	return chain.Call(
+	_param := chain.DefaultParamWithOragin(params.Signer.AccountID())
+	_param.PayAmount = params.PayAmount
+	_, gas, err := c.DryRunPodLen(_param)
+	if err != nil {
+		return err
+	}
+	return chain.CallInk(
 		c,
 		params.Signer,
 		params.PayAmount,
-		params.GasLimit,
-		params.StorageDepositLimit,
+		gas.GasRequired,
+		gas.StorageDeposit,
+		util.InkContractInput{
+			Selector: "pod_len",
+			Args:     []any{},
+		},
+	)
+}
+
+func (c *Cloud) TxCallOfPodLen(
+	params chain.CallParams,
+) (*types.Call, error) {
+	_param := chain.DefaultParamWithOragin(params.Signer.AccountID())
+	_param.PayAmount = params.PayAmount
+	_, gas, err := c.DryRunPodLen(_param)
+	if err != nil {
+		return nil, err
+	}
+	return chain.TxCall(
+		c,
+		params.Signer,
+		params.PayAmount,
+		gas.GasRequired,
+		gas.StorageDeposit,
 		util.InkContractInput{
 			Selector: "pod_len",
 			Args:     []any{},
@@ -103,7 +159,7 @@ func (c *Cloud) CallPodLen(
 func (c *Cloud) DryRunCreateUserPod(
 	params chain.DryRunCallParams,
 ) (*util.Result[util.NullTuple, Error], *chain.DryRunReturnGas, error) {
-	v, gas, err := chain.DryRun[util.Result[util.NullTuple, Error]](
+	v, gas, err := chain.DryRunInk[util.Result[util.NullTuple, Error]](
 		c,
 		params.Origin,
 		params.PayAmount,
@@ -127,12 +183,40 @@ func (c *Cloud) DryRunCreateUserPod(
 func (c *Cloud) CallCreateUserPod(
 	params chain.CallParams,
 ) error {
-	return chain.Call(
+	_param := chain.DefaultParamWithOragin(params.Signer.AccountID())
+	_param.PayAmount = params.PayAmount
+	_, gas, err := c.DryRunCreateUserPod(_param)
+	if err != nil {
+		return err
+	}
+	return chain.CallInk(
 		c,
 		params.Signer,
 		params.PayAmount,
-		params.GasLimit,
-		params.StorageDepositLimit,
+		gas.GasRequired,
+		gas.StorageDeposit,
+		util.InkContractInput{
+			Selector: "create_user_pod",
+			Args:     []any{},
+		},
+	)
+}
+
+func (c *Cloud) TxCallOfCreateUserPod(
+	params chain.CallParams,
+) (*types.Call, error) {
+	_param := chain.DefaultParamWithOragin(params.Signer.AccountID())
+	_param.PayAmount = params.PayAmount
+	_, gas, err := c.DryRunCreateUserPod(_param)
+	if err != nil {
+		return nil, err
+	}
+	return chain.TxCall(
+		c,
+		params.Signer,
+		params.PayAmount,
+		gas.GasRequired,
+		gas.StorageDeposit,
 		util.InkContractInput{
 			Selector: "create_user_pod",
 			Args:     []any{},
@@ -143,7 +227,7 @@ func (c *Cloud) CallCreateUserPod(
 func (c *Cloud) QueryUserPods(
 	params chain.DryRunCallParams,
 ) (*[]Tuple_48, *chain.DryRunReturnGas, error) {
-	v, gas, err := chain.DryRun[[]Tuple_48](
+	v, gas, err := chain.DryRunInk[[]Tuple_48](
 		c,
 		params.Origin,
 		params.PayAmount,

@@ -170,28 +170,14 @@ contract := dao.Dao{
     Address:     contractAddress,
 }
 
-// Step4: dry-run contract
-result, gas, err := contract.DryRunMemberPublicJoin(
-	chain.DefaultParamWithOragin(p.AccountID()),
-)
-if err == nil {
-	fmt.Println(result.E)
-} else {
-	fmt.Println(err)
-	return
-}
-
-// Step5: call contract
+// Step4: call contract
 err = contract.CallMemberPublicJoin(
-	chain.CallParams{
-		Signer:              &p,
-		PayAmount:           types.NewU128(*big.NewInt(0)),
-		GasLimit:            gas.GasConsumed,
-		StorageDepositLimit: gas.StorageDeposit,
-	},
+    chain.CallParams{
+        Signer:    &p,
+        PayAmount: types.NewU128(*big.NewInt(0)),
+    },
 )
 if err != nil {
 	fmt.Println(err)
 }
-
 ```

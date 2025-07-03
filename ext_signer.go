@@ -12,11 +12,21 @@ import (
 	"golang.org/x/crypto/blake2b"
 )
 
-type SignerApi interface {
+type SignerType interface {
 	Public() []byte
+	AccountID() types.AccountID
 	Sign([]byte) ([]byte, error)
 	Verify([]byte, []byte) bool
 	SignType() uint8
+}
+
+type PartialSignerType interface {
+	Public() []byte
+	AccountID() types.AccountID
+	Sign([]byte) ([]byte, error)
+	Verify([]byte, []byte) bool
+	SignType() uint8
+	PartialSign(msg []byte) ([]byte, error)
 }
 
 // Sr25519 Signer or Ed25519 Signer

@@ -113,7 +113,7 @@ func (c *ChainClient) GetBlockNumber() (types.BlockNumber, error) {
 
 // 获取账户信息
 // Get account info
-func (c *ChainClient) GetAccount(address SignerApi) (*types.AccountInfo, error) {
+func (c *ChainClient) GetAccount(address SignerType) (*types.AccountInfo, error) {
 	key, err := types.CreateStorageKey(c.Meta, "System", "Account", address.Public())
 	if err != nil {
 		panic(err)
@@ -125,16 +125,11 @@ func (c *ChainClient) GetAccount(address SignerApi) (*types.AccountInfo, error) 
 
 // 签名并提交交易
 // Sign and submit transaction
-func (c *ChainClient) SignAndSubmit(signer SignerApi, call types.Call, untilFinalized bool) error {
+func (c *ChainClient) SignAndSubmit(signer SignerType, call types.Call, untilFinalized bool) error {
 	accountInfo, err := c.GetAccount(signer)
 	if err != nil {
 		return errors.New("GetAccountInfo error: " + err.Error())
 	}
-
-	// call, err := (runtimeCall).AsCall()
-	// if err != nil {
-	// 	return errors.New("(runtimeCall).AsCall() error: " + err.Error())
-	// }
 
 	ext := NewExtrinsic(call)
 	err = ext.Sign(signer, c.Meta, extrinsic.WithEra(types.ExtrinsicEra{IsImmortalEra: true}, c.Hash),
@@ -510,7 +505,7 @@ func (c *ChainClient) BalanceOfH160(address string) (types.U128, error) {
 	return balance, nil
 }
 
-func (c *ChainClient) MapReviveAccount(signer SignerApi) error {
+func (c *ChainClient) MapReviveAccount(signer SignerType) error {
 	runtimeCall := revive.MakeMapAccountCall()
 
 	call, err := (runtimeCall).AsCall()

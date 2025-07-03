@@ -65,7 +65,7 @@ func (c *{{.Name}}) ContractAddress() types.H160 {
 func (c *{{$.Name}}) {{if .IsMut}}DryRun{{else}}Query{{end}}{{CamelCase .FuncName}}(
 	{{.ArgTypeStr}} params chain.DryRunCallParams,
 ) (*{{.Return}}, *chain.DryRunReturnGas, error) {
-	v, gas, err := chain.DryRun[{{.Return}}](
+	v, gas, err := chain.DryRunInk[{{.Return}}](
 		c,
 		params.Origin,
 		params.PayAmount,
@@ -90,12 +90,40 @@ func (c *{{$.Name}}) {{if .IsMut}}DryRun{{else}}Query{{end}}{{CamelCase .FuncNam
 func (c *{{$.Name}}) Call{{CamelCase .FuncName}}(
 	{{.ArgTypeStr}} params chain.CallParams,
 ) error {
-	return chain.Call(
+ 	_param := chain.DefaultParamWithOragin(params.Signer.AccountID())
+	_param.PayAmount = params.PayAmount
+	_, gas, err := c.DryRun{{CamelCase .FuncName}}({{.ArgStr}}_param)
+	if err != nil {
+		return err
+	}
+	return chain.CallInk(
 		c,
 		params.Signer,
 		params.PayAmount,
-		params.GasLimit,
-		params.StorageDepositLimit,
+		gas.GasRequired,
+		gas.StorageDeposit,
+		util.InkContractInput{
+			Selector: "{{.FuncName}}",
+			Args:     []any{ {{.ArgStr}} },
+		},
+	)
+}
+
+func (c *{{$.Name}}) TxCallOf{{CamelCase .FuncName}}(
+	{{.ArgTypeStr}} params chain.CallParams,
+) (*types.Call, error) {
+ 	_param := chain.DefaultParamWithOragin(params.Signer.AccountID())
+	_param.PayAmount = params.PayAmount
+	_, gas, err := c.DryRun{{CamelCase .FuncName}}({{.ArgStr}}_param)
+	if err != nil {
+		return nil,err
+	}
+	return chain.TxCall(
+		c,
+		params.Signer,
+		params.PayAmount,
+		gas.GasRequired,
+		gas.StorageDeposit,
 		util.InkContractInput{
 			Selector: "{{.FuncName}}",
 			Args:     []any{ {{.ArgStr}} },
