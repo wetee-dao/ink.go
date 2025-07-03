@@ -12,6 +12,13 @@ import (
 	"golang.org/x/crypto/blake2b"
 )
 
+type SignerApi interface {
+	Public() []byte
+	Sign([]byte) ([]byte, error)
+	Verify([]byte, []byte) bool
+	SignType() uint8
+}
+
 // Sr25519 Signer or Ed25519 Signer
 type Signer struct {
 	subkey.KeyPair
@@ -21,6 +28,10 @@ type Signer struct {
 	PublicKey []byte
 	// key type
 	KeyType uint8
+}
+
+func (e *Signer) SignType() uint8 {
+	return e.KeyType
 }
 
 func (e *Signer) Sign(msg []byte) ([]byte, error) {

@@ -20,7 +20,7 @@ type Extrinsic struct {
 	extrinsic.Extrinsic
 }
 
-func (e *Extrinsic) Sign(signer *Signer, meta *types.Metadata, opts ...extrinsic.SigningOption) error {
+func (e *Extrinsic) Sign(signer SignerApi, meta *types.Metadata, opts ...extrinsic.SigningOption) error {
 	if e.Type() != extrinsic.Version4 {
 		return extrinsic.ErrInvalidVersion.WithMsg("unsupported extrinsic version: %v (isSigned: %v, type: %v)", e.Version, e.IsSigned(), e.Type())
 	}
@@ -55,9 +55,10 @@ func (e *Extrinsic) Sign(signer *Signer, meta *types.Metadata, opts ...extrinsic
 	}
 
 	var signature types.MultiSignature
-	if signer.KeyType == 0 {
+	switch signer.SignType() {
+	case 0:
 		signature = types.MultiSignature{IsSr25519: true, AsSr25519: sig}
-	} else if signer.KeyType == 1 {
+	case 1:
 		signature = types.MultiSignature{IsEd25519: true, AsEd25519: sig}
 	}
 
@@ -106,7 +107,7 @@ func createPayload(meta *types.Metadata, encodedCall []byte) (*extrinsic.Payload
 	return payload, nil
 }
 
-func PayloadSign(signer *Signer, p *extrinsic.Payload) (sig types.SignatureHash, err error) {
+func PayloadSign(signer SignerApi, p *extrinsic.Payload) (sig types.SignatureHash, err error) {
 	b, err := codec.Encode(p)
 	if err != nil {
 		return sig, extrinsic.ErrPayloadEncoding.Wrap(err)

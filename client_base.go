@@ -113,8 +113,8 @@ func (c *ChainClient) GetBlockNumber() (types.BlockNumber, error) {
 
 // 获取账户信息
 // Get account info
-func (c *ChainClient) GetAccount(address *Signer) (*types.AccountInfo, error) {
-	key, err := types.CreateStorageKey(c.Meta, "System", "Account", address.PublicKey)
+func (c *ChainClient) GetAccount(address SignerApi) (*types.AccountInfo, error) {
+	key, err := types.CreateStorageKey(c.Meta, "System", "Account", address.Public())
 	if err != nil {
 		panic(err)
 	}
@@ -125,7 +125,7 @@ func (c *ChainClient) GetAccount(address *Signer) (*types.AccountInfo, error) {
 
 // 签名并提交交易
 // Sign and submit transaction
-func (c *ChainClient) SignAndSubmit(signer *Signer, call types.Call, untilFinalized bool) error {
+func (c *ChainClient) SignAndSubmit(signer SignerApi, call types.Call, untilFinalized bool) error {
 	accountInfo, err := c.GetAccount(signer)
 	if err != nil {
 		return errors.New("GetAccountInfo error: " + err.Error())
@@ -285,7 +285,7 @@ func (c *ChainClient) QueryMapAll(pallet string, method string) ([]types.Storage
 
 // 查询 map 所有数据
 // query map data list of map4
-func (c *ChainClient) QueryMapKeys(pallet string, method string, fkeys []interface{}) ([]types.StorageChangeSet, error) {
+func (c *ChainClient) QueryMapKeys(pallet string, method string, fkeys []any) ([]types.StorageChangeSet, error) {
 	key := CreatePrefixedKey(pallet, method)
 
 	hashers, err := c.GetHashers(pallet, method)
@@ -316,7 +316,7 @@ func (c *ChainClient) QueryMapKeys(pallet string, method string, fkeys []interfa
 
 // 查询 double map 第一个 key 的所有数据
 // query double map data list of double map
-func (c *ChainClient) QueryDoubleMapAll(pallet string, method string, keyarg interface{}, at *types.Hash) ([]types.StorageChangeSet, error) {
+func (c *ChainClient) QueryDoubleMapAll(pallet string, method string, keyarg any, at *types.Hash) ([]types.StorageChangeSet, error) {
 	key, err := c.GetDoubleMapPrefixKey(pallet, method, keyarg)
 	if err != nil {
 		return nil, err
@@ -350,7 +350,7 @@ func (c *ChainClient) QueryDoubleMapAll(pallet string, method string, keyarg int
 
 // 查询 double map 第一个 key 前缀
 // get double map prefix key of double map {{pallet}}.{{method}}.{{frist key}}
-func (c *ChainClient) GetDoubleMapPrefixKey(pallet string, method string, keyarg interface{}) ([]byte, error) {
+func (c *ChainClient) GetDoubleMapPrefixKey(pallet string, method string, keyarg any) ([]byte, error) {
 	arg, err := codec.Encode(keyarg)
 	if err != nil {
 		return nil, err
@@ -377,7 +377,7 @@ func (c *ChainClient) GetDoubleMapPrefixKey(pallet string, method string, keyarg
 
 // 查询 double map 第一个 key 的所有数据
 // query double map data list of double map
-func (c *ChainClient) QueryDoubleMapKeys(pallet string, method string, keyarg interface{}, skeys []interface{}, at *types.Hash) ([]types.StorageChangeSet, error) {
+func (c *ChainClient) QueryDoubleMapKeys(pallet string, method string, keyarg any, skeys []any, at *types.Hash) ([]types.StorageChangeSet, error) {
 	keys, err := c.GetDoubleMapPrefixKeys(pallet, method, keyarg, skeys)
 	if err != nil {
 		return nil, err
@@ -399,7 +399,7 @@ func (c *ChainClient) QueryDoubleMapKeys(pallet string, method string, keyarg in
 
 // 查询 double map 第一个 key 前缀 和 多个 第二个 key
 // get double map prefix key of double map {{pallet}}.{{method}}.{{frist key}}
-func (c *ChainClient) GetDoubleMapPrefixKeys(pallet string, method string, keyarg interface{}, skeys []interface{}) ([]types.StorageKey, error) {
+func (c *ChainClient) GetDoubleMapPrefixKeys(pallet string, method string, keyarg any, skeys []any) ([]types.StorageKey, error) {
 	arg, err := codec.Encode(keyarg)
 	if err != nil {
 		return nil, err
@@ -510,7 +510,7 @@ func (c *ChainClient) BalanceOfH160(address string) (types.U128, error) {
 	return balance, nil
 }
 
-func (c *ChainClient) MapReviveAccount(signer *Signer) error {
+func (c *ChainClient) MapReviveAccount(signer SignerApi) error {
 	runtimeCall := revive.MakeMapAccountCall()
 
 	call, err := (runtimeCall).AsCall()
