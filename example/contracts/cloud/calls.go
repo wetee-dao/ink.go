@@ -47,7 +47,7 @@ func (c *Cloud) DryRunSetCode(
 func (c *Cloud) CallSetCode(
 	code_hash types.H256, params chain.CallParams,
 ) error {
-	_param := chain.DefaultParamWithOragin(params.Signer.AccountID())
+	_param := chain.DefaultParamWithOrigin(params.Signer.AccountID())
 	_param.PayAmount = params.PayAmount
 	_, gas, err := c.DryRunSetCode(code_hash, _param)
 	if err != nil {
@@ -69,7 +69,7 @@ func (c *Cloud) CallSetCode(
 func (c *Cloud) TxCallOfSetCode(
 	code_hash types.H256, params chain.CallParams,
 ) (*types.Call, error) {
-	_param := chain.DefaultParamWithOragin(params.Signer.AccountID())
+	_param := chain.DefaultParamWithOrigin(params.Signer.AccountID())
 	_param.PayAmount = params.PayAmount
 	_, gas, err := c.DryRunSetCode(code_hash, _param)
 	if err != nil {
@@ -115,7 +115,7 @@ func (c *Cloud) DryRunPodLen(
 func (c *Cloud) CallPodLen(
 	params chain.CallParams,
 ) error {
-	_param := chain.DefaultParamWithOragin(params.Signer.AccountID())
+	_param := chain.DefaultParamWithOrigin(params.Signer.AccountID())
 	_param.PayAmount = params.PayAmount
 	_, gas, err := c.DryRunPodLen(_param)
 	if err != nil {
@@ -137,7 +137,7 @@ func (c *Cloud) CallPodLen(
 func (c *Cloud) TxCallOfPodLen(
 	params chain.CallParams,
 ) (*types.Call, error) {
-	_param := chain.DefaultParamWithOragin(params.Signer.AccountID())
+	_param := chain.DefaultParamWithOrigin(params.Signer.AccountID())
 	_param.PayAmount = params.PayAmount
 	_, gas, err := c.DryRunPodLen(_param)
 	if err != nil {
@@ -183,7 +183,7 @@ func (c *Cloud) DryRunCreateUserPod(
 func (c *Cloud) CallCreateUserPod(
 	params chain.CallParams,
 ) error {
-	_param := chain.DefaultParamWithOragin(params.Signer.AccountID())
+	_param := chain.DefaultParamWithOrigin(params.Signer.AccountID())
 	_param.PayAmount = params.PayAmount
 	_, gas, err := c.DryRunCreateUserPod(_param)
 	if err != nil {
@@ -205,7 +205,7 @@ func (c *Cloud) CallCreateUserPod(
 func (c *Cloud) TxCallOfCreateUserPod(
 	params chain.CallParams,
 ) (*types.Call, error) {
-	_param := chain.DefaultParamWithOragin(params.Signer.AccountID())
+	_param := chain.DefaultParamWithOrigin(params.Signer.AccountID())
 	_param.PayAmount = params.PayAmount
 	_, gas, err := c.DryRunCreateUserPod(_param)
 	if err != nil {

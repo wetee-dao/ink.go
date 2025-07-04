@@ -41,7 +41,7 @@ func TestInk(t *testing.T) {
 
 	// query data
 	data, _, err := contract.QueryUserPods(
-		chain.DefaultParamWithOragin(p.AccountID()),
+		chain.DefaultParamWithOrigin(p.AccountID()),
 	)
 	if err != nil {
 		fmt.Println(err)
@@ -60,7 +60,7 @@ func TestInk(t *testing.T) {
 
 	// query data
 	data2, _, err := contract.QueryUserPods(
-		chain.DefaultParamWithOragin(p.AccountID()),
+		chain.DefaultParamWithOrigin(p.AccountID()),
 	)
 	if err != nil {
 		fmt.Println(err)

@@ -132,7 +132,7 @@ contract := dao.Dao{
 
 // Step4: dry-run contract
 result, gas, err := contract.DryRunMemberPublicJoin(
-	chain.DefaultParamWithOragin(p.AccountID()),
+	chain.DefaultParamWithOrigin(p.AccountID()),
 )
 if err == nil {
 	fmt.Println(result.E)

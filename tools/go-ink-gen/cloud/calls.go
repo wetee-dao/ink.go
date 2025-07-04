@@ -45,18 +45,18 @@ func (c *Cloud) DryRunSetCode(
 }
 
 func (c *Cloud) CallSetCode(
-	code_hash types.H256, params chain.CallParams,
+	code_hash types.H256, __ink_params chain.CallParams,
 ) error {
-	_param := chain.DefaultParamWithOragin(params.Signer.AccountID())
-	_param.PayAmount = params.PayAmount
+	_param := chain.DefaultParamWithOrigin(__ink_params.Signer.AccountID())
+	_param.PayAmount = __ink_params.PayAmount
 	_, gas, err := c.DryRunSetCode(code_hash, _param)
 	if err != nil {
 		return err
 	}
 	return chain.CallInk(
 		c,
-		params.Signer,
-		params.PayAmount,
+		__ink_params.Signer,
+		__ink_params.PayAmount,
 		gas.GasRequired,
 		gas.StorageDeposit,
 		util.InkContractInput{
@@ -67,18 +67,18 @@ func (c *Cloud) CallSetCode(
 }
 
 func (c *Cloud) TxCallOfSetCode(
-	code_hash types.H256, params chain.CallParams,
+	code_hash types.H256, __ink_params chain.CallParams,
 ) (*types.Call, error) {
-	_param := chain.DefaultParamWithOragin(params.Signer.AccountID())
-	_param.PayAmount = params.PayAmount
+	_param := chain.DefaultParamWithOrigin(__ink_params.Signer.AccountID())
+	_param.PayAmount = __ink_params.PayAmount
 	_, gas, err := c.DryRunSetCode(code_hash, _param)
 	if err != nil {
 		return nil, err
 	}
 	return chain.TxCall(
 		c,
-		params.Signer,
-		params.PayAmount,
+		__ink_params.Signer,
+		__ink_params.PayAmount,
 		gas.GasRequired,
 		gas.StorageDeposit,
 		util.InkContractInput{
@@ -113,18 +113,18 @@ func (c *Cloud) DryRunPodLen(
 }
 
 func (c *Cloud) CallPodLen(
-	params chain.CallParams,
+	__ink_params chain.CallParams,
 ) error {
-	_param := chain.DefaultParamWithOragin(params.Signer.AccountID())
-	_param.PayAmount = params.PayAmount
+	_param := chain.DefaultParamWithOrigin(__ink_params.Signer.AccountID())
+	_param.PayAmount = __ink_params.PayAmount
 	_, gas, err := c.DryRunPodLen(_param)
 	if err != nil {
 		return err
 	}
 	return chain.CallInk(
 		c,
-		params.Signer,
-		params.PayAmount,
+		__ink_params.Signer,
+		__ink_params.PayAmount,
 		gas.GasRequired,
 		gas.StorageDeposit,
 		util.InkContractInput{
@@ -135,18 +135,18 @@ func (c *Cloud) CallPodLen(
 }
 
 func (c *Cloud) TxCallOfPodLen(
-	params chain.CallParams,
+	__ink_params chain.CallParams,
 ) (*types.Call, error) {
-	_param := chain.DefaultParamWithOragin(params.Signer.AccountID())
-	_param.PayAmount = params.PayAmount
+	_param := chain.DefaultParamWithOrigin(__ink_params.Signer.AccountID())
+	_param.PayAmount = __ink_params.PayAmount
 	_, gas, err := c.DryRunPodLen(_param)
 	if err != nil {
 		return nil, err
 	}
 	return chain.TxCall(
 		c,
-		params.Signer,
-		params.PayAmount,
+		__ink_params.Signer,
+		__ink_params.PayAmount,
 		gas.GasRequired,
 		gas.StorageDeposit,
 		util.InkContractInput{
@@ -181,18 +181,18 @@ func (c *Cloud) DryRunCreateUserPod(
 }
 
 func (c *Cloud) CallCreateUserPod(
-	params chain.CallParams,
+	__ink_params chain.CallParams,
 ) error {
-	_param := chain.DefaultParamWithOragin(params.Signer.AccountID())
-	_param.PayAmount = params.PayAmount
+	_param := chain.DefaultParamWithOrigin(__ink_params.Signer.AccountID())
+	_param.PayAmount = __ink_params.PayAmount
 	_, gas, err := c.DryRunCreateUserPod(_param)
 	if err != nil {
 		return err
 	}
 	return chain.CallInk(
 		c,
-		params.Signer,
-		params.PayAmount,
+		__ink_params.Signer,
+		__ink_params.PayAmount,
 		gas.GasRequired,
 		gas.StorageDeposit,
 		util.InkContractInput{
@@ -203,18 +203,18 @@ func (c *Cloud) CallCreateUserPod(
 }
 
 func (c *Cloud) TxCallOfCreateUserPod(
-	params chain.CallParams,
+	__ink_params chain.CallParams,
 ) (*types.Call, error) {
-	_param := chain.DefaultParamWithOragin(params.Signer.AccountID())
-	_param.PayAmount = params.PayAmount
+	_param := chain.DefaultParamWithOrigin(__ink_params.Signer.AccountID())
+	_param.PayAmount = __ink_params.PayAmount
 	_, gas, err := c.DryRunCreateUserPod(_param)
 	if err != nil {
 		return nil, err
 	}
 	return chain.TxCall(
 		c,
-		params.Signer,
-		params.PayAmount,
+		__ink_params.Signer,
+		__ink_params.PayAmount,
 		gas.GasRequired,
 		gas.StorageDeposit,
 		util.InkContractInput{

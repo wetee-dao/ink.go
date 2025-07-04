@@ -135,7 +135,6 @@ func CallInk(
 		util.LogWithYellow("[       RefTime ]", gas_limit.RefTime.Int64())
 		util.LogWithYellow("[     ProofSize ]", gas_limit.ProofSize.Int64())
 		util.LogWithYellow("[  DepositLimit ]", storage_deposit_limit.Int.String())
-		fmt.Println("")
 	}
 
 	runtimeCall := revive.MakeCallCall(
@@ -207,7 +206,7 @@ type DryRunCallParams struct {
 	StorageDepositLimit util.Option[types.U128]
 }
 
-func DefaultParamWithOragin(origin types.AccountID) DryRunCallParams {
+func DefaultParamWithOrigin(origin types.AccountID) DryRunCallParams {
 	var defaultParam = DryRunCallParams{
 		PayAmount:           types.NewU128(*big.NewInt(0)),
 		GasLimit:            util.NewNone[types.Weight](),

@@ -150,38 +150,43 @@ func (c *ChainClient) SignAndSubmit(signer SignerType, call types.Call, untilFin
 
 	defer sub.Unsubscribe()
 	timeout := time.After(30 * time.Second)
+
+	extBytes, err := codec.Encode(ext.Extrinsic)
+	if err != nil {
+		return errors.New("SubmitAndWatchExtrinsic error: " + err.Error())
+	}
+	hash := blake2b.Sum256(extBytes)
+
 	for {
 		select {
 		case status := <-sub.Chan():
 			if status.IsInBlock {
-				extBytes, err := codec.Encode(ext)
-				if err != nil {
-					return err
-				}
-
-				// 计算交易的hash
-				hash := blake2b.Sum256(extBytes)
 				events, err := c.checkExtrinsic(hash, status.AsInBlock)
 				if err != nil {
 					return err
 				}
-
-				// 如果不需要等待交易确认，直接返回
 				if events != nil && !untilFinalized {
 					return nil
 				}
-			}
-			if status.IsFinalized {
+			} else if status.IsFinalized {
+				_, err := c.checkExtrinsic(hash, status.AsFinalized)
+				if err != nil {
+					return err
+				}
 				return nil
+			} else if status.IsDropped {
+				util.LogWithRed("SubmitAndWatchExtrinsic Dropped")
+			} else if status.IsUsurped {
+				util.LogWithRed("SubmitAndWatchExtrinsic Usurped")
 			}
 		case err := <-sub.Err():
 			if c.Debug {
-				util.LogWithPurple("SubmitAndWatchExtrinsic ERROR", err.Error())
+				util.LogWithRed("SubmitAndWatchExtrinsic ERROR", err.Error())
 			}
 
 			return err
 		case <-timeout:
-			fmt.Println("Extrinsic: timeout")
+			util.LogWithRed("SubmitAndWatchExtrinsic ERROR: timeout")
 			return nil
 		}
 	}
@@ -204,18 +209,19 @@ func (c *ChainClient) checkExtrinsic(extHash types.Hash, blockHash types.Hash) (
 	for _, e := range events {
 		extrinsicIndex := e.Phase.AsApplyExtrinsicField0
 		ext := block.Block.Extrinsics[extrinsicIndex]
-		extBytes, err := codec.Encode(ext)
+		extBytes, err := hex.DecodeString(ext[2:])
 		if err != nil {
 			return nil, err
 		}
+		eventExtHash := blake2b.Sum256(extBytes)
 
 		// 添加相关的event
-		if blake2b.Sum256(extBytes) != extHash {
+		if eventExtHash != extHash {
 			cevents = append(cevents, e)
 		}
 
 		// 判断是否是当前交易的消息
-		if blake2b.Sum256(extBytes) != extHash || !e.Event.IsSystem {
+		if eventExtHash != extHash || !e.Event.IsSystem {
 			continue
 		}
 
