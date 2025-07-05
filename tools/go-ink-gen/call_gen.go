@@ -49,6 +49,17 @@ import (
 	"github.com/wetee-dao/ink.go/util"
 )
 
+func Init{{.Name}}Contract(client *chain.ChainClient, address string) (chain.Ink, error) {
+	contractAddress, err := util.HexToH160(address)
+	if err != nil {
+		return nil, err
+	}
+	return &{{.Name}}{
+		ChainClient: client,
+		Address:     contractAddress,
+	}, nil
+}
+
 type {{.Name}} struct {
 	ChainClient *chain.ChainClient
 	Address     types.H160

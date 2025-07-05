@@ -8,6 +8,17 @@ import (
 	"github.com/wetee-dao/ink.go/util"
 )
 
+func InitCloudContract(client *chain.ChainClient, address string) (chain.Ink, error) {
+	contractAddress, err := util.HexToH160(address)
+	if err != nil {
+		return nil, err
+	}
+	return &Cloud{
+		ChainClient: client,
+		Address:     contractAddress,
+	}, nil
+}
+
 type Cloud struct {
 	ChainClient *chain.ChainClient
 	Address     types.H160
