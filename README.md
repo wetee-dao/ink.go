@@ -75,16 +75,7 @@ if err != nil {
 }
 
 // Step3: initialize contract 
-contractAddressStr := "0x1547E25E7fe95a931E96907C70529d57D2438aD1"
-contractAddress, err := util.HexToH160(contractAddressStr)
-if err != nil {
-    util.LogWithPurple("HexToH160", err)
-    return
-}
-contract := dao.Dao{
-    ChainClient: chainClient,
-    Address:     contractAddress,
-}
+contract,_ := dao.InitDaoContract(chainClient,"0x1547E25E7fe95a931E96907C70529d57D2438aD1")
 
 // Step4: query contract data
 _, _, err = contract.QueryMemberList(
@@ -119,16 +110,7 @@ if err != nil {
 }
 
 // Step3: initialize contract 
-contractAddressStr := "0x1547E25E7fe95a931E96907C70529d57D2438aD1"
-contractAddress, err := util.HexToH160(contractAddressStr)
-if err != nil {
-    util.LogWithPurple("HexToH160", err)
-    return
-}
-contract := dao.Dao{
-    ChainClient: chainClient,
-    Address:     contractAddress,
-}
+contract,_ := dao.InitDaoContract(chainClient,"0x1547E25E7fe95a931E96907C70529d57D2438aD1")
 
 // Step4: dry-run contract
 result, gas, err := contract.DryRunMemberPublicJoin(
@@ -159,16 +141,7 @@ if err != nil {
 }
 
 // Step3: initialize contract 
-contractAddressStr := "0x1547E25E7fe95a931E96907C70529d57D2438aD1"
-contractAddress, err := util.HexToH160(contractAddressStr)
-if err != nil {
-    util.LogWithPurple("HexToH160", err)
-    return
-}
-contract := dao.Dao{
-    ChainClient: chainClient,
-    Address:     contractAddress,
-}
+contract,_ := dao.InitDaoContract(chainClient,"0x1547E25E7fe95a931E96907C70529d57D2438aD1")
 
 // Step4: call contract
 err = contract.CallMemberPublicJoin(
