@@ -1,4 +1,4 @@
-package client
+package ink
 
 import (
 	"github.com/centrifuge/go-substrate-rpc-client/v4/types"

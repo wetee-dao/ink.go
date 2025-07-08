@@ -1,4 +1,4 @@
-package client
+package ink
 
 import (
 	"bytes"
@@ -42,11 +42,11 @@ func DryRunInk[T any](
 
 	if client.Debug {
 		util.LogWithPurple("[ DryRun contract ]", addres.Hex())
-		util.LogWithPurple("[ DryRun   method ]", contractInput.Selector)
-		util.LogWithPurple("[ DryRun   origin ]", origin.ToHexString())
-		util.LogWithPurple("[ DryRun     args ]", "0x"+hex.EncodeToString(inputBt))
-		util.LogWithPurple("[ DryRun gaslimit ]", gas_limit)
-		util.LogWithPurple("[ DryRun  storage ]", storage_deposit_limit)
+		util.LogWithPurple("[          method ]", contractInput.Selector)
+		util.LogWithPurple("[          origin ]", origin.ToHexString())
+		util.LogWithPurple("[            args ]", "0x"+hex.EncodeToString(inputBt))
+		// util.LogWithPurple("[ DryRun gaslimit ]", gas_limit)
+		// util.LogWithPurple("[ DryRun  storage ]", storage_deposit_limit)
 		fmt.Println("")
 	}
 
