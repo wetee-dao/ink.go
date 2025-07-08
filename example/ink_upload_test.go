@@ -3,13 +3,13 @@ package example
 import (
 	"crypto/rand"
 	"fmt"
-	"math/big"
 	"os"
 	"testing"
 
-	"github.com/centrifuge/go-substrate-rpc-client/v4/types"
 	chain "github.com/wetee-dao/ink.go"
 	"github.com/wetee-dao/ink.go/util"
+
+	"github.com/wetee-dao/ink.go/example/contracts/pod"
 )
 
 func TestUpload(t *testing.T) {
@@ -52,7 +52,7 @@ func TestInitWithCode(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	data, err := os.ReadFile("./pod.polkavm")
+	data, err := os.ReadFile("./contracts/pod.polkavm")
 	if err != nil {
 		util.LogWithPurple("read file error", err)
 		t.Fatal(err)
@@ -66,17 +66,12 @@ func TestInitWithCode(t *testing.T) {
 	randomBytes := [32]byte{}
 	copy(randomBytes[:], bytes)
 
-	res, err := chainClient.DeployContract(
-		util.InkCode{Upload: &data}, &p, types.NewU128(*big.NewInt(0)),
-		util.InkContractInput{
-			Selector: "new",
-			Args: []any{
-				types.NewU64(1000),
-				p.H160Address(),
-			},
-		},
-		util.NewSome(randomBytes),
-	)
+	res, err := pod.DeployPodWithNew(1000, p.H160Address(), chain.DeployParams{
+		Client: chainClient,
+		Signer: &p,
+		Code:   util.InkCode{Upload: &data},
+		Salt:   util.NewSome(randomBytes),
+	})
 	if err != nil {
 		util.LogWithPurple("DeployContract", err)
 		t.Fatal(err)
