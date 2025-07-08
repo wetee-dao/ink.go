@@ -48,7 +48,9 @@ func FuncToSelector(f string) [4]byte {
 // Convert a h160 hex string to a byte array
 func HexToH160(hexString string) (types.H160, error) {
 	// Remove the "0x" prefix if it exists
-	hexString = strings.TrimLeft(hexString, "0x")
+	if strings.HasPrefix(hexString, "0x") {
+		hexString = hexString[2:]
+	}
 
 	// Decode the hexadecimal string to a byte slice
 	src := []byte(hexString)
