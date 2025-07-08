@@ -43,6 +43,8 @@ func (r *ReviveGen) SaveTypes() {
 	calls := ContractCallBox{}
 	calls.PackageName = name
 	calls.Name = UnderscoreToCamelCase(name)
+
+	/// Parse function
 	for i, t := range r.Abi.Spec.Messages {
 		msg := r.Abi.Spec.Messages[i]
 		// if t.Label != "Erc20::balance_of" {
@@ -68,7 +70,6 @@ func (r *ReviveGen) SaveTypes() {
 		util.LogWithRed("--------------------------------------------------->", result[1])
 		fmt.Println("")
 
-		// funcs = append(funcs, "func "+msg.Label+"("+strings.Join(args, ",")+")"+" ("+result[1]+", error){"+"}\n")
 		argTypeStr := strings.Join(args, ",")
 		if argTypeStr != "" {
 			argTypeStr = argTypeStr + ","
@@ -81,6 +82,7 @@ func (r *ReviveGen) SaveTypes() {
 		}
 
 		calls.Funcs = append(calls.Funcs, Func{
+			Selector:   msg.Selector,
 			FuncName:   msg.Label,
 			ArgStr:     argStr,
 			ArgTypeStr: argTypeStr,
@@ -89,12 +91,55 @@ func (r *ReviveGen) SaveTypes() {
 		})
 	}
 
-	var data = "package " + name + "\n"
-	data += "import (\n"
-	data += "  \"github.com/wetee-dao/ink.go/util\"\n"
-	data += "  \"github.com/centrifuge/go-substrate-rpc-client/v4/types\"\n"
-	data += "  \"github.com/centrifuge/go-substrate-rpc-client/v4/scale\"\n"
-	data += ")\n"
+	/// Parse constructors
+	for i, t := range r.Abi.Spec.Constructors {
+		msg := r.Abi.Spec.Constructors[i]
+
+		util.LogWithYellow("--------------------------------------------------" + t.Label)
+		args := []string{}
+		for _, arg := range msg.Args {
+			util.LogWithYellow("--------------------------------------------------->", arg)
+			typeName := ""
+			if len(arg.Type.DisplayName) > 0 {
+				typeName = arg.Type.DisplayName[len(arg.Type.DisplayName)-1]
+			}
+			rtype := r.RecursionTypes(arg.Type.Type, typeName, 1)
+			args = append(args, arg.Label+" "+rtype[1])
+		}
+
+		returnType, returnName := r.GetReturnValue(t.ReturnType.Type, t.ReturnType.DisplayName[len(t.ReturnType.DisplayName)-1], 1)
+		result := r.RecursionTypes(returnType, returnName, 1)
+
+		util.LogWithYellow("--------------------------------------------------->", msg.Label+"("+strings.Join(args, ",")+")")
+		util.LogWithRed("--------------------------------------------------->", result[1])
+		fmt.Println("")
+
+		argTypeStr := strings.Join(args, ",")
+		if argTypeStr != "" {
+			argTypeStr = argTypeStr + ","
+		}
+		argStr := ""
+		for _, arg := range args {
+			argType := strings.Split(arg, " ")
+			argStr = argStr + argType[0]
+			argStr = argStr + ","
+		}
+
+		calls.Constructors = append(calls.Constructors, Constructor{
+			Selector:   msg.Selector,
+			FuncName:   msg.Label,
+			ArgStr:     argStr,
+			ArgTypeStr: argTypeStr,
+			Return:     result[1],
+		})
+	}
+
+	var typeData = "package " + name + "\n"
+	typeData += "import (\n"
+	typeData += "  \"github.com/wetee-dao/ink.go/util\"\n"
+	typeData += "  \"github.com/centrifuge/go-substrate-rpc-client/v4/types\"\n"
+	typeData += "  \"github.com/centrifuge/go-substrate-rpc-client/v4/scale\"\n"
+	typeData += ")\n"
 
 	var keys []int
 	for k := range r.TypeResult {
@@ -102,14 +147,14 @@ func (r *ReviveGen) SaveTypes() {
 	}
 	sort.Ints(keys)
 	for _, t := range keys {
-		data += r.TypeResult[t]
+		typeData += r.TypeResult[t]
 	}
 
 	if err := os.MkdirAll("./"+name, os.ModePerm); err != nil {
 		log.Fatal(err)
 	}
 
-	formattedData := []byte(data)
+	formattedData := []byte(typeData)
 
 	os.Remove("./" + name + "/types.go")
 	var err error

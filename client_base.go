@@ -161,19 +161,29 @@ func (c *ChainClient) SignAndSubmit(signer SignerType, call types.Call, untilFin
 		select {
 		case status := <-sub.Chan():
 			if status.IsInBlock {
-				events, err := c.checkExtrinsic(hash, status.AsInBlock)
+				_, success, err := c.checkExtrinsic(hash, status.AsInBlock)
 				if err != nil {
 					return err
 				}
-				if events != nil && !untilFinalized {
+
+				if success && c.Debug {
+					util.LogWithPurple("Extrinsic", "InBlock")
+				}
+
+				if success && !untilFinalized {
 					return nil
 				}
 			} else if status.IsFinalized {
-				_, err := c.checkExtrinsic(hash, status.AsFinalized)
+				_, success, err := c.checkExtrinsic(hash, status.AsFinalized)
 				if err != nil {
 					return err
 				}
-				return nil
+				if success {
+					if c.Debug {
+						util.LogWithPurple("Extrinsic", "Finalized")
+					}
+					return nil
+				}
 			} else if status.IsDropped {
 				util.LogWithRed("SubmitAndWatchExtrinsic Dropped")
 			} else if status.IsUsurped {
@@ -194,15 +204,15 @@ func (c *ChainClient) SignAndSubmit(signer SignerType, call types.Call, untilFin
 
 // 检查交易是否成功
 // Check whether the transaction is successful
-func (c *ChainClient) checkExtrinsic(extHash types.Hash, blockHash types.Hash) ([]gtypes.EventRecord, error) {
+func (c *ChainClient) checkExtrinsic(extHash types.Hash, blockHash types.Hash) ([]gtypes.EventRecord, bool, error) {
 	block, err := c.Api.RPC.Chain.GetBlock(blockHash)
 	if err != nil {
-		return nil, err
+		return nil, false, err
 	}
 
 	events, err := system.GetEvents(c.Api.RPC.State, blockHash)
 	if err != nil {
-		return nil, err
+		return nil, false, err
 	}
 
 	cevents := make([]gtypes.EventRecord, 0, len(events))
@@ -211,7 +221,7 @@ func (c *ChainClient) checkExtrinsic(extHash types.Hash, blockHash types.Hash) (
 		ext := block.Block.Extrinsics[extrinsicIndex]
 		extBytes, err := hex.DecodeString(ext[2:])
 		if err != nil {
-			return nil, err
+			return nil, false, err
 		}
 		eventExtHash := blake2b.Sum256(extBytes)
 
@@ -227,10 +237,10 @@ func (c *ChainClient) checkExtrinsic(extHash types.Hash, blockHash types.Hash) (
 
 		// 判断是否是交易成功的消息
 		if e.Event.AsSystemField0.IsExtrinsicSuccess {
-			if c.Debug {
-				util.LogWithPurple("Extrinsic", "ExtrinsicSuccess")
-			}
-			return cevents, nil
+			// if c.Debug {
+			// 	util.LogWithPurple("Extrinsic", "ExtrinsicSuccess")
+			// }
+			return cevents, true, nil
 		}
 
 		// 获取交易失败的消息
@@ -254,16 +264,16 @@ func (c *ChainClient) checkExtrinsic(extHash types.Hash, blockHash types.Hash) (
 				b, err := errData.MarshalJSON()
 				if err != nil {
 					fmt.Println(err)
-					return nil, err
+					return nil, false, err
 				}
 				errInfo = errors.New(string(b))
 			}
 
-			return nil, errInfo
+			return nil, false, errInfo
 		}
 	}
 
-	return nil, nil
+	return nil, false, nil
 }
 
 // 查询 map 所有数据
@@ -489,8 +499,6 @@ func (c *ChainClient) CallRuntimeApi(pallet, method string, args []any, result a
 	if err != nil {
 		log.Fatalf("Failed to decode result: %v", err)
 	}
-
-	// fmt.Println("Call RuntimeApi Result:", resultBytes)
 
 	// Decode the result using scale.Decoder
 	return scale.NewDecoder(bytes.NewReader(resultBytes)).Decode(result)

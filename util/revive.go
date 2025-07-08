@@ -3,6 +3,7 @@ package util
 import (
 	"bytes"
 	"errors"
+	"fmt"
 
 	"github.com/centrifuge/go-substrate-rpc-client/v4/scale"
 	"github.com/centrifuge/go-substrate-rpc-client/v4/types"
@@ -50,6 +51,82 @@ type ContractResult struct {
 	GasRequired    gtypes.Weight
 	StorageDeposit gtypes.StorageDeposit
 	Result         Result[gtypes.ExecReturnValue, gtypes.DispatchError]
+}
+
+type UploadResult struct {
+	CodeHash types.H256
+	Deposit  types.U128
+}
+
+type ContractInitResult struct {
+	GasConsumed    gtypes.Weight
+	GasRequired    gtypes.Weight
+	StorageDeposit gtypes.StorageDeposit
+	Result         Result[InitReturnValue, gtypes.DispatchError]
+}
+
+type InitReturnValue struct {
+	Result gtypes.ExecReturnValue
+	Addr   types.H160
+}
+
+type InkCode struct {
+	Upload   *[]byte
+	Existing *types.H256
+}
+
+func (ty InkCode) Encode(encoder scale.Encoder) (err error) {
+	if ty.Upload != nil {
+		err = encoder.PushByte(0)
+		if err != nil {
+			return err
+		}
+		err = encoder.Encode(*ty.Upload)
+		if err != nil {
+			return err
+		}
+		return nil
+	}
+
+	if ty.Existing != nil {
+		err = encoder.PushByte(1)
+		if err != nil {
+			return err
+		}
+		err = encoder.Encode(*ty.Existing)
+		if err != nil {
+			return err
+		}
+		return nil
+	}
+
+	return fmt.Errorf("unrecognized enum")
+}
+
+func (ty *InkCode) Decode(decoder scale.Decoder) (err error) {
+	variant, err := decoder.ReadOneByte()
+	if err != nil {
+		return err
+	}
+	switch variant {
+	case 0:
+		ty.Upload = new([]byte)
+		err = decoder.Decode(ty.Upload)
+		if err != nil {
+			return err
+		}
+		return
+
+	case 1:
+		ty.Existing = new(types.H256)
+		err = decoder.Decode(ty.Upload)
+		if err != nil {
+			return err
+		}
+		return
+	default:
+		return fmt.Errorf("unrecognized enum")
+	}
 }
 
 type NullTuple struct{}

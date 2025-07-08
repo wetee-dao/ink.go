@@ -49,6 +49,7 @@ func (r *Result[T, Err]) Decode(decoder scale.Decoder) (err error) {
 	if err != nil {
 		return err
 	}
+
 	switch variant {
 	case 0:
 		err = decoder.Decode(&r.V)
@@ -66,6 +67,6 @@ func (r *Result[T, Err]) Decode(decoder scale.Decoder) (err error) {
 		r.E = tmp
 		return
 	default:
-		return fmt.Errorf("unrecognized enum")
+		return fmt.Errorf("Result unrecognized enum")
 	}
 }

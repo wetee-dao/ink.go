@@ -9,33 +9,41 @@ import (
 // New none value of Option
 func NewNone[T any]() Option[T] {
 	return Option[T]{
-		IsNone: true,
+		isNone: true,
 	}
 }
 
 // New value of Option
 func NewSome[T any](v T) Option[T] {
 	return Option[T]{
-		IsNone: false,
+		isNone: false,
 		V:      v,
 	}
 }
 
 // Option is a type for rust Option
 type Option[T any] struct {
-	IsNone bool
+	isNone bool
 	V      T
 }
 
+func (t Option[T]) IsSome() bool {
+	return !t.isNone
+}
+
+func (t Option[T]) IsNone() bool {
+	return t.isNone
+}
+
 func (t Option[T]) UnWrap() (T, error) {
-	if t.IsNone {
+	if t.isNone {
 		return t.V, fmt.Errorf("unwrap error: Option isNone")
 	}
 	return t.V, nil
 }
 
 func (ty Option[T]) Encode(encoder scale.Encoder) (err error) {
-	if ty.IsNone {
+	if ty.isNone {
 		err = encoder.PushByte(0)
 		if err != nil {
 			return err
@@ -58,7 +66,7 @@ func (ty *Option[T]) Decode(decoder scale.Decoder) (err error) {
 	}
 	switch variant {
 	case 0:
-		ty.IsNone = true
+		ty.isNone = true
 		return
 	case 1:
 		err = decoder.Decode(&ty.V)

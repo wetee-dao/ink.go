@@ -2,13 +2,14 @@ package cloud
 
 import (
 	"errors"
+	"math/big"
 
 	"github.com/centrifuge/go-substrate-rpc-client/v4/types"
 	chain "github.com/wetee-dao/ink.go"
 	"github.com/wetee-dao/ink.go/util"
 )
 
-func InitCloudContract(client *chain.ChainClient, address string) (chain.Ink, error) {
+func InitCloudContract(client *chain.ChainClient, address string) (*Cloud, error) {
 	contractAddress, err := util.HexToH160(address)
 	if err != nil {
 		return nil, err
@@ -19,6 +20,17 @@ func InitCloudContract(client *chain.ChainClient, address string) (chain.Ink, er
 	}, nil
 }
 
+func DeployCloudWithNew(__ink_params chain.DeployParams) (*types.H160, error) {
+	return __ink_params.Client.DeployContract(
+		__ink_params.Code, __ink_params.Signer, types.NewU128(*big.NewInt(0)),
+		util.InkContractInput{
+			Selector: "0x9bae9d5e",
+			Args:     []any{},
+		},
+		__ink_params.Salt,
+	)
+}
+
 type Cloud struct {
 	ChainClient *chain.ChainClient
 	Address     types.H160
@@ -27,6 +39,7 @@ type Cloud struct {
 func (c *Cloud) Client() *chain.ChainClient {
 	return c.ChainClient
 }
+
 func (c *Cloud) ContractAddress() types.H160 {
 	return c.Address
 }
@@ -41,7 +54,7 @@ func (c *Cloud) DryRunSetCode(
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
-			Selector: "set_code",
+			Selector: "0x694fb50f",
 			Args:     []any{code_hash},
 		},
 	)
@@ -71,13 +84,13 @@ func (c *Cloud) CallSetCode(
 		gas.GasRequired,
 		gas.StorageDeposit,
 		util.InkContractInput{
-			Selector: "set_code",
+			Selector: "0x694fb50f",
 			Args:     []any{code_hash},
 		},
 	)
 }
 
-func (c *Cloud) TxCallOfSetCode(
+func (c *Cloud) CallOfSetCodeTx(
 	code_hash types.H256, __ink_params chain.CallParams,
 ) (*types.Call, error) {
 	_param := chain.DefaultParamWithOrigin(__ink_params.Signer.AccountID())
@@ -86,14 +99,14 @@ func (c *Cloud) TxCallOfSetCode(
 	if err != nil {
 		return nil, err
 	}
-	return chain.TxCall(
+	return chain.CallOfTransaction(
 		c,
 		__ink_params.Signer,
 		__ink_params.PayAmount,
 		gas.GasRequired,
 		gas.StorageDeposit,
 		util.InkContractInput{
-			Selector: "set_code",
+			Selector: "0x694fb50f",
 			Args:     []any{code_hash},
 		},
 	)
@@ -109,7 +122,7 @@ func (c *Cloud) DryRunPodLen(
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
-			Selector: "pod_len",
+			Selector: "0xaf63d0e1",
 			Args:     []any{},
 		},
 	)
@@ -139,13 +152,13 @@ func (c *Cloud) CallPodLen(
 		gas.GasRequired,
 		gas.StorageDeposit,
 		util.InkContractInput{
-			Selector: "pod_len",
+			Selector: "0xaf63d0e1",
 			Args:     []any{},
 		},
 	)
 }
 
-func (c *Cloud) TxCallOfPodLen(
+func (c *Cloud) CallOfPodLenTx(
 	__ink_params chain.CallParams,
 ) (*types.Call, error) {
 	_param := chain.DefaultParamWithOrigin(__ink_params.Signer.AccountID())
@@ -154,14 +167,14 @@ func (c *Cloud) TxCallOfPodLen(
 	if err != nil {
 		return nil, err
 	}
-	return chain.TxCall(
+	return chain.CallOfTransaction(
 		c,
 		__ink_params.Signer,
 		__ink_params.PayAmount,
 		gas.GasRequired,
 		gas.StorageDeposit,
 		util.InkContractInput{
-			Selector: "pod_len",
+			Selector: "0xaf63d0e1",
 			Args:     []any{},
 		},
 	)
@@ -177,7 +190,7 @@ func (c *Cloud) DryRunCreateUserPod(
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
-			Selector: "create_user_pod",
+			Selector: "0x1035bf95",
 			Args:     []any{},
 		},
 	)
@@ -207,13 +220,13 @@ func (c *Cloud) CallCreateUserPod(
 		gas.GasRequired,
 		gas.StorageDeposit,
 		util.InkContractInput{
-			Selector: "create_user_pod",
+			Selector: "0x1035bf95",
 			Args:     []any{},
 		},
 	)
 }
 
-func (c *Cloud) TxCallOfCreateUserPod(
+func (c *Cloud) CallOfCreateUserPodTx(
 	__ink_params chain.CallParams,
 ) (*types.Call, error) {
 	_param := chain.DefaultParamWithOrigin(__ink_params.Signer.AccountID())
@@ -222,14 +235,14 @@ func (c *Cloud) TxCallOfCreateUserPod(
 	if err != nil {
 		return nil, err
 	}
-	return chain.TxCall(
+	return chain.CallOfTransaction(
 		c,
 		__ink_params.Signer,
 		__ink_params.PayAmount,
 		gas.GasRequired,
 		gas.StorageDeposit,
 		util.InkContractInput{
-			Selector: "create_user_pod",
+			Selector: "0x1035bf95",
 			Args:     []any{},
 		},
 	)
@@ -245,7 +258,7 @@ func (c *Cloud) QueryUserPods(
 		params.GasLimit,
 		params.StorageDepositLimit,
 		util.InkContractInput{
-			Selector: "user_pods",
+			Selector: "0x2ba5c5d5",
 			Args:     []any{},
 		},
 	)

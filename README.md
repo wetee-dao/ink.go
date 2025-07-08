@@ -132,7 +132,6 @@ if err != nil {
     panic(err)
 }
 
-
 // Step2: initialize the account
 var testSecretSeed = "0x167d9a020688544ea246b056799d6a771e97c9da057e4d0b87024537f99177bc"
 p, err := chain.Ed25519PairFromSecret(testSecretSeed, 42)

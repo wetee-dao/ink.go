@@ -27,16 +27,11 @@ func TestInk(t *testing.T) {
 
 	// 获取合约地址
 	contractAddressStr := "0xF39250328320705cdE6B478c6bc425239014a6D4"
-	contractAddress, err := util.HexToH160(contractAddressStr)
+	// init contract
+	contract, err := cloud.InitCloudContract(chainClient, contractAddressStr)
 	if err != nil {
 		util.LogWithPurple("HexToH160", err)
 		return
-	}
-
-	// init contract
-	contract := cloud.Cloud{
-		ChainClient: chainClient,
-		Address:     contractAddress,
 	}
 
 	// query data

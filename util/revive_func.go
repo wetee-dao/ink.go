@@ -4,6 +4,7 @@ import (
 	"encoding/hex"
 	"errors"
 	"fmt"
+	"strings"
 
 	"github.com/centrifuge/go-substrate-rpc-client/v4/types"
 	"golang.org/x/crypto/blake2b"
@@ -12,6 +13,16 @@ import (
 
 // Get selector of contract function
 func FuncToSelector(f string) [4]byte {
+	if strings.HasPrefix(f, "0x") {
+		f = f[2:]
+		hex, err := hex.DecodeString(f)
+		if err != nil {
+			fmt.Println("Error DecodeString hash:", err)
+			return [4]byte{}
+		}
+		return [4]byte(hex[:4])
+	}
+
 	inputBytes := []byte(f)
 
 	// Create a new BLAKE2s hash with default settings to produce a 32-byte hash
