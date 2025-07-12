@@ -59,17 +59,6 @@ import (
 	"github.com/wetee-dao/ink.go/util"
 )
 
-func Init{{.Name}}Contract(client *chain.ChainClient, address string) (*{{.Name}}, error) {
-	contractAddress, err := util.HexToH160(address)
-	if err != nil {
-		return nil, err
-	}
-	return &{{.Name}}{
-		ChainClient: client,
-		Address:     contractAddress,
-	}, nil
-}
-
 {{ range .Constructors }}
 func Deploy{{$.Name}}With{{CamelCase .FuncName}}({{.ArgTypeStr}} __ink_params chain.DeployParams) (*types.H160, error) {
 	return __ink_params.Client.DeployContract(
@@ -82,6 +71,17 @@ func Deploy{{$.Name}}With{{CamelCase .FuncName}}({{.ArgTypeStr}} __ink_params ch
 	)
 }
 {{ end }}
+
+func Init{{.Name}}Contract(client *chain.ChainClient, address string) (*{{.Name}}, error) {
+	contractAddress, err := util.HexToH160(address)
+	if err != nil {
+		return nil, err
+	}
+	return &{{.Name}}{
+		ChainClient: client,
+		Address:     contractAddress,
+	}, nil
+}
 
 type {{.Name}} struct {
 	ChainClient *chain.ChainClient
@@ -100,6 +100,10 @@ func (c *{{.Name}}) ContractAddress() types.H160 {
 func (c *{{$.Name}}) {{if .IsMut}}DryRun{{else}}Query{{end}}{{CamelCase .FuncName}}(
 	{{.ArgTypeStr}} params chain.DryRunCallParams,
 ) (*{{.Return}}, *chain.DryRunReturnGas, error) {
+ 	if c.ChainClient.Debug {
+		fmt.Println()
+		util.LogWithPurple("[ DryRun   method ]", "{{.FuncName}}")
+	}
 	v, gas, err := chain.DryRunInk[{{.Return}}](
 		c,
 		params.Origin,

@@ -167,7 +167,7 @@ func (c *ChainClient) SignAndSubmit(signer SignerType, call types.Call, untilFin
 				}
 
 				if success && c.Debug {
-					util.LogWithPurple("Extrinsic", "InBlock")
+					util.LogWithGreen("[Extrinsic]", "InBlock")
 				}
 
 				if success && !untilFinalized {
@@ -180,7 +180,8 @@ func (c *ChainClient) SignAndSubmit(signer SignerType, call types.Call, untilFin
 				}
 				if success {
 					if c.Debug {
-						util.LogWithPurple("Extrinsic", "Finalized")
+						util.LogWithGreen("[Extrinsic]", "Finalized")
+						fmt.Println()
 					}
 					return nil
 				}

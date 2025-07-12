@@ -2,23 +2,13 @@ package cloud
 
 import (
 	"errors"
+	"fmt"
 	"math/big"
 
 	"github.com/centrifuge/go-substrate-rpc-client/v4/types"
 	chain "github.com/wetee-dao/ink.go"
 	"github.com/wetee-dao/ink.go/util"
 )
-
-func InitCloudContract(client *chain.ChainClient, address string) (*Cloud, error) {
-	contractAddress, err := util.HexToH160(address)
-	if err != nil {
-		return nil, err
-	}
-	return &Cloud{
-		ChainClient: client,
-		Address:     contractAddress,
-	}, nil
-}
 
 func DeployCloudWithNew(__ink_params chain.DeployParams) (*types.H160, error) {
 	return __ink_params.Client.DeployContract(
@@ -29,6 +19,17 @@ func DeployCloudWithNew(__ink_params chain.DeployParams) (*types.H160, error) {
 		},
 		__ink_params.Salt,
 	)
+}
+
+func InitCloudContract(client *chain.ChainClient, address string) (*Cloud, error) {
+	contractAddress, err := util.HexToH160(address)
+	if err != nil {
+		return nil, err
+	}
+	return &Cloud{
+		ChainClient: client,
+		Address:     contractAddress,
+	}, nil
 }
 
 type Cloud struct {
@@ -47,6 +48,10 @@ func (c *Cloud) ContractAddress() types.H160 {
 func (c *Cloud) DryRunSetCode(
 	code_hash types.H256, params chain.DryRunCallParams,
 ) (*util.Result[util.NullTuple, Error], *chain.DryRunReturnGas, error) {
+	if c.ChainClient.Debug {
+		fmt.Println()
+		util.LogWithPurple("[ DryRun   method ]", "set_code")
+	}
 	v, gas, err := chain.DryRunInk[util.Result[util.NullTuple, Error]](
 		c,
 		params.Origin,
@@ -115,6 +120,10 @@ func (c *Cloud) CallOfSetCodeTx(
 func (c *Cloud) DryRunPodLen(
 	params chain.DryRunCallParams,
 ) (*util.Result[uint64, Error], *chain.DryRunReturnGas, error) {
+	if c.ChainClient.Debug {
+		fmt.Println()
+		util.LogWithPurple("[ DryRun   method ]", "pod_len")
+	}
 	v, gas, err := chain.DryRunInk[util.Result[uint64, Error]](
 		c,
 		params.Origin,
@@ -183,6 +192,10 @@ func (c *Cloud) CallOfPodLenTx(
 func (c *Cloud) DryRunCreateUserPod(
 	params chain.DryRunCallParams,
 ) (*util.Result[util.NullTuple, Error], *chain.DryRunReturnGas, error) {
+	if c.ChainClient.Debug {
+		fmt.Println()
+		util.LogWithPurple("[ DryRun   method ]", "create_user_pod")
+	}
 	v, gas, err := chain.DryRunInk[util.Result[util.NullTuple, Error]](
 		c,
 		params.Origin,
@@ -251,6 +264,10 @@ func (c *Cloud) CallOfCreateUserPodTx(
 func (c *Cloud) QueryUserPods(
 	params chain.DryRunCallParams,
 ) (*[]Tuple_48, *chain.DryRunReturnGas, error) {
+	if c.ChainClient.Debug {
+		fmt.Println()
+		util.LogWithPurple("[ DryRun   method ]", "user_pods")
+	}
 	v, gas, err := chain.DryRunInk[[]Tuple_48](
 		c,
 		params.Origin,

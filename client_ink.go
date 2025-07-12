@@ -41,13 +41,9 @@ func DryRunInk[T any](
 	addres := contractIns.ContractAddress()
 
 	if client.Debug {
-		util.LogWithPurple("[ DryRun contract ]", addres.Hex())
-		util.LogWithPurple("[          method ]", contractInput.Selector)
+		util.LogWithPurple("[        contract ]", addres.Hex())
 		util.LogWithPurple("[          origin ]", origin.ToHexString())
 		util.LogWithPurple("[            args ]", "0x"+hex.EncodeToString(inputBt))
-		// util.LogWithPurple("[ DryRun gaslimit ]", gas_limit)
-		// util.LogWithPurple("[ DryRun  storage ]", storage_deposit_limit)
-		fmt.Println("")
 	}
 
 	result := util.ContractResult{}
@@ -128,13 +124,14 @@ func CallInk(
 	addres := contractIns.ContractAddress()
 
 	if client.Debug {
-		util.LogWithYellow("[ Call contract ]", addres.Hex())
-		util.LogWithYellow("[        method ]", contractInput.Selector)
-		util.LogWithYellow("[        origin ]", "0x"+hex.EncodeToString(signer.Public()))
-		util.LogWithYellow("[          args ]", "0x"+hex.EncodeToString(inputBt))
-		util.LogWithYellow("[       RefTime ]", gas_limit.RefTime.Int64())
-		util.LogWithYellow("[     ProofSize ]", gas_limit.ProofSize.Int64())
-		util.LogWithYellow("[  DepositLimit ]", storage_deposit_limit.Int.String())
+		util.LogWithYellow("[         RefTime ]", gas_limit.RefTime.Int64())
+		util.LogWithYellow("[       ProofSize ]", gas_limit.ProofSize.Int64())
+		util.LogWithYellow("[    DepositLimit ]", storage_deposit_limit.Int.String())
+	}
+
+	storageDepositLimit := big.NewInt(0)
+	if storage_deposit_limit.Int != nil {
+		storageDepositLimit = storage_deposit_limit.Int
 	}
 
 	runtimeCall := revive.MakeCallCall(
@@ -144,7 +141,7 @@ func CallInk(
 			RefTime:   gas_limit.RefTime,
 			ProofSize: gas_limit.ProofSize,
 		},
-		types.NewUCompact(storage_deposit_limit.Int),
+		types.NewUCompact(storageDepositLimit),
 		inputBt,
 	)
 
@@ -180,7 +177,12 @@ func CallOfTransaction(
 		util.LogWithYellow("[       RefTime ]", gas_limit.RefTime.Int64())
 		util.LogWithYellow("[     ProofSize ]", gas_limit.ProofSize.Int64())
 		util.LogWithYellow("[  DepositLimit ]", storage_deposit_limit.Int.String())
-		fmt.Println("")
+		fmt.Println()
+	}
+
+	storageDepositLimit := big.NewInt(0)
+	if storage_deposit_limit.Int != nil {
+		storageDepositLimit = storage_deposit_limit.Int
 	}
 
 	runtimeCall := revive.MakeCallCall(
@@ -190,7 +192,7 @@ func CallOfTransaction(
 			RefTime:   gas_limit.RefTime,
 			ProofSize: gas_limit.ProofSize,
 		},
-		types.NewUCompact(storage_deposit_limit.Int),
+		types.NewUCompact(storageDepositLimit),
 		inputBt,
 	)
 
@@ -337,7 +339,7 @@ func (c *ChainClient) DeployContract(code util.InkCode, signer SignerType, payAm
 	}
 
 	if c.Debug {
-		util.LogWithYellow("[ Call   origin ]", origin)
+		util.LogWithYellow("[ Deploy origin ]", origin.ToHexString())
 		util.LogWithYellow("[         value ]", payAmount)
 		util.LogWithYellow("[          args ]", "0x"+hex.EncodeToString(argData))
 		util.LogWithYellow("[       RefTime ]", resultWrap.GasRequired.RefTime.Int64())
