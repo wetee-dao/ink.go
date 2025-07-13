@@ -538,6 +538,31 @@ func (c *ChainClient) InkBlockGasLimit(address [32]byte) error {
 	return err
 }
 
+var batchMethods = []string{"batch", "batch_all", "force_batch"}
+
+// / get batch call
+func (c *ChainClient) BatchCall(
+	callMethod string, // Utility.batch_all or Utility.batch or Utility.force_batch
+	calls []types.Call,
+) (*types.Call, error) {
+	isIn := false
+	for _, m := range batchMethods {
+		if m == callMethod {
+			isIn = true
+		}
+	}
+	if !isIn {
+		return nil, fmt.Errorf("callMethod %s is not in batchMethods %v", callMethod, batchMethods)
+	}
+
+	batchCall, err := types.NewCall(c.Meta, "Utility."+callMethod, calls)
+	if err != nil {
+		return nil, fmt.Errorf("new BatchCall error: %w", err)
+	}
+
+	return &batchCall, nil
+}
+
 // Create prefixed key of {{pallet}}.{{method}}
 func CreatePrefixedKey(pallet, method string) []byte {
 	return append(xxhash.New128([]byte(pallet)).Sum(nil), xxhash.New128([]byte(method)).Sum(nil)...)

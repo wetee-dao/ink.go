@@ -73,7 +73,7 @@ func (c *Cloud) DryRunSetCode(
 	return v, gas, nil
 }
 
-func (c *Cloud) CallSetCode(
+func (c *Cloud) ExecSetCode(
 	code_hash types.H256, __ink_params chain.CallParams,
 ) error {
 	_param := chain.DefaultParamWithOrigin(__ink_params.Signer.AccountID())
@@ -145,7 +145,7 @@ func (c *Cloud) DryRunPodLen(
 	return v, gas, nil
 }
 
-func (c *Cloud) CallPodLen(
+func (c *Cloud) ExecPodLen(
 	__ink_params chain.CallParams,
 ) error {
 	_param := chain.DefaultParamWithOrigin(__ink_params.Signer.AccountID())
@@ -217,7 +217,7 @@ func (c *Cloud) DryRunCreateUserPod(
 	return v, gas, nil
 }
 
-func (c *Cloud) CallCreateUserPod(
+func (c *Cloud) ExecCreateUserPod(
 	__ink_params chain.CallParams,
 ) error {
 	_param := chain.DefaultParamWithOrigin(__ink_params.Signer.AccountID())

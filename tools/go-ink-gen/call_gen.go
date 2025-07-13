@@ -126,7 +126,7 @@ func (c *{{$.Name}}) {{if .IsMut}}DryRun{{else}}Query{{end}}{{CamelCase .FuncNam
 	return v, gas, nil
 }
 {{if .IsMut}}
-func (c *{{$.Name}}) Call{{CamelCase .FuncName}}(
+func (c *{{$.Name}}) Exec{{CamelCase .FuncName}}(
 	{{.ArgTypeStr}} __ink_params chain.CallParams,
 ) error {
  	_param := chain.DefaultParamWithOrigin(__ink_params.Signer.AccountID())

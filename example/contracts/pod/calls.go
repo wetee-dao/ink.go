@@ -2,23 +2,13 @@ package pod
 
 import (
 	"errors"
+	"fmt"
 	"math/big"
 
 	"github.com/centrifuge/go-substrate-rpc-client/v4/types"
 	chain "github.com/wetee-dao/ink.go"
 	"github.com/wetee-dao/ink.go/util"
 )
-
-func InitPodContract(client *chain.ChainClient, address string) (*Pod, error) {
-	contractAddress, err := util.HexToH160(address)
-	if err != nil {
-		return nil, err
-	}
-	return &Pod{
-		ChainClient: client,
-		Address:     contractAddress,
-	}, nil
-}
 
 func DeployPodWithNew(id uint64, owner types.H160, __ink_params chain.DeployParams) (*types.H160, error) {
 	return __ink_params.Client.DeployContract(
@@ -29,6 +19,17 @@ func DeployPodWithNew(id uint64, owner types.H160, __ink_params chain.DeployPara
 		},
 		__ink_params.Salt,
 	)
+}
+
+func InitPodContract(client *chain.ChainClient, address string) (*Pod, error) {
+	contractAddress, err := util.HexToH160(address)
+	if err != nil {
+		return nil, err
+	}
+	return &Pod{
+		ChainClient: client,
+		Address:     contractAddress,
+	}, nil
 }
 
 type Pod struct {
@@ -47,6 +48,10 @@ func (c *Pod) ContractAddress() types.H160 {
 func (c *Pod) DryRunCloud(
 	params chain.DryRunCallParams,
 ) (*types.H160, *chain.DryRunReturnGas, error) {
+	if c.ChainClient.Debug {
+		fmt.Println()
+		util.LogWithPurple("[ DryRun   method ]", "cloud")
+	}
 	v, gas, err := chain.DryRunInk[types.H160](
 		c,
 		params.Origin,
@@ -64,7 +69,7 @@ func (c *Pod) DryRunCloud(
 	return v, gas, nil
 }
 
-func (c *Pod) CallCloud(
+func (c *Pod) ExecCloud(
 	__ink_params chain.CallParams,
 ) error {
 	_param := chain.DefaultParamWithOrigin(__ink_params.Signer.AccountID())
@@ -111,6 +116,10 @@ func (c *Pod) CallOfCloudTx(
 func (c *Pod) DryRunApprove(
 	value util.Option[types.U256], params chain.DryRunCallParams,
 ) (*util.Result[util.NullTuple, Error], *chain.DryRunReturnGas, error) {
+	if c.ChainClient.Debug {
+		fmt.Println()
+		util.LogWithPurple("[ DryRun   method ]", "approve")
+	}
 	v, gas, err := chain.DryRunInk[util.Result[util.NullTuple, Error]](
 		c,
 		params.Origin,
@@ -132,7 +141,7 @@ func (c *Pod) DryRunApprove(
 	return v, gas, nil
 }
 
-func (c *Pod) CallApprove(
+func (c *Pod) ExecApprove(
 	value util.Option[types.U256], __ink_params chain.CallParams,
 ) error {
 	_param := chain.DefaultParamWithOrigin(__ink_params.Signer.AccountID())
@@ -179,6 +188,10 @@ func (c *Pod) CallOfApproveTx(
 func (c *Pod) DryRunPayForWoker(
 	worker types.H160, amount types.U256, params chain.DryRunCallParams,
 ) (*util.Result[util.NullTuple, Error], *chain.DryRunReturnGas, error) {
+	if c.ChainClient.Debug {
+		fmt.Println()
+		util.LogWithPurple("[ DryRun   method ]", "pay_for_woker")
+	}
 	v, gas, err := chain.DryRunInk[util.Result[util.NullTuple, Error]](
 		c,
 		params.Origin,
@@ -200,7 +213,7 @@ func (c *Pod) DryRunPayForWoker(
 	return v, gas, nil
 }
 
-func (c *Pod) CallPayForWoker(
+func (c *Pod) ExecPayForWoker(
 	worker types.H160, amount types.U256, __ink_params chain.CallParams,
 ) error {
 	_param := chain.DefaultParamWithOrigin(__ink_params.Signer.AccountID())
@@ -247,6 +260,10 @@ func (c *Pod) CallOfPayForWokerTx(
 func (c *Pod) DryRunCharge(
 	params chain.DryRunCallParams,
 ) (*util.NullTuple, *chain.DryRunReturnGas, error) {
+	if c.ChainClient.Debug {
+		fmt.Println()
+		util.LogWithPurple("[ DryRun   method ]", "charge")
+	}
 	v, gas, err := chain.DryRunInk[util.NullTuple](
 		c,
 		params.Origin,
@@ -264,7 +281,7 @@ func (c *Pod) DryRunCharge(
 	return v, gas, nil
 }
 
-func (c *Pod) CallCharge(
+func (c *Pod) ExecCharge(
 	__ink_params chain.CallParams,
 ) error {
 	_param := chain.DefaultParamWithOrigin(__ink_params.Signer.AccountID())
@@ -311,6 +328,10 @@ func (c *Pod) CallOfChargeTx(
 func (c *Pod) DryRunWithdraw(
 	amount types.U256, params chain.DryRunCallParams,
 ) (*util.Result[util.NullTuple, Error], *chain.DryRunReturnGas, error) {
+	if c.ChainClient.Debug {
+		fmt.Println()
+		util.LogWithPurple("[ DryRun   method ]", "withdraw")
+	}
 	v, gas, err := chain.DryRunInk[util.Result[util.NullTuple, Error]](
 		c,
 		params.Origin,
@@ -332,7 +353,7 @@ func (c *Pod) DryRunWithdraw(
 	return v, gas, nil
 }
 
-func (c *Pod) CallWithdraw(
+func (c *Pod) ExecWithdraw(
 	amount types.U256, __ink_params chain.CallParams,
 ) error {
 	_param := chain.DefaultParamWithOrigin(__ink_params.Signer.AccountID())
@@ -379,6 +400,10 @@ func (c *Pod) CallOfWithdrawTx(
 func (c *Pod) DryRunSetCode(
 	code_hash types.H256, params chain.DryRunCallParams,
 ) (*util.Result[util.NullTuple, Error], *chain.DryRunReturnGas, error) {
+	if c.ChainClient.Debug {
+		fmt.Println()
+		util.LogWithPurple("[ DryRun   method ]", "set_code")
+	}
 	v, gas, err := chain.DryRunInk[util.Result[util.NullTuple, Error]](
 		c,
 		params.Origin,
@@ -400,7 +425,7 @@ func (c *Pod) DryRunSetCode(
 	return v, gas, nil
 }
 
-func (c *Pod) CallSetCode(
+func (c *Pod) ExecSetCode(
 	code_hash types.H256, __ink_params chain.CallParams,
 ) error {
 	_param := chain.DefaultParamWithOrigin(__ink_params.Signer.AccountID())
