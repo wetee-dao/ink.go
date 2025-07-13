@@ -143,7 +143,7 @@ if err != nil {
 contract,_ := dao.InitDaoContract(chainClient,"0x1547E25E7fe95a931E96907C70529d57D2438aD1")
 
 // Step4: call contract
-err = contract.CallMemberPublicJoin(
+err = contract.ExecMemberPublicJoin(
     chain.CallParams{
         Signer:    &p,
         PayAmount: types.NewU128(*big.NewInt(0)),
