@@ -44,7 +44,7 @@ func TestInk(t *testing.T) {
 	initLen := len(*data)
 
 	err = contract.ExecCreateUserPod(
-		chain.CallParams{
+		chain.ExecParams{
 			Signer:    &p,
 			PayAmount: types.NewU128(*big.NewInt(0)),
 		},

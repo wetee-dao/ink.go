@@ -98,7 +98,7 @@ func (c *{{.Name}}) ContractAddress() types.H160 {
 
 {{ range .Funcs }}
 func (c *{{$.Name}}) {{if .IsMut}}DryRun{{else}}Query{{end}}{{CamelCase .FuncName}}(
-	{{.ArgTypeStr}} params chain.DryRunCallParams,
+	{{.ArgTypeStr}} __ink_params chain.DryRunParams,
 ) (*{{.Return}}, *chain.DryRunReturnGas, error) {
  	if c.ChainClient.Debug {
 		fmt.Println()
@@ -106,10 +106,10 @@ func (c *{{$.Name}}) {{if .IsMut}}DryRun{{else}}Query{{end}}{{CamelCase .FuncNam
 	}
 	v, gas, err := chain.DryRunInk[{{.Return}}](
 		c,
-		params.Origin,
-		params.PayAmount,
-		params.GasLimit,
-		params.StorageDepositLimit,
+		__ink_params.Origin,
+		__ink_params.PayAmount,
+		__ink_params.GasLimit,
+		__ink_params.StorageDepositLimit,
 		util.InkContractInput{
 			Selector: "{{.Selector}}",
 			Args:     []any{ {{.ArgStr}} },
@@ -127,7 +127,7 @@ func (c *{{$.Name}}) {{if .IsMut}}DryRun{{else}}Query{{end}}{{CamelCase .FuncNam
 }
 {{if .IsMut}}
 func (c *{{$.Name}}) Exec{{CamelCase .FuncName}}(
-	{{.ArgTypeStr}} __ink_params chain.CallParams,
+	{{.ArgTypeStr}} __ink_params chain.ExecParams,
 ) error {
  	_param := chain.DefaultParamWithOrigin(__ink_params.Signer.AccountID())
 	_param.PayAmount = __ink_params.PayAmount
@@ -137,29 +137,25 @@ func (c *{{$.Name}}) Exec{{CamelCase .FuncName}}(
 	}
 	return chain.CallInk(
 		c,
-		__ink_params.Signer,
-		__ink_params.PayAmount,
 		gas.GasRequired,
 		gas.StorageDeposit,
 		util.InkContractInput{
 			Selector: "{{.Selector}}",
 			Args:     []any{ {{.ArgStr}} },
 		},
+		__ink_params,
 	)
 }
 
-func (c *{{$.Name}}) CallOf{{CamelCase .FuncName}}Tx(
-	{{.ArgTypeStr}} __ink_params chain.CallParams,
+func (c *{{$.Name}}) CallOf{{CamelCase .FuncName}}(
+	{{.ArgTypeStr}} __ink_params chain.DryRunParams,
 ) (*types.Call, error) {
- 	_param := chain.DefaultParamWithOrigin(__ink_params.Signer.AccountID())
-	_param.PayAmount = __ink_params.PayAmount
-	_, gas, err := c.DryRun{{CamelCase .FuncName}}({{.ArgStr}}_param)
+	_, gas, err := c.DryRun{{CamelCase .FuncName}}({{.ArgStr}}__ink_params)
 	if err != nil {
 		return nil,err
 	}
 	return chain.CallOfTransaction(
 		c,
-		__ink_params.Signer,
 		__ink_params.PayAmount,
 		gas.GasRequired,
 		gas.StorageDeposit,

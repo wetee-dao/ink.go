@@ -37,7 +37,7 @@ func ExampleExtrinsic() {
 		panic(err)
 	}
 
-	err = client.SignAndSubmit(&p, call, true)
+	err = client.SignAndSubmit(&p, call, true, 0)
 	if err != nil {
 		printErrorStack(err)
 		return

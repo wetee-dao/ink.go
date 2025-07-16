@@ -35,7 +35,7 @@ In the calls.go file, it contains all the Query, DryRun, and Call functions.
 For example, Complete example calls.go](https://github.com/wetee-dao/ink.go/blob/main/example/contracts/dao/calls.go)
 ```go
 func (c *Dao) QueryMemberList(
-	params chain.DryRunCallParams,
+	params chain.DryRunParams,
 ) ([]types.H160, *chain.DryRunReturnGas, error) {
 	v, gas, err := chain.DryRun[[]types.H160](
 		c,
@@ -79,7 +79,7 @@ contract,_ := dao.InitDaoContract(chainClient,"0x1547E25E7fe95a931E96907C70529d5
 
 // Step4: query contract data
 _, _, err = contract.QueryMemberList(
-    chain.DryRunCallParams{
+    chain.DryRunParams{
         Origin:              util.NewAccountID(p.PublicKey),
         PayAmount:           types.NewU128(*big.NewInt(0)),
         GasLimit:            util.NewNone[types.Weight](),
@@ -144,7 +144,7 @@ contract,_ := dao.InitDaoContract(chainClient,"0x1547E25E7fe95a931E96907C70529d5
 
 // Step4: call contract
 err = contract.ExecMemberPublicJoin(
-    chain.CallParams{
+    chain.ExecParams{
         Signer:    &p,
         PayAmount: types.NewU128(*big.NewInt(0)),
     },

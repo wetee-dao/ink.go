@@ -109,11 +109,12 @@ func DryRunInk[T any](
 // Call contract use substrate api
 func CallInk(
 	contractIns Ink,
-	signer SignerType,
-	amount types.U128,
+	// signer SignerType,
+	// amount types.U128,
 	gas_limit types.Weight,
 	storage_deposit_limit types.U128,
 	contractInput util.InkContractInput,
+	__ink_params ExecParams,
 ) error {
 	inputBt, err := contractInput.Encode()
 	if err != nil {
@@ -136,7 +137,7 @@ func CallInk(
 
 	runtimeCall := revive.MakeCallCall(
 		addres,
-		types.NewUCompact(amount.Int),
+		types.NewUCompact(__ink_params.PayAmount.Int),
 		gtypes.Weight{
 			RefTime:   gas_limit.RefTime,
 			ProofSize: gas_limit.ProofSize,
@@ -150,12 +151,11 @@ func CallInk(
 		return errors.New("(runtimeCall).AsCall() error: " + err.Error())
 	}
 
-	return client.SignAndSubmit(signer, call, true)
+	return client.SignAndSubmit(__ink_params.Signer, call, true, 0)
 }
 
 func CallOfTransaction(
 	contractIns Ink,
-	signer SignerType,
 	amount types.U128,
 	gas_limit types.Weight,
 	storage_deposit_limit types.U128,
@@ -172,7 +172,6 @@ func CallOfTransaction(
 	if client.Debug {
 		util.LogWithYellow("[ Call contract ]", addres.Hex())
 		util.LogWithYellow("[        method ]", contractInput.Selector)
-		util.LogWithYellow("[        origin ]", "0x"+hex.EncodeToString(signer.Public()))
 		util.LogWithYellow("[          args ]", "0x"+hex.EncodeToString(inputBt))
 		util.LogWithYellow("[       RefTime ]", gas_limit.RefTime.Int64())
 		util.LogWithYellow("[     ProofSize ]", gas_limit.ProofSize.Int64())
@@ -201,15 +200,15 @@ func CallOfTransaction(
 }
 
 // DryRun param of DryRun
-type DryRunCallParams struct {
+type DryRunParams struct {
 	Origin              types.AccountID
 	PayAmount           types.U128
 	GasLimit            util.Option[types.Weight]
 	StorageDepositLimit util.Option[types.U128]
 }
 
-func DefaultParamWithOrigin(origin types.AccountID) DryRunCallParams {
-	var defaultParam = DryRunCallParams{
+func DefaultParamWithOrigin(origin types.AccountID) DryRunParams {
+	var defaultParam = DryRunParams{
 		PayAmount:           types.NewU128(*big.NewInt(0)),
 		GasLimit:            util.NewNone[types.Weight](),
 		StorageDepositLimit: util.NewNone[types.U128](),
@@ -226,9 +225,11 @@ type DryRunReturnGas struct {
 }
 
 // Call param of Call
-type CallParams struct {
-	Signer    SignerType
-	PayAmount types.U128
+type ExecParams struct {
+	Signer         SignerType
+	PayAmount      types.U128
+	UntilFinalized bool
+	Nonce          uint64
 }
 
 // Call param of Call
@@ -265,7 +266,7 @@ func (c *ChainClient) UploadInkCode(code []byte, signer SignerType) (*types.H256
 		return nil, errors.New("(runtimeCall).AsCall() error: " + err.Error())
 	}
 
-	err = c.SignAndSubmit(signer, call, true)
+	err = c.SignAndSubmit(signer, call, true, 0)
 	if err != nil {
 		return nil, errors.New("SignAndSubmit error: " + err.Error())
 	}
@@ -374,7 +375,7 @@ func (c *ChainClient) DeployContract(code util.InkCode, signer SignerType, payAm
 	}
 
 	// submit call
-	err = c.SignAndSubmit(signer, call, true)
+	err = c.SignAndSubmit(signer, call, true, 0)
 	if err != nil {
 		return nil, errors.New("SignAndSubmit error: " + err.Error())
 	}

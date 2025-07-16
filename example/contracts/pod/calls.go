@@ -46,7 +46,7 @@ func (c *Pod) ContractAddress() types.H160 {
 }
 
 func (c *Pod) DryRunCloud(
-	params chain.DryRunCallParams,
+	__ink_params chain.DryRunParams,
 ) (*types.H160, *chain.DryRunReturnGas, error) {
 	if c.ChainClient.Debug {
 		fmt.Println()
@@ -54,10 +54,10 @@ func (c *Pod) DryRunCloud(
 	}
 	v, gas, err := chain.DryRunInk[types.H160](
 		c,
-		params.Origin,
-		params.PayAmount,
-		params.GasLimit,
-		params.StorageDepositLimit,
+		__ink_params.Origin,
+		__ink_params.PayAmount,
+		__ink_params.GasLimit,
+		__ink_params.StorageDepositLimit,
 		util.InkContractInput{
 			Selector: "0xb24fd0f6",
 			Args:     []any{},
@@ -70,7 +70,7 @@ func (c *Pod) DryRunCloud(
 }
 
 func (c *Pod) ExecCloud(
-	__ink_params chain.CallParams,
+	__ink_params chain.ExecParams,
 ) error {
 	_param := chain.DefaultParamWithOrigin(__ink_params.Signer.AccountID())
 	_param.PayAmount = __ink_params.PayAmount
@@ -80,29 +80,25 @@ func (c *Pod) ExecCloud(
 	}
 	return chain.CallInk(
 		c,
-		__ink_params.Signer,
-		__ink_params.PayAmount,
 		gas.GasRequired,
 		gas.StorageDeposit,
 		util.InkContractInput{
 			Selector: "0xb24fd0f6",
 			Args:     []any{},
 		},
+		__ink_params,
 	)
 }
 
-func (c *Pod) CallOfCloudTx(
-	__ink_params chain.CallParams,
+func (c *Pod) CallOfCloud(
+	__ink_params chain.DryRunParams,
 ) (*types.Call, error) {
-	_param := chain.DefaultParamWithOrigin(__ink_params.Signer.AccountID())
-	_param.PayAmount = __ink_params.PayAmount
-	_, gas, err := c.DryRunCloud(_param)
+	_, gas, err := c.DryRunCloud(__ink_params)
 	if err != nil {
 		return nil, err
 	}
 	return chain.CallOfTransaction(
 		c,
-		__ink_params.Signer,
 		__ink_params.PayAmount,
 		gas.GasRequired,
 		gas.StorageDeposit,
@@ -114,7 +110,7 @@ func (c *Pod) CallOfCloudTx(
 }
 
 func (c *Pod) DryRunApprove(
-	value util.Option[types.U256], params chain.DryRunCallParams,
+	value util.Option[types.U256], __ink_params chain.DryRunParams,
 ) (*util.Result[util.NullTuple, Error], *chain.DryRunReturnGas, error) {
 	if c.ChainClient.Debug {
 		fmt.Println()
@@ -122,10 +118,10 @@ func (c *Pod) DryRunApprove(
 	}
 	v, gas, err := chain.DryRunInk[util.Result[util.NullTuple, Error]](
 		c,
-		params.Origin,
-		params.PayAmount,
-		params.GasLimit,
-		params.StorageDepositLimit,
+		__ink_params.Origin,
+		__ink_params.PayAmount,
+		__ink_params.GasLimit,
+		__ink_params.StorageDepositLimit,
 		util.InkContractInput{
 			Selector: "0x681266a0",
 			Args:     []any{value},
@@ -142,7 +138,7 @@ func (c *Pod) DryRunApprove(
 }
 
 func (c *Pod) ExecApprove(
-	value util.Option[types.U256], __ink_params chain.CallParams,
+	value util.Option[types.U256], __ink_params chain.ExecParams,
 ) error {
 	_param := chain.DefaultParamWithOrigin(__ink_params.Signer.AccountID())
 	_param.PayAmount = __ink_params.PayAmount
@@ -152,29 +148,25 @@ func (c *Pod) ExecApprove(
 	}
 	return chain.CallInk(
 		c,
-		__ink_params.Signer,
-		__ink_params.PayAmount,
 		gas.GasRequired,
 		gas.StorageDeposit,
 		util.InkContractInput{
 			Selector: "0x681266a0",
 			Args:     []any{value},
 		},
+		__ink_params,
 	)
 }
 
-func (c *Pod) CallOfApproveTx(
-	value util.Option[types.U256], __ink_params chain.CallParams,
+func (c *Pod) CallOfApprove(
+	value util.Option[types.U256], __ink_params chain.DryRunParams,
 ) (*types.Call, error) {
-	_param := chain.DefaultParamWithOrigin(__ink_params.Signer.AccountID())
-	_param.PayAmount = __ink_params.PayAmount
-	_, gas, err := c.DryRunApprove(value, _param)
+	_, gas, err := c.DryRunApprove(value, __ink_params)
 	if err != nil {
 		return nil, err
 	}
 	return chain.CallOfTransaction(
 		c,
-		__ink_params.Signer,
 		__ink_params.PayAmount,
 		gas.GasRequired,
 		gas.StorageDeposit,
@@ -186,7 +178,7 @@ func (c *Pod) CallOfApproveTx(
 }
 
 func (c *Pod) DryRunPayForWoker(
-	worker types.H160, amount types.U256, params chain.DryRunCallParams,
+	worker types.H160, amount types.U256, __ink_params chain.DryRunParams,
 ) (*util.Result[util.NullTuple, Error], *chain.DryRunReturnGas, error) {
 	if c.ChainClient.Debug {
 		fmt.Println()
@@ -194,10 +186,10 @@ func (c *Pod) DryRunPayForWoker(
 	}
 	v, gas, err := chain.DryRunInk[util.Result[util.NullTuple, Error]](
 		c,
-		params.Origin,
-		params.PayAmount,
-		params.GasLimit,
-		params.StorageDepositLimit,
+		__ink_params.Origin,
+		__ink_params.PayAmount,
+		__ink_params.GasLimit,
+		__ink_params.StorageDepositLimit,
 		util.InkContractInput{
 			Selector: "0xd51e3b30",
 			Args:     []any{worker, amount},
@@ -214,7 +206,7 @@ func (c *Pod) DryRunPayForWoker(
 }
 
 func (c *Pod) ExecPayForWoker(
-	worker types.H160, amount types.U256, __ink_params chain.CallParams,
+	worker types.H160, amount types.U256, __ink_params chain.ExecParams,
 ) error {
 	_param := chain.DefaultParamWithOrigin(__ink_params.Signer.AccountID())
 	_param.PayAmount = __ink_params.PayAmount
@@ -224,29 +216,25 @@ func (c *Pod) ExecPayForWoker(
 	}
 	return chain.CallInk(
 		c,
-		__ink_params.Signer,
-		__ink_params.PayAmount,
 		gas.GasRequired,
 		gas.StorageDeposit,
 		util.InkContractInput{
 			Selector: "0xd51e3b30",
 			Args:     []any{worker, amount},
 		},
+		__ink_params,
 	)
 }
 
-func (c *Pod) CallOfPayForWokerTx(
-	worker types.H160, amount types.U256, __ink_params chain.CallParams,
+func (c *Pod) CallOfPayForWoker(
+	worker types.H160, amount types.U256, __ink_params chain.DryRunParams,
 ) (*types.Call, error) {
-	_param := chain.DefaultParamWithOrigin(__ink_params.Signer.AccountID())
-	_param.PayAmount = __ink_params.PayAmount
-	_, gas, err := c.DryRunPayForWoker(worker, amount, _param)
+	_, gas, err := c.DryRunPayForWoker(worker, amount, __ink_params)
 	if err != nil {
 		return nil, err
 	}
 	return chain.CallOfTransaction(
 		c,
-		__ink_params.Signer,
 		__ink_params.PayAmount,
 		gas.GasRequired,
 		gas.StorageDeposit,
@@ -258,7 +246,7 @@ func (c *Pod) CallOfPayForWokerTx(
 }
 
 func (c *Pod) DryRunCharge(
-	params chain.DryRunCallParams,
+	__ink_params chain.DryRunParams,
 ) (*util.NullTuple, *chain.DryRunReturnGas, error) {
 	if c.ChainClient.Debug {
 		fmt.Println()
@@ -266,10 +254,10 @@ func (c *Pod) DryRunCharge(
 	}
 	v, gas, err := chain.DryRunInk[util.NullTuple](
 		c,
-		params.Origin,
-		params.PayAmount,
-		params.GasLimit,
-		params.StorageDepositLimit,
+		__ink_params.Origin,
+		__ink_params.PayAmount,
+		__ink_params.GasLimit,
+		__ink_params.StorageDepositLimit,
 		util.InkContractInput{
 			Selector: "0x1906ffe6",
 			Args:     []any{},
@@ -282,7 +270,7 @@ func (c *Pod) DryRunCharge(
 }
 
 func (c *Pod) ExecCharge(
-	__ink_params chain.CallParams,
+	__ink_params chain.ExecParams,
 ) error {
 	_param := chain.DefaultParamWithOrigin(__ink_params.Signer.AccountID())
 	_param.PayAmount = __ink_params.PayAmount
@@ -292,29 +280,25 @@ func (c *Pod) ExecCharge(
 	}
 	return chain.CallInk(
 		c,
-		__ink_params.Signer,
-		__ink_params.PayAmount,
 		gas.GasRequired,
 		gas.StorageDeposit,
 		util.InkContractInput{
 			Selector: "0x1906ffe6",
 			Args:     []any{},
 		},
+		__ink_params,
 	)
 }
 
-func (c *Pod) CallOfChargeTx(
-	__ink_params chain.CallParams,
+func (c *Pod) CallOfCharge(
+	__ink_params chain.DryRunParams,
 ) (*types.Call, error) {
-	_param := chain.DefaultParamWithOrigin(__ink_params.Signer.AccountID())
-	_param.PayAmount = __ink_params.PayAmount
-	_, gas, err := c.DryRunCharge(_param)
+	_, gas, err := c.DryRunCharge(__ink_params)
 	if err != nil {
 		return nil, err
 	}
 	return chain.CallOfTransaction(
 		c,
-		__ink_params.Signer,
 		__ink_params.PayAmount,
 		gas.GasRequired,
 		gas.StorageDeposit,
@@ -326,7 +310,7 @@ func (c *Pod) CallOfChargeTx(
 }
 
 func (c *Pod) DryRunWithdraw(
-	amount types.U256, params chain.DryRunCallParams,
+	amount types.U256, __ink_params chain.DryRunParams,
 ) (*util.Result[util.NullTuple, Error], *chain.DryRunReturnGas, error) {
 	if c.ChainClient.Debug {
 		fmt.Println()
@@ -334,10 +318,10 @@ func (c *Pod) DryRunWithdraw(
 	}
 	v, gas, err := chain.DryRunInk[util.Result[util.NullTuple, Error]](
 		c,
-		params.Origin,
-		params.PayAmount,
-		params.GasLimit,
-		params.StorageDepositLimit,
+		__ink_params.Origin,
+		__ink_params.PayAmount,
+		__ink_params.GasLimit,
+		__ink_params.StorageDepositLimit,
 		util.InkContractInput{
 			Selector: "0x410fcc9d",
 			Args:     []any{amount},
@@ -354,7 +338,7 @@ func (c *Pod) DryRunWithdraw(
 }
 
 func (c *Pod) ExecWithdraw(
-	amount types.U256, __ink_params chain.CallParams,
+	amount types.U256, __ink_params chain.ExecParams,
 ) error {
 	_param := chain.DefaultParamWithOrigin(__ink_params.Signer.AccountID())
 	_param.PayAmount = __ink_params.PayAmount
@@ -364,29 +348,25 @@ func (c *Pod) ExecWithdraw(
 	}
 	return chain.CallInk(
 		c,
-		__ink_params.Signer,
-		__ink_params.PayAmount,
 		gas.GasRequired,
 		gas.StorageDeposit,
 		util.InkContractInput{
 			Selector: "0x410fcc9d",
 			Args:     []any{amount},
 		},
+		__ink_params,
 	)
 }
 
-func (c *Pod) CallOfWithdrawTx(
-	amount types.U256, __ink_params chain.CallParams,
+func (c *Pod) CallOfWithdraw(
+	amount types.U256, __ink_params chain.DryRunParams,
 ) (*types.Call, error) {
-	_param := chain.DefaultParamWithOrigin(__ink_params.Signer.AccountID())
-	_param.PayAmount = __ink_params.PayAmount
-	_, gas, err := c.DryRunWithdraw(amount, _param)
+	_, gas, err := c.DryRunWithdraw(amount, __ink_params)
 	if err != nil {
 		return nil, err
 	}
 	return chain.CallOfTransaction(
 		c,
-		__ink_params.Signer,
 		__ink_params.PayAmount,
 		gas.GasRequired,
 		gas.StorageDeposit,
@@ -398,7 +378,7 @@ func (c *Pod) CallOfWithdrawTx(
 }
 
 func (c *Pod) DryRunSetCode(
-	code_hash types.H256, params chain.DryRunCallParams,
+	code_hash types.H256, __ink_params chain.DryRunParams,
 ) (*util.Result[util.NullTuple, Error], *chain.DryRunReturnGas, error) {
 	if c.ChainClient.Debug {
 		fmt.Println()
@@ -406,10 +386,10 @@ func (c *Pod) DryRunSetCode(
 	}
 	v, gas, err := chain.DryRunInk[util.Result[util.NullTuple, Error]](
 		c,
-		params.Origin,
-		params.PayAmount,
-		params.GasLimit,
-		params.StorageDepositLimit,
+		__ink_params.Origin,
+		__ink_params.PayAmount,
+		__ink_params.GasLimit,
+		__ink_params.StorageDepositLimit,
 		util.InkContractInput{
 			Selector: "0x694fb50f",
 			Args:     []any{code_hash},
@@ -426,7 +406,7 @@ func (c *Pod) DryRunSetCode(
 }
 
 func (c *Pod) ExecSetCode(
-	code_hash types.H256, __ink_params chain.CallParams,
+	code_hash types.H256, __ink_params chain.ExecParams,
 ) error {
 	_param := chain.DefaultParamWithOrigin(__ink_params.Signer.AccountID())
 	_param.PayAmount = __ink_params.PayAmount
@@ -436,29 +416,25 @@ func (c *Pod) ExecSetCode(
 	}
 	return chain.CallInk(
 		c,
-		__ink_params.Signer,
-		__ink_params.PayAmount,
 		gas.GasRequired,
 		gas.StorageDeposit,
 		util.InkContractInput{
 			Selector: "0x694fb50f",
 			Args:     []any{code_hash},
 		},
+		__ink_params,
 	)
 }
 
-func (c *Pod) CallOfSetCodeTx(
-	code_hash types.H256, __ink_params chain.CallParams,
+func (c *Pod) CallOfSetCode(
+	code_hash types.H256, __ink_params chain.DryRunParams,
 ) (*types.Call, error) {
-	_param := chain.DefaultParamWithOrigin(__ink_params.Signer.AccountID())
-	_param.PayAmount = __ink_params.PayAmount
-	_, gas, err := c.DryRunSetCode(code_hash, _param)
+	_, gas, err := c.DryRunSetCode(code_hash, __ink_params)
 	if err != nil {
 		return nil, err
 	}
 	return chain.CallOfTransaction(
 		c,
-		__ink_params.Signer,
 		__ink_params.PayAmount,
 		gas.GasRequired,
 		gas.StorageDeposit,

@@ -125,15 +125,18 @@ func (c *ChainClient) GetAccount(address SignerType) (*types.AccountInfo, error)
 
 // 签名并提交交易
 // Sign and submit transaction
-func (c *ChainClient) SignAndSubmit(signer SignerType, call types.Call, untilFinalized bool) error {
-	accountInfo, err := c.GetAccount(signer)
-	if err != nil {
-		return errors.New("GetAccountInfo error: " + err.Error())
+func (c *ChainClient) SignAndSubmit(signer SignerType, call types.Call, untilFinalized bool, nonce uint64) error {
+	if nonce == 0 {
+		accountInfo, err := c.GetAccount(signer)
+		if err != nil {
+			return errors.New("GetAccountInfo error: " + err.Error())
+		}
+		nonce = uint64(accountInfo.Nonce)
 	}
 
 	ext := NewExtrinsic(call)
-	err = ext.Sign(signer, c.Meta, extrinsic.WithEra(types.ExtrinsicEra{IsImmortalEra: true}, c.Hash),
-		extrinsic.WithNonce(types.NewUCompactFromUInt(uint64(accountInfo.Nonce))),
+	err := ext.Sign(signer, c.Meta, extrinsic.WithEra(types.ExtrinsicEra{IsImmortalEra: true}, c.Hash),
+		extrinsic.WithNonce(types.NewUCompactFromUInt(nonce)),
 		extrinsic.WithTip(types.NewUCompactFromUInt(0)),
 		extrinsic.WithSpecVersion(c.Runtime.SpecVersion),
 		extrinsic.WithTransactionVersion(c.Runtime.TransactionVersion),
@@ -528,7 +531,7 @@ func (c *ChainClient) MapReviveAccount(signer SignerType) error {
 		return errors.New("(runtimeCall).AsCall() error: " + err.Error())
 	}
 
-	return c.SignAndSubmit(signer, call, true)
+	return c.SignAndSubmit(signer, call, true, 0)
 }
 
 // Get block gas limit
@@ -540,7 +543,10 @@ func (c *ChainClient) InkBlockGasLimit(address [32]byte) error {
 
 var batchMethods = []string{"batch", "batch_all", "force_batch"}
 
-// / get batch call
+// get batch call
+// Utility.batch 如果批量中的某个调用失败（返回错误），整个批量调用立即停止，后续调用永远不会执行
+// Utility.batch_all 无论中间某个调用是否失败，都会继续执行整个批量中的所有调用（不中断）
+// Utility.force_batch 强制执行，忽略调用失败
 func (c *ChainClient) BatchCall(
 	callMethod string, // Utility.batch_all or Utility.batch or Utility.force_batch
 	calls []types.Call,
