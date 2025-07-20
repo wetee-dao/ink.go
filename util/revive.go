@@ -11,6 +11,8 @@ import (
 	gtypes "github.com/wetee-dao/ink.go/pallet/types"
 )
 
+type AccountId = types.AccountID
+
 // type AccountId [32]byte
 func NewAccountID(pubkey []byte) types.AccountID {
 	var bt [32]byte
