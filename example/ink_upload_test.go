@@ -13,7 +13,7 @@ import (
 )
 
 func TestUpload(t *testing.T) {
-	chainClient, err := chain.ClientInit("ws://127.0.0.1:9944", true)
+	chainClient, err := chain.InitClient([]string{"ws://127.0.0.1:9944"}, true)
 	if err != nil {
 		panic(err)
 	}
@@ -40,7 +40,7 @@ func TestUpload(t *testing.T) {
 }
 
 func TestInitWithCode(t *testing.T) {
-	chainClient, err := chain.ClientInit("ws://127.0.0.1:9944", true)
+	chainClient, err := chain.InitClient([]string{"ws://127.0.0.1:9944"}, true)
 	if err != nil {
 		panic(err)
 	}

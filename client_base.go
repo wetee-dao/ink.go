@@ -8,6 +8,7 @@ import (
 	"hash"
 	"log"
 	"math/big"
+	"sync"
 	"time"
 
 	gsrpc "github.com/centrifuge/go-substrate-rpc-client/v4"
@@ -29,53 +30,88 @@ import (
 // 区块链链接
 // Chain client
 type ChainClient struct {
-	Api      *gsrpc.SubstrateAPI
 	Meta     *types.Metadata
 	Runtime  *types.RuntimeVersion
 	ErrorMap registry.ErrorRegistry
 	Hash     types.Hash
 	Debug    bool
+
+	currIndex int
+	mu        sync.Mutex
+	conns     []*gsrpc.SubstrateAPI
 }
 
 // 初始化区块连链接
 // Init chain client
-func ClientInit(url string, debug bool) (*ChainClient, error) {
-	if url == "" {
-		url = config.Default().RPCURL
-	}
-	api, err := gsrpc.NewSubstrateAPI(url)
-	if err != nil {
-		return nil, err
+func InitClient(urls []string, debug bool) (*ChainClient, error) {
+	if len(urls) == 0 {
+		urls = []string{config.Default().RPCURL}
 	}
 
-	meta, err := api.RPC.State.GetMetadataLatest()
-	if err != nil {
-		return nil, err
-	}
-	gtypes.Meta = *meta
+	var meta *types.Metadata
+	var runtime *types.RuntimeVersion
+	var errMap registry.ErrorRegistry
+	var genesisHash types.Hash
 
-	errMap, err := InitErrors(meta)
-	if err != nil {
-		return nil, err
+	conns := make([]*gsrpc.SubstrateAPI, 0, len(urls))
+	for _, url := range urls {
+		api, err := gsrpc.NewSubstrateAPI(url)
+		if err != nil {
+			return nil, err
+		}
+
+		if len(conns) > 0 {
+			hash, err := api.RPC.Chain.GetBlockHash(0)
+			if err != nil {
+				return nil, err
+			}
+
+			if hash != genesisHash {
+				return nil, errors.New("url " + url + " genesis hash is not match")
+			}
+
+			conns = append(conns, api)
+			continue
+		}
+
+		meta, err = api.RPC.State.GetMetadataLatest()
+		if err != nil {
+			return nil, err
+		}
+		gtypes.Meta = *meta
+
+		genesisHash, err = api.RPC.Chain.GetBlockHash(0)
+		if err != nil {
+			return nil, err
+		}
+
+		errMap, err = InitErrors(meta)
+		if err != nil {
+			return nil, err
+		}
+
+		runtime, err = api.RPC.State.GetRuntimeVersionLatest()
+		if err != nil {
+			return nil, err
+		}
+
+		conns = append(conns, api)
 	}
 
-	genesisHash, err := api.RPC.Chain.GetBlockHash(0)
-	if err != nil {
-		return nil, err
-	}
-
-	runtime, err := api.RPC.State.GetRuntimeVersionLatest()
-	if err != nil {
-		return nil, err
-	}
-
-	return &ChainClient{api, meta, runtime, errMap, genesisHash, debug}, nil
+	return &ChainClient{
+		Meta:     meta,
+		Runtime:  runtime,
+		ErrorMap: errMap,
+		Hash:     genesisHash,
+		Debug:    debug,
+		conns:    conns,
+	}, nil
 }
 
 // 检查 metadata 是否匹配
 // 不匹配就更新
 func (c *ChainClient) CheckMetadata() error {
-	runtime, err := c.Api.RPC.State.GetRuntimeVersionLatest()
+	runtime, err := c.Api().RPC.State.GetRuntimeVersionLatest()
 	if err != nil {
 		return err
 	}
@@ -84,7 +120,7 @@ func (c *ChainClient) CheckMetadata() error {
 		return nil
 	}
 
-	meta, err := c.Api.RPC.State.GetMetadataLatest()
+	meta, err := c.Api().RPC.State.GetMetadataLatest()
 	if err != nil {
 		return err
 	}
@@ -104,7 +140,7 @@ func (c *ChainClient) CheckMetadata() error {
 // 获取区块高度
 // Get block number
 func (c *ChainClient) GetBlockNumber() (types.BlockNumber, error) {
-	hash, err := c.Api.RPC.Chain.GetHeaderLatest()
+	hash, err := c.Api().RPC.Chain.GetHeaderLatest()
 	if err != nil {
 		return 0, err
 	}
@@ -119,7 +155,7 @@ func (c *ChainClient) GetAccount(address SignerType) (*types.AccountInfo, error)
 		panic(err)
 	}
 	var accountInfo types.AccountInfo
-	_, err = c.Api.RPC.State.GetStorageLatest(key, &accountInfo)
+	_, err = c.Api().RPC.State.GetStorageLatest(key, &accountInfo)
 	return &accountInfo, err
 }
 
@@ -146,9 +182,9 @@ func (c *ChainClient) SignAndSubmit(signer SignerType, call types.Call, untilFin
 		return err
 	}
 
-	sub, err := c.Api.RPC.Author.SubmitAndWatchExtrinsic(ext.Extrinsic)
+	sub, err := c.Api().RPC.Author.SubmitAndWatchExtrinsic(ext.Extrinsic)
 	if err != nil {
-		return errors.New("SubmitAndWatchExtrinsic error: " + err.Error())
+		return errors.New("Author.SubmitAndWatchExtrinsic error: " + err.Error())
 	}
 
 	defer sub.Unsubscribe()
@@ -156,7 +192,7 @@ func (c *ChainClient) SignAndSubmit(signer SignerType, call types.Call, untilFin
 
 	extBytes, err := codec.Encode(ext.Extrinsic)
 	if err != nil {
-		return errors.New("SubmitAndWatchExtrinsic error: " + err.Error())
+		return errors.New("Codec.Encode error: " + err.Error())
 	}
 	hash := blake2b.Sum256(extBytes)
 
@@ -209,12 +245,12 @@ func (c *ChainClient) SignAndSubmit(signer SignerType, call types.Call, untilFin
 // 检查交易是否成功
 // Check whether the transaction is successful
 func (c *ChainClient) checkExtrinsic(extHash types.Hash, blockHash types.Hash) ([]gtypes.EventRecord, bool, error) {
-	block, err := c.Api.RPC.Chain.GetBlock(blockHash)
+	block, err := c.Api().RPC.Chain.GetBlock(blockHash)
 	if err != nil {
 		return nil, false, err
 	}
 
-	events, err := system.GetEvents(c.Api.RPC.State, blockHash)
+	events, err := system.GetEvents(c.Api().RPC.State, blockHash)
 	if err != nil {
 		return nil, false, err
 	}
@@ -285,12 +321,12 @@ func (c *ChainClient) checkExtrinsic(extHash types.Hash, blockHash types.Hash) (
 func (c *ChainClient) QueryMapAll(pallet string, method string) ([]types.StorageChangeSet, error) {
 	key := CreatePrefixedKey(pallet, method)
 
-	keys, err := c.Api.RPC.State.GetKeysLatest(key)
+	keys, err := c.Api().RPC.State.GetKeysLatest(key)
 	if err != nil {
 		return []types.StorageChangeSet{}, err
 	}
 
-	set, err := c.Api.RPC.State.QueryStorageAtLatest(keys)
+	set, err := c.Api().RPC.State.QueryStorageAtLatest(keys)
 	if err != nil {
 		return []types.StorageChangeSet{}, err
 	}
@@ -321,7 +357,7 @@ func (c *ChainClient) QueryMapKeys(pallet string, method string, fkeys []any) ([
 		keys[i] = types.StorageKey(append(key, hashers[1].Sum(nil)...))
 	}
 
-	set, err := c.Api.RPC.State.QueryStorageAtLatest(keys)
+	set, err := c.Api().RPC.State.QueryStorageAtLatest(keys)
 	if err != nil {
 		return []types.StorageChangeSet{}, err
 	}
@@ -340,9 +376,9 @@ func (c *ChainClient) QueryDoubleMapAll(pallet string, method string, keyarg any
 	// query key
 	var keys []types.StorageKey
 	if at == nil {
-		keys, err = c.Api.RPC.State.GetKeysLatest(key)
+		keys, err = c.Api().RPC.State.GetKeysLatest(key)
 	} else {
-		keys, err = c.Api.RPC.State.GetKeys(key, *at)
+		keys, err = c.Api().RPC.State.GetKeys(key, *at)
 	}
 
 	if err != nil {
@@ -352,9 +388,9 @@ func (c *ChainClient) QueryDoubleMapAll(pallet string, method string, keyarg any
 	// get all data
 	var set []types.StorageChangeSet
 	if at == nil {
-		set, err = c.Api.RPC.State.QueryStorageAtLatest(keys)
+		set, err = c.Api().RPC.State.QueryStorageAtLatest(keys)
 	} else {
-		set, err = c.Api.RPC.State.QueryStorageAt(keys, *at)
+		set, err = c.Api().RPC.State.QueryStorageAt(keys, *at)
 	}
 	if err != nil {
 		return nil, err
@@ -401,9 +437,9 @@ func (c *ChainClient) QueryDoubleMapKeys(pallet string, method string, keyarg an
 	// get all data
 	var set []types.StorageChangeSet
 	if at == nil {
-		set, err = c.Api.RPC.State.QueryStorageAtLatest(keys)
+		set, err = c.Api().RPC.State.QueryStorageAtLatest(keys)
 	} else {
-		set, err = c.Api.RPC.State.QueryStorageAt(keys, *at)
+		set, err = c.Api().RPC.State.QueryStorageAt(keys, *at)
 	}
 	if err != nil {
 		return nil, err
@@ -492,7 +528,7 @@ func (c *ChainClient) CallRuntimeApi(pallet, method string, args []any, result a
 
 	// Call runtime api
 	var rawResult string
-	err = c.Api.Client.Call(&rawResult, "state_call", pallet+"_"+method, "0x"+hex.EncodeToString(buffer.Bytes()))
+	err = c.Api().Client.Call(&rawResult, "state_call", pallet+"_"+method, "0x"+hex.EncodeToString(buffer.Bytes()))
 	if err != nil {
 		return err
 	}
@@ -541,12 +577,17 @@ func (c *ChainClient) InkBlockGasLimit(address [32]byte) error {
 	return err
 }
 
-var batchMethods = []string{"batch", "batch_all", "force_batch"}
+// Close chain client
+func (c *ChainClient) Close() {
+	c.Api().Client.Close()
+}
 
-// get batch call
 // Utility.batch 如果批量中的某个调用失败（返回错误），整个批量调用立即停止，后续调用永远不会执行
 // Utility.batch_all 无论中间某个调用是否失败，都会继续执行整个批量中的所有调用（不中断）
 // Utility.force_batch 强制执行，忽略调用失败
+var batchMethods = []string{"batch", "batch_all", "force_batch"}
+
+// get batch call
 func (c *ChainClient) BatchCall(
 	callMethod string, // Utility.batch_all or Utility.batch or Utility.force_batch
 	calls []types.Call,
