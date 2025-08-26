@@ -61,7 +61,7 @@ After the complete code is generated, users can quickly complete the contract in
 For example
 ```go
 // Step1: connect to chain
-chainClient, err := chain.ClientInit("ws://127.0.0.1:9944", false)
+chainClient, err := chain.ClientInit([]string{"ws://127.0.0.1:9944"}, false)
 if err != nil {
     panic(err)
 }
@@ -96,7 +96,7 @@ Similar queries can also complete the DryRun steps in 4 steps.
 For example
 ```go
 // Step1: connect to chain
-chainClient, err := chain.ClientInit("ws://127.0.0.1:9944", false)
+chainClient, err := chain.ClientInit([]string{"ws://127.0.0.1:9944"}, false)
 if err != nil {
     panic(err)
 }
@@ -127,7 +127,7 @@ if err == nil {
 ## Call contract
 ```go
 // Step1: connect to chain
-chainClient, err := chain.ClientInit("ws://127.0.0.1:9944", false)
+chainClient, err := chain.ClientInit([]string{"ws://127.0.0.1:9944"}, false)
 if err != nil {
     panic(err)
 }

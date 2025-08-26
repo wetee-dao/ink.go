@@ -27,6 +27,11 @@ type Option[T any] struct {
 	V      T
 }
 
+func (t *Option[T]) Set(v T) {
+	t.isSome = true
+	t.V = v
+}
+
 func (t Option[T]) IsSome() bool {
 	return t.isSome
 }
