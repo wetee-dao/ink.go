@@ -60,10 +60,10 @@ func MakeCallCall(dest0 [20]byte, value1 types1.UCompact, gasLimit2 types.Weight
 	}
 }
 
-// Instantiates a contract from a previously deployed wasm binary.
+// Instantiates a contract from a previously deployed vm binary.
 //
 // This function is identical to [`Self::instantiate_with_code`] but without the
-// code deployment step. Instead, the `code_hash` of an on-chain deployed wasm binary
+// code deployment step. Instead, the `code_hash` of an on-chain deployed vm binary
 // must be supplied.
 func MakeInstantiateCall(value0 types1.UCompact, gasLimit1 types.Weight, storageDepositLimit2 types1.UCompact, codeHash3 [32]byte, data4 []byte, salt5 types.OptionTByteArray321) types.RuntimeCall {
 	return types.RuntimeCall{
@@ -121,11 +121,49 @@ func MakeInstantiateWithCodeCall(value0 types1.UCompact, gasLimit1 types.Weight,
 	}
 }
 
+// Same as [`Self::instantiate_with_code`], but intended to be dispatched **only**
+// by an EVM transaction through the EVM compatibility layer.
+//
+// Calling this dispatchable ensures that the origin's nonce is bumped only once,
+// via the `CheckNonce` transaction extension. In contrast, [`Self::instantiate_with_code`]
+// also bumps the nonce after contract instantiation, since it may be invoked multiple
+// times within a batch call transaction.
+func MakeEthInstantiateWithCodeCall(value0 [4]uint64, gasLimit1 types.Weight, code2 []byte, data3 []byte, effectiveGasPrice4 [4]uint64, encodedLen5 uint32) types.RuntimeCall {
+	return types.RuntimeCall{
+		IsRevive: true,
+		AsReviveField0: &types.PalletRevivePalletCall{
+			IsEthInstantiateWithCode:                   true,
+			AsEthInstantiateWithCodeValue0:             value0,
+			AsEthInstantiateWithCodeGasLimit1:          gasLimit1,
+			AsEthInstantiateWithCodeCode2:              code2,
+			AsEthInstantiateWithCodeData3:              data3,
+			AsEthInstantiateWithCodeEffectiveGasPrice4: effectiveGasPrice4,
+			AsEthInstantiateWithCodeEncodedLen5:        encodedLen5,
+		},
+	}
+}
+
+// Same as [`Self::call`], but intended to be dispatched **only**
+// by an EVM transaction through the EVM compatibility layer.
+func MakeEthCallCall(dest0 [20]byte, value1 [4]uint64, gasLimit2 types.Weight, data3 []byte, effectiveGasPrice4 [4]uint64, encodedLen5 uint32) types.RuntimeCall {
+	return types.RuntimeCall{
+		IsRevive: true,
+		AsReviveField0: &types.PalletRevivePalletCall{
+			IsEthCall:                   true,
+			AsEthCallDest0:              dest0,
+			AsEthCallValue1:             value1,
+			AsEthCallGasLimit2:          gasLimit2,
+			AsEthCallData3:              data3,
+			AsEthCallEffectiveGasPrice4: effectiveGasPrice4,
+			AsEthCallEncodedLen5:        encodedLen5,
+		},
+	}
+}
+
 // Upload new `code` without instantiating a contract from it.
 //
 // If the code does not already exist a deposit is reserved from the caller
-// and unreserved only when [`Self::remove_code`] is called. The size of the reserve
-// depends on the size of the supplied `code`.
+// The size of the reserve depends on the size of the supplied `code`.
 //
 // # Note
 //
@@ -133,6 +171,9 @@ func MakeInstantiateWithCodeCall(value0 types1.UCompact, gasLimit1 types.Weight,
 // To avoid this situation a constructor could employ access control so that it can
 // only be instantiated by permissioned entities. The same is true when uploading
 // through [`Self::instantiate_with_code`].
+//
+// If the refcount of the code reaches zero after terminating the last contract that
+// references this code, the code will be removed automatically.
 func MakeUploadCodeCall(code0 []byte, storageDepositLimit1 types1.UCompact) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsRevive: true,

@@ -2,7 +2,6 @@ package revive
 
 import (
 	"encoding/hex"
-
 	state "github.com/centrifuge/go-substrate-rpc-client/v4/rpc/state"
 	types "github.com/centrifuge/go-substrate-rpc-client/v4/types"
 	codec "github.com/centrifuge/go-substrate-rpc-client/v4/types/codec"
@@ -12,6 +11,8 @@ import (
 // Make a storage key for PristineCode
 //
 //	A mapping from a contract's code hash to its code.
+//	The code's size is bounded by [`crate::limits::BLOB_BYTES`] for PVM and
+//	[`revm::primitives::eip170::MAX_CODE_SIZE`] for EVM bytecode.
 func MakePristineCodeStorageKey(byteArray320 [32]byte) (types.StorageKey, error) {
 	byteArgs := [][]byte{}
 	encBytes := []byte{}
@@ -83,10 +84,10 @@ func GetCodeInfoOfLatest(state state.State, byteArray320 [32]byte) (ret types1.C
 	return
 }
 
-// Make a storage key for ContractInfoOf
+// Make a storage key for AccountInfoOf
 //
-//	The code associated with a given account.
-func MakeContractInfoOfStorageKey(byteArray200 [20]byte) (types.StorageKey, error) {
+//	The data associated to a contract or externally owned account.
+func MakeAccountInfoOfStorageKey(byteArray200 [20]byte) (types.StorageKey, error) {
 	byteArgs := [][]byte{}
 	encBytes := []byte{}
 	var err error
@@ -95,10 +96,10 @@ func MakeContractInfoOfStorageKey(byteArray200 [20]byte) (types.StorageKey, erro
 		return nil, err
 	}
 	byteArgs = append(byteArgs, encBytes)
-	return types.CreateStorageKey(&types1.Meta, "Revive", "ContractInfoOf", byteArgs...)
+	return types.CreateStorageKey(&types1.Meta, "Revive", "AccountInfoOf", byteArgs...)
 }
-func GetContractInfoOf(state state.State, bhash types.Hash, byteArray200 [20]byte) (ret types1.ContractInfo, isSome bool, err error) {
-	key, err := MakeContractInfoOfStorageKey(byteArray200)
+func GetAccountInfoOf(state state.State, bhash types.Hash, byteArray200 [20]byte) (ret types1.AccountInfo1, isSome bool, err error) {
+	key, err := MakeAccountInfoOfStorageKey(byteArray200)
 	if err != nil {
 		return
 	}
@@ -108,8 +109,8 @@ func GetContractInfoOf(state state.State, bhash types.Hash, byteArray200 [20]byt
 	}
 	return
 }
-func GetContractInfoOfLatest(state state.State, byteArray200 [20]byte) (ret types1.ContractInfo, isSome bool, err error) {
-	key, err := MakeContractInfoOfStorageKey(byteArray200)
+func GetAccountInfoOfLatest(state state.State, byteArray200 [20]byte) (ret types1.AccountInfo1, isSome bool, err error) {
+	key, err := MakeAccountInfoOfStorageKey(byteArray200)
 	if err != nil {
 		return
 	}
@@ -197,7 +198,7 @@ func GetDeletionQueueLatest(state state.State, uint320 uint32) (ret []byte, isSo
 	return
 }
 
-// Make a storage key for DeletionQueueCounter id={{false [234]}}
+// Make a storage key for DeletionQueueCounter id={{false [122]}}
 //
 //	A pair of monotonic counters used to track the latest contract marked for deletion
 //	and the latest deleted contract in queue.
@@ -282,6 +283,52 @@ func GetOriginalAccountLatest(state state.State, byteArray200 [20]byte) (ret [32
 	isSome, err = state.GetStorageLatest(key, &ret)
 	if err != nil {
 		return
+	}
+	return
+}
+
+// Make a storage key for DebugSettingsOf id={{false [123]}}
+//
+//	Debugging settings that can be configured when DebugEnabled config is true.
+func MakeDebugSettingsOfStorageKey() (types.StorageKey, error) {
+	return types.CreateStorageKey(&types1.Meta, "Revive", "DebugSettingsOf")
+}
+
+var DebugSettingsOfResultDefaultBytes, _ = hex.DecodeString("00")
+
+func GetDebugSettingsOf(state state.State, bhash types.Hash) (ret bool, err error) {
+	key, err := MakeDebugSettingsOfStorageKey()
+	if err != nil {
+		return
+	}
+	var isSome bool
+	isSome, err = state.GetStorage(key, &ret, bhash)
+	if err != nil {
+		return
+	}
+	if !isSome {
+		err = codec.Decode(DebugSettingsOfResultDefaultBytes, &ret)
+		if err != nil {
+			return
+		}
+	}
+	return
+}
+func GetDebugSettingsOfLatest(state state.State) (ret bool, err error) {
+	key, err := MakeDebugSettingsOfStorageKey()
+	if err != nil {
+		return
+	}
+	var isSome bool
+	isSome, err = state.GetStorageLatest(key, &ret)
+	if err != nil {
+		return
+	}
+	if !isSome {
+		err = codec.Decode(DebugSettingsOfResultDefaultBytes, &ret)
+		if err != nil {
+			return
+		}
 	}
 	return
 }

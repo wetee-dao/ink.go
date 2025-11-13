@@ -24,13 +24,15 @@ func ExampleExtrinsic() {
 		panic(err)
 	}
 
+	fmt.Println(p.Address)
+
 	minter, _ := types.NewMultiAddressFromAccountID(signature.TestKeyringPairAlice.PublicKey)
 	minterWrap := gtypes.MultiAddress{
 		IsId:       true,
 		AsIdField0: minter.AsID,
 	}
 
-	bal, _ := new(big.Int).SetString("500000000000", 10)
+	bal, _ := new(big.Int).SetString("400000000000", 10)
 	runtimeCall := balances.MakeTransferAllowDeathCall(minterWrap, types.NewUCompact(bal))
 	call, err := (runtimeCall).AsCall()
 	if err != nil {

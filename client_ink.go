@@ -59,7 +59,7 @@ func DryRunInk[T any](
 		return nil, nil, errors.New("CallRuntimeApi: " + err.Error())
 	}
 
-	var returnValue *gtypes.ExecReturnValue
+	var returnValue *util.ExecReturnValue
 	if result.Result.IsErr {
 		if result.Result.E.IsModule {
 			merr := result.Result.E.AsModuleField0

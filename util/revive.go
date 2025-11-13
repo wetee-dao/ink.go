@@ -2,6 +2,7 @@ package util
 
 import (
 	"bytes"
+	"encoding/json"
 	"errors"
 	"fmt"
 
@@ -51,8 +52,8 @@ func (e *InkContractInput) Encode() ([]byte, error) {
 type ContractResult struct {
 	GasConsumed    gtypes.Weight
 	GasRequired    gtypes.Weight
-	StorageDeposit gtypes.StorageDeposit
-	Result         Result[gtypes.ExecReturnValue, gtypes.DispatchError]
+	StorageDeposit StorageDeposit
+	Result         Result[ExecReturnValue, gtypes.DispatchError]
 }
 
 type UploadResult struct {
@@ -63,12 +64,12 @@ type UploadResult struct {
 type ContractInitResult struct {
 	GasConsumed    gtypes.Weight
 	GasRequired    gtypes.Weight
-	StorageDeposit gtypes.StorageDeposit
+	StorageDeposit StorageDeposit
 	Result         Result[InitReturnValue, gtypes.DispatchError]
 }
 
 type InitReturnValue struct {
-	Result gtypes.ExecReturnValue
+	Result ExecReturnValue
 	Addr   types.H160
 }
 
@@ -132,3 +133,88 @@ func (ty *InkCode) Decode(decoder scale.Decoder) (err error) {
 }
 
 type NullTuple struct{}
+
+// Generated PalletRevivePrimitivesStorageDeposit with id=335
+type StorageDeposit struct {
+	IsRefund       bool
+	AsRefundField0 types.U128
+	IsCharge       bool
+	AsChargeField0 types.U128
+}
+
+func (ty StorageDeposit) Encode(encoder scale.Encoder) (err error) {
+	if ty.IsRefund {
+		err = encoder.PushByte(0)
+		if err != nil {
+			return err
+		}
+		err = encoder.Encode(ty.AsRefundField0)
+		if err != nil {
+			return err
+		}
+		return nil
+	}
+	if ty.IsCharge {
+		err = encoder.PushByte(1)
+		if err != nil {
+			return err
+		}
+		err = encoder.Encode(ty.AsChargeField0)
+		if err != nil {
+			return err
+		}
+		return nil
+	}
+	return fmt.Errorf("Unrecognized variant")
+}
+func (ty *StorageDeposit) Decode(decoder scale.Decoder) (err error) {
+	variant, err := decoder.ReadOneByte()
+	if err != nil {
+		return err
+	}
+	switch variant {
+	case 0:
+		ty.IsRefund = true
+		err = decoder.Decode(&ty.AsRefundField0)
+		if err != nil {
+			return err
+		}
+		return
+	case 1:
+		ty.IsCharge = true
+		err = decoder.Decode(&ty.AsChargeField0)
+		if err != nil {
+			return err
+		}
+		return
+	default:
+		return fmt.Errorf("Unrecognized variant")
+	}
+}
+func (ty *StorageDeposit) Variant() (uint8, error) {
+	if ty.IsRefund {
+		return 0, nil
+	}
+	if ty.IsCharge {
+		return 1, nil
+	}
+	return 0, fmt.Errorf("No variant detected")
+}
+func (ty StorageDeposit) MarshalJSON() ([]byte, error) {
+	if ty.IsRefund {
+		m := map[string]interface{}{"StorageDeposit::Refund": ty.AsRefundField0}
+		return json.Marshal(m)
+	}
+	if ty.IsCharge {
+		m := map[string]interface{}{"StorageDeposit::Charge": ty.AsChargeField0}
+		return json.Marshal(m)
+	}
+	return nil, fmt.Errorf("No variant detected")
+}
+
+type ExecReturnValue struct {
+	// Field 0 with TypeId=334
+	Flags uint32
+	// Field 1 with TypeId=14
+	Data []byte
+}
