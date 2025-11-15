@@ -198,7 +198,7 @@ func GetDeletionQueueLatest(state state.State, uint320 uint32) (ret []byte, isSo
 	return
 }
 
-// Make a storage key for DeletionQueueCounter id={{false [122]}}
+// Make a storage key for DeletionQueueCounter id={{false [146]}}
 //
 //	A pair of monotonic counters used to track the latest contract marked for deletion
 //	and the latest deleted contract in queue.
@@ -287,7 +287,7 @@ func GetOriginalAccountLatest(state state.State, byteArray200 [20]byte) (ret [32
 	return
 }
 
-// Make a storage key for DebugSettingsOf id={{false [123]}}
+// Make a storage key for DebugSettingsOf id={{false [147]}}
 //
 //	Debugging settings that can be configured when DebugEnabled config is true.
 func MakeDebugSettingsOfStorageKey() (types.StorageKey, error) {
