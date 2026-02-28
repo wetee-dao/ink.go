@@ -77,6 +77,10 @@ func DryRunInk[T any](
 
 	// 获取返回值
 	returnValue = &result.Result.V
+	if len(returnValue.Data) < 2 {
+		return nil, nil, errors.New("DryRun: returnValue.Data is nil")
+	}
+
 	data := new(T)
 	err = scale.NewDecoder(bytes.NewReader(returnValue.Data[1:])).Decode(data)
 	if err != nil {
