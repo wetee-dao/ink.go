@@ -49,11 +49,15 @@ func (e *InkContractInput) Encode() ([]byte, error) {
 	return buffer.Bytes(), nil
 }
 
+// ContractResult 与 pallet-revive ContractResult<R, Balance> 对齐（call 返回值）
+// 字段顺序与 ContractInitResult 一致，使用 gtypes.Weight
 type ContractResult struct {
-	GasConsumed    gtypes.Weight
-	GasRequired    gtypes.Weight
-	StorageDeposit StorageDeposit
-	Result         Result[ExecReturnValue, gtypes.DispatchError]
+	WeightConsumed    gtypes.Weight
+	WeightRequired    gtypes.Weight
+	StorageDeposit    StorageDeposit
+	MaxStorageDeposit StorageDeposit
+	GasConsumed       types.U128
+	Result            Result[ExecReturnValue, gtypes.DispatchError]
 }
 
 type UploadResult struct {
@@ -61,16 +65,22 @@ type UploadResult struct {
 	Deposit  types.U128
 }
 
+// ContractInitResult 与 pallet-revive ReviveApi::instantiate 返回的 ContractResult<InstantiateReturnValue, Balance> 对齐
+// 字段顺序: weight_consumed, weight_required, storage_deposit, max_storage_deposit, gas_consumed, result
+// 使用 gtypes.Weight（与链元数据一致，可能为 Compact 编码）以正确对齐
 type ContractInitResult struct {
-	GasConsumed    gtypes.Weight
-	GasRequired    gtypes.Weight
-	StorageDeposit StorageDeposit
-	Result         Result[InitReturnValue, gtypes.DispatchError]
+	WeightConsumed    gtypes.Weight
+	WeightRequired    gtypes.Weight
+	StorageDeposit    StorageDeposit
+	MaxStorageDeposit StorageDeposit
+	GasConsumed       types.U128
+	Result            Result[InitReturnValue, gtypes.DispatchError]
 }
 
+// InitReturnValue 与 pallet-revive InstantiateReturnValue 对齐（result: ExecReturnValue, addr: H160）
 type InitReturnValue struct {
-	Result ExecReturnValue
-	Addr   types.H160
+	Result    ExecReturnValue
+	AccountID types.H160
 }
 
 type InkCode struct {

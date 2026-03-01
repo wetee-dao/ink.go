@@ -77,12 +77,13 @@ func DryRunInk[T any](
 
 	// 获取返回值
 	returnValue = &result.Result.V
-	if len(returnValue.Data) < 2 {
-		return nil, nil, errors.New("DryRun: returnValue.Data is nil")
+	if len(returnValue.Data) == 0 {
+		return nil, nil, errors.New("DryRun: returnValue.Data is empty")
 	}
 
 	data := new(T)
-	err = scale.NewDecoder(bytes.NewReader(returnValue.Data[1:])).Decode(data)
+	// pallet-revive ExecReturnValue.Data 为合约原始返回，无 selector 前缀时直接解码
+	err = scale.NewDecoder(bytes.NewReader(returnValue.Data)).Decode(data)
 	if err != nil {
 		return nil, nil, errors.New("DryRun scale.NewDecoder.Decode: " + err.Error())
 	}
@@ -98,14 +99,8 @@ func DryRunInk[T any](
 	}
 
 	return data, &DryRunReturnGas{
-		GasConsumed: types.Weight{
-			RefTime:   result.GasConsumed.RefTime,
-			ProofSize: result.GasConsumed.ProofSize,
-		},
-		GasRequired: types.Weight{
-			RefTime:   result.GasRequired.RefTime,
-			ProofSize: result.GasRequired.ProofSize,
-		},
+		GasConsumed:    types.Weight(result.WeightConsumed),
+		GasRequired:    types.Weight(result.WeightRequired),
 		StorageDeposit: storageDeposit,
 	}, nil
 }
@@ -349,12 +344,23 @@ func (c *ChainClient) DeployContract(code util.InkCode, signer SignerType, payAm
 		}
 	}
 
+	// 提交时 gas 略放宽 20%
+	w := resultWrap.WeightRequired
+	refTimeAdj := new(big.Int).Mul((*big.Int)(&w.RefTime), big.NewInt(120))
+	refTimeAdj.Quo(refTimeAdj, big.NewInt(100))
+	proofAdj := new(big.Int).Mul((*big.Int)(&w.ProofSize), big.NewInt(120))
+	proofAdj.Quo(proofAdj, big.NewInt(100))
+	gasWeight := gtypes.Weight{
+		RefTime:   types.NewUCompact(refTimeAdj),
+		ProofSize: types.NewUCompact(proofAdj),
+	}
+	depositLimit := types.NewUCompact(resultWrap.StorageDeposit.AsChargeField0.Int)
 	if c.Debug {
 		util.LogWithYellow("[ Deploy origin ]", origin.ToHexString())
 		util.LogWithYellow("[         value ]", payAmount)
 		util.LogWithYellow("[          args ]", "0x"+hex.EncodeToString(argData))
-		util.LogWithYellow("[       RefTime ]", resultWrap.GasRequired.RefTime.Int64())
-		util.LogWithYellow("[     ProofSize ]", resultWrap.GasRequired.ProofSize.Int64())
+		util.LogWithYellow("[       RefTime ]", refTimeAdj.String())
+		util.LogWithYellow("[     ProofSize ]", proofAdj.String())
 		util.LogWithYellow("[  DepositLimit ]", resultWrap.StorageDeposit.AsChargeField0.Int.String())
 		fmt.Println("")
 	}
@@ -363,8 +369,8 @@ func (c *ChainClient) DeployContract(code util.InkCode, signer SignerType, payAm
 	if code.Upload != nil {
 		runtimeCall = revive.MakeInstantiateWithCodeCall(
 			types.NewUCompact(payAmount.Int),
-			resultWrap.GasRequired,
-			types.NewUCompact(resultWrap.StorageDeposit.AsChargeField0.Int),
+			gasWeight,
+			depositLimit,
 			*code.Upload,
 			argData,
 			gsalt,
@@ -372,8 +378,8 @@ func (c *ChainClient) DeployContract(code util.InkCode, signer SignerType, payAm
 	} else if code.Existing != nil {
 		runtimeCall = revive.MakeInstantiateCall(
 			types.NewUCompact(payAmount.Int),
-			resultWrap.GasRequired,
-			types.NewUCompact(resultWrap.StorageDeposit.AsChargeField0.Int),
+			gasWeight,
+			depositLimit,
 			*code.Existing,
 			argData,
 			gsalt,
@@ -390,5 +396,5 @@ func (c *ChainClient) DeployContract(code util.InkCode, signer SignerType, payAm
 		return nil, errors.New("SignAndSubmit error: " + err.Error())
 	}
 
-	return &result.Addr, nil
+	return &result.AccountID, nil
 }
