@@ -1,5 +1,5 @@
 # Golang client for ink! v6 contract
-> Base on github.com/centrifuge/go-substrate-rpc-client
+> Base on github.com/Snowfork/go-substrate-rpc-client
 
 ## Installation
 ### 1. Install the code generation tool for ink! contracts

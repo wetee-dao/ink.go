@@ -533,11 +533,16 @@ func (c *ChainClient) CallRuntimeApi(pallet, method string, args []any, result a
 		return err
 	}
 
+	if c.Debug {
+		util.LogWithPurple("[RuntimeApi]", pallet+"_"+method)
+		util.LogWithPurple("[RawResult]", rawResult)
+	}
+
 	// Decode the raw result from hex to bytes
 	rawResult = rawResult[2:]
 	resultBytes, err := hex.DecodeString(rawResult)
 	if err != nil {
-		log.Fatalf("Failed to decode result: %v", err)
+		log.Fatalf("CallRuntimeApi Failed to decode result: %v", err)
 	}
 
 	// Decode the result using scale.Decoder

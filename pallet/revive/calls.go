@@ -9,10 +9,7 @@ import (
 //
 // # Parameters
 //
-//   - `payload`: The encoded [`crate::evm::TransactionSigned`].
-//   - `gas_limit`: The gas limit enforced during contract execution.
-//   - `storage_deposit_limit`: The maximum balance that can be charged to the caller for
-//     storage usage.
+// * `payload`: The encoded [`crate::evm::TransactionSigned`].
 //
 // # Note
 //
@@ -36,7 +33,7 @@ func MakeEthTransactCall(payload0 []byte) types.RuntimeCall {
 //
 //   - `dest`: Address of the contract to call.
 //   - `value`: The balance to transfer from the `origin` to `dest`.
-//   - `gas_limit`: The gas limit enforced when executing the constructor.
+//   - `weight_limit`: The weight limit enforced when executing the constructor.
 //   - `storage_deposit_limit`: The maximum amount of balance that can be charged from the
 //     caller to pay for the storage consumed.
 //   - `data`: The input data to pass to the contract.
@@ -46,14 +43,14 @@ func MakeEthTransactCall(payload0 []byte) types.RuntimeCall {
 // * If the account is a regular account, any value will be transferred.
 // * If no account exists and the call value is not less than `existential_deposit`,
 // a regular account will be created and any value will be transferred.
-func MakeCallCall(dest0 [20]byte, value1 types1.UCompact, gasLimit2 types.Weight, storageDepositLimit3 types1.UCompact, data4 []byte) types.RuntimeCall {
+func MakeCallCall(dest0 [20]byte, value1 types1.UCompact, weightLimit2 types.Weight, storageDepositLimit3 types1.UCompact, data4 []byte) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsRevive: true,
 		AsReviveField0: &types.PalletRevivePalletCall{
 			IsCall:                     true,
 			AsCallDest0:                dest0,
 			AsCallValue1:               value1,
-			AsCallGasLimit2:            gasLimit2,
+			AsCallWeightLimit2:         weightLimit2,
 			AsCallStorageDepositLimit3: storageDepositLimit3,
 			AsCallData4:                data4,
 		},
@@ -65,13 +62,13 @@ func MakeCallCall(dest0 [20]byte, value1 types1.UCompact, gasLimit2 types.Weight
 // This function is identical to [`Self::instantiate_with_code`] but without the
 // code deployment step. Instead, the `code_hash` of an on-chain deployed vm binary
 // must be supplied.
-func MakeInstantiateCall(value0 types1.UCompact, gasLimit1 types.Weight, storageDepositLimit2 types1.UCompact, codeHash3 [32]byte, data4 []byte, salt5 types.OptionTByteArray321) types.RuntimeCall {
+func MakeInstantiateCall(value0 types1.UCompact, weightLimit1 types.Weight, storageDepositLimit2 types1.UCompact, codeHash3 [32]byte, data4 []byte, salt5 types.OptionTByteArray321) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsRevive: true,
 		AsReviveField0: &types.PalletRevivePalletCall{
 			IsInstantiate:                     true,
 			AsInstantiateValue0:               value0,
-			AsInstantiateGasLimit1:            gasLimit1,
+			AsInstantiateWeightLimit1:         weightLimit1,
 			AsInstantiateStorageDepositLimit2: storageDepositLimit2,
 			AsInstantiateCodeHash3:            codeHash3,
 			AsInstantiateData4:                data4,
@@ -90,7 +87,7 @@ func MakeInstantiateCall(value0 types1.UCompact, gasLimit1 types.Weight, storage
 // # Parameters
 //
 //   - `value`: The balance to transfer from the `origin` to the newly created contract.
-//   - `gas_limit`: The gas limit enforced when executing the constructor.
+//   - `weight_limit`: The weight limit enforced when executing the constructor.
 //   - `storage_deposit_limit`: The maximum amount of balance that can be charged/reserved
 //     from the caller to pay for the storage consumed.
 //   - `code`: The contract code to deploy in raw bytes.
@@ -106,13 +103,13 @@ func MakeInstantiateCall(value0 types1.UCompact, gasLimit1 types.Weight, storage
 // - The smart-contract account is created at the computed address.
 // - The `value` is transferred to the new account.
 // - The `deploy` function is executed in the context of the newly-created account.
-func MakeInstantiateWithCodeCall(value0 types1.UCompact, gasLimit1 types.Weight, storageDepositLimit2 types1.UCompact, code3 []byte, data4 []byte, salt5 types.OptionTByteArray321) types.RuntimeCall {
+func MakeInstantiateWithCodeCall(value0 types1.UCompact, weightLimit1 types.Weight, storageDepositLimit2 types1.UCompact, code3 []byte, data4 []byte, salt5 types.OptionTByteArray321) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsRevive: true,
 		AsReviveField0: &types.PalletRevivePalletCall{
 			IsInstantiateWithCode:                     true,
 			AsInstantiateWithCodeValue0:               value0,
-			AsInstantiateWithCodeGasLimit1:            gasLimit1,
+			AsInstantiateWithCodeWeightLimit1:         weightLimit1,
 			AsInstantiateWithCodeStorageDepositLimit2: storageDepositLimit2,
 			AsInstantiateWithCodeCode3:                code3,
 			AsInstantiateWithCodeData4:                data4,
@@ -124,38 +121,91 @@ func MakeInstantiateWithCodeCall(value0 types1.UCompact, gasLimit1 types.Weight,
 // Same as [`Self::instantiate_with_code`], but intended to be dispatched **only**
 // by an EVM transaction through the EVM compatibility layer.
 //
+// # Parameters
+//
+//   - `value`: The balance to transfer from the `origin` to the newly created contract.
+//   - `weight_limit`: The gas limit used to derive the transaction weight for transaction
+//     payment
+//   - `eth_gas_limit`: The Ethereum gas limit governing the resource usage of the execution
+//   - `code`: The contract code to deploy in raw bytes.
+//   - `data`: The input data to pass to the contract constructor.
+//   - `transaction_encoded`: The RLP encoding of the signed Ethereum transaction,
+//     represented as [crate::evm::TransactionSigned], provided by the Ethereum wallet. This
+//     is used for building the Ethereum transaction root.
+//   - effective_gas_price: the price of a unit of gas
+//   - encoded len: the byte code size of the `eth_transact` extrinsic
+//
 // Calling this dispatchable ensures that the origin's nonce is bumped only once,
 // via the `CheckNonce` transaction extension. In contrast, [`Self::instantiate_with_code`]
 // also bumps the nonce after contract instantiation, since it may be invoked multiple
 // times within a batch call transaction.
-func MakeEthInstantiateWithCodeCall(value0 [4]uint64, gasLimit1 types.Weight, code2 []byte, data3 []byte, effectiveGasPrice4 [4]uint64, encodedLen5 uint32) types.RuntimeCall {
+func MakeEthInstantiateWithCodeCall(value0 [4]uint64, weightLimit1 types.Weight, ethGasLimit2 [4]uint64, code3 []byte, data4 []byte, transactionEncoded5 []byte, effectiveGasPrice6 [4]uint64, encodedLen7 uint32) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsRevive: true,
 		AsReviveField0: &types.PalletRevivePalletCall{
-			IsEthInstantiateWithCode:                   true,
-			AsEthInstantiateWithCodeValue0:             value0,
-			AsEthInstantiateWithCodeGasLimit1:          gasLimit1,
-			AsEthInstantiateWithCodeCode2:              code2,
-			AsEthInstantiateWithCodeData3:              data3,
-			AsEthInstantiateWithCodeEffectiveGasPrice4: effectiveGasPrice4,
-			AsEthInstantiateWithCodeEncodedLen5:        encodedLen5,
+			IsEthInstantiateWithCode:                    true,
+			AsEthInstantiateWithCodeValue0:              value0,
+			AsEthInstantiateWithCodeWeightLimit1:        weightLimit1,
+			AsEthInstantiateWithCodeEthGasLimit2:        ethGasLimit2,
+			AsEthInstantiateWithCodeCode3:               code3,
+			AsEthInstantiateWithCodeData4:               data4,
+			AsEthInstantiateWithCodeTransactionEncoded5: transactionEncoded5,
+			AsEthInstantiateWithCodeEffectiveGasPrice6:  effectiveGasPrice6,
+			AsEthInstantiateWithCodeEncodedLen7:         encodedLen7,
 		},
 	}
 }
 
 // Same as [`Self::call`], but intended to be dispatched **only**
 // by an EVM transaction through the EVM compatibility layer.
-func MakeEthCallCall(dest0 [20]byte, value1 [4]uint64, gasLimit2 types.Weight, data3 []byte, effectiveGasPrice4 [4]uint64, encodedLen5 uint32) types.RuntimeCall {
+//
+// # Parameters
+//
+//   - `dest`: The Ethereum address of the account to be called
+//   - `value`: The balance to transfer from the `origin` to the newly created contract.
+//   - `weight_limit`: The gas limit used to derive the transaction weight for transaction
+//     payment
+//   - `eth_gas_limit`: The Ethereum gas limit governing the resource usage of the execution
+//   - `data`: The input data to pass to the contract constructor.
+//   - `transaction_encoded`: The RLP encoding of the signed Ethereum transaction,
+//     represented as [crate::evm::TransactionSigned], provided by the Ethereum wallet. This
+//     is used for building the Ethereum transaction root.
+//   - effective_gas_price: the price of a unit of gas
+//   - encoded len: the byte code size of the `eth_transact` extrinsic
+func MakeEthCallCall(dest0 [20]byte, value1 [4]uint64, weightLimit2 types.Weight, ethGasLimit3 [4]uint64, data4 []byte, transactionEncoded5 []byte, effectiveGasPrice6 [4]uint64, encodedLen7 uint32) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsRevive: true,
 		AsReviveField0: &types.PalletRevivePalletCall{
-			IsEthCall:                   true,
-			AsEthCallDest0:              dest0,
-			AsEthCallValue1:             value1,
-			AsEthCallGasLimit2:          gasLimit2,
-			AsEthCallData3:              data3,
-			AsEthCallEffectiveGasPrice4: effectiveGasPrice4,
-			AsEthCallEncodedLen5:        encodedLen5,
+			IsEthCall:                    true,
+			AsEthCallDest0:               dest0,
+			AsEthCallValue1:              value1,
+			AsEthCallWeightLimit2:        weightLimit2,
+			AsEthCallEthGasLimit3:        ethGasLimit3,
+			AsEthCallData4:               data4,
+			AsEthCallTransactionEncoded5: transactionEncoded5,
+			AsEthCallEffectiveGasPrice6:  effectiveGasPrice6,
+			AsEthCallEncodedLen7:         encodedLen7,
+		},
+	}
+}
+
+// Executes a Substrate runtime call from an Ethereum transaction.
+//
+// This dispatchable is intended to be called **only** through the EVM compatibility
+// layer. The provided call will be dispatched using `RawOrigin::Signed`.
+//
+// # Parameters
+//
+// * `origin`: Must be an [`Origin::EthTransaction`] origin.
+// * `call`: The Substrate runtime call to execute.
+// * `transaction_encoded`: The RLP encoding of the Ethereum transaction,
+func MakeEthSubstrateCallCall(call0 types.RuntimeCall, transactionEncoded1 []byte) types.RuntimeCall {
+	return types.RuntimeCall{
+		IsRevive: true,
+		AsReviveField0: &types.PalletRevivePalletCall{
+			IsEthSubstrateCall:                    true,
+			AsEthSubstrateCallCall0:               &call0,
+			AsEthSubstrateCallTransactionEncoded1: transactionEncoded1,
 		},
 	}
 }

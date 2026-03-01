@@ -287,6 +287,12 @@ func (c *ChainClient) DeployContract(code util.InkCode, signer SignerType, payAm
 		return nil, errors.New("args.Encode: " + err.Error())
 	}
 
+	if c.Debug {
+		util.LogWithPurple("[ Deploy origin ]", origin.ToHexString())
+		util.LogWithPurple("[         value ]", payAmount)
+		util.LogWithPurple("[          args ]", "0x"+hex.EncodeToString(argData))
+	}
+
 	err = c.CallRuntimeApi(
 		"ReviveApi",
 		"instantiate",
