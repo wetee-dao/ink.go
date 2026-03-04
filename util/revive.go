@@ -13,6 +13,8 @@ import (
 )
 
 type AccountId = types.AccountID
+type Bytes = []byte
+type BlockNumber = uint32
 
 // type AccountId [32]byte
 func NewAccountID(pubkey []byte) types.AccountID {

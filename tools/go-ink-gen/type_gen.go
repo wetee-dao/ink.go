@@ -425,10 +425,12 @@ var skipTypes = map[string]bool{
 }
 
 var typePrefix = map[string]string{
-	"U256":      "types",
-	"H256":      "types",
-	"H160":      "types",
-	"Result":    "util",
-	"Option":    "util",
-	"AccountId": "util",
+	"U256":        "types",
+	"H256":        "types",
+	"H160":        "types",
+	"Result":      "util",
+	"Option":      "util",
+	"AccountId":   "util",
+	"BlockNumber": "util",
+	"Bytes":       "util",
 }
