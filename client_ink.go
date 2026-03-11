@@ -78,7 +78,7 @@ func DryRunInk[T any](
 	// 获取返回值
 	returnValue = &result.Result.V
 	if len(returnValue.Data) == 0 {
-		return nil, nil, errors.New("DryRun: returnValue.Data is empty")
+		return nil, nil, errors.New("DryRun: returnValue.Data is empty, maybe delegate_call failed with Revive.ContractTrapped")
 	}
 
 	data := new(T)

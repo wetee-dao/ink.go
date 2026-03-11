@@ -8,7 +8,7 @@ import (
 	types1 "github.com/wetee-dao/ink.go/pallet/types"
 )
 
-// Make a storage key for NextFeeMultiplier id={{false [101]}}
+// Make a storage key for NextFeeMultiplier id={{false [108]}}
 func MakeNextFeeMultiplierStorageKey() (types.StorageKey, error) {
 	return types.CreateStorageKey(&types1.Meta, "TransactionPayment", "NextFeeMultiplier")
 }
@@ -52,7 +52,7 @@ func GetNextFeeMultiplierLatest(state state.State) (ret types.U128, err error) {
 	return
 }
 
-// Make a storage key for StorageVersion id={{false [102]}}
+// Make a storage key for StorageVersion id={{false [109]}}
 func MakeStorageVersionStorageKey() (types.StorageKey, error) {
 	return types.CreateStorageKey(&types1.Meta, "TransactionPayment", "StorageVersion")
 }
@@ -96,7 +96,7 @@ func GetStorageVersionLatest(state state.State) (ret types1.Releases, err error)
 	return
 }
 
-// Make a storage key for TxPaymentCredit id={{false [103]}}
+// Make a storage key for TxPaymentCredit id={{false [110]}}
 //
 //	The `OnChargeTransaction` stores the withdrawn tx fee here.
 //

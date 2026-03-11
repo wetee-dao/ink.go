@@ -621,7 +621,7 @@ func GetEventTopicsLatest(state state.State, byteArray320 [32]byte) (ret []types
 	return
 }
 
-// Make a storage key for LastRuntimeUpgrade id={{false [49]}}
+// Make a storage key for LastRuntimeUpgrade id={{false [50]}}
 //
 //	Stores the `spec_version` and `spec_name` of when the last runtime upgrade happened.
 func MakeLastRuntimeUpgradeStorageKey() (types.StorageKey, error) {
@@ -640,6 +640,35 @@ func GetLastRuntimeUpgrade(state state.State, bhash types.Hash) (ret types1.Last
 }
 func GetLastRuntimeUpgradeLatest(state state.State) (ret types1.LastRuntimeUpgradeInfo, isSome bool, err error) {
 	key, err := MakeLastRuntimeUpgradeStorageKey()
+	if err != nil {
+		return
+	}
+	isSome, err = state.GetStorageLatest(key, &ret)
+	if err != nil {
+		return
+	}
+	return
+}
+
+// Make a storage key for BlocksTillUpgrade id={{false [2]}}
+//
+//	Number of blocks till the pending code upgrade is applied.
+func MakeBlocksTillUpgradeStorageKey() (types.StorageKey, error) {
+	return types.CreateStorageKey(&types1.Meta, "System", "BlocksTillUpgrade")
+}
+func GetBlocksTillUpgrade(state state.State, bhash types.Hash) (ret byte, isSome bool, err error) {
+	key, err := MakeBlocksTillUpgradeStorageKey()
+	if err != nil {
+		return
+	}
+	isSome, err = state.GetStorage(key, &ret, bhash)
+	if err != nil {
+		return
+	}
+	return
+}
+func GetBlocksTillUpgradeLatest(state state.State) (ret byte, isSome bool, err error) {
+	key, err := MakeBlocksTillUpgradeStorageKey()
 	if err != nil {
 		return
 	}
@@ -743,7 +772,7 @@ func GetUpgradedToTripleRefCountLatest(state state.State) (ret bool, err error) 
 	return
 }
 
-// Make a storage key for ExecutionPhase id={{false [46]}}
+// Make a storage key for ExecutionPhase id={{false [47]}}
 //
 //	The execution phase of the block.
 func MakeExecutionPhaseStorageKey() (types.StorageKey, error) {
@@ -772,7 +801,7 @@ func GetExecutionPhaseLatest(state state.State) (ret types1.Phase, isSome bool, 
 	return
 }
 
-// Make a storage key for AuthorizedUpgrade id={{false [53]}}
+// Make a storage key for AuthorizedUpgrade id={{false [54]}}
 //
 //	`Some` if a code upgrade has been authorized.
 func MakeAuthorizedUpgradeStorageKey() (types.StorageKey, error) {
