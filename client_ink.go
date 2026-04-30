@@ -82,6 +82,13 @@ func DryRunInk[T any](
 	}
 
 	data := new(T)
+
+	if client.Debug {
+		util.LogWithPurple("[           data ]", "0x"+hex.EncodeToString(returnValue.Data))
+	}
+
+	util.LogWithPurple("[RawResult]")
+
 	// pallet-revive ExecReturnValue.Data 为合约原始返回，无 selector 前缀时直接解码
 	err = scale.NewDecoder(bytes.NewReader(returnValue.Data)).Decode(data)
 	if err != nil {
@@ -254,6 +261,21 @@ func (c *ChainClient) UploadInkCode(code []byte, signer SignerType) (*types.H256
 		return nil, errors.New("CallRuntimeApi: " + err.Error())
 	}
 
+	if resultWrap.IsErr {
+		if resultWrap.E.IsModule {
+			merr := resultWrap.E.AsModuleField0
+			info, ierr := c.GetErrorInfo(merr.Index, merr.Error)
+			if ierr == nil {
+				err = errors.New("DryRun: Module Error: " + info.Name)
+			} else {
+				err = errors.New("DryRun: unknown Module Error")
+			}
+			return nil, err
+		}
+		bt, _ := json.Marshal(resultWrap.E)
+		return nil, errors.New(string(bt))
+	}
+
 	result, err := resultWrap.UnWrap()
 	if err != nil {
 		return nil, errors.New("UnWrap: " + err.Error())
@@ -333,11 +355,11 @@ func (c *ChainClient) DeployContract(code util.InkCode, signer SignerType, payAm
 	}
 
 	// init salt
-	gsalt := gtypes.OptionTByteArray321{
+	gsalt := gtypes.OptionTByteArray32{
 		IsNone: true,
 	}
 	if !salt.IsNone() {
-		gsalt = gtypes.OptionTByteArray321{
+		gsalt = gtypes.OptionTByteArray32{
 			IsNone:       false,
 			IsSome:       true,
 			AsSomeField0: salt.V,

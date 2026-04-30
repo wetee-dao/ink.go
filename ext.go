@@ -83,20 +83,22 @@ func createPayload(meta *types.Metadata, encodedCall []byte) (*extrinsic.Payload
 
 	for _, signedExtension := range meta.AsMetadataV14.Extrinsic.SignedExtensions {
 		signedExtensionType, ok := meta.AsMetadataV14.EfficientLookup[signedExtension.Type.Int64()]
-
 		if !ok {
 			return nil, extrinsic.ErrSignedExtensionTypeNotDefined.WithMsg("lookup ID - '%d'", signedExtension.Type.Int64())
+		}
+
+		if len(signedExtensionType.Path) == 0 {
+			continue
 		}
 
 		signedExtensionName := extensions.SignedExtensionName(signedExtensionType.Path[len(signedExtensionType.Path)-1])
 
 		// TODO pull requset to go-substrate-rpc-client
-		if signedExtensionName == "WeightReclaim" || signedExtensionName == "SetOrigin" {
+		if signedExtensionName == "WeightReclaim" || signedExtensionName == "SetOrigin" || signedExtensionName == "AuthorizeCall" {
 			continue
 		}
 
 		payloadMutatorFn, ok := extrinsic.PayloadMutatorFns[signedExtensionName]
-
 		if !ok {
 			return nil, extrinsic.ErrSignedExtensionTypeNotSupported.WithMsg("signed extension '%s'", signedExtensionName)
 		}

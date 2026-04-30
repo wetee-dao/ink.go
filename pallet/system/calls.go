@@ -98,6 +98,15 @@ func MakeRemarkWithEventCall(remark0 []byte) types.RuntimeCall {
 		},
 	}
 }
+func MakeDoTaskCall(task0 struct{}) types.RuntimeCall {
+	return types.RuntimeCall{
+		IsSystem: true,
+		AsSystemField0: &types.FrameSystemPalletCall{
+			IsDoTask:      true,
+			AsDoTaskTask0: &task0,
+		},
+	}
+}
 
 // Authorize an upgrade to a given `code_hash` for the runtime. The runtime can be supplied
 // later.

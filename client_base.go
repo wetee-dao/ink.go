@@ -18,6 +18,7 @@ import (
 	"github.com/centrifuge/go-substrate-rpc-client/v4/types"
 	"github.com/centrifuge/go-substrate-rpc-client/v4/types/codec"
 	"github.com/centrifuge/go-substrate-rpc-client/v4/types/extrinsic"
+	"github.com/centrifuge/go-substrate-rpc-client/v4/types/extrinsic/extensions"
 	"github.com/centrifuge/go-substrate-rpc-client/v4/xxhash"
 	"golang.org/x/crypto/blake2b"
 
@@ -177,6 +178,8 @@ func (c *ChainClient) SignAndSubmit(signer SignerType, call types.Call, untilFin
 		extrinsic.WithSpecVersion(c.Runtime.SpecVersion),
 		extrinsic.WithTransactionVersion(c.Runtime.TransactionVersion),
 		extrinsic.WithGenesisHash(c.Hash),
+		extrinsic.WithMetadataMode(extensions.CheckMetadataModeDisabled, extensions.CheckMetadataHash{Hash: types.NewEmptyOption[types.H256]()}),
+		extrinsic.WithAssetID(types.NewEmptyOption[types.AssetID]()),
 	)
 	if err != nil {
 		return err
@@ -188,7 +191,7 @@ func (c *ChainClient) SignAndSubmit(signer SignerType, call types.Call, untilFin
 	}
 
 	defer sub.Unsubscribe()
-	timeout := time.After(30 * time.Second)
+	timeout := time.After(120 * time.Second)
 
 	extBytes, err := codec.Encode(ext.Extrinsic)
 	if err != nil {
@@ -277,9 +280,9 @@ func (c *ChainClient) checkExtrinsic(extHash types.Hash, blockHash types.Hash) (
 
 		// 判断是否是交易成功的消息
 		if e.Event.AsSystemField0.IsExtrinsicSuccess {
-			// if c.Debug {
-			// 	util.LogWithPurple("Extrinsic", "ExtrinsicSuccess")
-			// }
+			if c.Debug {
+				util.LogWithPurple("Extrinsic", "ExtrinsicSuccess")
+			}
 			return cevents, true, nil
 		}
 

@@ -183,16 +183,14 @@ func GetBlockWeightLatest(state state.State) (ret types1.PerDispatchClass, err e
 	return
 }
 
-// Make a storage key for BlockSize id={{false [4]}}
+// Make a storage key for AllExtrinsicsLen id={{false [4]}}
 //
-//	Total size (in bytes) of the current block.
-//
-//	Tracks the size of the header and all extrinsics.
-func MakeBlockSizeStorageKey() (types.StorageKey, error) {
-	return types.CreateStorageKey(&types1.Meta, "System", "BlockSize")
+//	Total length (in bytes) for all extrinsics put together, for the current block.
+func MakeAllExtrinsicsLenStorageKey() (types.StorageKey, error) {
+	return types.CreateStorageKey(&types1.Meta, "System", "AllExtrinsicsLen")
 }
-func GetBlockSize(state state.State, bhash types.Hash) (ret uint32, isSome bool, err error) {
-	key, err := MakeBlockSizeStorageKey()
+func GetAllExtrinsicsLen(state state.State, bhash types.Hash) (ret uint32, isSome bool, err error) {
+	key, err := MakeAllExtrinsicsLenStorageKey()
 	if err != nil {
 		return
 	}
@@ -202,8 +200,8 @@ func GetBlockSize(state state.State, bhash types.Hash) (ret uint32, isSome bool,
 	}
 	return
 }
-func GetBlockSizeLatest(state state.State) (ret uint32, isSome bool, err error) {
-	key, err := MakeBlockSizeStorageKey()
+func GetAllExtrinsicsLenLatest(state state.State) (ret uint32, isSome bool, err error) {
+	key, err := MakeAllExtrinsicsLenStorageKey()
 	if err != nil {
 		return
 	}
@@ -621,7 +619,7 @@ func GetEventTopicsLatest(state state.State, byteArray320 [32]byte) (ret []types
 	return
 }
 
-// Make a storage key for LastRuntimeUpgrade id={{false [50]}}
+// Make a storage key for LastRuntimeUpgrade id={{false [734]}}
 //
 //	Stores the `spec_version` and `spec_name` of when the last runtime upgrade happened.
 func MakeLastRuntimeUpgradeStorageKey() (types.StorageKey, error) {
@@ -640,35 +638,6 @@ func GetLastRuntimeUpgrade(state state.State, bhash types.Hash) (ret types1.Last
 }
 func GetLastRuntimeUpgradeLatest(state state.State) (ret types1.LastRuntimeUpgradeInfo, isSome bool, err error) {
 	key, err := MakeLastRuntimeUpgradeStorageKey()
-	if err != nil {
-		return
-	}
-	isSome, err = state.GetStorageLatest(key, &ret)
-	if err != nil {
-		return
-	}
-	return
-}
-
-// Make a storage key for BlocksTillUpgrade id={{false [2]}}
-//
-//	Number of blocks till the pending code upgrade is applied.
-func MakeBlocksTillUpgradeStorageKey() (types.StorageKey, error) {
-	return types.CreateStorageKey(&types1.Meta, "System", "BlocksTillUpgrade")
-}
-func GetBlocksTillUpgrade(state state.State, bhash types.Hash) (ret byte, isSome bool, err error) {
-	key, err := MakeBlocksTillUpgradeStorageKey()
-	if err != nil {
-		return
-	}
-	isSome, err = state.GetStorage(key, &ret, bhash)
-	if err != nil {
-		return
-	}
-	return
-}
-func GetBlocksTillUpgradeLatest(state state.State) (ret byte, isSome bool, err error) {
-	key, err := MakeBlocksTillUpgradeStorageKey()
 	if err != nil {
 		return
 	}
@@ -772,7 +741,7 @@ func GetUpgradedToTripleRefCountLatest(state state.State) (ret bool, err error) 
 	return
 }
 
-// Make a storage key for ExecutionPhase id={{false [47]}}
+// Make a storage key for ExecutionPhase id={{false [733]}}
 //
 //	The execution phase of the block.
 func MakeExecutionPhaseStorageKey() (types.StorageKey, error) {
@@ -801,7 +770,7 @@ func GetExecutionPhaseLatest(state state.State) (ret types1.Phase, isSome bool, 
 	return
 }
 
-// Make a storage key for AuthorizedUpgrade id={{false [54]}}
+// Make a storage key for AuthorizedUpgrade id={{false [737]}}
 //
 //	`Some` if a code upgrade has been authorized.
 func MakeAuthorizedUpgradeStorageKey() (types.StorageKey, error) {

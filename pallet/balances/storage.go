@@ -307,7 +307,7 @@ func MakeHoldsStorageKey(byteArray320 [32]byte) (types.StorageKey, error) {
 
 var HoldsResultDefaultBytes, _ = hex.DecodeString("00")
 
-func GetHolds(state state.State, bhash types.Hash, byteArray320 [32]byte) (ret []types1.IdAmount, err error) {
+func GetHolds(state state.State, bhash types.Hash, byteArray320 [32]byte) (ret []types1.IdAmountIdRuntimeHoldReason, err error) {
 	key, err := MakeHoldsStorageKey(byteArray320)
 	if err != nil {
 		return
@@ -325,7 +325,7 @@ func GetHolds(state state.State, bhash types.Hash, byteArray320 [32]byte) (ret [
 	}
 	return
 }
-func GetHoldsLatest(state state.State, byteArray320 [32]byte) (ret []types1.IdAmount, err error) {
+func GetHoldsLatest(state state.State, byteArray320 [32]byte) (ret []types1.IdAmountIdRuntimeHoldReason, err error) {
 	key, err := MakeHoldsStorageKey(byteArray320)
 	if err != nil {
 		return
@@ -361,7 +361,7 @@ func MakeFreezesStorageKey(byteArray320 [32]byte) (types.StorageKey, error) {
 
 var FreezesResultDefaultBytes, _ = hex.DecodeString("00")
 
-func GetFreezes(state state.State, bhash types.Hash, byteArray320 [32]byte) (ret []types1.IdAmountIdStruct, err error) {
+func GetFreezes(state state.State, bhash types.Hash, byteArray320 [32]byte) (ret []types1.IdAmountIdRuntimeFreezeReason, err error) {
 	key, err := MakeFreezesStorageKey(byteArray320)
 	if err != nil {
 		return
@@ -379,7 +379,7 @@ func GetFreezes(state state.State, bhash types.Hash, byteArray320 [32]byte) (ret
 	}
 	return
 }
-func GetFreezesLatest(state state.State, byteArray320 [32]byte) (ret []types1.IdAmountIdStruct, err error) {
+func GetFreezesLatest(state state.State, byteArray320 [32]byte) (ret []types1.IdAmountIdRuntimeFreezeReason, err error) {
 	key, err := MakeFreezesStorageKey(byteArray320)
 	if err != nil {
 		return

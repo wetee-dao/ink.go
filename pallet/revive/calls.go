@@ -62,7 +62,7 @@ func MakeCallCall(dest0 [20]byte, value1 types1.UCompact, weightLimit2 types.Wei
 // This function is identical to [`Self::instantiate_with_code`] but without the
 // code deployment step. Instead, the `code_hash` of an on-chain deployed vm binary
 // must be supplied.
-func MakeInstantiateCall(value0 types1.UCompact, weightLimit1 types.Weight, storageDepositLimit2 types1.UCompact, codeHash3 [32]byte, data4 []byte, salt5 types.OptionTByteArray321) types.RuntimeCall {
+func MakeInstantiateCall(value0 types1.UCompact, weightLimit1 types.Weight, storageDepositLimit2 types1.UCompact, codeHash3 [32]byte, data4 []byte, salt5 types.OptionTByteArray32) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsRevive: true,
 		AsReviveField0: &types.PalletRevivePalletCall{
@@ -103,7 +103,7 @@ func MakeInstantiateCall(value0 types1.UCompact, weightLimit1 types.Weight, stor
 // - The smart-contract account is created at the computed address.
 // - The `value` is transferred to the new account.
 // - The `deploy` function is executed in the context of the newly-created account.
-func MakeInstantiateWithCodeCall(value0 types1.UCompact, weightLimit1 types.Weight, storageDepositLimit2 types1.UCompact, code3 []byte, data4 []byte, salt5 types.OptionTByteArray321) types.RuntimeCall {
+func MakeInstantiateWithCodeCall(value0 types1.UCompact, weightLimit1 types.Weight, storageDepositLimit2 types1.UCompact, code3 []byte, data4 []byte, salt5 types.OptionTByteArray32) types.RuntimeCall {
 	return types.RuntimeCall{
 		IsRevive: true,
 		AsReviveField0: &types.PalletRevivePalletCall{
