@@ -6,6 +6,7 @@ import (
 	"github.com/centrifuge/go-substrate-rpc-client/v4/types"
 	"github.com/centrifuge/go-substrate-rpc-client/v4/types/codec"
 	"github.com/centrifuge/go-substrate-rpc-client/v4/types/extrinsic"
+	"github.com/centrifuge/go-substrate-rpc-client/v4/types/extrinsic/extensions"
 )
 
 // 签名并提交交易
@@ -23,6 +24,8 @@ func (c *ChainClient) PartialSign(signer PartialSignerType, call types.Call) ([]
 		extrinsic.WithSpecVersion(c.Runtime.SpecVersion),
 		extrinsic.WithTransactionVersion(c.Runtime.TransactionVersion),
 		extrinsic.WithGenesisHash(c.Hash),
+		extrinsic.WithMetadataMode(extensions.CheckMetadataModeDisabled, extensions.CheckMetadataHash{Hash: types.NewEmptyOption[types.H256]()}),
+		extrinsic.WithAssetID(types.NewEmptyOption[types.AssetID]()),
 	)
 }
 
