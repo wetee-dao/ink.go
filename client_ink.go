@@ -87,8 +87,6 @@ func DryRunInk[T any](
 		util.LogWithPurple("[           data ]", "0x"+hex.EncodeToString(returnValue.Data))
 	}
 
-	util.LogWithPurple("[RawResult]")
-
 	// pallet-revive ExecReturnValue.Data 为合约原始返回，无 selector 前缀时直接解码
 	err = scale.NewDecoder(bytes.NewReader(returnValue.Data)).Decode(data)
 	if err != nil {
