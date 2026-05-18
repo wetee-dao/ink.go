@@ -1,10 +1,15 @@
 package ink
 
 import (
+	"crypto/ed25519"
+	"fmt"
+
 	"github.com/centrifuge/go-substrate-rpc-client/v4/types"
 	"github.com/centrifuge/go-substrate-rpc-client/v4/types/codec"
 	"github.com/centrifuge/go-substrate-rpc-client/v4/types/extrinsic"
 	"github.com/centrifuge/go-substrate-rpc-client/v4/types/extrinsic/extensions"
+	"github.com/vedhavyas/go-subkey/v2"
+	"golang.org/x/crypto/blake2b"
 )
 
 func NewExtrinsic(c types.Call) Extrinsic {
@@ -110,14 +115,26 @@ func createPayload(meta *types.Metadata, encodedCall []byte) (*extrinsic.Payload
 }
 
 func PayloadSign(signer SignerType, p *extrinsic.Payload) (sig types.SignatureHash, err error) {
-	b, err := codec.Encode(p)
+	msg, err := codec.Encode(p)
 	if err != nil {
 		return sig, extrinsic.ErrPayloadEncoding.Wrap(err)
 	}
 
-	signatureBytes, err := signer.Sign(b)
+	signatureBytes, err := signer.Sign(msg)
 	if err != nil {
 		return sig, extrinsic.ErrPayloadSigning.Wrap(err)
+	}
+
+	if signer.SignType() == 1 {
+		if len(msg) > 256 {
+			h := blake2b.Sum256(msg)
+			msg = h[:]
+		}
+		isok := ed25519.Verify(signer.Public(), msg, signatureBytes)
+		if !isok {
+			fmt.Println("public key:", subkey.SS58Encode(signer.Public(), 42))
+			fmt.Println("PayloadSign Ed25519.Verify", isok)
+		}
 	}
 
 	sig = types.NewSignature(signatureBytes)

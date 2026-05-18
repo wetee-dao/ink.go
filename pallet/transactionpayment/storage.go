@@ -52,7 +52,7 @@ func GetNextFeeMultiplierLatest(state state.State) (ret types.U128, err error) {
 	return
 }
 
-// Make a storage key for StorageVersion id={{false [803]}}
+// Make a storage key for StorageVersion id={{false [636]}}
 func MakeStorageVersionStorageKey() (types.StorageKey, error) {
 	return types.CreateStorageKey(&types1.Meta, "TransactionPayment", "StorageVersion")
 }
@@ -96,7 +96,7 @@ func GetStorageVersionLatest(state state.State) (ret types1.Releases, err error)
 	return
 }
 
-// Make a storage key for TxPaymentCredit id={{false [804]}}
+// Make a storage key for TxPaymentCredit id={{false [637]}}
 //
 //	The `OnChargeTransaction` stores the withdrawn tx fee here.
 //

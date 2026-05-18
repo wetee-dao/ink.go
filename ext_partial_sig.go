@@ -57,12 +57,12 @@ func (e *Extrinsic) PartialSign(signer PartialSignerType, meta *types.Metadata, 
 }
 
 func PayloadPartialSign(signer PartialSignerType, p *extrinsic.Payload) (sig []byte, err error) {
-	b, err := codec.Encode(p)
+	msg, err := codec.Encode(p)
 	if err != nil {
 		return sig, extrinsic.ErrPayloadEncoding.Wrap(err)
 	}
 
-	signatureBytes, err := signer.PartialSign(b)
+	signatureBytes, err := signer.PartialSign(msg)
 	if err != nil {
 		return sig, extrinsic.ErrPayloadSigning.Wrap(err)
 	}

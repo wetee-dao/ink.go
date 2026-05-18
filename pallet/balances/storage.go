@@ -307,7 +307,7 @@ func MakeHoldsStorageKey(byteArray320 [32]byte) (types.StorageKey, error) {
 
 var HoldsResultDefaultBytes, _ = hex.DecodeString("00")
 
-func GetHolds(state state.State, bhash types.Hash, byteArray320 [32]byte) (ret []types1.IdAmountIdRuntimeHoldReason, err error) {
+func GetHolds(state state.State, bhash types.Hash, byteArray320 [32]byte) (ret []types1.IdAmount, err error) {
 	key, err := MakeHoldsStorageKey(byteArray320)
 	if err != nil {
 		return
@@ -325,7 +325,7 @@ func GetHolds(state state.State, bhash types.Hash, byteArray320 [32]byte) (ret [
 	}
 	return
 }
-func GetHoldsLatest(state state.State, byteArray320 [32]byte) (ret []types1.IdAmountIdRuntimeHoldReason, err error) {
+func GetHoldsLatest(state state.State, byteArray320 [32]byte) (ret []types1.IdAmount, err error) {
 	key, err := MakeHoldsStorageKey(byteArray320)
 	if err != nil {
 		return

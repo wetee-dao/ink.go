@@ -198,7 +198,7 @@ func GetDeletionQueueLatest(state state.State, uint320 uint32) (ret []byte, isSo
 	return
 }
 
-// Make a storage key for DeletionQueueCounter id={{false [1046]}}
+// Make a storage key for DeletionQueueCounter id={{false [907]}}
 //
 //	A pair of monotonic counters used to track the latest contract marked for deletion
 //	and the latest deleted contract in queue.
@@ -287,7 +287,7 @@ func GetOriginalAccountLatest(state state.State, byteArray200 [20]byte) (ret [32
 	return
 }
 
-// Make a storage key for EthereumBlock id={{false [1047]}}
+// Make a storage key for EthereumBlock id={{false [908]}}
 //
 //	The current Ethereum block that is stored in the `on_finalize` method.
 //
@@ -397,7 +397,7 @@ func GetBlockHashLatest(state state.State, uint320 uint32) (ret [32]byte, err er
 	return
 }
 
-// Make a storage key for ReceiptInfoData id={{false [1074]}}
+// Make a storage key for ReceiptInfoData id={{false [935]}}
 //
 //	The details needed to reconstruct the receipt info offchain.
 //
@@ -448,7 +448,7 @@ func GetReceiptInfoDataLatest(state state.State) (ret []types1.ReceiptGasInfo, e
 	return
 }
 
-// Make a storage key for EthBlockBuilderIR id={{false [1076]}}
+// Make a storage key for EthBlockBuilderIR id={{false [937]}}
 //
 //	Incremental ethereum block builder.
 func MakeEthBlockBuilderIRStorageKey() (types.StorageKey, error) {
@@ -494,7 +494,7 @@ func GetEthBlockBuilderIRLatest(state state.State) (ret types1.EthereumBlockBuil
 	return
 }
 
-// Make a storage key for EthBlockBuilderFirstValues id={{false [1078]}}
+// Make a storage key for EthBlockBuilderFirstValues id={{false [939]}}
 //
 //	The first transaction and receipt of the ethereum block.
 //
@@ -543,14 +543,14 @@ func GetEthBlockBuilderFirstValuesLatest(state state.State) (ret types1.OptionTT
 	return
 }
 
-// Make a storage key for DebugSettingsOf id={{false [1079]}}
+// Make a storage key for DebugSettingsOf id={{false [940]}}
 //
 //	Debugging settings that can be configured when DebugEnabled config is true.
 func MakeDebugSettingsOfStorageKey() (types.StorageKey, error) {
 	return types.CreateStorageKey(&types1.Meta, "Revive", "DebugSettingsOf")
 }
 
-var DebugSettingsOfResultDefaultBytes, _ = hex.DecodeString("000000")
+var DebugSettingsOfResultDefaultBytes, _ = hex.DecodeString("00000000")
 
 func GetDebugSettingsOf(state state.State, bhash types.Hash) (ret types1.DebugSettings, err error) {
 	key, err := MakeDebugSettingsOfStorageKey()
